@@ -15,7 +15,7 @@ Currently supported subtitle formats :
 
 # Installation and Running
 ## Prerequisite
-To run Whisper, you need to have `python` version 3.8 to 3.10, `ffmpeg`, and `git` installed on your system. The reason `git` is required is because I am currently using a custom version of Whisper for my WebUI.
+To run Whisper, you need to have `python` version 3.8 to 3.10, `ffmpeg`, and `git` installed on your system. The reason `git` is required is because I am currently using a custom version of `whisper` for my WebUI.
 
 Please follow the links below to install the necessary software:
 - python : [https://www.python.org/downloads/](https://www.python.org/downloads/)
