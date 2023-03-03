@@ -24,3 +24,14 @@ Please follow the links below to install the necessary software:
 
 ## Automatic Installation
 
+1. Run `install.bat` from Windows Explorer as a regular, non-administrator user.
+2. After installation, run the `launch.bat`.
+3. Open your web browser and go to `http://localhost:7860`
+
+## Support
+
+If you found this project useful, kindly consider supporting it.
+
+<a href="https://www.buymeacoffee.com/jhj0517" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a>
+
+
