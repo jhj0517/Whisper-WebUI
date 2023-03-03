@@ -4,14 +4,15 @@ A Gradio-based browser interface for Whisper.
 ![Whisper WebUI](https://github.com/jhj0517/Whsiper-WebUI/blob/master/screenshot.png)
 
 # Feature
-Generate subtitles from various sources, including :
-- Files
-- Youtube
-- Microphone
-
-Currently supported subtitle formats : 
-- SRT
-- WebVTT
+- Generate subtitles from various sources, including :
+  - Files
+  - Youtube
+  - Microphone
+- Currently supported subtitle formats : 
+  - SRT
+  - WebVTT
+- Speech to Text Translation
+  - From other languages to English.
 
 # Installation and Running
 ## Prerequisite
