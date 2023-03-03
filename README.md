@@ -1,7 +1,7 @@
 # Whsiper-WebUI
 A Gradio-based browser interface for Whisper.
 
-![Whisper WebUI](screenshot.png)
+![Whisper WebUI](https://github.com/jhj0517/Whsiper-WebUI/blob/master/screenshot.png)
 
 # Feature
 Generate subtitles from various sources, including :
