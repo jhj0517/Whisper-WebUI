@@ -23,6 +23,7 @@ Please follow the links below to install the necessary software:
 - git : [https://git-scm.com/book/en/v2/Getting-Started-Installing-Git](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git)
 
 ## Automatic Installation
+If you have satisfied the prerequisites listed above, you are now ready to start Whisper-WebUI.
 
 1. Run `install.bat` from Windows Explorer as a regular, non-administrator user.
 2. After installation, run the `launch.bat`.
