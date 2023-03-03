@@ -27,7 +27,7 @@ Please follow the links below to install the necessary software:
 If you have satisfied the prerequisites listed above, you are now ready to start Whisper-WebUI.
 
 1. Run `Install.bat` from Windows Explorer as a regular, non-administrator user.
-2. After installation, run the `Launch.bat`.
+2. After installation, run the `Launch.bat`. (It will automatically download the model if it is not already installed on your computer.)
 3. Open your web browser and go to `http://localhost:7860`
 
 ## Support
