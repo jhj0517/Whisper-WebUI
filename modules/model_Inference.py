@@ -8,19 +8,20 @@ from datetime import datetime
 class ModelInference():
     def __init__(self):
         print("\nInitializing Model..\n")
-        self.default_model = "large-v2"
-        self.model = whisper.load_model(self.default_model)
+        self.current_model_size = "large-v2"
+        self.model = whisper.load_model(self.current_model_size)
 
     def transcribe_file(self,fileobj
-                        ,model,lang,subformat,istranslate,
+                        ,model_size,lang,subformat,istranslate,
                         progress=gr.Progress()):
         
         def progress_callback(progress_value):
             progress(progress_value,desc="Transcribing..")
         
-        if model != self.default_model or model==None:
+        if model_size != self.current_model_size:
             progress(0,desc="Initializing Model..")
-            self.model = whisper.load_model(model)
+            self.current_model_size = model_size
+            self.model = whisper.load_model(model_size)
 
         if lang == "Automatic Detection" :
             lang = None    
@@ -51,15 +52,16 @@ class ModelInference():
         return f"Done! Subtitle is in the outputs folder.\n\n{subtitle}"
     
     def transcribe_youtube(self,youtubelink
-                        ,model,lang,subformat,istranslate,
+                        ,model_size,lang,subformat,istranslate,
                         progress=gr.Progress()):
         
         def progress_callback(progress_value):
             progress(progress_value,desc="Transcribing..")
 
-        if model != self.default_model or model==None:
+        if model_size != self.current_model_size:
             progress(0,desc="Initializing Model..")
-            self.model = whisper.load_model(model)
+            self.current_model_size = model_size
+            self.model = whisper.load_model(model_size)
 
         if lang == "Automatic Detection" :
             lang = None    
@@ -89,15 +91,16 @@ class ModelInference():
         return f"Done! Subtitle file is in the outputs folder.\n\n{subtitle}"
     
     def transcribe_mic(self,micaudio
-                    ,model,lang,subformat,istranslate,
+                    ,model_size,lang,subformat,istranslate,
                     progress=gr.Progress()):
 
         def progress_callback(progress_value):
             progress(progress_value,desc="Transcribing..")
         
-        if model != self.default_model or model==None:
+        if model_size != self.current_model_size:
             progress(0,desc="Initializing Model..")
-            self.model = whisper.load_model(model)
+            self.current_model_size = model_size
+            self.model = whisper.load_model(model_size)
 
         if lang == "Automatic Detection" :
             lang = None    
