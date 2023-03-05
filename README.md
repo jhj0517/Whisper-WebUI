@@ -1,5 +1,5 @@
 # Whsiper-WebUI
-A Gradio-based browser interface for Whisper for Easy Subtitle.
+A Gradio-based browser interface for Whisper
 
 ![Whisper WebUI](https://github.com/jhj0517/Whsiper-WebUI/blob/master/screenshot.png)
 
