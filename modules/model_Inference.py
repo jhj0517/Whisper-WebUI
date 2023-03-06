@@ -5,11 +5,13 @@ import gradio as gr
 import os
 from datetime import datetime
 
+DEFAULT_MODEL_SIZE="large-v2"
+
 class WhisperInference():
     def __init__(self):
         print("\nInitializing Model..\n")
-        self.current_model_size = "large-v2"
-        self.model = whisper.load_model(self.current_model_size)
+        self.current_model_size = DEFAULT_MODEL_SIZE
+        self.model = whisper.load_model(name=DEFAULT_MODEL_SIZE,download_root="models")
         self.available_models = whisper.available_models()
         self.available_langs = sorted(list(whisper.tokenizer.LANGUAGES.values()))
 
@@ -23,7 +25,7 @@ class WhisperInference():
         if model_size != self.current_model_size:
             progress(0,desc="Initializing Model..")
             self.current_model_size = model_size
-            self.model = whisper.load_model(model_size)
+            self.model = whisper.load_model(name=model_size,download_root="models")
 
         if lang == "Automatic Detection" :
             lang = None    
@@ -63,7 +65,7 @@ class WhisperInference():
         if model_size != self.current_model_size:
             progress(0,desc="Initializing Model..")
             self.current_model_size = model_size
-            self.model = whisper.load_model(model_size)
+            self.model = whisper.load_model(name=model_size,download_root="models")
 
         if lang == "Automatic Detection" :
             lang = None    
@@ -102,7 +104,7 @@ class WhisperInference():
         if model_size != self.current_model_size:
             progress(0,desc="Initializing Model..")
             self.current_model_size = model_size
-            self.model = whisper.load_model(model_size)
+            self.model = whisper.load_model(name=model_size,download_root="models")
 
         if lang == "Automatic Detection" :
             lang = None    
