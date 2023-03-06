@@ -1,0 +1,4 @@
+venv/
+ui/__pycache__/
+outputs/
+modules/__pycache__/
