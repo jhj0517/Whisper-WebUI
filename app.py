@@ -29,7 +29,7 @@ with block:
             with gr.Row():
                 cb_translate = gr.Checkbox(value=False,label="Translate to English?",interactive=True) 
             with gr.Row():
-                btn_run = gr.Button("GENERATE SUBTITLE FILE")
+                btn_run = gr.Button("GENERATE SUBTITLE FILE",variant="primary")
             with gr.Row():
                 tb_indicator = gr.Textbox(label="Output")
                 btn_openfolder = gr.Button('📂').style(full_width=False)
@@ -53,7 +53,7 @@ with block:
             with gr.Row():
                 cb_translate = gr.Checkbox(value=False,label="Translate to English?",interactive=True) 
             with gr.Row():
-                btn_run = gr.Button("GENERATE SUBTITLE FILE")
+                btn_run = gr.Button("GENERATE SUBTITLE FILE",variant="primary")
             with gr.Row():
                 tb_indicator = gr.Textbox(label="Output")
                 btn_openfolder = gr.Button('📂').style(full_width=False)
@@ -72,7 +72,7 @@ with block:
             with gr.Row():
                 cb_translate = gr.Checkbox(value=False,label="Translate to English?",interactive=True) 
             with gr.Row():
-                btn_run = gr.Button("GENERATE SUBTITLE FILE")
+                btn_run = gr.Button("GENERATE SUBTITLE FILE",variant="primary")
             with gr.Row():
                 tb_indicator = gr.Textbox(label="Output")
                 btn_openfolder = gr.Button('📂').style(full_width=False)
