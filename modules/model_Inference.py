@@ -5,11 +5,13 @@ import gradio as gr
 import os
 from datetime import datetime
 
-class ModelInference():
+class WhisperInference():
     def __init__(self):
         print("\nInitializing Model..\n")
         self.current_model_size = "large-v2"
         self.model = whisper.load_model(self.current_model_size)
+        self.available_models = whisper.available_models()
+        self.available_langs = sorted(list(whisper.tokenizer.LANGUAGES.values()))
 
     def transcribe_file(self,fileobj
                         ,model_size,lang,subformat,istranslate,
