@@ -27,12 +27,16 @@ CSS = """
     margin-top: 0;
     padding-top: 0;
 }
+
+#md_project a {
+  color: black;
+  text-decoration: none;
+}
+#md_project a:hover {
+  text-decoration: underline;
+}
 """
 
 MARKDOWN = """
-### Whisper Web-UI
-Latest updates on <a href="https://github.com/jhj0517/Whsiper-WebUI">here.</a>  If you found this project useful, please consider supporting it. <br>
-<a class="bmc-button" href="https://www.buymeacoffee.com/jhj0517" target="_blank">
-<img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="30" width="140">
-</a>
+### [Whisper Web-UI](https://github.com/jhj0517/Whsiper-WebUI)
 """

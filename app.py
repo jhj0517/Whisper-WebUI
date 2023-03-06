@@ -18,7 +18,7 @@ block = gr.Blocks(css=CSS).queue(api_open=False)
 with block:
     with gr.Row():
         with gr.Column():
-            gr.Markdown(MARKDOWN)
+            gr.Markdown(MARKDOWN,elem_id="md_project")
     with gr.Tabs():
         with gr.TabItem("File"): # tab1    
             with gr.Row():
