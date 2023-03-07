@@ -29,6 +29,21 @@ If you have satisfied the prerequisites listed above, you are now ready to start
 2. After installation, run the `start-webui.bat`. (It will automatically download the model if it is not already installed.)
 3. Open your web browser and go to `http://localhost:7860`
 
+# Available models
+
+The WebUI uses the Open AI Whisper model
+
+|  Size  | Parameters | English-only model | Multilingual model | Required VRAM | Relative speed |
+|:------:|:----------:|:------------------:|:------------------:|:-------------:|:--------------:|
+|  tiny  |    39 M    |     `tiny.en`      |       `tiny`       |     ~1 GB     |      ~32x      |
+|  base  |    74 M    |     `base.en`      |       `base`       |     ~1 GB     |      ~16x      |
+| small  |   244 M    |     `small.en`     |      `small`       |     ~2 GB     |      ~6x       |
+| medium |   769 M    |    `medium.en`     |      `medium`      |     ~5 GB     |      ~2x       |
+| large  |   1550 M   |        N/A         |      `large`       |    ~10 GB     |       1x       |
+
+
+`.en` models are for English only, and the cool thing is that you can use the `Translate to English` option from the "large" models!
+
 ## Support
 
 If you found this project useful, kindly consider supporting it.
