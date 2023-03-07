@@ -28,7 +28,7 @@ with block:
     with gr.Tabs():
         with gr.TabItem("File"): # tab1    
             with gr.Row():
-                input_file = gr.File(type="file", label="Upload File here")
+                input_file = gr.Files(type="file", label="Upload File here")
             with gr.Row():
                 dd_model = gr.Dropdown(choices=whisper_inf.available_models,value="large-v2",label="Model")
                 dd_lang = gr.Dropdown(choices=["Automatic Detection"]+whisper_inf.available_langs,value="Automatic Detection",label="Language")

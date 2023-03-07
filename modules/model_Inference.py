@@ -15,7 +15,7 @@ class WhisperInference():
         self.available_models = whisper.available_models()
         self.available_langs = sorted(list(whisper.tokenizer.LANGUAGES.values()))
 
-    def transcribe_file(self,fileobj
+    def transcribe_file(self,fileobjs
                         ,model_size,lang,subformat,istranslate,
                         progress=gr.Progress()):
         
@@ -31,30 +31,41 @@ class WhisperInference():
             lang = None    
 
         progress(0,desc="Loading Audio..")    
-        audio = whisper.load_audio(fileobj.name)
 
-        translatable_model = ["large","large-v1","large-v2"]
-        if istranslate and self.current_model_size in translatable_model:
-            result = self.model.transcribe(audio=audio,language=lang,verbose=False,task="translate",progress_callback=progress_callback)
-        else : 
-            result = self.model.transcribe(audio=audio,language=lang,verbose=False,progress_callback=progress_callback)
+        files_info = {}
+        for fileobj in fileobjs: 
+            audio = whisper.load_audio(fileobj.name)
 
-        progress(1,desc="Completed!")
+            translatable_model = ["large","large-v1","large-v2"]
+            if istranslate and self.current_model_size in translatable_model:
+                result = self.model.transcribe(audio=audio,language=lang,verbose=False,task="translate",progress_callback=progress_callback)
+            else : 
+                result = self.model.transcribe(audio=audio,language=lang,verbose=False,progress_callback=progress_callback)
 
-        file_name, file_ext = os.path.splitext(os.path.basename(fileobj.orig_name))
-        file_name = file_name[:-9]
-        file_name = safe_filename(file_name)
-        timestamp = datetime.now().strftime("%m%d%H%M%S")
-        output_path = f"outputs/{file_name}-{timestamp}"
+            progress(1,desc="Completed!")
 
-        if subformat == "SRT":
-            subtitle = get_srt(result["segments"])
-            write_srt(subtitle,f"{output_path}.srt")
-        elif subformat == "WebVTT":
-            subtitle = get_vtt(result["segments"])
-            write_vtt(subtitle,f"{output_path}.vtt")    
+            file_name, file_ext = os.path.splitext(os.path.basename(fileobj.orig_name))
+            file_name = file_name[:-9]
+            file_name = safe_filename(file_name)
+            timestamp = datetime.now().strftime("%m%d%H%M%S")
+            output_path = f"outputs/{file_name}-{timestamp}"
 
-        return f"Done! Subtitle is in the outputs folder.\n\n{subtitle}"
+            if subformat == "SRT":
+                subtitle = get_srt(result["segments"])
+                write_srt(subtitle,f"{output_path}.srt")
+            elif subformat == "WebVTT":
+                subtitle = get_vtt(result["segments"])
+                write_vtt(subtitle,f"{output_path}.vtt")  
+
+            files_info[file_name] = subtitle
+
+        total_result = ''
+        for file_name,subtitle in files_info.items():
+            total_result+='------------------------------------\n'
+            total_result+=f'{file_name}\n\n'  
+            total_result+=f'{subtitle}'  
+
+        return f"Done! Subtitle is in the outputs folder.\n\n{total_result}"
     
     def transcribe_youtube(self,youtubelink
                         ,model_size,lang,subformat,istranslate,
