@@ -16,11 +16,11 @@ A Gradio-based browser interface for Whisper
 
 # Installation and Running
 ## Prerequisite
-To run Whisper, you need to have `python` version 3.8 to 3.10 and `ffmpeg`.
+To run Whisper, you need to have `python` version 3.8 to 3.10 and `FFmpeg`.
 
 Please follow the links below to install the necessary software:
 - python : [https://www.python.org/downloads/](https://www.python.org/downloads/)
-- ffmpeg :  [https://ffmpeg.org/download.html](https://ffmpeg.org/download.html)
+- FFmpeg :  [https://ffmpeg.org/download.html](https://ffmpeg.org/download.html)
 
 ## Automatic Installation
 If you have satisfied the prerequisites listed above, you are now ready to start Whisper-WebUI.
