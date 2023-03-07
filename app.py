@@ -11,6 +11,13 @@ def open_output_folder():
     else:
         print(f"The folder {folder_path} does not exist.")
 
+def on_change_models(model_size):
+    translatable_model = ["large","large-v1","large-v2"]
+    if model_size not in translatable_model:
+        return gr.Checkbox.update(visible=False,value=False,interactive=False)
+    else:
+        return gr.Checkbox.update(visible=True,value=False,label="Translate to English?",interactive=True) 
+
 whisper_inf = WhisperInference()
 block = gr.Blocks(css=CSS).queue(api_open=False)
 
@@ -36,6 +43,7 @@ with block:
 
             btn_run.click(fn=whisper_inf.transcribe_file,inputs=[input_file,dd_model,dd_lang,dd_subformat,cb_translate],outputs=[tb_indicator])    
             btn_openfolder.click(fn=open_output_folder,inputs=[],outputs=[])
+            dd_model.change(fn=on_change_models,inputs=[dd_model],outputs=[cb_translate])
         
         with gr.TabItem("Youtube"): # tab2
             with gr.Row():
@@ -61,6 +69,7 @@ with block:
             btn_run.click(fn=whisper_inf.transcribe_youtube,inputs=[tb_youtubelink,dd_model,dd_lang,dd_subformat,cb_translate],outputs=[tb_indicator])    
             tb_youtubelink.change(get_ytmetas,inputs=[tb_youtubelink],outputs=[img_thumbnail,tb_title,tb_description])
             btn_openfolder.click(fn=open_output_folder,inputs=[],outputs=[])
+            dd_model.change(fn=on_change_models,inputs=[dd_model],outputs=[cb_translate])
 
         with gr.TabItem("Mic"): # tab3
             with gr.Row():
@@ -78,7 +87,8 @@ with block:
                 btn_openfolder = gr.Button('📂').style(full_width=False)
 
             btn_run.click(fn=whisper_inf.transcribe_mic,inputs=[mic_input,dd_model,dd_lang,dd_subformat,cb_translate],outputs=[tb_indicator])    
-            btn_openfolder.click(fn=open_output_folder,inputs=[],outputs=[])    
+            btn_openfolder.click(fn=open_output_folder,inputs=[],outputs=[]) 
+            dd_model.change(fn=on_change_models,inputs=[dd_model],outputs=[cb_translate])   
     
 block.launch()
 
