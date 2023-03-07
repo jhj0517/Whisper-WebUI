@@ -33,7 +33,8 @@ class WhisperInference():
         progress(0,desc="Loading Audio..")    
         audio = whisper.load_audio(fileobj.name)
 
-        if istranslate == True:
+        translatable_model = ["large","large-v1","large-v2"]
+        if istranslate and self.current_model_size in translatable_model:
             result = self.model.transcribe(audio=audio,language=lang,verbose=False,task="translate",progress_callback=progress_callback)
         else : 
             result = self.model.transcribe(audio=audio,language=lang,verbose=False,progress_callback=progress_callback)
@@ -74,7 +75,8 @@ class WhisperInference():
         yt = get_ytdata(youtubelink)
         audio = whisper.load_audio(get_ytaudio(yt))
 
-        if istranslate == True:
+        translatable_model = ["large","large-v1","large-v2"]
+        if istranslate and self.current_model_size in translatable_model:
             result = self.model.transcribe(audio=audio,language=lang,verbose=False,task="translate",progress_callback=progress_callback)
         else : 
             result = self.model.transcribe(audio=audio,language=lang,verbose=False,progress_callback=progress_callback)
@@ -111,7 +113,8 @@ class WhisperInference():
 
         progress(0,desc="Loading Audio..")    
 
-        if istranslate == True:
+        translatable_model = ["large","large-v1","large-v2"]
+        if istranslate and self.current_model_size in translatable_model:
             result = self.model.transcribe(audio=micaudio,language=lang,verbose=False,task="translate",progress_callback=progress_callback)
         else : 
             result = self.model.transcribe(audio=micaudio,language=lang,verbose=False,progress_callback=progress_callback)
