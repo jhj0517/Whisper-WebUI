@@ -44,7 +44,7 @@ class WhisperInference():
         file_name, file_ext = os.path.splitext(os.path.basename(fileobj.orig_name))
         file_name = file_name[:-9]
         file_name = safe_filename(file_name)
-        timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
+        timestamp = datetime.now().strftime("%m%d%H%M%S")
         output_path = f"outputs/{file_name}-{timestamp}"
 
         if subformat == "SRT":
@@ -84,7 +84,7 @@ class WhisperInference():
         progress(1,desc="Completed!")
 
         file_name = safe_filename(yt.title)
-        timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
+        timestamp = datetime.now().strftime("%m%d%H%M%S")
         output_path = f"outputs/{file_name}-{timestamp}"
 
         if subformat == "SRT":
@@ -121,7 +121,7 @@ class WhisperInference():
 
         progress(1,desc="Completed!")
 
-        timestamp = datetime.now().strftime("%Y%m%d%H%M%S")
+        timestamp = datetime.now().strftime("%m%d%H%M%S")
         output_path = f"outputs/Mic-{timestamp}"
 
         if subformat == "SRT":
