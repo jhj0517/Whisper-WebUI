@@ -22,7 +22,7 @@ Please follow the links below to install the necessary software:
 - python : [https://www.python.org/downloads/](https://www.python.org/downloads/)
 - FFmpeg :  [https://ffmpeg.org/download.html](https://ffmpeg.org/download.html)
 
-After installing FFmpeg, make sure to add the `FFmpeg/bin` folder to your system PATH!
+After installing FFmpeg, **make sure to add the `FFmpeg/bin` folder to your system PATH!**
 
 ## Automatic Installation
 If you have satisfied the prerequisites listed above, you are now ready to start Whisper-WebUI.
