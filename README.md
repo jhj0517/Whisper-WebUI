@@ -31,6 +31,8 @@ If you have satisfied the prerequisites listed above, you are now ready to start
 2. After installation, run the `start-webui.bat`. (It will automatically download the model if it is not already installed.)
 3. Open your web browser and go to `http://localhost:7860`
 
+( If you're running another Web-UI, it will be hosted on a different port , such as `localhost:7861`, `localhost:7862`, and so on )
+
 # Available models
 
 The WebUI uses the Open AI Whisper model
