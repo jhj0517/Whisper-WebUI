@@ -19,6 +19,7 @@ A Gradio-based browser interface for Whisper. You can use it as an Easy Subtitle
 To run Whisper, you need to have `python` version 3.8 to 3.10 and `FFmpeg`.
 
 Please follow the links below to install the necessary software:
+- git : [https://git-scm.com/downloads](https://git-scm.com/downloads)
 - python : [https://www.python.org/downloads/](https://www.python.org/downloads/)
 - FFmpeg :  [https://ffmpeg.org/download.html](https://ffmpeg.org/download.html)
 
