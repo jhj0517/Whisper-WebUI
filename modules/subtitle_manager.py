@@ -17,12 +17,7 @@ def timeformat_vtt(time):
     return f"{int(hours):02d}:{int(minutes):02d}:{int(seconds):02d}.{int(milliseconds):03d}"
 
 
-def write_srt(subtitle, output_file):
-    with open(output_file, 'w', encoding='utf-8') as f:
-        f.write(subtitle)
-
-
-def write_vtt(subtitle, output_file):
+def write_file(subtitle, output_file):
     with open(output_file, 'w', encoding='utf-8') as f:
         f.write(subtitle)
 
