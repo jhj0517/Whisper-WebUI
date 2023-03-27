@@ -16,7 +16,7 @@ A Gradio-based browser interface for Whisper. You can use it as an Easy Subtitle
 
 # Installation and Running
 ## Prerequisite
-To run Whisper, you need to have `python` version 3.8 to 3.10 and `FFmpeg`.
+To run Whisper, you need to have `git`, `python` version 3.8 ~ 3.10 and `FFmpeg`.
 
 Please follow the links below to install the necessary software:
 - git : [https://git-scm.com/downloads](https://git-scm.com/downloads)
