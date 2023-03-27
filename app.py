@@ -4,6 +4,7 @@ import os
 from ui.htmls import CSS, MARKDOWN
 from modules.youtube_manager import get_ytmetas
 
+
 def open_output_folder():
     folder_path = "outputs"
     if os.path.exists(folder_path):
@@ -11,12 +12,14 @@ def open_output_folder():
     else:
         print(f"The folder {folder_path} does not exist.")
 
+
 def on_change_models(model_size):
     translatable_model = ["large", "large-v1", "large-v2"]
     if model_size not in translatable_model:
         return gr.Checkbox.update(visible=False, value=False, interactive=False)
     else:
         return gr.Checkbox.update(visible=True, value=False, label="Translate to English?", interactive=True)
+
 
 whisper_inf = WhisperInference()
 block = gr.Blocks(css=CSS).queue(api_open=False)
