@@ -1,5 +1,5 @@
 import gradio as gr
-from modules.model_Inference import WhisperInference
+from modules.whisper_Inference import WhisperInference
 import os
 from ui.htmls import CSS, MARKDOWN
 from modules.youtube_manager import get_ytmetas
