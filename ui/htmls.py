@@ -40,3 +40,58 @@ CSS = """
 MARKDOWN = """
 ### [Whisper Web-UI](https://github.com/jhj0517/Whsiper-WebUI)
 """
+
+
+NLLB_VRAM_TABLE = """
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+    th, td {
+      border: 1px solid #dddddd;
+      text-align: left;
+      padding: 8px;
+    }
+    th {
+      background-color: #f2f2f2;
+    }
+  </style>
+</head>
+<body>
+
+<details>
+  <summary>VRAM usage for each model</summary>
+  <table>
+    <thead>
+      <tr>
+        <th>Model name</th>
+        <th>Required VRAM</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>nllb-200-3.3B</td>
+        <td>~16GB</td>
+      </tr>
+      <tr>
+        <td>nllb-200-1.3B</td>
+        <td>~8GB</td>
+      </tr>
+      <tr>
+        <td>nllb-200-distilled-600M</td>
+        <td>~4GB</td>
+      </tr>
+    </tbody>
+  </table>
+  <p><strong>Note:</strong> Be mindful of your VRAM! The table above provides an approximate VRAM usage for each model.</p>
+</details>
+
+</body>
+</html>
+"""

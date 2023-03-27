@@ -1,7 +1,8 @@
 import gradio as gr
 from modules.whisper_Inference import WhisperInference
+from modules.nllb_inference import NLLBInference
 import os
-from ui.htmls import CSS, MARKDOWN
+from ui.htmls import *
 from modules.youtube_manager import get_ytmetas
 
 
@@ -21,6 +22,7 @@ def on_change_models(model_size):
 
 
 whisper_inf = WhisperInference()
+nllb_inf = NLLBInference()
 block = gr.Blocks(css=CSS).queue(api_open=False)
 
 with block:
@@ -99,5 +101,30 @@ with block:
                           inputs=[mic_input, dd_model, dd_lang, dd_subformat, cb_translate], outputs=[tb_indicator])
             btn_openfolder.click(fn=lambda: open_fodler("outputs"), inputs=None, outputs=None)
             dd_model.change(fn=on_change_models, inputs=[dd_model], outputs=[cb_translate])
+
+        with gr.TabItem("T2T Translation"):  # tab 4
+            with gr.Row():
+                file_subs = gr.Files(type="file", label="Upload Subtitle Files to translate here",
+                                     file_types=['.vtt', '.srt'])
+
+            with gr.TabItem("NLLB"):  # sub tab1
+                with gr.Row():
+                    dd_nllb_model = gr.Dropdown(label="Model", value=nllb_inf.default_model_size,
+                                                choices=nllb_inf.available_models)
+                    dd_nllb_sourcelang = gr.Dropdown(label="Source Language", choices=nllb_inf.available_source_langs)
+                    dd_nllb_targetlang = gr.Dropdown(label="Target Language", choices=nllb_inf.available_target_langs)
+                with gr.Row():
+                    btn_run = gr.Button("TRANSLATE SUBTITLE FILE", variant="primary")
+                with gr.Row():
+                    tb_indicator = gr.Textbox(label="Output")
+                    btn_openfolder = gr.Button('📂').style(full_width=False)
+                with gr.Column():
+                    md_vram_table = gr.HTML(NLLB_VRAM_TABLE, elem_id="md_nllb_vram_table")
+
+            btn_run.click(fn=nllb_inf.translate_file,
+                          inputs=[file_subs, dd_nllb_model, dd_nllb_sourcelang, dd_nllb_targetlang],
+                          outputs=[tb_indicator])
+            btn_openfolder.click(fn=lambda: open_fodler("outputs\\translations"), inputs=None, outputs=None)
+
 
 block.launch()

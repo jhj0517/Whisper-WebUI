@@ -68,7 +68,7 @@ class NLLBInference:
 
                 write_file(subtitle, f"{output_path}.srt")
 
-            elif file_path == ".vtt":
+            elif file_ext == ".vtt":
                 parsed_dicts = parse_vtt(file_path=file_path)
                 total_progress = len(parsed_dicts)
                 for index, dic in enumerate(parsed_dicts):
