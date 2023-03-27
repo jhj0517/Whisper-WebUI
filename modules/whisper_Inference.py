@@ -1,5 +1,5 @@
 import whisper
-from modules.subtitle_manager import get_srt, get_vtt, write_srt, write_vtt, safe_filename
+from modules.subtitle_manager import get_srt, get_vtt, write_file, safe_filename
 from modules.youtube_manager import get_ytdata, get_ytaudio
 import gradio as gr
 import os
@@ -56,10 +56,10 @@ class WhisperInference:
 
             if subformat == "SRT":
                 subtitle = get_srt(result["segments"])
-                write_srt(subtitle, f"{output_path}.srt")
+                write_file(subtitle, f"{output_path}.srt")
             elif subformat == "WebVTT":
                 subtitle = get_vtt(result["segments"])
-                write_vtt(subtitle, f"{output_path}.vtt")
+                write_file(subtitle, f"{output_path}.vtt")
 
             files_info[file_name] = subtitle
 
@@ -106,10 +106,10 @@ class WhisperInference:
 
         if subformat == "SRT":
             subtitle = get_srt(result["segments"])
-            write_srt(subtitle, f"{output_path}.srt")
+            write_file(subtitle, f"{output_path}.srt")
         elif subformat == "WebVTT":
             subtitle = get_vtt(result["segments"])
-            write_vtt(subtitle, f"{output_path}.vtt")
+            write_file(subtitle, f"{output_path}.vtt")
 
         return f"Done! Subtitle file is in the outputs folder.\n\n{subtitle}"
 
@@ -145,9 +145,9 @@ class WhisperInference:
 
         if subformat == "SRT":
             subtitle = get_srt(result["segments"])
-            write_srt(subtitle, f"{output_path}.srt")
+            write_file(subtitle, f"{output_path}.srt")
         elif subformat == "WebVTT":
             subtitle = get_vtt(result["segments"])
-            write_vtt(subtitle, f"{output_path}.vtt")
+            write_file(subtitle, f"{output_path}.vtt")
 
         return f"Done! Subtitle file is in the outputs folder.\n\n{subtitle}"
