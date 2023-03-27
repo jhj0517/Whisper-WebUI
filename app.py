@@ -5,8 +5,7 @@ from ui.htmls import CSS, MARKDOWN
 from modules.youtube_manager import get_ytmetas
 
 
-def open_output_folder():
-    folder_path = "outputs"
+def open_fodler(folder_path):
     if os.path.exists(folder_path):
         os.system(f"start {folder_path}")
     else:
@@ -47,7 +46,7 @@ with block:
 
             btn_run.click(fn=whisper_inf.transcribe_file,
                           inputs=[input_file, dd_model, dd_lang, dd_subformat, cb_translate], outputs=[tb_indicator])
-            btn_openfolder.click(fn=open_output_folder, inputs=[], outputs=[])
+            btn_openfolder.click(fn=lambda: open_fodler("outputs"), inputs=None, outputs=None)
             dd_model.change(fn=on_change_models, inputs=[dd_model], outputs=[cb_translate])
 
         with gr.TabItem("Youtube"):  # tab2
@@ -77,7 +76,7 @@ with block:
                           outputs=[tb_indicator])
             tb_youtubelink.change(get_ytmetas, inputs=[tb_youtubelink],
                                   outputs=[img_thumbnail, tb_title, tb_description])
-            btn_openfolder.click(fn=open_output_folder, inputs=[], outputs=[])
+            btn_openfolder.click(fn=lambda: open_fodler("outputs"), inputs=None, outputs=None)
             dd_model.change(fn=on_change_models, inputs=[dd_model], outputs=[cb_translate])
 
         with gr.TabItem("Mic"):  # tab3
@@ -98,7 +97,7 @@ with block:
 
             btn_run.click(fn=whisper_inf.transcribe_mic,
                           inputs=[mic_input, dd_model, dd_lang, dd_subformat, cb_translate], outputs=[tb_indicator])
-            btn_openfolder.click(fn=open_output_folder, inputs=[], outputs=[])
+            btn_openfolder.click(fn=lambda: open_fodler("outputs"), inputs=None, outputs=None)
             dd_model.change(fn=on_change_models, inputs=[dd_model], outputs=[cb_translate])
 
 block.launch()
