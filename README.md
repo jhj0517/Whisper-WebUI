@@ -49,10 +49,3 @@ The WebUI uses the Open AI Whisper model
 
 `.en` models are for English only, and the cool thing is that you can use the `Translate to English` option from the "large" models!
 
-## Support
-
-If you found this project useful, kindly consider supporting it.
-
-<a href="https://www.buymeacoffee.com/jhj0517" target="_blank"><img src="https://cdn.buymeacoffee.com/buttons/default-orange.png" alt="Buy Me A Coffee" height="41" width="174"></a>
-
-
