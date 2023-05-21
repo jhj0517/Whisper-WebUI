@@ -10,20 +10,19 @@ DEFAULT_MODEL_SIZE = "large-v2"
 
 class WhisperInference:
     def __init__(self):
-        print("\nInitializing Model..\n")
-        self.current_model_size = DEFAULT_MODEL_SIZE
-        self.model = whisper.load_model(name=DEFAULT_MODEL_SIZE, download_root="models/Whisper")
+        self.current_model_size = None
+        self.model = None
         self.available_models = whisper.available_models()
         self.available_langs = sorted(list(whisper.tokenizer.LANGUAGES.values()))
 
-    def transcribe_file(self, fileobjs
-                        , model_size, lang, subformat, istranslate,
+    def transcribe_file(self, fileobjs,
+                        model_size, lang, subformat, istranslate,
                         progress=gr.Progress()):
 
         def progress_callback(progress_value):
             progress(progress_value, desc="Transcribing..")
 
-        if model_size != self.current_model_size:
+        if model_size != self.current_model_size or self.model is None:
             progress(0, desc="Initializing Model..")
             self.current_model_size = model_size
             self.model = whisper.load_model(name=model_size, download_root="models/Whisper")
@@ -71,14 +70,14 @@ class WhisperInference:
 
         return f"Done! Subtitle is in the outputs folder.\n\n{total_result}"
 
-    def transcribe_youtube(self, youtubelink
-                           , model_size, lang, subformat, istranslate,
+    def transcribe_youtube(self, youtubelink,
+                           model_size, lang, subformat, istranslate,
                            progress=gr.Progress()):
 
         def progress_callback(progress_value):
             progress(progress_value, desc="Transcribing..")
 
-        if model_size != self.current_model_size:
+        if model_size != self.current_model_size or self.model is None:
             progress(0, desc="Initializing Model..")
             self.current_model_size = model_size
             self.model = whisper.load_model(name=model_size, download_root="models/Whisper")
@@ -113,14 +112,14 @@ class WhisperInference:
 
         return f"Done! Subtitle file is in the outputs folder.\n\n{subtitle}"
 
-    def transcribe_mic(self, micaudio
-                       , model_size, lang, subformat, istranslate,
+    def transcribe_mic(self, micaudio,
+                       model_size, lang, subformat, istranslate,
                        progress=gr.Progress()):
 
         def progress_callback(progress_value):
             progress(progress_value, desc="Transcribing..")
 
-        if model_size != self.current_model_size:
+        if model_size != self.current_model_size or self.model is None:
             progress(0, desc="Initializing Model..")
             self.current_model_size = model_size
             self.model = whisper.load_model(name=model_size, download_root="models/Whisper")
