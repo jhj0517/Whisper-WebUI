@@ -6,7 +6,7 @@ from ui.htmls import *
 from modules.youtube_manager import get_ytmetas
 
 
-def open_fodler(folder_path):
+def open_folder(folder_path):
     if os.path.exists(folder_path):
         os.system(f"start {folder_path}")
     else:
