@@ -48,7 +48,7 @@ with block:
 
             btn_run.click(fn=whisper_inf.transcribe_file,
                           inputs=[input_file, dd_model, dd_lang, dd_subformat, cb_translate], outputs=[tb_indicator])
-            btn_openfolder.click(fn=lambda: open_fodler("outputs"), inputs=None, outputs=None)
+            btn_openfolder.click(fn=lambda: open_folder("outputs"), inputs=None, outputs=None)
             dd_model.change(fn=on_change_models, inputs=[dd_model], outputs=[cb_translate])
 
         with gr.TabItem("Youtube"):  # tab2
@@ -78,7 +78,7 @@ with block:
                           outputs=[tb_indicator])
             tb_youtubelink.change(get_ytmetas, inputs=[tb_youtubelink],
                                   outputs=[img_thumbnail, tb_title, tb_description])
-            btn_openfolder.click(fn=lambda: open_fodler("outputs"), inputs=None, outputs=None)
+            btn_openfolder.click(fn=lambda: open_folder("outputs"), inputs=None, outputs=None)
             dd_model.change(fn=on_change_models, inputs=[dd_model], outputs=[cb_translate])
 
         with gr.TabItem("Mic"):  # tab3
@@ -99,7 +99,7 @@ with block:
 
             btn_run.click(fn=whisper_inf.transcribe_mic,
                           inputs=[mic_input, dd_model, dd_lang, dd_subformat, cb_translate], outputs=[tb_indicator])
-            btn_openfolder.click(fn=lambda: open_fodler("outputs"), inputs=None, outputs=None)
+            btn_openfolder.click(fn=lambda: open_folder("outputs"), inputs=None, outputs=None)
             dd_model.change(fn=on_change_models, inputs=[dd_model], outputs=[cb_translate])
 
         with gr.TabItem("T2T Translation"):  # tab 4
@@ -124,7 +124,7 @@ with block:
             btn_run.click(fn=nllb_inf.translate_file,
                           inputs=[file_subs, dd_nllb_model, dd_nllb_sourcelang, dd_nllb_targetlang],
                           outputs=[tb_indicator])
-            btn_openfolder.click(fn=lambda: open_fodler("outputs\\translations"), inputs=None, outputs=None)
+            btn_openfolder.click(fn=lambda: open_folder("outputs\\translations"), inputs=None, outputs=None)
 
 
 block.launch()
