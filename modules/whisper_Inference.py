@@ -1,4 +1,5 @@
 import whisper
+from .base_interface import BaseInterface
 from modules.subtitle_manager import get_srt, get_vtt, write_file, safe_filename
 from modules.youtube_manager import get_ytdata, get_ytaudio
 import gradio as gr
@@ -8,8 +9,9 @@ from datetime import datetime
 DEFAULT_MODEL_SIZE = "large-v2"
 
 
-class WhisperInference:
+class WhisperInference(BaseInterface):
     def __init__(self):
+        super().__init__()
         self.current_model_size = None
         self.model = None
         self.available_models = whisper.available_models()
@@ -71,11 +73,10 @@ class WhisperInference:
 
             return f"Done! Subtitle is in the outputs folder.\n\n{total_result}"
         except Exception as e:
-            return str(e)
+            return f"Error: {str(e)}"
         finally:
-            for fileobj in fileobjs:
-                if os.path.exists(fileobj.name):
-                    os.remove(fileobj.name)
+            self.release_cuda_memory()
+            self.remove_input_files([fileobj.name for fileobj in fileobjs])
 
     def transcribe_youtube(self, youtubelink,
                            model_size, lang, subformat, istranslate,
@@ -120,12 +121,12 @@ class WhisperInference:
 
             return f"Done! Subtitle file is in the outputs folder.\n\n{subtitle}"
         except Exception as e:
-            return str(e)
+            return f"Error: {str(e)}"
         finally:
             yt = get_ytdata(youtubelink)
             file_path = get_ytaudio(yt)
-            if os.path.exists(file_path):
-                os.remove(file_path)
+            self.release_cuda_memory()
+            self.remove_input_files([file_path])
 
     def transcribe_mic(self, micaudio,
                        model_size, lang, subformat, istranslate,
@@ -167,7 +168,7 @@ class WhisperInference:
 
             return f"Done! Subtitle file is in the outputs folder.\n\n{subtitle}"
         except Exception as e:
-            print(str(e))
+            return f"Error: {str(e)}"
         finally:
-            if os.path.exists(micaudio):
-                os.remove(micaudio)
+            self.release_cuda_memory()
+            self.remove_input_files([micaudio])
