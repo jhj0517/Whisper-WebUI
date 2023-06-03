@@ -1,3 +1,4 @@
+from .base_interface import BaseInterface
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM, pipeline
 import gradio as gr
 import torch
@@ -10,8 +11,9 @@ DEFAULT_MODEL_SIZE = "facebook/nllb-200-1.3B"
 NLLB_MODELS = ["facebook/nllb-200-3.3B", "facebook/nllb-200-1.3B", "facebook/nllb-200-distilled-600M"]
 
 
-class NLLBInference:
+class NLLBInference(BaseInterface):
     def __init__(self):
+        super().__init__()
         self.default_model_size = DEFAULT_MODEL_SIZE
         self.current_model_size = None
         self.model = None
@@ -29,69 +31,74 @@ class NLLBInference:
     def translate_file(self, fileobjs
                        , model_size, src_lang, tgt_lang,
                        progress=gr.Progress()):
+        try:
+            if model_size != self.current_model_size or self.model is None:
+                print("\nInitializing NLLB Model..\n")
+                progress(0, desc="Initializing NLLB Model..")
+                self.current_model_size = model_size
+                self.model = AutoModelForSeq2SeqLM.from_pretrained(pretrained_model_name_or_path=model_size,
+                                                                   cache_dir="models/NLLB")
+                self.tokenizer = AutoTokenizer.from_pretrained(pretrained_model_name_or_path=model_size,
+                                                               cache_dir=f"models/NLLB/tokenizers")
 
-        if model_size != self.current_model_size or self.model is None:
-            print("\nInitializing NLLB Model..\n")
-            progress(0, desc="Initializing NLLB Model..")
-            self.current_model_size = model_size
-            self.model = AutoModelForSeq2SeqLM.from_pretrained(pretrained_model_name_or_path=model_size,
-                                                               cache_dir="models/NLLB")
-            self.tokenizer = AutoTokenizer.from_pretrained(pretrained_model_name_or_path=model_size,
-                                                           cache_dir=f"models/NLLB/tokenizers")
+            src_lang = NLLB_AVAILABLE_LANGS[src_lang]
+            tgt_lang = NLLB_AVAILABLE_LANGS[tgt_lang]
 
-        src_lang = NLLB_AVAILABLE_LANGS[src_lang]
-        tgt_lang = NLLB_AVAILABLE_LANGS[tgt_lang]
+            self.pipeline = pipeline("translation",
+                                     model=self.model,
+                                     tokenizer=self.tokenizer,
+                                     src_lang=src_lang,
+                                     tgt_lang=tgt_lang,
+                                     device=self.device)
 
-        self.pipeline = pipeline("translation",
-                                 model=self.model,
-                                 tokenizer=self.tokenizer,
-                                 src_lang=src_lang,
-                                 tgt_lang=tgt_lang,
-                                 device=self.device)
+            files_info = {}
+            for fileobj in fileobjs:
+                file_path = fileobj.name
+                file_name, file_ext = os.path.splitext(os.path.basename(fileobj.orig_name))
+                if file_ext == ".srt":
+                    parsed_dicts = parse_srt(file_path=file_path)
+                    total_progress = len(parsed_dicts)
+                    for index, dic in enumerate(parsed_dicts):
+                        progress(index / total_progress, desc="Translating..")
+                        translated_text = self.translate_text(dic["sentence"])
+                        dic["sentence"] = translated_text
+                    subtitle = get_serialized_srt(parsed_dicts)
 
-        files_info = {}
-        for fileobj in fileobjs:
-            file_path = fileobj.name
-            file_name, file_ext = os.path.splitext(os.path.basename(fileobj.orig_name))
-            if file_ext == ".srt":
-                parsed_dicts = parse_srt(file_path=file_path)
-                total_progress = len(parsed_dicts)
-                for index, dic in enumerate(parsed_dicts):
-                    progress(index / total_progress, desc="Translating..")
-                    translated_text = self.translate_text(dic["sentence"])
-                    dic["sentence"] = translated_text
-                subtitle = get_serialized_srt(parsed_dicts)
+                    timestamp = datetime.now().strftime("%m%d%H%M%S")
+                    file_name = file_name[:-9]
+                    output_path = f"outputs/translations/{file_name}-{timestamp}"
 
-                timestamp = datetime.now().strftime("%m%d%H%M%S")
-                file_name = file_name[:-9]
-                output_path = f"outputs/translations/{file_name}-{timestamp}"
+                    write_file(subtitle, f"{output_path}.srt")
 
-                write_file(subtitle, f"{output_path}.srt")
+                elif file_ext == ".vtt":
+                    parsed_dicts = parse_vtt(file_path=file_path)
+                    total_progress = len(parsed_dicts)
+                    for index, dic in enumerate(parsed_dicts):
+                        progress(index / total_progress, desc="Translating..")
+                        translated_text = self.translate_text(dic["sentence"])
+                        dic["sentence"] = translated_text
+                    subtitle = get_serialized_vtt(parsed_dicts)
 
-            elif file_ext == ".vtt":
-                parsed_dicts = parse_vtt(file_path=file_path)
-                total_progress = len(parsed_dicts)
-                for index, dic in enumerate(parsed_dicts):
-                    progress(index / total_progress, desc="Translating..")
-                    translated_text = self.translate_text(dic["sentence"])
-                    dic["sentence"] = translated_text
-                subtitle = get_serialized_vtt(parsed_dicts)
+                    timestamp = datetime.now().strftime("%m%d%H%M%S")
+                    file_name = file_name[:-9]
+                    output_path = f"outputs/translations/{file_name}-{timestamp}"
 
-                timestamp = datetime.now().strftime("%m%d%H%M%S")
-                file_name = file_name[:-9]
-                output_path = f"outputs/translations/{file_name}-{timestamp}"
+                    write_file(subtitle, f"{output_path}.vtt")
 
-                write_file(subtitle, f"{output_path}.vtt")
+                files_info[file_name] = subtitle
 
-            files_info[file_name] = subtitle
+            total_result = ''
+            for file_name, subtitle in files_info.items():
+                total_result += '------------------------------------\n'
+                total_result += f'{file_name}\n\n'
+                total_result += f'{subtitle}'
 
-        total_result = ''
-        for file_name, subtitle in files_info.items():
-            total_result += '------------------------------------\n'
-            total_result += f'{file_name}\n\n'
-            total_result += f'{subtitle}'
-
-        return f"Done! Subtitle is in the outputs/translation folder.\n\n{total_result}"
+            return f"Done! Subtitle is in the outputs/translation folder.\n\n{total_result}"
+        except Exception as e:
+            return f"Error: {str(e)}"
+        finally:
+            self.release_cuda_memory()
+            self.remove_input_files([fileobj.name for fileobj in fileobjs])
 
 
 NLLB_AVAILABLE_LANGS = {
