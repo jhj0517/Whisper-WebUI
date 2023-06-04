@@ -3,6 +3,9 @@ A Gradio-based browser interface for Whisper. You can use it as an Easy Subtitle
 
 ![Whisper WebUI](https://github.com/jhj0517/Whsiper-WebUI/blob/master/screenshot.png)
 
+## Notebook
+If you wish to try this on Colab, you can do it in [here](https://colab.research.google.com/github/jhj0517/Whisper-WebUI/blob/master/notebook/whisper-webui.ipynb)!
+
 # Feature
 - Generate subtitles from various sources, including :
   - Files
