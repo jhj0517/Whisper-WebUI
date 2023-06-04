@@ -124,7 +124,7 @@ with block:
             btn_run.click(fn=nllb_inf.translate_file,
                           inputs=[file_subs, dd_nllb_model, dd_nllb_sourcelang, dd_nllb_targetlang],
                           outputs=[tb_indicator])
-            btn_openfolder.click(fn=lambda: open_folder("outputs\\translations"), inputs=None, outputs=None)
+            btn_openfolder.click(fn=lambda: open_folder(os.path.join("outputs", "translations")), inputs=None, outputs=None)
 
 
 block.launch()

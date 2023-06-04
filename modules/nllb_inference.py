@@ -37,9 +37,9 @@ class NLLBInference(BaseInterface):
                 progress(0, desc="Initializing NLLB Model..")
                 self.current_model_size = model_size
                 self.model = AutoModelForSeq2SeqLM.from_pretrained(pretrained_model_name_or_path=model_size,
-                                                                   cache_dir="models/NLLB")
+                                                                   cache_dir=os.path.join("models", "NLLB"))
                 self.tokenizer = AutoTokenizer.from_pretrained(pretrained_model_name_or_path=model_size,
-                                                               cache_dir=f"models/NLLB/tokenizers")
+                                                               cache_dir=os.path.join("models", "NLLB", "tokenizers"))
 
             src_lang = NLLB_AVAILABLE_LANGS[src_lang]
             tgt_lang = NLLB_AVAILABLE_LANGS[tgt_lang]
@@ -66,7 +66,7 @@ class NLLBInference(BaseInterface):
 
                     timestamp = datetime.now().strftime("%m%d%H%M%S")
                     file_name = file_name[:-9]
-                    output_path = f"outputs/translations/{file_name}-{timestamp}"
+                    output_path = os.path.join("outputs", "translations", f"{file_name}-{timestamp}")
 
                     write_file(subtitle, f"{output_path}.srt")
 

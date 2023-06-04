@@ -28,7 +28,7 @@ class WhisperInference(BaseInterface):
             if model_size != self.current_model_size or self.model is None:
                 progress(0, desc="Initializing Model..")
                 self.current_model_size = model_size
-                self.model = whisper.load_model(name=model_size, download_root="models/Whisper")
+                self.model = whisper.load_model(name=model_size, download_root=os.path.join("models", "Whisper"))
 
             if lang == "Automatic Detection":
                 lang = None
@@ -54,7 +54,7 @@ class WhisperInference(BaseInterface):
                 file_name = file_name[:-9]
                 file_name = safe_filename(file_name)
                 timestamp = datetime.now().strftime("%m%d%H%M%S")
-                output_path = f"outputs/{file_name}-{timestamp}"
+                output_path = os.path.join("outputs", f"{file_name}-{timestamp}")
 
                 if subformat == "SRT":
                     subtitle = get_srt(result["segments"])
@@ -89,7 +89,7 @@ class WhisperInference(BaseInterface):
             if model_size != self.current_model_size or self.model is None:
                 progress(0, desc="Initializing Model..")
                 self.current_model_size = model_size
-                self.model = whisper.load_model(name=model_size, download_root="models/Whisper")
+                self.model = whisper.load_model(name=model_size, download_root=os.path.join("models", "Whisper"))
 
             if lang == "Automatic Detection":
                 lang = None
@@ -110,7 +110,7 @@ class WhisperInference(BaseInterface):
 
             file_name = safe_filename(yt.title)
             timestamp = datetime.now().strftime("%m%d%H%M%S")
-            output_path = f"outputs/{file_name}-{timestamp}"
+            output_path = os.path.join("outputs", f"{file_name}-{timestamp}")
 
             if subformat == "SRT":
                 subtitle = get_srt(result["segments"])
@@ -139,7 +139,7 @@ class WhisperInference(BaseInterface):
             if model_size != self.current_model_size or self.model is None:
                 progress(0, desc="Initializing Model..")
                 self.current_model_size = model_size
-                self.model = whisper.load_model(name=model_size, download_root="models/Whisper")
+                self.model = whisper.load_model(name=model_size, download_root=os.path.join("models", "Whisper"))
 
             if lang == "Automatic Detection":
                 lang = None
@@ -157,7 +157,7 @@ class WhisperInference(BaseInterface):
             progress(1, desc="Completed!")
 
             timestamp = datetime.now().strftime("%m%d%H%M%S")
-            output_path = f"outputs/Mic-{timestamp}"
+            output_path = os.path.join("outputs", f"{file_name}-{timestamp}")
 
             if subformat == "SRT":
                 subtitle = get_srt(result["segments"])
