@@ -4,6 +4,13 @@ from modules.nllb_inference import NLLBInference
 import os
 from ui.htmls import *
 from modules.youtube_manager import get_ytmetas
+import argparse
+
+# Create the parser
+parser = argparse.ArgumentParser()
+parser.add_argument('--share', type=bool, default=False, nargs='?', const=True,
+                    help='Share value')
+args = parser.parse_args()
 
 
 def open_folder(folder_path):
@@ -19,7 +26,6 @@ def on_change_models(model_size):
         return gr.Checkbox.update(visible=False, value=False, interactive=False)
     else:
         return gr.Checkbox.update(visible=True, value=False, label="Translate to English?", interactive=True)
-
 
 whisper_inf = WhisperInference()
 nllb_inf = NLLBInference()
@@ -127,4 +133,7 @@ with block:
             btn_openfolder.click(fn=lambda: open_folder(os.path.join("outputs", "translations")), inputs=None, outputs=None)
 
 
-block.launch()
+if args.share:
+    block.launch(share=True)
+else:
+    block.launch()
