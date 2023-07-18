@@ -157,7 +157,7 @@ class WhisperInference(BaseInterface):
             progress(1, desc="Completed!")
 
             timestamp = datetime.now().strftime("%m%d%H%M%S")
-            output_path = os.path.join("outputs", f"{file_name}-{timestamp}")
+            output_path = os.path.join("outputs", f"Mic-{timestamp}")
 
             if subformat == "SRT":
                 subtitle = get_srt(result["segments"])
