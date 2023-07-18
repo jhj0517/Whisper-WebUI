@@ -49,8 +49,8 @@ with block:
             with gr.Row():
                 btn_run = gr.Button("GENERATE SUBTITLE FILE", variant="primary")
             with gr.Row():
-                tb_indicator = gr.Textbox(label="Output")
-                btn_openfolder = gr.Button('📂').style(full_width=False)
+                tb_indicator = gr.Textbox(label="Output", scale=8)
+                btn_openfolder = gr.Button('📂', scale=2)
 
             btn_run.click(fn=whisper_inf.transcribe_file,
                           inputs=[input_file, dd_model, dd_lang, dd_subformat, cb_translate], outputs=[tb_indicator])
@@ -60,7 +60,7 @@ with block:
         with gr.TabItem("Youtube"):  # tab2
             with gr.Row():
                 tb_youtubelink = gr.Textbox(label="Youtube Link")
-            with gr.Row().style(equal_height=True):
+            with gr.Row(equal_height=True):
                 with gr.Column():
                     img_thumbnail = gr.Image(label="Youtube Thumbnail")
                 with gr.Column():
@@ -76,8 +76,8 @@ with block:
             with gr.Row():
                 btn_run = gr.Button("GENERATE SUBTITLE FILE", variant="primary")
             with gr.Row():
-                tb_indicator = gr.Textbox(label="Output")
-                btn_openfolder = gr.Button('📂').style(full_width=False)
+                tb_indicator = gr.Textbox(label="Output", scale=8)
+                btn_openfolder = gr.Button('📂', scale=2)
 
             btn_run.click(fn=whisper_inf.transcribe_youtube,
                           inputs=[tb_youtubelink, dd_model, dd_lang, dd_subformat, cb_translate],
@@ -100,8 +100,8 @@ with block:
             with gr.Row():
                 btn_run = gr.Button("GENERATE SUBTITLE FILE", variant="primary")
             with gr.Row():
-                tb_indicator = gr.Textbox(label="Output")
-                btn_openfolder = gr.Button('📂').style(full_width=False)
+                tb_indicator = gr.Textbox(label="Output", scale=8)
+                btn_openfolder = gr.Button('📂', scale=2)
 
             btn_run.click(fn=whisper_inf.transcribe_mic,
                           inputs=[mic_input, dd_model, dd_lang, dd_subformat, cb_translate], outputs=[tb_indicator])
@@ -122,8 +122,8 @@ with block:
                 with gr.Row():
                     btn_run = gr.Button("TRANSLATE SUBTITLE FILE", variant="primary")
                 with gr.Row():
-                    tb_indicator = gr.Textbox(label="Output")
-                    btn_openfolder = gr.Button('📂').style(full_width=False)
+                    tb_indicator = gr.Textbox(label="Output", scale=8)
+                    btn_openfolder = gr.Button('📂', scale=2)
                 with gr.Column():
                     md_vram_table = gr.HTML(NLLB_VRAM_TABLE, elem_id="md_nllb_vram_table")
 
