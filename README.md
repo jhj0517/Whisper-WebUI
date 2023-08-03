@@ -1,7 +1,7 @@
-# Whisper-WebUI
-A Gradio-based browser interface for Whisper. You can use it as an Easy Subtitle Generator!
+# Whisper-WebUI-Kr
+쉽게 음성을 자막으로 변경 할수 있습니니다.
 
-![Whisper WebUI](https://github.com/jhj0517/Whsiper-WebUI/blob/master/screenshot.png)
+![Whisper WebUI](https://github.com/samuggi/Whsiper-WebUI-Kr/blob/master/screenshot.png)
 
 ## Notebook
 If you wish to try this on Colab, you can do it in [here](https://colab.research.google.com/github/jhj0517/Whisper-WebUI/blob/master/notebook/whisper-webui.ipynb)!
@@ -21,7 +21,7 @@ If you wish to try this on Colab, you can do it in [here](https://colab.research
 ## Prerequisite
 To run Whisper, you need to have `git`, `python` version 3.8 ~ 3.10 and `FFmpeg`.
 
-Please follow the links below to install the necessary software:
+필요한 소프트웨어를 설치하려면 아래 링크를 따르십시오.: (존재 할 경우 패스가능)
 - git : [https://git-scm.com/downloads](https://git-scm.com/downloads)
 - python : [https://www.python.org/downloads/](https://www.python.org/downloads/)
 - FFmpeg :  [https://ffmpeg.org/download.html](https://ffmpeg.org/download.html)
