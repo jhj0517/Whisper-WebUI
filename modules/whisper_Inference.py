@@ -1,10 +1,11 @@
 import whisper
-from .base_interface import BaseInterface
-from modules.subtitle_manager import get_srt, get_vtt, write_file, safe_filename
-from modules.youtube_manager import get_ytdata, get_ytaudio
 import gradio as gr
 import os
 from datetime import datetime
+
+from .base_interface import BaseInterface
+from modules.subtitle_manager import get_srt, get_vtt, write_file, safe_filename
+from modules.youtube_manager import get_ytdata, get_ytaudio
 
 DEFAULT_MODEL_SIZE = "large-v2"
 
@@ -17,10 +18,33 @@ class WhisperInference(BaseInterface):
         self.available_models = whisper.available_models()
         self.available_langs = sorted(list(whisper.tokenizer.LANGUAGES.values()))
 
-    def transcribe_file(self, fileobjs,
-                        model_size, lang, subformat, istranslate,
+    def transcribe_file(self,
+                        fileobjs: list,
+                        model_size: str,
+                        lang: str,
+                        subformat: str,
+                        istranslate: bool,
                         progress=gr.Progress()):
+        """
+        Write subtitle file from Files
 
+        Parameters
+        ----------
+        fileobjs: list
+            List of files to transcribe from gr.Files()
+        model_size: str
+            Whisper model size from gr.Dropdown()
+        lang: str
+            Source language of the file to transcribe from gr.Dropdown()
+        subformat: str
+            Subtitle format to write from gr.Dropdown(). Supported format: [SRT, WebVTT]
+        istranslate: bool
+            Boolean value from gr.Checkbox() that determines whether to translate to English.
+            It's Whisper's feature to translate speech from another language directly into English end-to-end.
+        progress: gr.Progress
+            Indicator to show progress directly in gradio.
+            I use a forked version of whisper for this. To see more info : https://github.com/jhj0517/jhj0517-whisper/tree/add-progress-callback
+        """
         def progress_callback(progress_value):
             progress(progress_value, desc="Transcribing..")
 
@@ -78,10 +102,33 @@ class WhisperInference(BaseInterface):
             self.release_cuda_memory()
             self.remove_input_files([fileobj.name for fileobj in fileobjs])
 
-    def transcribe_youtube(self, youtubelink,
-                           model_size, lang, subformat, istranslate,
+    def transcribe_youtube(self,
+                           youtubelink: str,
+                           model_size: str,
+                           lang: str,
+                           subformat: str,
+                           istranslate: bool,
                            progress=gr.Progress()):
+        """
+        Write subtitle file from Youtube
 
+        Parameters
+        ----------
+        youtubelink: str
+            Link of Youtube to transcribe from gr.Textbox()
+        model_size: str
+            Whisper model size from gr.Dropdown()
+        lang: str
+            Source language of the file to transcribe from gr.Dropdown()
+        subformat: str
+            Subtitle format to write from gr.Dropdown(). Supported format: [SRT, WebVTT]
+        istranslate: bool
+            Boolean value from gr.Checkbox() that determines whether to translate to English.
+            It's Whisper's feature to translate speech from another language directly into English end-to-end.
+        progress: gr.Progress
+            Indicator to show progress directly in gradio.
+            I use a forked version of whisper for this. To see more info : https://github.com/jhj0517/jhj0517-whisper/tree/add-progress-callback
+        """
         def progress_callback(progress_value):
             progress(progress_value, desc="Transcribing..")
 
@@ -128,10 +175,33 @@ class WhisperInference(BaseInterface):
             self.release_cuda_memory()
             self.remove_input_files([file_path])
 
-    def transcribe_mic(self, micaudio,
-                       model_size, lang, subformat, istranslate,
+    def transcribe_mic(self,
+                       micaudio: str,
+                       model_size: str,
+                       lang: str,
+                       subformat: str,
+                       istranslate: bool,
                        progress=gr.Progress()):
+        """
+        Write subtitle file from microphone
 
+        Parameters
+        ----------
+        micaudio: str
+            Audio file path from gr.Microphone()
+        model_size: str
+            Whisper model size from gr.Dropdown()
+        lang: str
+            Source language of the file to transcribe from gr.Dropdown()
+        subformat: str
+            Subtitle format to write from gr.Dropdown(). Supported format: [SRT, WebVTT]
+        istranslate: bool
+            Boolean value from gr.Checkbox() that determines whether to translate to English.
+            It's Whisper's feature to translate speech from another language directly into English end-to-end.
+        progress: gr.Progress
+            Indicator to show progress directly in gradio.
+            I use a forked version of whisper for this. To see more info : https://github.com/jhj0517/jhj0517-whisper/tree/add-progress-callback
+        """
         def progress_callback(progress_value):
             progress(progress_value, desc="Transcribing..")
 

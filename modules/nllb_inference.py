@@ -1,10 +1,10 @@
-from .base_interface import BaseInterface
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM, pipeline
 import gradio as gr
 import torch
 import os
 from datetime import datetime
 
+from .base_interface import BaseInterface
 from modules.subtitle_manager import *
 
 DEFAULT_MODEL_SIZE = "facebook/nllb-200-1.3B"
@@ -28,9 +28,29 @@ class NLLBInference(BaseInterface):
         result = self.pipeline(text)
         return result[0]['translation_text']
 
-    def translate_file(self, fileobjs
-                       , model_size, src_lang, tgt_lang,
+    def translate_file(self,
+                       fileobjs: list,
+                       model_size: str,
+                       src_lang: str,
+                       tgt_lang: str,
                        progress=gr.Progress()):
+        """
+        Translate subtitle file from source language to target language
+
+        Parameters
+        ----------
+        fileobjs: list
+            List of files to transcribe from gr.Files()
+        model_size: str
+            Whisper model size from gr.Dropdown()
+        src_lang: str
+            Source language of the file to translate from gr.Dropdown()
+        tgt_lang: str
+            Target language of the file to translate from gr.Dropdown()
+        progress: gr.Progress
+            Indicator to show progress directly in gradio.
+            I use a forked version of whisper for this. To see more info : https://github.com/jhj0517/jhj0517-whisper/tree/add-progress-callback
+        """
         try:
             if model_size != self.current_model_size or self.model is None:
                 print("\nInitializing NLLB Model..\n")
