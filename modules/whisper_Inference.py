@@ -24,6 +24,7 @@ class WhisperInference(BaseInterface):
                         lang: str,
                         subformat: str,
                         istranslate: bool,
+                        add_timestamp: bool,
                         progress=gr.Progress()):
         """
         Write subtitle file from Files
@@ -41,6 +42,8 @@ class WhisperInference(BaseInterface):
         istranslate: bool
             Boolean value from gr.Checkbox() that determines whether to translate to English.
             It's Whisper's feature to translate speech from another language directly into English end-to-end.
+        add_timestamp: bool
+            Boolean value from gr.Checkbox() that determines whether to add a timestamp at the end of the filename.
         progress: gr.Progress
             Indicator to show progress directly in gradio.
             I use a forked version of whisper for this. To see more info : https://github.com/jhj0517/jhj0517-whisper/tree/add-progress-callback
@@ -75,10 +78,12 @@ class WhisperInference(BaseInterface):
                 progress(1, desc="Completed!")
 
                 file_name, file_ext = os.path.splitext(os.path.basename(fileobj.orig_name))
-                file_name = file_name[:-9]
                 file_name = safe_filename(file_name)
                 timestamp = datetime.now().strftime("%m%d%H%M%S")
-                output_path = os.path.join("outputs", f"{file_name}-{timestamp}")
+                if add_timestamp:
+                    output_path = os.path.join("outputs", f"{file_name}-{timestamp}")
+                else:
+                    output_path = os.path.join("outputs", f"{file_name}")
 
                 if subformat == "SRT":
                     subtitle = get_srt(result["segments"])
@@ -108,6 +113,7 @@ class WhisperInference(BaseInterface):
                            lang: str,
                            subformat: str,
                            istranslate: bool,
+                           add_timestamp: bool,
                            progress=gr.Progress()):
         """
         Write subtitle file from Youtube
@@ -125,6 +131,8 @@ class WhisperInference(BaseInterface):
         istranslate: bool
             Boolean value from gr.Checkbox() that determines whether to translate to English.
             It's Whisper's feature to translate speech from another language directly into English end-to-end.
+        add_timestamp: bool
+            Boolean value from gr.Checkbox() that determines whether to add a timestamp at the end of the filename.
         progress: gr.Progress
             Indicator to show progress directly in gradio.
             I use a forked version of whisper for this. To see more info : https://github.com/jhj0517/jhj0517-whisper/tree/add-progress-callback
@@ -157,7 +165,10 @@ class WhisperInference(BaseInterface):
 
             file_name = safe_filename(yt.title)
             timestamp = datetime.now().strftime("%m%d%H%M%S")
-            output_path = os.path.join("outputs", f"{file_name}-{timestamp}")
+            if add_timestamp:
+                output_path = os.path.join("outputs", f"{file_name}-{timestamp}")
+            else:
+                output_path = os.path.join("outputs", f"{file_name}")
 
             if subformat == "SRT":
                 subtitle = get_srt(result["segments"])
