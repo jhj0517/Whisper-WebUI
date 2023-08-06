@@ -46,9 +46,9 @@ class App:
                                               value="Automatic Detection", label="Language")
                         dd_subformat = gr.Dropdown(["SRT", "WebVTT"], value="SRT", label="Subtitle Format")
                     with gr.Row():
-                        cb_translate = gr.Checkbox(value=False, label="Translate to English?", interactive=True, scale=1)
+                        cb_translate = gr.Checkbox(value=False, label="Translate to English?", interactive=True)
                     with gr.Row():
-                        cb_timestamp = gr.Checkbox(value=True, label="Add a timestamp to the end of the filename", interactive=True, scale=1)
+                        cb_timestamp = gr.Checkbox(value=True, label="Add a timestamp to the end of the filename", interactive=True)
                     with gr.Row():
                         btn_run = gr.Button("GENERATE SUBTITLE FILE", variant="primary")
                     with gr.Row():
