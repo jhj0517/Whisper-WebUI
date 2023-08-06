@@ -33,6 +33,7 @@ class NLLBInference(BaseInterface):
                        model_size: str,
                        src_lang: str,
                        tgt_lang: str,
+                       add_timestamp: bool,
                        progress=gr.Progress()):
         """
         Translate subtitle file from source language to target language
@@ -47,6 +48,8 @@ class NLLBInference(BaseInterface):
             Source language of the file to translate from gr.Dropdown()
         tgt_lang: str
             Target language of the file to translate from gr.Dropdown()
+        add_timestamp: bool
+            Boolean value from gr.Checkbox() that determines whether to add a timestamp at the end of the filename.
         progress: gr.Progress
             Indicator to show progress directly in gradio.
             I use a forked version of whisper for this. To see more info : https://github.com/jhj0517/jhj0517-whisper/tree/add-progress-callback
@@ -85,8 +88,10 @@ class NLLBInference(BaseInterface):
                     subtitle = get_serialized_srt(parsed_dicts)
 
                     timestamp = datetime.now().strftime("%m%d%H%M%S")
-                    file_name = file_name[:-9]
-                    output_path = os.path.join("outputs", "translations", f"{file_name}-{timestamp}")
+                    if add_timestamp:
+                        output_path = os.path.join("outputs", "translations", f"{file_name}-{timestamp}")
+                    else:
+                        output_path = os.path.join("outputs", "translations", f"{file_name}")
 
                     write_file(subtitle, f"{output_path}.srt")
 
@@ -100,8 +105,10 @@ class NLLBInference(BaseInterface):
                     subtitle = get_serialized_vtt(parsed_dicts)
 
                     timestamp = datetime.now().strftime("%m%d%H%M%S")
-                    file_name = file_name[:-9]
-                    output_path = f"outputs/translations/{file_name}-{timestamp}"
+                    if add_timestamp:
+                        output_path = os.path.join("outputs", "translations", f"{file_name}-{timestamp}")
+                    else:
+                        output_path = os.path.join("outputs", "translations", f"{file_name}")
 
                     write_file(subtitle, f"{output_path}.vtt")
 

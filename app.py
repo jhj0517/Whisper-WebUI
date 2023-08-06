@@ -46,7 +46,9 @@ class App:
                                               value="Automatic Detection", label="Language")
                         dd_subformat = gr.Dropdown(["SRT", "WebVTT"], value="SRT", label="Subtitle Format")
                     with gr.Row():
-                        cb_translate = gr.Checkbox(value=False, label="Translate to English?", interactive=True)
+                        cb_translate = gr.Checkbox(value=False, label="Translate to English?", interactive=True, scale=1)
+                    with gr.Row():
+                        cb_timestamp = gr.Checkbox(value=True, label="Add a timestamp to the end of the filename", interactive=True, scale=1)
                     with gr.Row():
                         btn_run = gr.Button("GENERATE SUBTITLE FILE", variant="primary")
                     with gr.Row():
@@ -54,7 +56,7 @@ class App:
                         btn_openfolder = gr.Button('📂', scale=2)
 
                     btn_run.click(fn=self.whisper_inf.transcribe_file,
-                                  inputs=[input_file, dd_model, dd_lang, dd_subformat, cb_translate],
+                                  inputs=[input_file, dd_model, dd_lang, dd_subformat, cb_translate, cb_timestamp],
                                   outputs=[tb_indicator])
                     btn_openfolder.click(fn=lambda: self.open_folder("outputs"), inputs=None, outputs=None)
                     dd_model.change(fn=self.on_change_models, inputs=[dd_model], outputs=[cb_translate])
@@ -77,13 +79,16 @@ class App:
                     with gr.Row():
                         cb_translate = gr.Checkbox(value=False, label="Translate to English?", interactive=True)
                     with gr.Row():
+                        cb_timestamp = gr.Checkbox(value=True, label="Add a timestamp to the end of the filename",
+                                                   interactive=True)
+                    with gr.Row():
                         btn_run = gr.Button("GENERATE SUBTITLE FILE", variant="primary")
                     with gr.Row():
                         tb_indicator = gr.Textbox(label="Output", scale=8)
                         btn_openfolder = gr.Button('📂', scale=2)
 
                     btn_run.click(fn=self.whisper_inf.transcribe_youtube,
-                                  inputs=[tb_youtubelink, dd_model, dd_lang, dd_subformat, cb_translate],
+                                  inputs=[tb_youtubelink, dd_model, dd_lang, dd_subformat, cb_translate, cb_timestamp],
                                   outputs=[tb_indicator])
                     tb_youtubelink.change(get_ytmetas, inputs=[tb_youtubelink],
                                           outputs=[img_thumbnail, tb_title, tb_description])
@@ -127,6 +132,9 @@ class App:
                             dd_nllb_targetlang = gr.Dropdown(label="Target Language",
                                                              choices=self.nllb_inf.available_target_langs)
                         with gr.Row():
+                            cb_timestamp = gr.Checkbox(value=True, label="Add a timestamp to the end of the filename",
+                                                       interactive=True)
+                        with gr.Row():
                             btn_run = gr.Button("TRANSLATE SUBTITLE FILE", variant="primary")
                         with gr.Row():
                             tb_indicator = gr.Textbox(label="Output", scale=8)
@@ -135,7 +143,7 @@ class App:
                             md_vram_table = gr.HTML(NLLB_VRAM_TABLE, elem_id="md_nllb_vram_table")
 
                     btn_run.click(fn=self.nllb_inf.translate_file,
-                                  inputs=[file_subs, dd_nllb_model, dd_nllb_sourcelang, dd_nllb_targetlang],
+                                  inputs=[file_subs, dd_nllb_model, dd_nllb_sourcelang, dd_nllb_targetlang, cb_timestamp],
                                   outputs=[tb_indicator])
                     btn_openfolder.click(fn=lambda: self.open_folder(os.path.join("outputs", "translations")),
                                          inputs=None,
