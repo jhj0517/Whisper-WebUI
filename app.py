@@ -149,16 +149,28 @@ class App:
                                          inputs=None,
                                          outputs=None)
 
+        # Launch the app with optional server settings
         if self.args.share:
             self.app.queue(api_open=False).launch(share=True)
         else:
-            self.app.queue(api_open=False).launch()
+            launch_args = {}
+            if self.args.server_name:
+                launch_args['server_name'] = self.args.server_name
+            if self.args.server_port:
+                launch_args['server_port'] = self.args.server_port
+            if self.args.username and self.args.password:
+                launch_args['auth'] = (self.args.username, self.args.password)
+            self.app.queue(api_open=False).launch(**launch_args)
 
 
-# Create the parser
+# Create the parser for command-line arguments
 parser = argparse.ArgumentParser()
 parser.add_argument('--share', type=bool, default=False, nargs='?', const=True,
                     help='Share value')
+parser.add_argument('--server_name', type=str, default=None, help='Gradio server host')
+parser.add_argument('--server_port', type=int, default=None, help='Gradio server port')
+parser.add_argument('--username', type=str, default=None, help='Authentication username')
+parser.add_argument('--password', type=str, default=None, help='Authentication password')
 _args = parser.parse_args()
 
 if __name__ == "__main__":
