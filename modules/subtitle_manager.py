@@ -21,6 +21,12 @@ def write_file(subtitle, output_file):
     with open(output_file, 'w', encoding='utf-8') as f:
         f.write(subtitle)
 
+def get_txt(segments):
+        output = "txt\n\n"
+        for i, segment in enumerate(segments):
+           output += f"{segment['text']}\n\n"
+        return output
+
 
 def get_srt(segments):
     output = ""
