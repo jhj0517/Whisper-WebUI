@@ -4,7 +4,7 @@ import os
 from datetime import datetime
 
 from .base_interface import BaseInterface
-from modules.subtitle_manager import get_srt, get_vtt, get_txt, write_file, safe_filename
+from modules.subtitle_manager import get_srt, get_vtt, write_file, safe_filename
 from modules.youtube_manager import get_ytdata, get_ytaudio
 
 DEFAULT_MODEL_SIZE = "large-v2"
@@ -91,9 +91,6 @@ class WhisperInference(BaseInterface):
                 elif subformat == "WebVTT":
                     subtitle = get_vtt(result["segments"])
                     write_file(subtitle, f"{output_path}.vtt")
-                else :
-                    subtitle = get_txt(result["segments"])
-                    write_file(subtitle, f"{output_path}.txt")
 
                 files_info[file_name] = subtitle
 
@@ -109,9 +106,6 @@ class WhisperInference(BaseInterface):
         finally:
             self.release_cuda_memory()
             self.remove_input_files([fileobj.name for fileobj in fileobjs])
-
-    
-
 
     def transcribe_youtube(self,
                            youtubelink: str,
