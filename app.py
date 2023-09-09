@@ -149,18 +149,17 @@ class App:
                                          inputs=None,
                                          outputs=None)
 
-        # Launch the app with optional server settings
+        # Launch the app with optional gradio settings
+        launch_args = {}
         if self.args.share:
-            self.app.queue(api_open=False).launch(share=True)
-        else:
-            launch_args = {}
-            if self.args.server_name:
-                launch_args['server_name'] = self.args.server_name
-            if self.args.server_port:
-                launch_args['server_port'] = self.args.server_port
-            if self.args.username and self.args.password:
-                launch_args['auth'] = (self.args.username, self.args.password)
-            self.app.queue(api_open=False).launch(**launch_args)
+            launch_args['share'] = self.args.share
+        if self.args.server_name:
+            launch_args['server_name'] = self.args.server_name
+        if self.args.server_port:
+            launch_args['server_port'] = self.args.server_port
+        if self.args.username and self.args.password:
+            launch_args['auth'] = (self.args.username, self.args.password)
+        self.app.queue(api_open=False).launch(**launch_args)
 
 
 # Create the parser for command-line arguments
