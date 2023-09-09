@@ -164,12 +164,11 @@ class App:
 
 # Create the parser for command-line arguments
 parser = argparse.ArgumentParser()
-parser.add_argument('--share', type=bool, default=False, nargs='?', const=True,
-                    help='Share value')
+parser.add_argument('--share', type=bool, default=False, nargs='?', const=True, help='Gradio share value')
 parser.add_argument('--server_name', type=str, default=None, help='Gradio server host')
 parser.add_argument('--server_port', type=int, default=None, help='Gradio server port')
-parser.add_argument('--username', type=str, default=None, help='Authentication username')
-parser.add_argument('--password', type=str, default=None, help='Authentication password')
+parser.add_argument('--username', type=str, default=None, help='Gradio authentication username')
+parser.add_argument('--password', type=str, default=None, help='Gradio authentication password')
 _args = parser.parse_args()
 
 if __name__ == "__main__":
