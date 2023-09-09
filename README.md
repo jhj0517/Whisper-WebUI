@@ -37,6 +37,8 @@ If you have satisfied the prerequisites listed above, you are now ready to start
 
 ( If you're running another Web-UI, it will be hosted on a different port , such as `localhost:7861`, `localhost:7862`, and so on )
 
+And you can also run the project with command line arguments if you like by running `user-start-webui.bat`, see [wiki](https://github.com/jhj0517/Whisper-WebUI/wiki/Command-Line-Arguments) for a guide to arguments.
+
 # Available models
 
 The WebUI uses the Open AI Whisper model
