@@ -7,6 +7,7 @@ set SERVER_PORT=
 set USERNAME=
 set PASSWORD=
 set SHARE=
+set THEME=
 
 :: Set args accordingly
 if not "%SERVER_NAME%"=="" (
@@ -24,7 +25,10 @@ if not "%PASSWORD%"=="" (
 if /I "%SHARE%"=="true" (
     set SHARE_ARG=--share
 )
+if not "%THEME%"=="" (
+    set THEME_ARG=--theme %THEME%
+)
 
 :: Call the original .bat script with optional arguments
-start-webui.bat %SERVER_NAME_ARG% %SERVER_PORT_ARG% %USERNAME_ARG% %PASSWORD_ARG% %SHARE_ARG%
+start-webui.bat %SERVER_NAME_ARG% %SERVER_PORT_ARG% %USERNAME_ARG% %PASSWORD_ARG% %SHARE_ARG% %THEME_ARG%
 pause

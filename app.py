@@ -11,7 +11,7 @@ from modules.youtube_manager import get_ytmetas
 class App:
     def __init__(self, args):
         self.args = args
-        self.app = gr.Blocks(css=CSS)
+        self.app = gr.Blocks(css=CSS, theme=self.args.theme)
         self.whisper_inf = WhisperInference()
         self.nllb_inf = NLLBInference()
 
@@ -169,6 +169,7 @@ parser.add_argument('--server_name', type=str, default=None, help='Gradio server
 parser.add_argument('--server_port', type=int, default=None, help='Gradio server port')
 parser.add_argument('--username', type=str, default=None, help='Gradio authentication username')
 parser.add_argument('--password', type=str, default=None, help='Gradio authentication password')
+parser.add_argument('--theme', type=str, default=None, help='Gradio Blocks theme')
 _args = parser.parse_args()
 
 if __name__ == "__main__":
