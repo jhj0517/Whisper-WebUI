@@ -14,8 +14,10 @@ If you wish to try this on Colab, you can do it in [here](https://colab.research
 - Currently supported subtitle formats : 
   - SRT
   - WebVTT
-- Speech to Text Translation
-  - From other languages to English.
+- Speech to Text Translation 
+  - From other languages to English. ( This is Whisper's end-to-end speech-to-text translation feature )
+- Text to Text Translation
+  - Translate subtitle files using Facebook NLLB models
 
 # Installation and Running
 ## Prerequisite
@@ -39,9 +41,19 @@ If you have satisfied the prerequisites listed above, you are now ready to start
 
 And you can also run the project with command line arguments if you like by running `user-start-webui.bat`, see [wiki](https://github.com/jhj0517/Whisper-WebUI/wiki/Command-Line-Arguments) for a guide to arguments.
 
-# Available models
+## VRAM Usages
+This project is integrated with [faster-whisper](https://github.com/guillaumekln/faster-whisper) by default for better VRAM usage and transcription speed.
 
-The WebUI uses the Open AI Whisper model
+According to faster-whisper, the efficiency of the optimized whisper model is as follows: 
+| Implementation    | Precision | Beam size | Time  | Max. GPU memory | Max. CPU memory |
+|-------------------|-----------|-----------|-------|-----------------|-----------------|
+| openai/whisper    | fp16      | 5         | 4m30s | 11325MB         | 9439MB          |
+| faster-whisper    | fp16      | 5         | 54s   | 4755MB          | 3244MB          |
+
+If you want to use the original Open AI whisper implementation instead of optimized whisper, you can set the command line argument `DISABLE_FASTER_WHISPER` to `True`. See the [wiki](https://github.com/jhj0517/Whisper-WebUI/wiki/Command-Line-Arguments) for more information.
+
+## Available models
+This is Whisper's original VRAM usage table for models.
 
 |  Size  | Parameters | English-only model | Multilingual model | Required VRAM | Relative speed |
 |:------:|:----------:|:------------------:|:------------------:|:-------------:|:--------------:|
