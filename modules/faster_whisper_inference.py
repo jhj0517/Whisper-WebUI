@@ -259,6 +259,8 @@ class FasterWhisperInference(BaseInterface):
         ----------
         segments_result: list[dict]
             list of dicts that includes start, end timestamps and transcribed text
+        elapsed_time: float
+            elapsed time for transcription
         """
         start_time = time.time()
         segments, info = self.model.transcribe(
