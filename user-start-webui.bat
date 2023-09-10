@@ -1,4 +1,5 @@
 :: This batch file is for launching with command line args
+:: See the wiki for a guide to command line arguments: https://github.com/jhj0517/Whisper-WebUI/wiki/Command-Line-Arguments
 @echo off
 
 :: Set values
@@ -8,6 +9,7 @@ set USERNAME=
 set PASSWORD=
 set SHARE=
 set THEME=
+set DISABLE_FASTER_WHISPER=
 
 :: Set args accordingly
 if not "%SERVER_NAME%"=="" (
@@ -28,7 +30,10 @@ if /I "%SHARE%"=="true" (
 if not "%THEME%"=="" (
     set THEME_ARG=--theme %THEME%
 )
+if /I "%DISABLE_FASTER_WHISPER%"=="true" (
+    set DISABLE_FASTER_WHISPER_ARG=--disable_faster_whisper
+)
 
 :: Call the original .bat script with optional arguments
-start-webui.bat %SERVER_NAME_ARG% %SERVER_PORT_ARG% %USERNAME_ARG% %PASSWORD_ARG% %SHARE_ARG% %THEME_ARG%
+start-webui.bat %SERVER_NAME_ARG% %SERVER_PORT_ARG% %USERNAME_ARG% %PASSWORD_ARG% %SHARE_ARG% %THEME_ARG% %DISABLE_FASTER_WHISPER_ARG%
 pause
