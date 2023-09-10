@@ -263,6 +263,9 @@ class FasterWhisperInference(BaseInterface):
             elapsed time for transcription
         """
         start_time = time.time()
+        if lang:
+            language_code_dict = {value: key for key, value in whisper.tokenizer.LANGUAGES.items()}
+            lang = language_code_dict[lang]
         segments, info = self.model.transcribe(
             audio=audio,
             language=lang,
