@@ -227,7 +227,6 @@ class FasterWhisperInference(BaseInterface):
                 add_timestamp=True,
                 subformat=subformat
             )
-            time_for_task = time.strftime("%H hours %M minute %S seconds", time.gmtime(time_for_task))
             return f"Done in {self.format_time(time_for_task)}! Subtitle file is in the outputs folder.\n\n{subtitle}"
         except Exception as e:
             return f"Error: {str(e)}"
