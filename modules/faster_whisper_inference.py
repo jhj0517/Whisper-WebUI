@@ -336,7 +336,7 @@ class FasterWhisperInference(BaseInterface):
         return subtitle
 
     @staticmethod
-    def format_time(elapsed_time: float):
+    def format_time(elapsed_time: float) -> str:
         hours, rem = divmod(elapsed_time, 3600)
         minutes, seconds = divmod(rem, 60)
 
