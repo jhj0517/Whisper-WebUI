@@ -41,7 +41,7 @@ If you have satisfied the prerequisites listed above, you are now ready to start
 
 And you can also run the project with command line arguments if you like by running `user-start-webui.bat`, see [wiki](https://github.com/jhj0517/Whisper-WebUI/wiki/Command-Line-Arguments) for a guide to arguments.
 
-## VRAM Usages
+# VRAM Usages
 This project is integrated with [faster-whisper](https://github.com/guillaumekln/faster-whisper) by default for better VRAM usage and transcription speed.
 
 According to faster-whisper, the efficiency of the optimized whisper model is as follows: 
