@@ -1,7 +1,11 @@
 import whisper
 import gradio as gr
+import time
 import os
+from typing import BinaryIO, Union, Tuple
+import numpy as np
 from datetime import datetime
+import torch
 
 from .base_interface import BaseInterface
 from modules.subtitle_manager import get_srt, get_vtt, write_file, safe_filename
@@ -48,61 +52,45 @@ class WhisperInference(BaseInterface):
             Indicator to show progress directly in gradio.
             I use a forked version of whisper for this. To see more info : https://github.com/jhj0517/jhj0517-whisper/tree/add-progress-callback
         """
-        def progress_callback(progress_value):
-            progress(progress_value, desc="Transcribing..")
 
         try:
             if model_size != self.current_model_size or self.model is None:
-                progress(0, desc="Initializing Model..")
-                self.current_model_size = model_size
-                self.model = whisper.load_model(name=model_size, download_root=os.path.join("models", "Whisper"))
-
-            if lang == "Automatic Detection":
-                lang = None
-
-            progress(0, desc="Loading Audio..")
+                self.initialize_model(model_size=model_size, progress=progress)
 
             files_info = {}
             for fileobj in fileobjs:
-
+                progress(0, desc="Loading Audio..")
                 audio = whisper.load_audio(fileobj.name)
 
-                translatable_model = ["large", "large-v1", "large-v2"]
-                if istranslate and self.current_model_size in translatable_model:
-                    result = self.model.transcribe(audio=audio, language=lang, verbose=False, task="translate",
-                                                   progress_callback=progress_callback)
-                else:
-                    result = self.model.transcribe(audio=audio, language=lang, verbose=False,
-                                                   progress_callback=progress_callback)
-
+                result, elapsed_time = self.transcribe(audio=audio,
+                                                       lang=lang,
+                                                       istranslate=istranslate,
+                                                       progress=progress)
                 progress(1, desc="Completed!")
 
                 file_name, file_ext = os.path.splitext(os.path.basename(fileobj.orig_name))
                 file_name = safe_filename(file_name)
-                timestamp = datetime.now().strftime("%m%d%H%M%S")
-                if add_timestamp:
-                    output_path = os.path.join("outputs", f"{file_name}-{timestamp}")
-                else:
-                    output_path = os.path.join("outputs", f"{file_name}")
+                subtitle = self.generate_and_write_subtitle(
+                    file_name=file_name,
+                    transcribed_segments=result,
+                    add_timestamp=add_timestamp,
+                    subformat=subformat
+                )
 
-                if subformat == "SRT":
-                    subtitle = get_srt(result["segments"])
-                    write_file(subtitle, f"{output_path}.srt")
-                elif subformat == "WebVTT":
-                    subtitle = get_vtt(result["segments"])
-                    write_file(subtitle, f"{output_path}.vtt")
-
-                files_info[file_name] = subtitle
+                files_info[file_name] = {"subtitle": subtitle, "elapsed_time": elapsed_time}
 
             total_result = ''
-            for file_name, subtitle in files_info.items():
+            total_time = 0
+            for file_name, info in files_info.items():
                 total_result += '------------------------------------\n'
                 total_result += f'{file_name}\n\n'
-                total_result += f'{subtitle}'
+                total_result += f"{info['subtitle']}"
+                total_time += info["elapsed_time"]
 
-            return f"Done! Subtitle is in the outputs folder.\n\n{total_result}"
+            return f"Done in {self.format_time(total_time)}! Subtitle is in the outputs folder.\n\n{total_result}"
         except Exception as e:
-            return f"Error: {str(e)}"
+            print(f"Error transcribing file: {str(e)}")
+            return f"Error transcribing file: {str(e)}"
         finally:
             self.release_cuda_memory()
             self.remove_input_files([fileobj.name for fileobj in fileobjs])
@@ -137,49 +125,32 @@ class WhisperInference(BaseInterface):
             Indicator to show progress directly in gradio.
             I use a forked version of whisper for this. To see more info : https://github.com/jhj0517/jhj0517-whisper/tree/add-progress-callback
         """
-        def progress_callback(progress_value):
-            progress(progress_value, desc="Transcribing..")
-
         try:
             if model_size != self.current_model_size or self.model is None:
-                progress(0, desc="Initializing Model..")
-                self.current_model_size = model_size
-                self.model = whisper.load_model(name=model_size, download_root=os.path.join("models", "Whisper"))
-
-            if lang == "Automatic Detection":
-                lang = None
+                self.initialize_model(model_size=model_size, progress=progress)
 
             progress(0, desc="Loading Audio from Youtube..")
             yt = get_ytdata(youtubelink)
             audio = whisper.load_audio(get_ytaudio(yt))
 
-            translatable_model = ["large", "large-v1", "large-v2"]
-            if istranslate and self.current_model_size in translatable_model:
-                result = self.model.transcribe(audio=audio, language=lang, verbose=False, task="translate",
-                                               progress_callback=progress_callback)
-            else:
-                result = self.model.transcribe(audio=audio, language=lang, verbose=False,
-                                               progress_callback=progress_callback)
-
+            result, elapsed_time = self.transcribe(audio=audio,
+                                                   lang=lang,
+                                                   istranslate=istranslate,
+                                                   progress=progress)
             progress(1, desc="Completed!")
 
             file_name = safe_filename(yt.title)
-            timestamp = datetime.now().strftime("%m%d%H%M%S")
-            if add_timestamp:
-                output_path = os.path.join("outputs", f"{file_name}-{timestamp}")
-            else:
-                output_path = os.path.join("outputs", f"{file_name}")
+            subtitle = self.generate_and_write_subtitle(
+                file_name=file_name,
+                transcribed_segments=result,
+                add_timestamp=add_timestamp,
+                subformat=subformat
+            )
 
-            if subformat == "SRT":
-                subtitle = get_srt(result["segments"])
-                write_file(subtitle, f"{output_path}.srt")
-            elif subformat == "WebVTT":
-                subtitle = get_vtt(result["segments"])
-                write_file(subtitle, f"{output_path}.vtt")
-
-            return f"Done! Subtitle file is in the outputs folder.\n\n{subtitle}"
+            return f"Done in {self.format_time(elapsed_time)}! Subtitle file is in the outputs folder.\n\n{subtitle}"
         except Exception as e:
-            return f"Error: {str(e)}"
+            print(f"Error transcribing youtube video: {str(e)}")
+            return f"Error transcribing youtube video: {str(e)}"
         finally:
             yt = get_ytdata(youtubelink)
             file_path = get_ytaudio(yt)
@@ -213,43 +184,123 @@ class WhisperInference(BaseInterface):
             Indicator to show progress directly in gradio.
             I use a forked version of whisper for this. To see more info : https://github.com/jhj0517/jhj0517-whisper/tree/add-progress-callback
         """
-        def progress_callback(progress_value):
-            progress(progress_value, desc="Transcribing..")
 
         try:
             if model_size != self.current_model_size or self.model is None:
-                progress(0, desc="Initializing Model..")
-                self.current_model_size = model_size
-                self.model = whisper.load_model(name=model_size, download_root=os.path.join("models", "Whisper"))
+                self.initialize_model(model_size=model_size, progress=progress)
 
-            if lang == "Automatic Detection":
-                lang = None
-
-            progress(0, desc="Loading Audio..")
-
-            translatable_model = ["large", "large-v1", "large-v2"]
-            if istranslate and self.current_model_size in translatable_model:
-                result = self.model.transcribe(audio=micaudio, language=lang, verbose=False, task="translate",
-                                               progress_callback=progress_callback)
-            else:
-                result = self.model.transcribe(audio=micaudio, language=lang, verbose=False,
-                                               progress_callback=progress_callback)
-
+            result, elapsed_time = self.transcribe(audio=micaudio,
+                                                   lang=lang,
+                                                   istranslate=istranslate,
+                                                   progress=progress)
             progress(1, desc="Completed!")
 
-            timestamp = datetime.now().strftime("%m%d%H%M%S")
-            output_path = os.path.join("outputs", f"Mic-{timestamp}")
+            subtitle = self.generate_and_write_subtitle(
+                file_name="Mic",
+                transcribed_segments=result,
+                add_timestamp=True,
+                subformat=subformat
+            )
 
-            if subformat == "SRT":
-                subtitle = get_srt(result["segments"])
-                write_file(subtitle, f"{output_path}.srt")
-            elif subformat == "WebVTT":
-                subtitle = get_vtt(result["segments"])
-                write_file(subtitle, f"{output_path}.vtt")
-
-            return f"Done! Subtitle file is in the outputs folder.\n\n{subtitle}"
+            return f"Done in {self.format_time(elapsed_time)}! Subtitle file is in the outputs folder.\n\n{subtitle}"
         except Exception as e:
-            return f"Error: {str(e)}"
+            print(f"Error transcribing mic: {str(e)}")
+            return f"Error transcribing mic: {str(e)}"
         finally:
             self.release_cuda_memory()
             self.remove_input_files([micaudio])
+
+    def transcribe(self,
+                   audio: Union[str, np.ndarray, torch.Tensor],
+                   lang: str,
+                   istranslate: bool,
+                   progress: gr.Progress
+                   ) -> Tuple[list[dict], float]:
+        """
+        transcribe method for OpenAI's Whisper implementation.
+
+        Parameters
+        ----------
+        audio: Union[str, BinaryIO, torch.Tensor]
+            Audio path or file binary or Audio numpy array
+        lang: str
+            Source language of the file to transcribe from gr.Dropdown()
+        istranslate: bool
+            Boolean value from gr.Checkbox() that determines whether to translate to English.
+            It's Whisper's feature to translate speech from another language directly into English end-to-end.
+        progress: gr.Progress
+            Indicator to show progress directly in gradio.
+
+        Returns
+        ----------
+        segments_result: list[dict]
+            list of dicts that includes start, end timestamps and transcribed text
+        elapsed_time: float
+            elapsed time for transcription
+        """
+        start_time = time.time()
+
+        def progress_callback(progress_value):
+            progress(progress_value, desc="Transcribing..")
+
+        if lang == "Automatic Detection":
+            lang = None
+
+        translatable_model = ["large", "large-v1", "large-v2"]
+        segments_result = self.model.transcribe(audio=audio,
+                                                language=lang,
+                                                verbose=False,
+                                                task="translate" if istranslate and self.current_model_size in translatable_model else "transcribe",
+                                                progress_callback=progress_callback)["segments"]
+        elapsed_time = time.time() - start_time
+
+        return segments_result, elapsed_time
+
+    def initialize_model(self,
+                         model_size: str,
+                         progress: gr.Progress
+                         ):
+        """
+        Initialize model if it doesn't match with current model size
+        """
+        progress(0, desc="Initializing Model..")
+        self.current_model_size = model_size
+        self.model = whisper.load_model(name=model_size, download_root=os.path.join("models", "Whisper"))
+
+    @staticmethod
+    def generate_and_write_subtitle(file_name: str,
+                                    transcribed_segments: list,
+                                    add_timestamp: bool,
+                                    subformat: str,
+                                    ) -> str:
+        """
+        This method writes subtitle file and returns str to gr.Textbox
+        """
+        timestamp = datetime.now().strftime("%m%d%H%M%S")
+        if add_timestamp:
+            output_path = os.path.join("outputs", f"{file_name}-{timestamp}")
+        else:
+            output_path = os.path.join("outputs", f"{file_name}")
+
+        if subformat == "SRT":
+            subtitle = get_srt(transcribed_segments)
+            write_file(subtitle, f"{output_path}.srt")
+        elif subformat == "WebVTT":
+            subtitle = get_vtt(transcribed_segments)
+            write_file(subtitle, f"{output_path}.vtt")
+        return subtitle
+
+    @staticmethod
+    def format_time(elapsed_time: float) -> str:
+        hours, rem = divmod(elapsed_time, 3600)
+        minutes, seconds = divmod(rem, 60)
+
+        time_str = ""
+        if hours:
+            time_str += f"{hours} hours "
+        if minutes:
+            time_str += f"{minutes} minutes "
+        seconds = round(seconds)
+        time_str += f"{seconds} seconds"
+
+        return time_str.strip()
