@@ -21,6 +21,7 @@ class WhisperInference(BaseInterface):
         self.model = None
         self.available_models = whisper.available_models()
         self.available_langs = sorted(list(whisper.tokenizer.LANGUAGES.values()))
+        self.default_beam_size = 1
 
     def transcribe_file(self,
                         fileobjs: list,
@@ -250,6 +251,7 @@ class WhisperInference(BaseInterface):
         segments_result = self.model.transcribe(audio=audio,
                                                 language=lang,
                                                 verbose=False,
+                                                beam_size=self.default_beam_size,
                                                 task="translate" if istranslate and self.current_model_size in translatable_model else "transcribe",
                                                 progress_callback=progress_callback)["segments"]
         elapsed_time = time.time() - start_time

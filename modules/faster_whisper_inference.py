@@ -24,7 +24,7 @@ class FasterWhisperInference(BaseInterface):
         self.available_models = whisper.available_models()
         self.available_langs = sorted(list(whisper.tokenizer.LANGUAGES.values()))
         self.translatable_models = ["large", "large-v1", "large-v2"]
-        self.default_beam_size = 5
+        self.default_beam_size = 1
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
 
     def transcribe_file(self,
