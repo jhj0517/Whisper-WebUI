@@ -273,11 +273,10 @@ class FasterWhisperInference(BaseInterface):
             task="translate" if istranslate and self.current_model_size in self.translatable_models else "transcribe"
         )
         progress(0, desc="Loading audio..")
-        total_frames = self.get_total_frames(audio=audio, progress=progress)
 
         segments_result = []
         for segment in segments:
-            progress(segment.seek / total_frames, desc="Transcribing..")
+            progress(segment.start / info.duration, desc="Transcribing..")
             segments_result.append({
                 "start": segment.start,
                 "end": segment.end,
@@ -302,20 +301,6 @@ class FasterWhisperInference(BaseInterface):
             download_root=os.path.join("models", "Whisper", "faster-whisper"),
             compute_type="float16"
         )
-
-    def get_total_frames(self,
-                         audio: Union[str, BinaryIO],
-                         progress: gr.Progress
-                         ) -> float:
-        """
-        This method is only for tracking the progress.
-        Returns total frames to track progress.
-        """
-        progress(0, desc="Loading audio..")
-        decoded_audio = faster_whisper.decode_audio(audio)
-        features = self.model.feature_extractor(decoded_audio)
-        content_frames = features.shape[-1] - self.model.feature_extractor.nb_max_frames
-        return content_frames
 
     @staticmethod
     def generate_and_write_subtitle(file_name: str,
