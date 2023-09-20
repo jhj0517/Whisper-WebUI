@@ -34,6 +34,9 @@ class FasterWhisperInference(BaseInterface):
                         subformat: str,
                         istranslate: bool,
                         add_timestamp: bool,
+                        beam_size: int,
+                        log_prob_threshold: float,
+                        no_speech_threshold: float,
                         progress=gr.Progress()
                         ) -> str:
         """
@@ -54,6 +57,15 @@ class FasterWhisperInference(BaseInterface):
             It's Whisper's feature to translate speech from another language directly into English end-to-end.
         add_timestamp: bool
             Boolean value from gr.Checkbox() that determines whether to add a timestamp at the end of the filename.
+        beam_size: int
+            Int value from gr.Number() that is used for decoding option.
+        log_prob_threshold: float
+            float value from gr.Number(). If the average log probability over sampled tokens is
+            below this value, treat as failed.
+        no_speech_threshold: float
+            float value from gr.Number(). If the no_speech probability is higher than this value AND
+            the average log probability over sampled tokens is below `log_prob_threshold`,
+            consider the segment as silent.
         progress: gr.Progress
             Indicator to show progress directly in gradio.
 
@@ -74,6 +86,9 @@ class FasterWhisperInference(BaseInterface):
                     audio=fileobj.name,
                     lang=lang,
                     istranslate=istranslate,
+                    beam_size=beam_size,
+                    log_prob_threshold=log_prob_threshold,
+                    no_speech_threshold=no_speech_threshold,
                     progress=progress
                 )
 
@@ -110,6 +125,9 @@ class FasterWhisperInference(BaseInterface):
                            subformat: str,
                            istranslate: bool,
                            add_timestamp: bool,
+                           beam_size: int,
+                           log_prob_threshold: float,
+                           no_speech_threshold: float,
                            progress=gr.Progress()
                            ) -> str:
         """
@@ -130,6 +148,15 @@ class FasterWhisperInference(BaseInterface):
             It's Whisper's feature to translate speech from another language directly into English end-to-end.
         add_timestamp: bool
             Boolean value from gr.Checkbox() that determines whether to add a timestamp at the end of the filename.
+        beam_size: int
+            Int value from gr.Number() that is used for decoding option.
+        log_prob_threshold: float
+            float value from gr.Number(). If the average log probability over sampled tokens is
+            below this value, treat as failed.
+        no_speech_threshold: float
+            float value from gr.Number(). If the no_speech probability is higher than this value AND
+            the average log probability over sampled tokens is below `log_prob_threshold`,
+            consider the segment as silent.
         progress: gr.Progress
             Indicator to show progress directly in gradio.
 
@@ -152,6 +179,9 @@ class FasterWhisperInference(BaseInterface):
                 audio=audio,
                 lang=lang,
                 istranslate=istranslate,
+                beam_size=beam_size,
+                log_prob_threshold=log_prob_threshold,
+                no_speech_threshold=no_speech_threshold,
                 progress=progress
             )
 
@@ -168,10 +198,17 @@ class FasterWhisperInference(BaseInterface):
         except Exception as e:
             return f"Error: {str(e)}"
         finally:
-            yt = get_ytdata(youtubelink)
-            file_path = get_ytaudio(yt)
-            self.release_cuda_memory()
-            self.remove_input_files([file_path])
+            try:
+                if 'yt' not in locals():
+                    yt = get_ytdata(youtubelink)
+                    file_path = get_ytaudio(yt)
+                else:
+                    file_path = get_ytaudio(yt)
+
+                self.release_cuda_memory()
+                self.remove_input_files([file_path])
+            except Exception as cleanup_error:
+                pass
 
     def transcribe_mic(self,
                        micaudio: str,
@@ -179,6 +216,9 @@ class FasterWhisperInference(BaseInterface):
                        lang: str,
                        subformat: str,
                        istranslate: bool,
+                       beam_size: int,
+                       log_prob_threshold: float,
+                       no_speech_threshold: float,
                        progress=gr.Progress()
                        ) -> str:
         """
@@ -197,6 +237,15 @@ class FasterWhisperInference(BaseInterface):
         istranslate: bool
             Boolean value from gr.Checkbox() that determines whether to translate to English.
             It's Whisper's feature to translate speech from another language directly into English end-to-end.
+        beam_size: int
+            Int value from gr.Number() that is used for decoding option.
+        log_prob_threshold: float
+            float value from gr.Number(). If the average log probability over sampled tokens is
+            below this value, treat as failed.
+        no_speech_threshold: float
+            float value from gr.Number(). If the no_speech probability is higher than this value AND
+            the average log probability over sampled tokens is below `log_prob_threshold`,
+            consider the segment as silent.
         progress: gr.Progress
             Indicator to show progress directly in gradio.
 
@@ -217,6 +266,9 @@ class FasterWhisperInference(BaseInterface):
                 audio=micaudio,
                 lang=lang,
                 istranslate=istranslate,
+                beam_size=beam_size,
+                log_prob_threshold=log_prob_threshold,
+                no_speech_threshold=no_speech_threshold,
                 progress=progress
             )
             progress(1, desc="Completed!")
@@ -238,6 +290,9 @@ class FasterWhisperInference(BaseInterface):
                    audio: Union[str, BinaryIO, np.ndarray],
                    lang: str,
                    istranslate: bool,
+                   beam_size: int,
+                   log_prob_threshold: float,
+                   no_speech_threshold: float,
                    progress: gr.Progress
                    ) -> Tuple[list, float]:
         """
@@ -252,6 +307,15 @@ class FasterWhisperInference(BaseInterface):
         istranslate: bool
             Boolean value from gr.Checkbox() that determines whether to translate to English.
             It's Whisper's feature to translate speech from another language directly into English end-to-end.
+        beam_size: int
+            Int value from gr.Number() that is used for decoding option.
+        log_prob_threshold: float
+            float value from gr.Number(). If the average log probability over sampled tokens is
+            below this value, treat as failed.
+        no_speech_threshold: float
+            float value from gr.Number(). If the no_speech probability is higher than this value AND
+            the average log probability over sampled tokens is below `log_prob_threshold`,
+            consider the segment as silent.
         progress: gr.Progress
             Indicator to show progress directly in gradio.
 
@@ -269,8 +333,10 @@ class FasterWhisperInference(BaseInterface):
         segments, info = self.model.transcribe(
             audio=audio,
             language=lang,
-            beam_size=self.default_beam_size,
-            task="translate" if istranslate and self.current_model_size in self.translatable_models else "transcribe"
+            task="translate" if istranslate and self.current_model_size in self.translatable_models else "transcribe",
+            beam_size=beam_size,
+            log_prob_threshold=log_prob_threshold,
+            no_speech_threshold=no_speech_threshold,
         )
         progress(0, desc="Loading audio..")
 
