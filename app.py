@@ -54,14 +54,20 @@ class App:
                         cb_translate = gr.Checkbox(value=False, label="Translate to English?", interactive=True)
                     with gr.Row():
                         cb_timestamp = gr.Checkbox(value=True, label="Add a timestamp to the end of the filename", interactive=True)
+                    with gr.Accordion("Advanced_Parameters", open=False):
+                        nb_beam_size = gr.Number(label="Beam Size", value=1, precision=0, interactive=True)
+                        nb_log_prob_threshold = gr.Number(label="Log Probability Threshold", value=-1.0, interactive=True)
+                        nb_no_speech_threshold = gr.Number(label="No Speech Threshold", value=0.6, interactive=True)
                     with gr.Row():
                         btn_run = gr.Button("GENERATE SUBTITLE FILE", variant="primary")
                     with gr.Row():
                         tb_indicator = gr.Textbox(label="Output", scale=8)
                         btn_openfolder = gr.Button('📂', scale=2)
 
+                    params = [input_file, dd_model, dd_lang, dd_subformat, cb_translate, cb_timestamp]
+                    advanced_params = [nb_beam_size, nb_log_prob_threshold, nb_no_speech_threshold]
                     btn_run.click(fn=self.whisper_inf.transcribe_file,
-                                  inputs=[input_file, dd_model, dd_lang, dd_subformat, cb_translate, cb_timestamp],
+                                  inputs=params + advanced_params,
                                   outputs=[tb_indicator])
                     btn_openfolder.click(fn=lambda: self.open_folder("outputs"), inputs=None, outputs=None)
                     dd_model.change(fn=self.on_change_models, inputs=[dd_model], outputs=[cb_translate])
@@ -86,14 +92,20 @@ class App:
                     with gr.Row():
                         cb_timestamp = gr.Checkbox(value=True, label="Add a timestamp to the end of the filename",
                                                    interactive=True)
+                    with gr.Accordion("Advanced_Parameters", open=False):
+                        nb_beam_size = gr.Number(label="Beam Size", value=1, precision=0, interactive=True)
+                        nb_log_prob_threshold = gr.Number(label="Log Probability Threshold", value=-1.0, interactive=True)
+                        nb_no_speech_threshold = gr.Number(label="No Speech Threshold", value=0.6, interactive=True)
                     with gr.Row():
                         btn_run = gr.Button("GENERATE SUBTITLE FILE", variant="primary")
                     with gr.Row():
                         tb_indicator = gr.Textbox(label="Output", scale=8)
                         btn_openfolder = gr.Button('📂', scale=2)
 
+                    params = [tb_youtubelink, dd_model, dd_lang, dd_subformat, cb_translate, cb_timestamp]
+                    advanced_params = [nb_beam_size, nb_log_prob_threshold, nb_no_speech_threshold]
                     btn_run.click(fn=self.whisper_inf.transcribe_youtube,
-                                  inputs=[tb_youtubelink, dd_model, dd_lang, dd_subformat, cb_translate, cb_timestamp],
+                                  inputs=params + advanced_params,
                                   outputs=[tb_indicator])
                     tb_youtubelink.change(get_ytmetas, inputs=[tb_youtubelink],
                                           outputs=[img_thumbnail, tb_title, tb_description])
@@ -111,14 +123,20 @@ class App:
                         dd_subformat = gr.Dropdown(["SRT", "WebVTT"], value="SRT", label="Subtitle Format")
                     with gr.Row():
                         cb_translate = gr.Checkbox(value=False, label="Translate to English?", interactive=True)
+                    with gr.Accordion("Advanced_Parameters", open=False):
+                        nb_beam_size = gr.Number(label="Beam Size", value=1, precision=0, interactive=True)
+                        nb_log_prob_threshold = gr.Number(label="Log Probability Threshold", value=-1.0, interactive=True)
+                        nb_no_speech_threshold = gr.Number(label="No Speech Threshold", value=0.6, interactive=True)
                     with gr.Row():
                         btn_run = gr.Button("GENERATE SUBTITLE FILE", variant="primary")
                     with gr.Row():
                         tb_indicator = gr.Textbox(label="Output", scale=8)
                         btn_openfolder = gr.Button('📂', scale=2)
 
+                    params = [mic_input, dd_model, dd_lang, dd_subformat, cb_translate]
+                    advanced_params = [nb_beam_size, nb_log_prob_threshold, nb_no_speech_threshold]
                     btn_run.click(fn=self.whisper_inf.transcribe_mic,
-                                  inputs=[mic_input, dd_model, dd_lang, dd_subformat, cb_translate],
+                                  inputs=params + advanced_params,
                                   outputs=[tb_indicator])
                     btn_openfolder.click(fn=lambda: self.open_folder("outputs"), inputs=None, outputs=None)
                     dd_model.change(fn=self.on_change_models, inputs=[dd_model], outputs=[cb_translate])

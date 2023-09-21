@@ -30,6 +30,9 @@ class WhisperInference(BaseInterface):
                         subformat: str,
                         istranslate: bool,
                         add_timestamp: bool,
+                        beam_size: int,
+                        log_prob_threshold: float,
+                        no_speech_threshold: float,
                         progress=gr.Progress()):
         """
         Write subtitle file from Files
@@ -49,6 +52,15 @@ class WhisperInference(BaseInterface):
             It's Whisper's feature to translate speech from another language directly into English end-to-end.
         add_timestamp: bool
             Boolean value from gr.Checkbox() that determines whether to add a timestamp at the end of the filename.
+        beam_size: int
+            Int value from gr.Number() that is used for decoding option.
+        log_prob_threshold: float
+            float value from gr.Number(). If the average log probability over sampled tokens is
+            below this value, treat as failed.
+        no_speech_threshold: float
+            float value from gr.Number(). If the no_speech probability is higher than this value AND
+            the average log probability over sampled tokens is below `log_prob_threshold`,
+            consider the segment as silent.
         progress: gr.Progress
             Indicator to show progress directly in gradio.
             I use a forked version of whisper for this. To see more info : https://github.com/jhj0517/jhj0517-whisper/tree/add-progress-callback
@@ -66,6 +78,9 @@ class WhisperInference(BaseInterface):
                 result, elapsed_time = self.transcribe(audio=audio,
                                                        lang=lang,
                                                        istranslate=istranslate,
+                                                       beam_size=beam_size,
+                                                       log_prob_threshold=log_prob_threshold,
+                                                       no_speech_threshold=no_speech_threshold,
                                                        progress=progress)
                 progress(1, desc="Completed!")
 
@@ -103,6 +118,9 @@ class WhisperInference(BaseInterface):
                            subformat: str,
                            istranslate: bool,
                            add_timestamp: bool,
+                           beam_size: int,
+                           log_prob_threshold: float,
+                           no_speech_threshold: float,
                            progress=gr.Progress()):
         """
         Write subtitle file from Youtube
@@ -122,6 +140,15 @@ class WhisperInference(BaseInterface):
             It's Whisper's feature to translate speech from another language directly into English end-to-end.
         add_timestamp: bool
             Boolean value from gr.Checkbox() that determines whether to add a timestamp at the end of the filename.
+        beam_size: int
+            Int value from gr.Number() that is used for decoding option.
+        log_prob_threshold: float
+            float value from gr.Number(). If the average log probability over sampled tokens is
+            below this value, treat as failed.
+        no_speech_threshold: float
+            float value from gr.Number(). If the no_speech probability is higher than this value AND
+            the average log probability over sampled tokens is below `log_prob_threshold`,
+            consider the segment as silent.
         progress: gr.Progress
             Indicator to show progress directly in gradio.
             I use a forked version of whisper for this. To see more info : https://github.com/jhj0517/jhj0517-whisper/tree/add-progress-callback
@@ -137,6 +164,9 @@ class WhisperInference(BaseInterface):
             result, elapsed_time = self.transcribe(audio=audio,
                                                    lang=lang,
                                                    istranslate=istranslate,
+                                                   beam_size=beam_size,
+                                                   log_prob_threshold=log_prob_threshold,
+                                                   no_speech_threshold=no_speech_threshold,
                                                    progress=progress)
             progress(1, desc="Completed!")
 
@@ -153,10 +183,17 @@ class WhisperInference(BaseInterface):
             print(f"Error transcribing youtube video: {str(e)}")
             return f"Error transcribing youtube video: {str(e)}"
         finally:
-            yt = get_ytdata(youtubelink)
-            file_path = get_ytaudio(yt)
-            self.release_cuda_memory()
-            self.remove_input_files([file_path])
+            try:
+                if 'yt' not in locals():
+                    yt = get_ytdata(youtubelink)
+                    file_path = get_ytaudio(yt)
+                else:
+                    file_path = get_ytaudio(yt)
+
+                self.release_cuda_memory()
+                self.remove_input_files([file_path])
+            except Exception as cleanup_error:
+                pass
 
     def transcribe_mic(self,
                        micaudio: str,
@@ -164,6 +201,9 @@ class WhisperInference(BaseInterface):
                        lang: str,
                        subformat: str,
                        istranslate: bool,
+                       beam_size: int,
+                       log_prob_threshold: float,
+                       no_speech_threshold: float,
                        progress=gr.Progress()):
         """
         Write subtitle file from microphone
@@ -181,6 +221,15 @@ class WhisperInference(BaseInterface):
         istranslate: bool
             Boolean value from gr.Checkbox() that determines whether to translate to English.
             It's Whisper's feature to translate speech from another language directly into English end-to-end.
+        beam_size: int
+            Int value from gr.Number() that is used for decoding option.
+        log_prob_threshold: float
+            float value from gr.Number(). If the average log probability over sampled tokens is
+            below this value, treat as failed.
+        no_speech_threshold: float
+            float value from gr.Number(). If the no_speech probability is higher than this value AND
+            the average log probability over sampled tokens is below `log_prob_threshold`,
+            consider the segment as silent.
         progress: gr.Progress
             Indicator to show progress directly in gradio.
             I use a forked version of whisper for this. To see more info : https://github.com/jhj0517/jhj0517-whisper/tree/add-progress-callback
@@ -193,6 +242,9 @@ class WhisperInference(BaseInterface):
             result, elapsed_time = self.transcribe(audio=micaudio,
                                                    lang=lang,
                                                    istranslate=istranslate,
+                                                   beam_size=beam_size,
+                                                   log_prob_threshold=log_prob_threshold,
+                                                   no_speech_threshold=no_speech_threshold,
                                                    progress=progress)
             progress(1, desc="Completed!")
 
@@ -215,6 +267,9 @@ class WhisperInference(BaseInterface):
                    audio: Union[str, np.ndarray, torch.Tensor],
                    lang: str,
                    istranslate: bool,
+                   beam_size: int,
+                   log_prob_threshold: float,
+                   no_speech_threshold: float,
                    progress: gr.Progress
                    ) -> Tuple[list[dict], float]:
         """
@@ -229,6 +284,15 @@ class WhisperInference(BaseInterface):
         istranslate: bool
             Boolean value from gr.Checkbox() that determines whether to translate to English.
             It's Whisper's feature to translate speech from another language directly into English end-to-end.
+        beam_size: int
+            Int value from gr.Number() that is used for decoding option.
+        log_prob_threshold: float
+            float value from gr.Number(). If the average log probability over sampled tokens is
+            below this value, treat as failed.
+        no_speech_threshold: float
+            float value from gr.Number(). If the no_speech probability is higher than this value AND
+            the average log probability over sampled tokens is below `log_prob_threshold`,
+            consider the segment as silent.
         progress: gr.Progress
             Indicator to show progress directly in gradio.
 
@@ -251,7 +315,9 @@ class WhisperInference(BaseInterface):
         segments_result = self.model.transcribe(audio=audio,
                                                 language=lang,
                                                 verbose=False,
-                                                beam_size=self.default_beam_size,
+                                                beam_size=beam_size,
+                                                logprob_threshold=log_prob_threshold,
+                                                no_speech_threshold=no_speech_threshold,
                                                 task="translate" if istranslate and self.current_model_size in translatable_model else "transcribe",
                                                 progress_callback=progress_callback)["segments"]
         elapsed_time = time.time() - start_time
