@@ -21,6 +21,7 @@ class WhisperInference(BaseInterface):
         self.model = None
         self.available_models = whisper.available_models()
         self.available_langs = sorted(list(whisper.tokenizer.LANGUAGES.values()))
+        self.device = "cuda" if torch.cuda.is_available() else "cpu"
         self.default_beam_size = 1
 
     def transcribe_file(self,

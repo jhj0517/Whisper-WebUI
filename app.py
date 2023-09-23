@@ -18,6 +18,7 @@ class App:
             print("Use Faster Whisper implementation")
         else:
             print("Use Open AI Whisper implementation")
+        print(f"Device \"{self.whisper_inf.device}\" is detected")
         self.nllb_inf = NLLBInference()
 
     @staticmethod

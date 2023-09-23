@@ -26,6 +26,7 @@ class FasterWhisperInference(BaseInterface):
         self.translatable_models = ["large", "large-v1", "large-v2"]
         self.default_beam_size = 1
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
+        self.compute_type = "float16" if self.device == "cuda" else "int8"
 
     def transcribe_file(self,
                         fileobjs: list,
@@ -365,7 +366,7 @@ class FasterWhisperInference(BaseInterface):
             device=self.device,
             model_size_or_path=model_size,
             download_root=os.path.join("models", "Whisper", "faster-whisper"),
-            compute_type="float16"
+            compute_type=self.compute_type
         )
 
     @staticmethod
