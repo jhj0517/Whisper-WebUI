@@ -59,6 +59,7 @@ class App:
                         nb_beam_size = gr.Number(label="Beam Size", value=1, precision=0, interactive=True)
                         nb_log_prob_threshold = gr.Number(label="Log Probability Threshold", value=-1.0, interactive=True)
                         nb_no_speech_threshold = gr.Number(label="No Speech Threshold", value=0.6, interactive=True)
+                        dd_compute_type = gr.Dropdown(label="Compute Type", choices=self.whisper_inf.available_compute_types, value=self.whisper_inf.current_compute_type, interactive=True)
                     with gr.Row():
                         btn_run = gr.Button("GENERATE SUBTITLE FILE", variant="primary")
                     with gr.Row():
@@ -66,7 +67,7 @@ class App:
                         btn_openfolder = gr.Button('📂', scale=2)
 
                     params = [input_file, dd_model, dd_lang, dd_subformat, cb_translate, cb_timestamp]
-                    advanced_params = [nb_beam_size, nb_log_prob_threshold, nb_no_speech_threshold]
+                    advanced_params = [nb_beam_size, nb_log_prob_threshold, nb_no_speech_threshold, dd_compute_type]
                     btn_run.click(fn=self.whisper_inf.transcribe_file,
                                   inputs=params + advanced_params,
                                   outputs=[tb_indicator])
@@ -97,6 +98,7 @@ class App:
                         nb_beam_size = gr.Number(label="Beam Size", value=1, precision=0, interactive=True)
                         nb_log_prob_threshold = gr.Number(label="Log Probability Threshold", value=-1.0, interactive=True)
                         nb_no_speech_threshold = gr.Number(label="No Speech Threshold", value=0.6, interactive=True)
+                        dd_compute_type = gr.Dropdown(label="Compute Type", choices=self.whisper_inf.available_compute_types, value=self.whisper_inf.current_compute_type, interactive=True)
                     with gr.Row():
                         btn_run = gr.Button("GENERATE SUBTITLE FILE", variant="primary")
                     with gr.Row():
@@ -104,7 +106,7 @@ class App:
                         btn_openfolder = gr.Button('📂', scale=2)
 
                     params = [tb_youtubelink, dd_model, dd_lang, dd_subformat, cb_translate, cb_timestamp]
-                    advanced_params = [nb_beam_size, nb_log_prob_threshold, nb_no_speech_threshold]
+                    advanced_params = [nb_beam_size, nb_log_prob_threshold, nb_no_speech_threshold, dd_compute_type]
                     btn_run.click(fn=self.whisper_inf.transcribe_youtube,
                                   inputs=params + advanced_params,
                                   outputs=[tb_indicator])
@@ -128,6 +130,7 @@ class App:
                         nb_beam_size = gr.Number(label="Beam Size", value=1, precision=0, interactive=True)
                         nb_log_prob_threshold = gr.Number(label="Log Probability Threshold", value=-1.0, interactive=True)
                         nb_no_speech_threshold = gr.Number(label="No Speech Threshold", value=0.6, interactive=True)
+                        dd_compute_type = gr.Dropdown(label="Compute Type", choices=self.whisper_inf.available_compute_types, value=self.whisper_inf.current_compute_type, interactive=True)
                     with gr.Row():
                         btn_run = gr.Button("GENERATE SUBTITLE FILE", variant="primary")
                     with gr.Row():
@@ -135,7 +138,7 @@ class App:
                         btn_openfolder = gr.Button('📂', scale=2)
 
                     params = [mic_input, dd_model, dd_lang, dd_subformat, cb_translate]
-                    advanced_params = [nb_beam_size, nb_log_prob_threshold, nb_no_speech_threshold]
+                    advanced_params = [nb_beam_size, nb_log_prob_threshold, nb_no_speech_threshold, dd_compute_type]
                     btn_run.click(fn=self.whisper_inf.transcribe_mic,
                                   inputs=params + advanced_params,
                                   outputs=[tb_indicator])

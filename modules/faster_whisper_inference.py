@@ -24,9 +24,10 @@ class FasterWhisperInference(BaseInterface):
         self.available_models = whisper.available_models()
         self.available_langs = sorted(list(whisper.tokenizer.LANGUAGES.values()))
         self.translatable_models = ["large", "large-v1", "large-v2"]
-        self.default_beam_size = 1
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
-        self.compute_type = "float16" if self.device == "cuda" else "float32"
+        self.available_compute_types = ["int8", "int8_float32", "int8_float16", "int8_bfloat16", "int16", "float16", "bfloat16", "float32"]
+        self.current_compute_type = "float16" if self.device == "cuda" else "float32"
+        self.default_beam_size = 1
 
     def transcribe_file(self,
                         fileobjs: list,
@@ -38,6 +39,7 @@ class FasterWhisperInference(BaseInterface):
                         beam_size: int,
                         log_prob_threshold: float,
                         no_speech_threshold: float,
+                        compute_type: str,
                         progress=gr.Progress()
                         ) -> str:
         """
@@ -67,6 +69,9 @@ class FasterWhisperInference(BaseInterface):
             float value from gr.Number(). If the no_speech probability is higher than this value AND
             the average log probability over sampled tokens is below `log_prob_threshold`,
             consider the segment as silent.
+        compute_type: str
+            compute type from gr.Dropdown().
+            see more info : https://opennmt.net/CTranslate2/quantization.html
         progress: gr.Progress
             Indicator to show progress directly in gradio.
 
@@ -75,8 +80,7 @@ class FasterWhisperInference(BaseInterface):
         String to return to gr.Textbox()
         """
         try:
-            if model_size != self.current_model_size or self.model is None:
-                self.initialize_model(model_size=model_size, progress=progress)
+            self.update_model_if_needed(model_size=model_size, compute_type=compute_type, progress=progress)
 
             if lang == "Automatic Detection":
                 lang = None
@@ -129,6 +133,7 @@ class FasterWhisperInference(BaseInterface):
                            beam_size: int,
                            log_prob_threshold: float,
                            no_speech_threshold: float,
+                           compute_type: str,
                            progress=gr.Progress()
                            ) -> str:
         """
@@ -158,6 +163,9 @@ class FasterWhisperInference(BaseInterface):
             float value from gr.Number(). If the no_speech probability is higher than this value AND
             the average log probability over sampled tokens is below `log_prob_threshold`,
             consider the segment as silent.
+        compute_type: str
+            compute type from gr.Dropdown().
+            see more info : https://opennmt.net/CTranslate2/quantization.html
         progress: gr.Progress
             Indicator to show progress directly in gradio.
 
@@ -166,8 +174,7 @@ class FasterWhisperInference(BaseInterface):
         String to return to gr.Textbox()
         """
         try:
-            if model_size != self.current_model_size or self.model is None:
-                self.initialize_model(model_size=model_size, progress=progress)
+            self.update_model_if_needed(model_size=model_size, compute_type=compute_type, progress=progress)
 
             if lang == "Automatic Detection":
                 lang = None
@@ -220,6 +227,7 @@ class FasterWhisperInference(BaseInterface):
                        beam_size: int,
                        log_prob_threshold: float,
                        no_speech_threshold: float,
+                       compute_type: str,
                        progress=gr.Progress()
                        ) -> str:
         """
@@ -246,6 +254,9 @@ class FasterWhisperInference(BaseInterface):
         no_speech_threshold: float
             float value from gr.Number(). If the no_speech probability is higher than this value AND
             the average log probability over sampled tokens is below `log_prob_threshold`,
+        compute_type: str
+            compute type from gr.Dropdown().
+            see more info : https://opennmt.net/CTranslate2/quantization.html
             consider the segment as silent.
         progress: gr.Progress
             Indicator to show progress directly in gradio.
@@ -255,8 +266,7 @@ class FasterWhisperInference(BaseInterface):
         String to return to gr.Textbox()
         """
         try:
-            if model_size != self.current_model_size or self.model is None:
-                self.initialize_model(model_size=model_size, progress=progress)
+            self.update_model_if_needed(model_size=model_size, compute_type=compute_type, progress=progress)
 
             if lang == "Automatic Detection":
                 lang = None
@@ -353,21 +363,24 @@ class FasterWhisperInference(BaseInterface):
         elapsed_time = time.time() - start_time
         return segments_result, elapsed_time
 
-    def initialize_model(self,
-                         model_size: str,
-                         progress: gr.Progress
-                         ):
+    def update_model_if_needed(self,
+                               model_size: str,
+                               compute_type: str,
+                               progress: gr.Progress
+                               ):
         """
-        Initialize model if it doesn't match with current model size
+        Initialize model if it doesn't match with current model setting
         """
-        progress(0, desc="Initializing Model..")
-        self.current_model_size = model_size
-        self.model = faster_whisper.WhisperModel(
-            device=self.device,
-            model_size_or_path=model_size,
-            download_root=os.path.join("models", "Whisper", "faster-whisper"),
-            compute_type=self.compute_type
-        )
+        if model_size != self.current_model_size or self.model is None or self.current_compute_type != compute_type:
+            progress(0, desc="Initializing Model..")
+            self.current_model_size = model_size
+            self.current_compute_type = compute_type
+            self.model = faster_whisper.WhisperModel(
+                device=self.device,
+                model_size_or_path=model_size,
+                download_root=os.path.join("models", "Whisper", "faster-whisper"),
+                compute_type=self.current_compute_type
+            )
 
     @staticmethod
     def generate_and_write_subtitle(file_name: str,
