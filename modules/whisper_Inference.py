@@ -22,6 +22,8 @@ class WhisperInference(BaseInterface):
         self.available_models = whisper.available_models()
         self.available_langs = sorted(list(whisper.tokenizer.LANGUAGES.values()))
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
+        self.available_compute_types = ["float16", "float32"]
+        self.current_compute_type = "float16" if self.device == "cuda" else "float32"
         self.default_beam_size = 1
 
     def transcribe_file(self,
@@ -34,6 +36,7 @@ class WhisperInference(BaseInterface):
                         beam_size: int,
                         log_prob_threshold: float,
                         no_speech_threshold: float,
+                        compute_type: str,
                         progress=gr.Progress()):
         """
         Write subtitle file from Files
@@ -62,14 +65,15 @@ class WhisperInference(BaseInterface):
             float value from gr.Number(). If the no_speech probability is higher than this value AND
             the average log probability over sampled tokens is below `log_prob_threshold`,
             consider the segment as silent.
+        compute_type: str
+            compute type from gr.Dropdown().
         progress: gr.Progress
             Indicator to show progress directly in gradio.
             I use a forked version of whisper for this. To see more info : https://github.com/jhj0517/jhj0517-whisper/tree/add-progress-callback
         """
 
         try:
-            if model_size != self.current_model_size or self.model is None:
-                self.initialize_model(model_size=model_size, progress=progress)
+            self.update_model_if_needed(model_size=model_size, compute_type=compute_type, progress=progress)
 
             files_info = {}
             for fileobj in fileobjs:
@@ -82,7 +86,9 @@ class WhisperInference(BaseInterface):
                                                        beam_size=beam_size,
                                                        log_prob_threshold=log_prob_threshold,
                                                        no_speech_threshold=no_speech_threshold,
-                                                       progress=progress)
+                                                       compute_type=compute_type,
+                                                       progress=progress
+                                                       )
                 progress(1, desc="Completed!")
 
                 file_name, file_ext = os.path.splitext(os.path.basename(fileobj.orig_name))
@@ -122,6 +128,7 @@ class WhisperInference(BaseInterface):
                            beam_size: int,
                            log_prob_threshold: float,
                            no_speech_threshold: float,
+                           compute_type: str,
                            progress=gr.Progress()):
         """
         Write subtitle file from Youtube
@@ -150,13 +157,14 @@ class WhisperInference(BaseInterface):
             float value from gr.Number(). If the no_speech probability is higher than this value AND
             the average log probability over sampled tokens is below `log_prob_threshold`,
             consider the segment as silent.
+        compute_type: str
+            compute type from gr.Dropdown().
         progress: gr.Progress
             Indicator to show progress directly in gradio.
             I use a forked version of whisper for this. To see more info : https://github.com/jhj0517/jhj0517-whisper/tree/add-progress-callback
         """
         try:
-            if model_size != self.current_model_size or self.model is None:
-                self.initialize_model(model_size=model_size, progress=progress)
+            self.update_model_if_needed(model_size=model_size, compute_type=compute_type, progress=progress)
 
             progress(0, desc="Loading Audio from Youtube..")
             yt = get_ytdata(youtubelink)
@@ -168,6 +176,7 @@ class WhisperInference(BaseInterface):
                                                    beam_size=beam_size,
                                                    log_prob_threshold=log_prob_threshold,
                                                    no_speech_threshold=no_speech_threshold,
+                                                   compute_type=compute_type,
                                                    progress=progress)
             progress(1, desc="Completed!")
 
@@ -205,6 +214,7 @@ class WhisperInference(BaseInterface):
                        beam_size: int,
                        log_prob_threshold: float,
                        no_speech_threshold: float,
+                       compute_type: str,
                        progress=gr.Progress()):
         """
         Write subtitle file from microphone
@@ -231,14 +241,15 @@ class WhisperInference(BaseInterface):
             float value from gr.Number(). If the no_speech probability is higher than this value AND
             the average log probability over sampled tokens is below `log_prob_threshold`,
             consider the segment as silent.
+        compute_type: str
+            compute type from gr.Dropdown().
         progress: gr.Progress
             Indicator to show progress directly in gradio.
             I use a forked version of whisper for this. To see more info : https://github.com/jhj0517/jhj0517-whisper/tree/add-progress-callback
         """
 
         try:
-            if model_size != self.current_model_size or self.model is None:
-                self.initialize_model(model_size=model_size, progress=progress)
+            self.update_model_if_needed(model_size=model_size, compute_type=compute_type, progress=progress)
 
             result, elapsed_time = self.transcribe(audio=micaudio,
                                                    lang=lang,
@@ -246,6 +257,7 @@ class WhisperInference(BaseInterface):
                                                    beam_size=beam_size,
                                                    log_prob_threshold=log_prob_threshold,
                                                    no_speech_threshold=no_speech_threshold,
+                                                   compute_type=compute_type,
                                                    progress=progress)
             progress(1, desc="Completed!")
 
@@ -271,6 +283,7 @@ class WhisperInference(BaseInterface):
                    beam_size: int,
                    log_prob_threshold: float,
                    no_speech_threshold: float,
+                   compute_type: str,
                    progress: gr.Progress
                    ) -> Tuple[list[dict], float]:
         """
@@ -294,6 +307,8 @@ class WhisperInference(BaseInterface):
             float value from gr.Number(). If the no_speech probability is higher than this value AND
             the average log probability over sampled tokens is below `log_prob_threshold`,
             consider the segment as silent.
+        compute_type: str
+            compute type from gr.Dropdown().
         progress: gr.Progress
             Indicator to show progress directly in gradio.
 
@@ -320,21 +335,30 @@ class WhisperInference(BaseInterface):
                                                 logprob_threshold=log_prob_threshold,
                                                 no_speech_threshold=no_speech_threshold,
                                                 task="translate" if istranslate and self.current_model_size in translatable_model else "transcribe",
+                                                fp16=True if compute_type == "float16" else False,
                                                 progress_callback=progress_callback)["segments"]
         elapsed_time = time.time() - start_time
 
         return segments_result, elapsed_time
 
-    def initialize_model(self,
-                         model_size: str,
-                         progress: gr.Progress
-                         ):
+    def update_model_if_needed(self,
+                               model_size: str,
+                               compute_type: str,
+                               progress: gr.Progress,
+                               ):
         """
-        Initialize model if it doesn't match with current model size
+        Initialize model if it doesn't match with current model setting
         """
-        progress(0, desc="Initializing Model..")
-        self.current_model_size = model_size
-        self.model = whisper.load_model(name=model_size, download_root=os.path.join("models", "Whisper"))
+        if compute_type != self.current_compute_type:
+            self.current_compute_type = compute_type
+        if model_size != self.current_model_size or self.model is None:
+            progress(0, desc="Initializing Model..")
+            self.current_model_size = model_size
+            self.model = whisper.load_model(
+                name=model_size,
+                device=self.device,
+                download_root=os.path.join("models", "Whisper")
+            )
 
     @staticmethod
     def generate_and_write_subtitle(file_name: str,
