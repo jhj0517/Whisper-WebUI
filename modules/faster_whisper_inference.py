@@ -82,9 +82,6 @@ class FasterWhisperInference(BaseInterface):
         try:
             self.update_model_if_needed(model_size=model_size, compute_type=compute_type, progress=progress)
 
-            if lang == "Automatic Detection":
-                lang = None
-
             files_info = {}
             for fileobj in fileobjs:
                 transcribed_segments, time_for_task = self.transcribe(
@@ -176,9 +173,6 @@ class FasterWhisperInference(BaseInterface):
         try:
             self.update_model_if_needed(model_size=model_size, compute_type=compute_type, progress=progress)
 
-            if lang == "Automatic Detection":
-                lang = None
-
             progress(0, desc="Loading Audio from Youtube..")
             yt = get_ytdata(youtubelink)
             audio = get_ytaudio(yt)
@@ -268,9 +262,6 @@ class FasterWhisperInference(BaseInterface):
         try:
             self.update_model_if_needed(model_size=model_size, compute_type=compute_type, progress=progress)
 
-            if lang == "Automatic Detection":
-                lang = None
-
             progress(0, desc="Loading Audio..")
 
             transcribed_segments, time_for_task = self.transcribe(
@@ -338,7 +329,10 @@ class FasterWhisperInference(BaseInterface):
             elapsed time for transcription
         """
         start_time = time.time()
-        if lang:
+
+        if lang == "Automatic Detection":
+            lang = None
+        else:
             language_code_dict = {value: key for key, value in whisper.tokenizer.LANGUAGES.items()}
             lang = language_code_dict[lang]
         segments, info = self.model.transcribe(
