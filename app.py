@@ -50,7 +50,7 @@ class App:
                                                label="Model")
                         dd_lang = gr.Dropdown(choices=["Automatic Detection"] + self.whisper_inf.available_langs,
                                               value="Automatic Detection", label="Language")
-                        dd_subformat = gr.Dropdown(["SRT", "WebVTT"], value="SRT", label="Subtitle Format")
+                        dd_subformat = gr.Dropdown(["SRT", "WebVTT","Raw"], value="SRT", label="Subtitle Format")
                     with gr.Row():
                         cb_translate = gr.Checkbox(value=False, label="Translate to English?", interactive=True)
                     with gr.Row():
