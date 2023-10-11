@@ -153,7 +153,7 @@ class FasterWhisperInference(BaseInterface):
         lang: str
             Source language of the file to transcribe from gr.Dropdown()
         subformat: str
-            Subtitle format to write from gr.Dropdown(). Supported format: [SRT, WebVTT]
+            Subtitle format to write from gr.Dropdown(). Supported format: [SRT, WebVTT, Raw]
         istranslate: bool
             Boolean value from gr.Checkbox() that determines whether to translate to English.
             It's Whisper's feature to translate speech from another language directly into English end-to-end.
@@ -198,12 +198,19 @@ class FasterWhisperInference(BaseInterface):
             progress(1, desc="Completed!")
 
             file_name = safe_filename(yt.title)
-            subtitle = self.generate_and_write_subtitle(
-                file_name=file_name,
-                transcribed_segments=transcribed_segments,
-                add_timestamp=add_timestamp,
-                subformat=subformat
-            )
+            if subformat == "Raw":
+                subtitle =""
+                for i, segment in enumerate(transcribed_segments):
+                    if segment['text'].startswith(' '):
+                        segment['text'] = segment['text'][1:]
+                    subtitle += f"{segment['text']}\n"
+            else :
+                subtitle = self.generate_and_write_subtitle(
+                    file_name=file_name,
+                    transcribed_segments=transcribed_segments,
+                    add_timestamp=add_timestamp,
+                    subformat=subformat
+                )            
             return f"Done in {self.format_time(time_for_task)}! Subtitle file is in the outputs folder.\n\n{subtitle}"
         except Exception as e:
             return f"Error: {str(e)}"
@@ -244,7 +251,7 @@ class FasterWhisperInference(BaseInterface):
         lang: str
             Source language of the file to transcribe from gr.Dropdown()
         subformat: str
-            Subtitle format to write from gr.Dropdown(). Supported format: [SRT, WebVTT]
+            Subtitle format to write from gr.Dropdown(). Supported format: [SRT, WebVTT, Raw]
         istranslate: bool
             Boolean value from gr.Checkbox() that determines whether to translate to English.
             It's Whisper's feature to translate speech from another language directly into English end-to-end.
@@ -282,13 +289,19 @@ class FasterWhisperInference(BaseInterface):
                 progress=progress
             )
             progress(1, desc="Completed!")
-
-            subtitle = self.generate_and_write_subtitle(
-                file_name="Mic",
-                transcribed_segments=transcribed_segments,
-                add_timestamp=True,
-                subformat=subformat
-            )
+            if subformat == "Raw":
+                    subtitle =""
+                    for i, segment in enumerate(transcribed_segments):
+                        if segment['text'].startswith(' '):
+                            segment['text'] = segment['text'][1:]
+                        subtitle += f"{segment['text']}\n"
+            else :
+                subtitle = self.generate_and_write_subtitle(
+                    file_name="Mic",
+                    transcribed_segments=transcribed_segments,
+                    add_timestamp=True,
+                    subformat=subformat
+                )
             return f"Done in {self.format_time(time_for_task)}! Subtitle file is in the outputs folder.\n\n{subtitle}"
         except Exception as e:
             return f"Error: {str(e)}"
