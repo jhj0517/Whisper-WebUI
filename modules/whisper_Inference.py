@@ -8,7 +8,7 @@ from datetime import datetime
 import torch
 
 from .base_interface import BaseInterface
-from modules.subtitle_manager import get_srt, get_vtt, write_file, safe_filename
+from modules.subtitle_manager import get_srt, get_vtt, get_txt, write_file, safe_filename
 from modules.youtube_manager import get_ytdata, get_ytaudio
 
 DEFAULT_MODEL_SIZE = "large-v2"
@@ -30,7 +30,7 @@ class WhisperInference(BaseInterface):
                         fileobjs: list,
                         model_size: str,
                         lang: str,
-                        subformat: str,
+                        file_format: str,
                         istranslate: bool,
                         add_timestamp: bool,
                         beam_size: int,
@@ -49,8 +49,8 @@ class WhisperInference(BaseInterface):
             Whisper model size from gr.Dropdown()
         lang: str
             Source language of the file to transcribe from gr.Dropdown()
-        subformat: str
-            Subtitle format to write from gr.Dropdown(). Supported format: [SRT, WebVTT]
+        file_format: str
+            File format to write from gr.Dropdown(). Supported format: [SRT, WebVTT, txt]
         istranslate: bool
             Boolean value from gr.Checkbox() that determines whether to translate to English.
             It's Whisper's feature to translate speech from another language directly into English end-to-end.
@@ -93,11 +93,11 @@ class WhisperInference(BaseInterface):
 
                 file_name, file_ext = os.path.splitext(os.path.basename(fileobj.orig_name))
                 file_name = safe_filename(file_name)
-                subtitle = self.generate_and_write_subtitle(
+                subtitle = self.generate_and_write_file(
                     file_name=file_name,
                     transcribed_segments=result,
                     add_timestamp=add_timestamp,
-                    subformat=subformat
+                    file_format=file_format
                 )
 
                 files_info[file_name] = {"subtitle": subtitle, "elapsed_time": elapsed_time}
@@ -122,7 +122,7 @@ class WhisperInference(BaseInterface):
                            youtubelink: str,
                            model_size: str,
                            lang: str,
-                           subformat: str,
+                           file_format: str,
                            istranslate: bool,
                            add_timestamp: bool,
                            beam_size: int,
@@ -141,8 +141,8 @@ class WhisperInference(BaseInterface):
             Whisper model size from gr.Dropdown()
         lang: str
             Source language of the file to transcribe from gr.Dropdown()
-        subformat: str
-            Subtitle format to write from gr.Dropdown(). Supported format: [SRT, WebVTT]
+        file_format: str
+            File format to write from gr.Dropdown(). Supported format: [SRT, WebVTT, txt]
         istranslate: bool
             Boolean value from gr.Checkbox() that determines whether to translate to English.
             It's Whisper's feature to translate speech from another language directly into English end-to-end.
@@ -181,11 +181,11 @@ class WhisperInference(BaseInterface):
             progress(1, desc="Completed!")
 
             file_name = safe_filename(yt.title)
-            subtitle = self.generate_and_write_subtitle(
+            subtitle = self.generate_and_write_file(
                 file_name=file_name,
                 transcribed_segments=result,
                 add_timestamp=add_timestamp,
-                subformat=subformat
+                file_format=file_format
             )
 
             return f"Done in {self.format_time(elapsed_time)}! Subtitle file is in the outputs folder.\n\n{subtitle}"
@@ -209,7 +209,7 @@ class WhisperInference(BaseInterface):
                        micaudio: str,
                        model_size: str,
                        lang: str,
-                       subformat: str,
+                       file_format: str,
                        istranslate: bool,
                        beam_size: int,
                        log_prob_threshold: float,
@@ -227,8 +227,8 @@ class WhisperInference(BaseInterface):
             Whisper model size from gr.Dropdown()
         lang: str
             Source language of the file to transcribe from gr.Dropdown()
-        subformat: str
-            Subtitle format to write from gr.Dropdown(). Supported format: [SRT, WebVTT]
+        file_format: str
+            Subtitle format to write from gr.Dropdown(). Supported format: [SRT, WebVTT, txt]
         istranslate: bool
             Boolean value from gr.Checkbox() that determines whether to translate to English.
             It's Whisper's feature to translate speech from another language directly into English end-to-end.
@@ -261,11 +261,11 @@ class WhisperInference(BaseInterface):
                                                    progress=progress)
             progress(1, desc="Completed!")
 
-            subtitle = self.generate_and_write_subtitle(
+            subtitle = self.generate_and_write_file(
                 file_name="Mic",
                 transcribed_segments=result,
                 add_timestamp=True,
-                subformat=subformat
+                file_format=file_format
             )
 
             return f"Done in {self.format_time(elapsed_time)}! Subtitle file is in the outputs folder.\n\n{subtitle}"
@@ -361,11 +361,11 @@ class WhisperInference(BaseInterface):
             )
 
     @staticmethod
-    def generate_and_write_subtitle(file_name: str,
-                                    transcribed_segments: list,
-                                    add_timestamp: bool,
-                                    subformat: str,
-                                    ) -> str:
+    def generate_and_write_file(file_name: str,
+                                transcribed_segments: list,
+                                add_timestamp: bool,
+                                file_format: str,
+                                ) -> str:
         """
         This method writes subtitle file and returns str to gr.Textbox
         """
@@ -375,13 +375,18 @@ class WhisperInference(BaseInterface):
         else:
             output_path = os.path.join("outputs", f"{file_name}")
 
-        if subformat == "SRT":
-            subtitle = get_srt(transcribed_segments)
-            write_file(subtitle, f"{output_path}.srt")
-        elif subformat == "WebVTT":
-            subtitle = get_vtt(transcribed_segments)
-            write_file(subtitle, f"{output_path}.vtt")
-        return subtitle
+        if file_format == "SRT":
+            content = get_srt(transcribed_segments)
+            write_file(content, f"{output_path}.srt")
+
+        elif file_format == "WebVTT":
+            content = get_vtt(transcribed_segments)
+            write_file(content, f"{output_path}.vtt")
+
+        elif file_format == "txt":
+            content = get_txt(transcribed_segments)
+            write_file(content, f"{output_path}.vtt")
+        return content
 
     @staticmethod
     def format_time(elapsed_time: float) -> str:
