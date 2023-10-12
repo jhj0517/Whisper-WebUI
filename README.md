@@ -14,6 +14,7 @@ If you wish to try this on Colab, you can do it in [here](https://colab.research
 - Currently supported subtitle formats : 
   - SRT
   - WebVTT
+  - txt ( only text file without timeline )
 - Speech to Text Translation 
   - From other languages to English. ( This is Whisper's end-to-end speech-to-text translation feature )
 - Text to Text Translation
