@@ -50,7 +50,7 @@ class App:
                                                label="Model")
                         dd_lang = gr.Dropdown(choices=["Automatic Detection"] + self.whisper_inf.available_langs,
                                               value="Automatic Detection", label="Language")
-                        dd_subformat = gr.Dropdown(["SRT", "WebVTT"], value="SRT", label="Subtitle Format")
+                        dd_file_format = gr.Dropdown(["SRT", "WebVTT", "txt"], value="SRT", label="File Format")
                     with gr.Row():
                         cb_translate = gr.Checkbox(value=False, label="Translate to English?", interactive=True)
                     with gr.Row():
@@ -66,7 +66,7 @@ class App:
                         tb_indicator = gr.Textbox(label="Output", scale=8)
                         btn_openfolder = gr.Button('📂', scale=2)
 
-                    params = [input_file, dd_model, dd_lang, dd_subformat, cb_translate, cb_timestamp]
+                    params = [input_file, dd_model, dd_lang, dd_file_format, cb_translate, cb_timestamp]
                     advanced_params = [nb_beam_size, nb_log_prob_threshold, nb_no_speech_threshold, dd_compute_type]
                     btn_run.click(fn=self.whisper_inf.transcribe_file,
                                   inputs=params + advanced_params,
@@ -88,7 +88,7 @@ class App:
                                                label="Model")
                         dd_lang = gr.Dropdown(choices=["Automatic Detection"] + self.whisper_inf.available_langs,
                                               value="Automatic Detection", label="Language")
-                        dd_subformat = gr.Dropdown(choices=["SRT", "WebVTT"], value="SRT", label="Subtitle Format")
+                        dd_file_format = gr.Dropdown(choices=["SRT", "WebVTT", "txt"], value="SRT", label="File Format")
                     with gr.Row():
                         cb_translate = gr.Checkbox(value=False, label="Translate to English?", interactive=True)
                     with gr.Row():
@@ -105,7 +105,7 @@ class App:
                         tb_indicator = gr.Textbox(label="Output", scale=8)
                         btn_openfolder = gr.Button('📂', scale=2)
 
-                    params = [tb_youtubelink, dd_model, dd_lang, dd_subformat, cb_translate, cb_timestamp]
+                    params = [tb_youtubelink, dd_model, dd_lang, dd_file_format, cb_translate, cb_timestamp]
                     advanced_params = [nb_beam_size, nb_log_prob_threshold, nb_no_speech_threshold, dd_compute_type]
                     btn_run.click(fn=self.whisper_inf.transcribe_youtube,
                                   inputs=params + advanced_params,
@@ -123,7 +123,7 @@ class App:
                                                label="Model")
                         dd_lang = gr.Dropdown(choices=["Automatic Detection"] + self.whisper_inf.available_langs,
                                               value="Automatic Detection", label="Language")
-                        dd_subformat = gr.Dropdown(["SRT", "WebVTT"], value="SRT", label="Subtitle Format")
+                        dd_file_format = gr.Dropdown(["SRT", "WebVTT", "txt"], value="SRT", label="File Format")
                     with gr.Row():
                         cb_translate = gr.Checkbox(value=False, label="Translate to English?", interactive=True)
                     with gr.Accordion("Advanced_Parameters", open=False):
@@ -137,7 +137,7 @@ class App:
                         tb_indicator = gr.Textbox(label="Output", scale=8)
                         btn_openfolder = gr.Button('📂', scale=2)
 
-                    params = [mic_input, dd_model, dd_lang, dd_subformat, cb_translate]
+                    params = [mic_input, dd_model, dd_lang, dd_file_format, cb_translate]
                     advanced_params = [nb_beam_size, nb_log_prob_threshold, nb_no_speech_threshold, dd_compute_type]
                     btn_run.click(fn=self.whisper_inf.transcribe_mic,
                                   inputs=params + advanced_params,
