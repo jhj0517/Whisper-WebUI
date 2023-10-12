@@ -44,6 +44,15 @@ def get_vtt(segments):
     return output
 
 
+def get_txt(segments):
+    output = ""
+    for i, segment in enumerate(segments):
+        if segment['text'].startswith(' '):
+            segment['text'] = segment['text'][1:]
+        output += f"{segment['text']}\n"
+    return output
+
+
 def parse_srt(file_path):
     """Reads SRT file and returns as dict"""
     with open(file_path, 'r', encoding='utf-8') as file:
