@@ -2,5 +2,6 @@
 torch
 git+https://github.com/jhj0517/jhj0517-whisper.git
 faster-whisper
+transformers
 gradio==3.37.0
 pytube
