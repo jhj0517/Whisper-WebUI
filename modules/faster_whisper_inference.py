@@ -24,7 +24,7 @@ class FasterWhisperInference(BaseInterface):
         self.model = None
         self.available_models = whisper.available_models()
         self.available_langs = sorted(list(whisper.tokenizer.LANGUAGES.values()))
-        self.translatable_models = ["large", "large-v1", "large-v2"]
+        self.translatable_models = ["large", "large-v1", "large-v2", "large-v3"]
         self.device = "cuda" if torch.cuda.is_available() else "cpu"
         self.available_compute_types = ctranslate2.get_supported_compute_types("cuda") if self.device == "cuda" else ctranslate2.get_supported_compute_types("cpu")
         self.current_compute_type = "float16" if self.device == "cuda" else "float32"

@@ -11,7 +11,7 @@ from .base_interface import BaseInterface
 from modules.subtitle_manager import get_srt, get_vtt, get_txt, write_file, safe_filename
 from modules.youtube_manager import get_ytdata, get_ytaudio
 
-DEFAULT_MODEL_SIZE = "large-v2"
+DEFAULT_MODEL_SIZE = "large-v3"
 
 
 class WhisperInference(BaseInterface):
@@ -327,7 +327,7 @@ class WhisperInference(BaseInterface):
         if lang == "Automatic Detection":
             lang = None
 
-        translatable_model = ["large", "large-v1", "large-v2"]
+        translatable_model = ["large", "large-v1", "large-v2", "large-v3"]
         segments_result = self.model.transcribe(audio=audio,
                                                 language=lang,
                                                 verbose=False,
