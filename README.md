@@ -3,9 +3,6 @@ A Gradio-based browser interface for [Whisper](https://github.com/openai/whisper
 
 ![Whisper WebUI](https://github.com/jhj0517/Whsiper-WebUI/blob/master/screenshot.png)
 
-### About large-v3 
-large-v3 model has newly added on 23-11-07. large-v3 can not be used in [faster-whsiper](https://github.com/guillaumekln/faster-whisper) now, so set `DISABLE_FASTER_WHISPER` to true in `user-start-webui.bat` file if you want to use large-v3.  
-
 ## Notebook
 If you wish to try this on Colab, you can do it in [here](https://colab.research.google.com/github/jhj0517/Whisper-WebUI/blob/master/notebook/whisper-webui.ipynb)!
 
