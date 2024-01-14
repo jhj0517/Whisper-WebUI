@@ -34,7 +34,7 @@ class NLLBInference(BaseInterface):
                        src_lang: str,
                        tgt_lang: str,
                        add_timestamp: bool,
-                       progress=gr.Progress()):
+                       progress=gr.Progress()) -> list:
         """
         Translate subtitle file from source language to target language
 
@@ -53,6 +53,12 @@ class NLLBInference(BaseInterface):
         progress: gr.Progress
             Indicator to show progress directly in gradio.
             I use a forked version of whisper for this. To see more info : https://github.com/jhj0517/jhj0517-whisper/tree/add-progress-callback
+
+        Returns
+        ----------
+        A List of
+        String to return to gr.Textbox()
+        Files to return to gr.Files()
         """
         try:
             if model_size != self.current_model_size or self.model is None:
@@ -92,8 +98,9 @@ class NLLBInference(BaseInterface):
                         output_path = os.path.join("outputs", "translations", f"{file_name}-{timestamp}")
                     else:
                         output_path = os.path.join("outputs", "translations", f"{file_name}")
+                    output_path += '.srt'
 
-                    write_file(subtitle, f"{output_path}.srt")
+                    write_file(subtitle, output_path)
 
                 elif file_ext == ".vtt":
                     parsed_dicts = parse_vtt(file_path=file_path)
@@ -109,8 +116,9 @@ class NLLBInference(BaseInterface):
                         output_path = os.path.join("outputs", "translations", f"{file_name}-{timestamp}")
                     else:
                         output_path = os.path.join("outputs", "translations", f"{file_name}")
+                    output_path += '.vtt'
 
-                    write_file(subtitle, f"{output_path}.vtt")
+                    write_file(subtitle, output_path)
 
                 files_info[file_name] = subtitle
 
@@ -120,9 +128,10 @@ class NLLBInference(BaseInterface):
                 total_result += f'{file_name}\n\n'
                 total_result += f'{subtitle}'
 
-            return f"Done! Subtitle is in the outputs/translation folder.\n\n{total_result}"
+            gr_str = f"Done! Subtitle is in the outputs/translation folder.\n\n{total_result}"
+            return [gr_str, output_path]
         except Exception as e:
-            return f"Error: {str(e)}"
+            print(f"Error: {str(e)}")
         finally:
             self.release_cuda_memory()
             self.remove_input_files([fileobj.name for fileobj in fileobjs])

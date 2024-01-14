@@ -42,7 +42,7 @@ class FasterWhisperInference(BaseInterface):
                         no_speech_threshold: float,
                         compute_type: str,
                         progress=gr.Progress()
-                        ) -> str:
+                        ) -> list:
         """
         Write subtitle file from Files
 
@@ -78,7 +78,9 @@ class FasterWhisperInference(BaseInterface):
 
         Returns
         ----------
+        A List of
         String to return to gr.Textbox()
+        Files to return to gr.Files()
         """
         try:
             self.update_model_if_needed(model_size=model_size, compute_type=compute_type, progress=progress)
@@ -95,16 +97,15 @@ class FasterWhisperInference(BaseInterface):
                     progress=progress
                 )
 
-                file_name, file_ext = os.path.splitext(os.path.basename(fileobj.orig_name))
+                file_name, file_ext = os.path.splitext(os.path.basename(fileobj.name))
                 file_name = safe_filename(file_name)
-                subtitle = self.generate_and_write_file(
+                subtitle, file_path = self.generate_and_write_file(
                     file_name=file_name,
                     transcribed_segments=transcribed_segments,
                     add_timestamp=add_timestamp,
                     file_format=file_format
                 )
-                print(f"{subtitle}")
-                files_info[file_name] = {"subtitle": subtitle, "time_for_task": time_for_task}
+                files_info[file_name] = {"subtitle": subtitle, "time_for_task": time_for_task, "path":  file_path}
 
             total_result = ''
             total_time = 0
@@ -114,7 +115,10 @@ class FasterWhisperInference(BaseInterface):
                 total_result += f'{info["subtitle"]}'
                 total_time += info["time_for_task"]
 
-            return f"Done in {self.format_time(total_time)}! Subtitle is in the outputs folder.\n\n{total_result}"
+            gr_str = f"Done in {self.format_time(total_time)}! Subtitle is in the outputs folder.\n\n{total_result}"
+            gr_file_path = [info['path'] for info in files_info.values()]
+
+            return [gr_str, gr_file_path]
 
         except Exception as e:
             print(f"Error transcribing file on line {e}")
@@ -134,7 +138,7 @@ class FasterWhisperInference(BaseInterface):
                            no_speech_threshold: float,
                            compute_type: str,
                            progress=gr.Progress()
-                           ) -> str:
+                           ) -> list:
         """
         Write subtitle file from Youtube
 
@@ -170,7 +174,9 @@ class FasterWhisperInference(BaseInterface):
 
         Returns
         ----------
+        A List of
         String to return to gr.Textbox()
+        Files to return to gr.Files()
         """
         try:
             self.update_model_if_needed(model_size=model_size, compute_type=compute_type, progress=progress)
@@ -192,15 +198,18 @@ class FasterWhisperInference(BaseInterface):
             progress(1, desc="Completed!")
 
             file_name = safe_filename(yt.title)
-            subtitle = self.generate_and_write_file(
+            subtitle, file_path = self.generate_and_write_file(
                 file_name=file_name,
                 transcribed_segments=transcribed_segments,
                 add_timestamp=add_timestamp,
                 file_format=file_format
             )
-            return f"Done in {self.format_time(time_for_task)}! Subtitle file is in the outputs folder.\n\n{subtitle}"
+            gr_str = f"Done in {self.format_time(time_for_task)}! Subtitle file is in the outputs folder.\n\n{subtitle}"
+
+            return [gr_str, file_path]
+
         except Exception as e:
-            return f"Error: {str(e)}"
+            print(f"Error transcribing file on line {e}")
         finally:
             try:
                 if 'yt' not in locals():
@@ -225,7 +234,7 @@ class FasterWhisperInference(BaseInterface):
                        no_speech_threshold: float,
                        compute_type: str,
                        progress=gr.Progress()
-                       ) -> str:
+                       ) -> list:
         """
         Write subtitle file from microphone
 
@@ -259,7 +268,9 @@ class FasterWhisperInference(BaseInterface):
 
         Returns
         ----------
+        A List of
         String to return to gr.Textbox()
+        Files to return to gr.Files()
         """
         try:
             self.update_model_if_needed(model_size=model_size, compute_type=compute_type, progress=progress)
@@ -277,15 +288,17 @@ class FasterWhisperInference(BaseInterface):
             )
             progress(1, desc="Completed!")
 
-            subtitle = self.generate_and_write_file(
+            subtitle, file_path = self.generate_and_write_file(
                 file_name="Mic",
                 transcribed_segments=transcribed_segments,
                 add_timestamp=True,
                 file_format=file_format
             )
-            return f"Done in {self.format_time(time_for_task)}! Subtitle file is in the outputs folder.\n\n{subtitle}"
+
+            gr_str = f"Done in {self.format_time(time_for_task)}! Subtitle file is in the outputs folder.\n\n{subtitle}"
+            return [gr_str, file_path]
         except Exception as e:
-            return f"Error: {str(e)}"
+            print(f"Error transcribing file on line {e}")
         finally:
             self.release_cuda_memory()
             self.remove_input_files([micaudio])
@@ -395,16 +408,19 @@ class FasterWhisperInference(BaseInterface):
 
         if file_format == "SRT":
             content = get_srt(transcribed_segments)
-            write_file(content, f"{output_path}.srt")
+            output_path += '.srt'
+            write_file(content, output_path)
 
         elif file_format == "WebVTT":
             content = get_vtt(transcribed_segments)
-            write_file(content, f"{output_path}.vtt")
+            output_path += '.vtt'
+            write_file(content, output_path)
 
         elif file_format == "txt":
             content = get_txt(transcribed_segments)
-            write_file(content, f"{output_path}.txt")
-        return content
+            output_path += '.txt'
+            write_file(content, output_path)
+        return content, output_path
 
     @staticmethod
     def format_time(elapsed_time: float) -> str:
