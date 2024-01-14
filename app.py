@@ -44,7 +44,7 @@ class App:
             with gr.Tabs():
                 with gr.TabItem("File"):  # tab1
                     with gr.Row():
-                        input_file = gr.Files(type="file", label="Upload File here")
+                        input_file = gr.Files(type="filepath", label="Upload File here")
                     with gr.Row():
                         dd_model = gr.Dropdown(choices=self.whisper_inf.available_models, value="large-v3",
                                                label="Model")
@@ -63,14 +63,15 @@ class App:
                     with gr.Row():
                         btn_run = gr.Button("GENERATE SUBTITLE FILE", variant="primary")
                     with gr.Row():
-                        tb_indicator = gr.Textbox(label="Output", scale=8)
-                        btn_openfolder = gr.Button('📂', scale=2)
+                        tb_indicator = gr.Textbox(label="Output", scale=4)
+                        files_subtitles = gr.Files(label="Downloadable output file", scale=4, interactive=False)
+                        btn_openfolder = gr.Button('📂', scale=1)
 
                     params = [input_file, dd_model, dd_lang, dd_file_format, cb_translate, cb_timestamp]
                     advanced_params = [nb_beam_size, nb_log_prob_threshold, nb_no_speech_threshold, dd_compute_type]
                     btn_run.click(fn=self.whisper_inf.transcribe_file,
                                   inputs=params + advanced_params,
-                                  outputs=[tb_indicator])
+                                  outputs=[tb_indicator, files_subtitles])
                     btn_openfolder.click(fn=lambda: self.open_folder("outputs"), inputs=None, outputs=None)
                     dd_model.change(fn=self.on_change_models, inputs=[dd_model], outputs=[cb_translate])
 
@@ -102,14 +103,15 @@ class App:
                     with gr.Row():
                         btn_run = gr.Button("GENERATE SUBTITLE FILE", variant="primary")
                     with gr.Row():
-                        tb_indicator = gr.Textbox(label="Output", scale=8)
-                        btn_openfolder = gr.Button('📂', scale=2)
+                        tb_indicator = gr.Textbox(label="Output", scale=4)
+                        files_subtitles = gr.Files(label="Downloadable output file", scale=4)
+                        btn_openfolder = gr.Button('📂', scale=1)
 
                     params = [tb_youtubelink, dd_model, dd_lang, dd_file_format, cb_translate, cb_timestamp]
                     advanced_params = [nb_beam_size, nb_log_prob_threshold, nb_no_speech_threshold, dd_compute_type]
                     btn_run.click(fn=self.whisper_inf.transcribe_youtube,
                                   inputs=params + advanced_params,
-                                  outputs=[tb_indicator])
+                                  outputs=[tb_indicator, files_subtitles])
                     tb_youtubelink.change(get_ytmetas, inputs=[tb_youtubelink],
                                           outputs=[img_thumbnail, tb_title, tb_description])
                     btn_openfolder.click(fn=lambda: self.open_folder("outputs"), inputs=None, outputs=None)
@@ -134,20 +136,21 @@ class App:
                     with gr.Row():
                         btn_run = gr.Button("GENERATE SUBTITLE FILE", variant="primary")
                     with gr.Row():
-                        tb_indicator = gr.Textbox(label="Output", scale=8)
-                        btn_openfolder = gr.Button('📂', scale=2)
+                        tb_indicator = gr.Textbox(label="Output", scale=4)
+                        files_subtitles = gr.Files(label="Downloadable output file", scale=4)
+                        btn_openfolder = gr.Button('📂', scale=1)
 
                     params = [mic_input, dd_model, dd_lang, dd_file_format, cb_translate]
                     advanced_params = [nb_beam_size, nb_log_prob_threshold, nb_no_speech_threshold, dd_compute_type]
                     btn_run.click(fn=self.whisper_inf.transcribe_mic,
                                   inputs=params + advanced_params,
-                                  outputs=[tb_indicator])
+                                  outputs=[tb_indicator, files_subtitles])
                     btn_openfolder.click(fn=lambda: self.open_folder("outputs"), inputs=None, outputs=None)
                     dd_model.change(fn=self.on_change_models, inputs=[dd_model], outputs=[cb_translate])
 
                 with gr.TabItem("T2T Translation"):  # tab 4
                     with gr.Row():
-                        file_subs = gr.Files(type="file", label="Upload Subtitle Files to translate here",
+                        file_subs = gr.Files(type="filepath", label="Upload Subtitle Files to translate here",
                                              file_types=['.vtt', '.srt'])
 
                     with gr.TabItem("NLLB"):  # sub tab1
@@ -164,14 +167,16 @@ class App:
                         with gr.Row():
                             btn_run = gr.Button("TRANSLATE SUBTITLE FILE", variant="primary")
                         with gr.Row():
-                            tb_indicator = gr.Textbox(label="Output", scale=8)
-                            btn_openfolder = gr.Button('📂', scale=2)
+                            tb_indicator = gr.Textbox(label="Output", scale=4)
+                            files_subtitles = gr.Files(label="Downloadable output file", scale=4)
+                            btn_openfolder = gr.Button('📂', scale=1)
                         with gr.Column():
                             md_vram_table = gr.HTML(NLLB_VRAM_TABLE, elem_id="md_nllb_vram_table")
 
                     btn_run.click(fn=self.nllb_inf.translate_file,
                                   inputs=[file_subs, dd_nllb_model, dd_nllb_sourcelang, dd_nllb_targetlang, cb_timestamp],
-                                  outputs=[tb_indicator])
+                                  outputs=[tb_indicator, files_subtitles])
+
                     btn_openfolder.click(fn=lambda: self.open_folder(os.path.join("outputs", "translations")),
                                          inputs=None,
                                          outputs=None)
