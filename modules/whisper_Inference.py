@@ -37,7 +37,7 @@ class WhisperInference(BaseInterface):
                         log_prob_threshold: float,
                         no_speech_threshold: float,
                         compute_type: str,
-                        progress=gr.Progress()):
+                        progress=gr.Progress()) -> list:
         """
         Write subtitle file from Files
 
@@ -70,8 +70,13 @@ class WhisperInference(BaseInterface):
         progress: gr.Progress
             Indicator to show progress directly in gradio.
             I use a forked version of whisper for this. To see more info : https://github.com/jhj0517/jhj0517-whisper/tree/add-progress-callback
-        """
 
+        Returns
+        ----------
+        A List of
+        String to return to gr.Textbox()
+        Files to return to gr.Files()
+        """
         try:
             self.update_model_if_needed(model_size=model_size, compute_type=compute_type, progress=progress)
 
@@ -91,16 +96,15 @@ class WhisperInference(BaseInterface):
                                                        )
                 progress(1, desc="Completed!")
 
-                file_name, file_ext = os.path.splitext(os.path.basename(fileobj.orig_name))
+                file_name, file_ext = os.path.splitext(os.path.basename(fileobj.name))
                 file_name = safe_filename(file_name)
-                subtitle = self.generate_and_write_file(
+                subtitle, file_path = self.generate_and_write_file(
                     file_name=file_name,
                     transcribed_segments=result,
                     add_timestamp=add_timestamp,
                     file_format=file_format
                 )
-
-                files_info[file_name] = {"subtitle": subtitle, "elapsed_time": elapsed_time}
+                files_info[file_name] = {"subtitle": subtitle, "elapsed_time": elapsed_time, "path":  file_path}
 
             total_result = ''
             total_time = 0
@@ -110,10 +114,12 @@ class WhisperInference(BaseInterface):
                 total_result += f"{info['subtitle']}"
                 total_time += info["elapsed_time"]
 
-            return f"Done in {self.format_time(total_time)}! Subtitle is in the outputs folder.\n\n{total_result}"
+            gr_str = f"Done in {self.format_time(total_time)}! Subtitle is in the outputs folder.\n\n{total_result}"
+            gr_file_path = [info['path'] for info in files_info.values()]
+
+            return [gr_str, gr_file_path]
         except Exception as e:
             print(f"Error transcribing file: {str(e)}")
-            return f"Error transcribing file: {str(e)}"
         finally:
             self.release_cuda_memory()
             self.remove_input_files([fileobj.name for fileobj in fileobjs])
@@ -129,7 +135,7 @@ class WhisperInference(BaseInterface):
                            log_prob_threshold: float,
                            no_speech_threshold: float,
                            compute_type: str,
-                           progress=gr.Progress()):
+                           progress=gr.Progress()) -> list:
         """
         Write subtitle file from Youtube
 
@@ -162,6 +168,12 @@ class WhisperInference(BaseInterface):
         progress: gr.Progress
             Indicator to show progress directly in gradio.
             I use a forked version of whisper for this. To see more info : https://github.com/jhj0517/jhj0517-whisper/tree/add-progress-callback
+
+        Returns
+        ----------
+        A List of
+        String to return to gr.Textbox()
+        Files to return to gr.Files()
         """
         try:
             self.update_model_if_needed(model_size=model_size, compute_type=compute_type, progress=progress)
@@ -181,17 +193,17 @@ class WhisperInference(BaseInterface):
             progress(1, desc="Completed!")
 
             file_name = safe_filename(yt.title)
-            subtitle = self.generate_and_write_file(
+            subtitle, file_path = self.generate_and_write_file(
                 file_name=file_name,
                 transcribed_segments=result,
                 add_timestamp=add_timestamp,
                 file_format=file_format
             )
 
-            return f"Done in {self.format_time(elapsed_time)}! Subtitle file is in the outputs folder.\n\n{subtitle}"
+            gr_str = f"Done in {self.format_time(elapsed_time)}! Subtitle file is in the outputs folder.\n\n{subtitle}"
+            return [gr_str, file_path]
         except Exception as e:
             print(f"Error transcribing youtube video: {str(e)}")
-            return f"Error transcribing youtube video: {str(e)}"
         finally:
             try:
                 if 'yt' not in locals():
@@ -215,7 +227,7 @@ class WhisperInference(BaseInterface):
                        log_prob_threshold: float,
                        no_speech_threshold: float,
                        compute_type: str,
-                       progress=gr.Progress()):
+                       progress=gr.Progress()) -> list:
         """
         Write subtitle file from microphone
 
@@ -246,8 +258,13 @@ class WhisperInference(BaseInterface):
         progress: gr.Progress
             Indicator to show progress directly in gradio.
             I use a forked version of whisper for this. To see more info : https://github.com/jhj0517/jhj0517-whisper/tree/add-progress-callback
-        """
 
+        Returns
+        ----------
+        A List of
+        String to return to gr.Textbox()
+        Files to return to gr.Files()
+        """
         try:
             self.update_model_if_needed(model_size=model_size, compute_type=compute_type, progress=progress)
 
@@ -261,17 +278,17 @@ class WhisperInference(BaseInterface):
                                                    progress=progress)
             progress(1, desc="Completed!")
 
-            subtitle = self.generate_and_write_file(
+            subtitle, file_path = self.generate_and_write_file(
                 file_name="Mic",
                 transcribed_segments=result,
                 add_timestamp=True,
                 file_format=file_format
             )
 
-            return f"Done in {self.format_time(elapsed_time)}! Subtitle file is in the outputs folder.\n\n{subtitle}"
+            gr_str = f"Done in {self.format_time(elapsed_time)}! Subtitle file is in the outputs folder.\n\n{subtitle}"
+            return [gr_str, file_path]
         except Exception as e:
             print(f"Error transcribing mic: {str(e)}")
-            return f"Error transcribing mic: {str(e)}"
         finally:
             self.release_cuda_memory()
             self.remove_input_files([micaudio])
@@ -377,16 +394,19 @@ class WhisperInference(BaseInterface):
 
         if file_format == "SRT":
             content = get_srt(transcribed_segments)
-            write_file(content, f"{output_path}.srt")
+            output_path += '.srt'
+            write_file(content, output_path)
 
         elif file_format == "WebVTT":
             content = get_vtt(transcribed_segments)
-            write_file(content, f"{output_path}.vtt")
+            output_path += '.vtt'
+            write_file(content, output_path)
 
         elif file_format == "txt":
             content = get_txt(transcribed_segments)
-            write_file(content, f"{output_path}.vtt")
-        return content
+            output_path += '.txt'
+            write_file(content, output_path)
+        return content, output_path
 
     @staticmethod
     def format_time(elapsed_time: float) -> str:
