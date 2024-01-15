@@ -119,8 +119,11 @@ def get_serialized_vtt(dicts):
 
 
 def safe_filename(name):
+    from app import _args
     INVALID_FILENAME_CHARS = r'[<>:"/\\|?*\x00-\x1f]'
     safe_name = re.sub(INVALID_FILENAME_CHARS, '_', name)
+    if not _args.colab:
+        return safe_name
     # Truncate the filename if it exceeds the max_length (20)
     if len(safe_name) > 20:
         file_extension = safe_name.split('.')[-1]
