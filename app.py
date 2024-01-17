@@ -7,7 +7,7 @@ from modules.faster_whisper_inference import FasterWhisperInference
 from modules.nllb_inference import NLLBInference
 from ui.htmls import *
 from modules.youtube_manager import get_ytmetas
-from modules.deepl_manager import DeepLAPI
+from modules.deepl_api import DeepLAPI
 
 class App:
     def __init__(self, args):
