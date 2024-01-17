@@ -7,8 +7,8 @@ import gradio as gr
 from modules.subtitle_manager import *
 
 """
-This is written by the DeepL API documentation.
-If you want to know the information of DeepL API, see here: https://www.deepl.com/docs-api/documents
+This is written with reference to the DeepL API documentation.
+If you want to know the information of the DeepL API, see here: https://www.deepl.com/docs-api/documents
 """
 
 DEEPL_AVAILABLE_TARGET_LANGS = {
