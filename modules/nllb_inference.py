@@ -83,7 +83,7 @@ class NLLBInference(BaseInterface):
             files_info = {}
             for fileobj in fileobjs:
                 file_path = fileobj.name
-                file_name, file_ext = os.path.splitext(os.path.basename(fileobj.orig_name))
+                file_name, file_ext = os.path.splitext(os.path.basename(fileobj.name))
                 if file_ext == ".srt":
                     parsed_dicts = parse_srt(file_path=file_path)
                     total_progress = len(parsed_dicts)
