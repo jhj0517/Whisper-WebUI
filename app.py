@@ -7,6 +7,7 @@ from modules.faster_whisper_inference import FasterWhisperInference
 from modules.nllb_inference import NLLBInference
 from ui.htmls import *
 from modules.youtube_manager import get_ytmetas
+from modules.deepl_api import DeepLAPI
 
 class App:
     def __init__(self, args):
@@ -19,6 +20,7 @@ class App:
             print("Use Open AI Whisper implementation")
         print(f"Device \"{self.whisper_inf.device}\" is detected")
         self.nllb_inf = NLLBInference()
+        self.deepl_api = DeepLAPI()
 
     @staticmethod
     def open_folder(folder_path: str):
@@ -152,7 +154,36 @@ class App:
                         file_subs = gr.Files(type="filepath", label="Upload Subtitle Files to translate here",
                                              file_types=['.vtt', '.srt'])
 
-                    with gr.TabItem("NLLB"):  # sub tab1
+                    with gr.TabItem("DeepL API"):  # sub tab1
+                        with gr.Row():
+                            tb_authkey = gr.Textbox(label="Your Auth Key (API KEY)",
+                                                    value="")
+                        with gr.Row():
+                            dd_deepl_sourcelang = gr.Dropdown(label="Source Language", value="Automatic Detection",
+                                                              choices=list(
+                                                                  self.deepl_api.available_source_langs.keys()))
+                            dd_deepl_targetlang = gr.Dropdown(label="Target Language", value="English",
+                                                              choices=list(
+                                                                  self.deepl_api.available_target_langs.keys()))
+                        with gr.Row():
+                            cb_deepl_ispro = gr.Checkbox(label="Pro User?", value=False)
+                        with gr.Row():
+                            btn_run = gr.Button("TRANSLATE SUBTITLE FILE", variant="primary")
+                        with gr.Row():
+                            tb_indicator = gr.Textbox(label="Output", scale=4)
+                            files_subtitles = gr.Files(label="Downloadable output file", scale=4)
+                            btn_openfolder = gr.Button('📂', scale=1)
+
+                    btn_run.click(fn=self.deepl_api.translate_deepl,
+                                  inputs=[tb_authkey, file_subs, dd_deepl_sourcelang, dd_deepl_targetlang,
+                                          cb_deepl_ispro],
+                                  outputs=[tb_indicator, files_subtitles])
+
+                    btn_openfolder.click(fn=lambda: self.open_folder(os.path.join("outputs", "translations")),
+                                         inputs=None,
+                                         outputs=None)
+
+                    with gr.TabItem("NLLB"):  # sub tab2
                         with gr.Row():
                             dd_nllb_model = gr.Dropdown(label="Model", value=self.nllb_inf.default_model_size,
                                                         choices=self.nllb_inf.available_models)
