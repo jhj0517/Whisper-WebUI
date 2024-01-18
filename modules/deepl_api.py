@@ -160,7 +160,7 @@ class DeepLAPI:
                 timestamp = datetime.now().strftime("%m%d%H%M%S")
 
                 file_name = file_name[:-9]
-                output_path = os.path.join("outputs", "translations", f"{file_name}-{timestamp}.srt")
+                output_path = os.path.join("outputs", "translations", f"{file_name}-{timestamp}.vtt")
 
                 write_file(subtitle, output_path)
 
