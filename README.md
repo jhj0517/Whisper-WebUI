@@ -19,6 +19,7 @@ If you wish to try this on Colab, you can do it in [here](https://colab.research
   - From other languages to English. ( This is Whisper's end-to-end speech-to-text translation feature )
 - Text to Text Translation
   - Translate subtitle files using Facebook NLLB models
+  - Translate subtitle files using DeepL API
 
 # Installation and Running
 ## Prerequisite
