@@ -33,9 +33,9 @@ class App:
     def on_change_models(model_size: str):
         translatable_model = ["large", "large-v1", "large-v2", "large-v3"]
         if model_size not in translatable_model:
-            return gr.Checkbox.update(visible=False, value=False, interactive=False)
+            return gr.Checkbox(visible=False, value=False, interactive=False)
         else:
-            return gr.Checkbox.update(visible=True, value=False, label="Translate to English?", interactive=True)
+            return gr.Checkbox(visible=True, value=False, label="Translate to English?", interactive=True)
 
     def launch(self):
         with self.app:
