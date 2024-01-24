@@ -16,6 +16,6 @@ class BaseInterface:
     @staticmethod
     def remove_input_files(file_paths: List[str]):
         for file_path in file_paths:
-            if not os.path.exists(file_path):
+            if file_path is None or not os.path.exists(file_path):
                 continue
             os.remove(file_path)
