@@ -1,11 +1,12 @@
 #!/bin/bash
-SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
-source "$SCRIPT_DIR/venv/Scripts/activate"
+source "./venv/Scripts/activate.bat"
 
-PYTHON="$SCRIPT_DIR/venv/Scripts/python.exe"
+PYTHON="./venv/Scripts/python.exe"
 echo "venv ${PYTHON}"
 echo ""
 
-python app.py "$@"
+echo "Executing app.py..."
+"${PYTHON}" app.py
 
 deactivate
+read -p "Press enter to continue"
