@@ -1,7 +1,7 @@
 --extra-index-url https://download.pytorch.org/whl/cu118
 torch
 git+https://github.com/jhj0517/jhj0517-whisper.git
-faster-whisper
+faster-whisper==0.10.1
 transformers
 gradio==4.14.0
 pytube
