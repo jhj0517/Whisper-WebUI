@@ -23,9 +23,10 @@ If you wish to try this on Colab, you can do it in [here](https://colab.research
 
 # Installation and Running
 ## Prerequisite
-To run Whisper, you need to have `git`, `python` version 3.8 ~ 3.10 and `FFmpeg`.
+To run this WebUI, you need to have `git`, `python` version 3.8 ~ 3.10, `CUDA` version above 12.0 and `FFmpeg`.
 
 Please follow the links below to install the necessary software:
+- CUDA : [https://developer.nvidia.com/cuda-downloads](https://developer.nvidia.com/cuda-downloads)
 - git : [https://git-scm.com/downloads](https://git-scm.com/downloads)
 - python : [https://www.python.org/downloads/](https://www.python.org/downloads/) **( If your python version is too new, torch will not install properly.)**
 - FFmpeg :  [https://ffmpeg.org/download.html](https://ffmpeg.org/download.html)
