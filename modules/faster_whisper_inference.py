@@ -124,7 +124,8 @@ class FasterWhisperInference(BaseInterface):
             print(f"Error transcribing file on line {e}")
         finally:
             self.release_cuda_memory()
-            self.remove_input_files([fileobj.name for fileobj in fileobjs])
+            if not fileobjs:
+                self.remove_input_files([fileobj.name for fileobj in fileobjs])
 
     def transcribe_youtube(self,
                            youtubelink: str,
