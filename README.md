@@ -22,6 +22,7 @@ If you wish to try this on Colab, you can do it in [here](https://colab.research
   - Translate subtitle files using DeepL API
 
 # Installation and Running
+- # On Windows OS
 ## Prerequisite
 To run this WebUI, you need to have `git`, `python` version 3.8 ~ 3.10, `CUDA` version above 12.0 and `FFmpeg`.
 
@@ -44,7 +45,7 @@ If you have satisfied the prerequisites listed above, you are now ready to start
 
 And you can also run the project with command line arguments if you like by running `user-start-webui.bat`, see [wiki](https://github.com/jhj0517/Whisper-WebUI/wiki/Command-Line-Arguments) for a guide to arguments.
 
-## Using Docker
+- # Or Using Docker
 
 1. Build the image
 
