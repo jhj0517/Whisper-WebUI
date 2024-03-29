@@ -44,6 +44,24 @@ If you have satisfied the prerequisites listed above, you are now ready to start
 
 And you can also run the project with command line arguments if you like by running `user-start-webui.bat`, see [wiki](https://github.com/jhj0517/Whisper-WebUI/wiki/Command-Line-Arguments) for a guide to arguments.
 
+## Using Docker
+
+1. build the image
+
+```sh
+docker build -t whisper-webui:latest . 
+```
+
+2. run the container
+
+```sh
+docker run --gpus all -d \
+-v /path/to/models:/Whisper-WebUI/models \
+-v /path/to/outputs:/Whisper-WebUI/outputs \
+-p 7860:7860 \
+whisper-webui:latest --server_name 0.0.0.0 --server_port 7860
+```
+
 # VRAM Usages
 This project is integrated with [faster-whisper](https://github.com/guillaumekln/faster-whisper) by default for better VRAM usage and transcription speed.
 
