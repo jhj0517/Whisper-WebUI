@@ -37,8 +37,8 @@ After installing FFmpeg, **make sure to add the `FFmpeg/bin` folder to your syst
 ### Automatic Installation
 If you have satisfied the prerequisites listed above, you are now ready to start Whisper-WebUI.
 
-1. Run `Install.bat` from Windows Explorer as a regular, non-administrator user. ( Run `install.sh` if you are using Mac ) 
-2. After installation, run the `start-webui.bat`. ( Run `start-webui.sh` if you are using Mac ) 
+1. Run `Install.bat` from Windows Explorer as a regular, non-administrator user. 
+2. After installation, run the `start-webui.bat`. 
 3. Open your web browser and go to `http://localhost:7860`
 
 ( If you're running another Web-UI, it will be hosted on a different port , such as `localhost:7861`, `localhost:7862`, and so on )
