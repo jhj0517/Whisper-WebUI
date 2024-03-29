@@ -46,19 +46,30 @@ And you can also run the project with command line arguments if you like by runn
 
 ## Using Docker
 
-1. build the image
+1. Build the image
 
 ```sh
 docker build -t whisper-webui:latest . 
 ```
 
-2. run the container
+2. Run the container with commands
 
+- For bash :
 ```sh
 docker run --gpus all -d \
 -v /path/to/models:/Whisper-WebUI/models \
 -v /path/to/outputs:/Whisper-WebUI/outputs \
 -p 7860:7860 \
+-it \
+whisper-webui:latest --server_name 0.0.0.0 --server_port 7860
+```
+- For PowerShell:
+```shell
+docker run --gpus all -d `
+-v /path/to/models:/Whisper-WebUI/models `
+-v /path/to/outputs:/Whisper-WebUI/outputs `
+-p 7860:7860 `
+-it `
 whisper-webui:latest --server_name 0.0.0.0 --server_port 7860
 ```
 
