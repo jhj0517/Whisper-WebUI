@@ -1,13 +1,13 @@
 #!/bin/bash
 
-echo "activate venv"
 source venv/bin/activate
+echo "activate venv"
 
 PYTHON="venv/bin/python"
 echo "venv ${PYTHON}"
 echo ""
 
-python app.py $*
+python app.py
 
 echo "launching the app"
 
