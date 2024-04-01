@@ -33,7 +33,6 @@ jobs:
         ./Install.sh
 
     - name: 'Execute start-webui.sh'
-      shell: bash
       run: |
         chmod +x ./start-webui.sh
         timeout 60s ./start-webui.sh || true
