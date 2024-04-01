@@ -1,4 +1,4 @@
---extra-index-url https://download.pytorch.org/whl/cu118
+--extra-index-url https://download.pytorch.org/whl/cu121
 torch
 git+https://github.com/jhj0517/jhj0517-whisper.git
 faster-whisper==1.0.1
