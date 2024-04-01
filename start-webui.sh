@@ -8,4 +8,6 @@ echo ""
 
 $PYTHON app.py $*
 
+echo "launching the app"
+
 deactivate
