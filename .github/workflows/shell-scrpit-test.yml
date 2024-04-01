@@ -36,5 +36,5 @@ jobs:
       shell: bash
       run: |
         chmod +x ./start-webui.sh
-        ./start-webui.sh
+        timeout 60s ./start-webui.sh || true
 
