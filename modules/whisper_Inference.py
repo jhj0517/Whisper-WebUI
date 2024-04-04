@@ -2,7 +2,7 @@ import whisper
 import gradio as gr
 import time
 import os
-from typing import BinaryIO, Union, Tuple
+from typing import BinaryIO, Union, Tuple, List
 import numpy as np
 from datetime import datetime
 import torch
@@ -302,7 +302,7 @@ class WhisperInference(BaseInterface):
                    no_speech_threshold: float,
                    compute_type: str,
                    progress: gr.Progress
-                   ) -> Tuple[list[dict], float]:
+                   ) -> Tuple[List[dict], float]:
         """
         transcribe method for OpenAI's Whisper implementation.
 
@@ -331,7 +331,7 @@ class WhisperInference(BaseInterface):
 
         Returns
         ----------
-        segments_result: list[dict]
+        segments_result: List[dict]
             list of dicts that includes start, end timestamps and transcribed text
         elapsed_time: float
             elapsed time for transcription
