@@ -339,7 +339,7 @@ class FasterWhisperInference(BaseInterface):
 
         Returns
         ----------
-        segments_result: list[dict]
+        segments_result: List[dict]
             list of dicts that includes start, end timestamps and transcribed text
         elapsed_time: float
             elapsed time for transcription
