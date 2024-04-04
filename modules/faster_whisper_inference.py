@@ -3,7 +3,7 @@ import os
 import tqdm
 import time
 import numpy as np
-from typing import BinaryIO, Union, Tuple
+from typing import BinaryIO, Union, Tuple, List
 from datetime import datetime, timedelta
 
 import faster_whisper
@@ -312,7 +312,7 @@ class FasterWhisperInference(BaseInterface):
                    log_prob_threshold: float,
                    no_speech_threshold: float,
                    progress: gr.Progress
-                   ) -> Tuple[list, float]:
+                   ) -> Tuple[List[dict], float]:
         """
         transcribe method for faster-whisper.
 
@@ -339,7 +339,7 @@ class FasterWhisperInference(BaseInterface):
 
         Returns
         ----------
-        segments_result: list[dict]
+        segments_result: List[dict]
             list of dicts that includes start, end timestamps and transcribed text
         elapsed_time: float
             elapsed time for transcription
