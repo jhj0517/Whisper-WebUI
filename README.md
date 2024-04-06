@@ -83,7 +83,7 @@ According to faster-whisper, the efficiency of the optimized whisper model is as
 | openai/whisper    | fp16      | 5         | 4m30s | 11325MB         | 9439MB          |
 | faster-whisper    | fp16      | 5         | 54s   | 4755MB          | 3244MB          |
 
-If you want to use the original Open AI whisper implementation instead of optimized whisper, you can set the command line argument `DISABLE_FASTER_WHISPER` to `True`. See the [wiki](https://github.com/jhj0517/Whisper-WebUI/wiki/Command-Line-Arguments) for more information.
+If you want to use the original Open AI whisper implementation instead of optimized whisper, you can set the command line argument `--disable_faster_whisper` to `True`. See the [wiki](https://github.com/jhj0517/Whisper-WebUI/wiki/Command-Line-Arguments) for more information.
 
 ## Available models
 This is Whisper's original VRAM usage table for models.
