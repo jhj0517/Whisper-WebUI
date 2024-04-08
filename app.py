@@ -8,6 +8,8 @@ from modules.nllb_inference import NLLBInference
 from ui.htmls import *
 from modules.youtube_manager import get_ytmetas
 from modules.deepl_api import DeepLAPI
+from modules.whisper_data_class import *
+
 
 class App:
     def __init__(self, args):
@@ -68,10 +70,16 @@ class App:
                         files_subtitles = gr.Files(label="Downloadable output file", scale=4, interactive=False)
                         btn_openfolder = gr.Button('📂', scale=1)
 
-                    params = [input_file, dd_model, dd_lang, dd_file_format, cb_translate, cb_timestamp]
-                    advanced_params = [nb_beam_size, nb_log_prob_threshold, nb_no_speech_threshold, dd_compute_type]
+                    params = [input_file, dd_file_format, cb_timestamp]
+                    whisper_params = WhisperGradioComponents(model_size=dd_model,
+                                                             lang=dd_lang,
+                                                             is_translate=cb_translate,
+                                                             beam_size=nb_beam_size,
+                                                             log_prob_threshold=nb_log_prob_threshold,
+                                                             no_speech_threshold=nb_no_speech_threshold,
+                                                             compute_type=dd_compute_type)
                     btn_run.click(fn=self.whisper_inf.transcribe_file,
-                                  inputs=params + advanced_params,
+                                  inputs=params + whisper_params.to_list(),
                                   outputs=[tb_indicator, files_subtitles])
                     btn_openfolder.click(fn=lambda: self.open_folder("outputs"), inputs=None, outputs=None)
                     dd_model.change(fn=self.on_change_models, inputs=[dd_model], outputs=[cb_translate])
@@ -108,10 +116,16 @@ class App:
                         files_subtitles = gr.Files(label="Downloadable output file", scale=4)
                         btn_openfolder = gr.Button('📂', scale=1)
 
-                    params = [tb_youtubelink, dd_model, dd_lang, dd_file_format, cb_translate, cb_timestamp]
-                    advanced_params = [nb_beam_size, nb_log_prob_threshold, nb_no_speech_threshold, dd_compute_type]
+                    params = [tb_youtubelink, dd_file_format, cb_timestamp]
+                    whisper_params = WhisperGradioComponents(model_size=dd_model,
+                                                             lang=dd_lang,
+                                                             is_translate=cb_translate,
+                                                             beam_size=nb_beam_size,
+                                                             log_prob_threshold=nb_log_prob_threshold,
+                                                             no_speech_threshold=nb_no_speech_threshold,
+                                                             compute_type=dd_compute_type)
                     btn_run.click(fn=self.whisper_inf.transcribe_youtube,
-                                  inputs=params + advanced_params,
+                                  inputs=params + whisper_params.to_list(),
                                   outputs=[tb_indicator, files_subtitles])
                     tb_youtubelink.change(get_ytmetas, inputs=[tb_youtubelink],
                                           outputs=[img_thumbnail, tb_title, tb_description])
@@ -141,10 +155,16 @@ class App:
                         files_subtitles = gr.Files(label="Downloadable output file", scale=4)
                         btn_openfolder = gr.Button('📂', scale=1)
 
-                    params = [mic_input, dd_model, dd_lang, dd_file_format, cb_translate]
-                    advanced_params = [nb_beam_size, nb_log_prob_threshold, nb_no_speech_threshold, dd_compute_type]
+                    params = [mic_input, dd_file_format]
+                    whisper_params = WhisperGradioComponents(model_size=dd_model,
+                                                             lang=dd_lang,
+                                                             is_translate=cb_translate,
+                                                             beam_size=nb_beam_size,
+                                                             log_prob_threshold=nb_log_prob_threshold,
+                                                             no_speech_threshold=nb_no_speech_threshold,
+                                                             compute_type=dd_compute_type)
                     btn_run.click(fn=self.whisper_inf.transcribe_mic,
-                                  inputs=params + advanced_params,
+                                  inputs=params + whisper_params.to_list(),
                                   outputs=[tb_indicator, files_subtitles])
                     btn_openfolder.click(fn=lambda: self.open_folder("outputs"), inputs=None, outputs=None)
                     dd_model.change(fn=self.on_change_models, inputs=[dd_model], outputs=[cb_translate])
