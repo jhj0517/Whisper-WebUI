@@ -13,9 +13,9 @@ class WhisperGradioComponents:
     compute_type: gr.Dropdown
     """
     A data class to pass Gradio components to the function before Gradio pre-processing.
-    See this documentation for more info: https://www.gradio.app/docs/components
+    See this documentation for more information about Gradio pre-processing: https://www.gradio.app/docs/components
 
-    Parameters
+    Attributes
     ----------
     model_size: gr.Dropdown
         Whisper model size.
@@ -39,7 +39,7 @@ class WhisperGradioComponents:
 
     def to_list(self) -> list:
         """
-        Use this to pass parameters before Gradio pre-processing to the function.
+        Converts the data class attributes into a list, to pass parameters to a function before Gradio pre-processing.
 
         Returns
         ----------
@@ -50,7 +50,13 @@ class WhisperGradioComponents:
     @staticmethod
     def to_values(*params):
         """
-        Use this to use parameters after Gradio pre-processing in the function.
+        Convert a tuple of parameters into a WhisperValues data class, to use parameters in a function after Gradio pre-processing.
+
+        Parameters
+        ----------
+        *params: tuple
+            This is provided in a tuple because the parameters are passed to a function as a list, for example
+            btn.click(fn=function, inputs=[comp1, comp2], outputs=[comp3])
 
         Returns
         ----------
@@ -69,6 +75,6 @@ class WhisperValues:
     no_speech_threshold: float
     compute_type: str
     """
-    A data class to use Whisper parameters in the function after gradio pre-processing.
-    See this documentation for more info : https://www.gradio.app/docs/components
+    A data class to use Whisper parameters in the function after Gradio pre-processing.
+    See this documentation for more information about Gradio pre-processing: : https://www.gradio.app/docs/components
     """
