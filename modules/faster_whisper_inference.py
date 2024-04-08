@@ -252,14 +252,14 @@ class FasterWhisperInference(BaseInterface):
             self.update_model(params.model_size, params.compute_type, progress)
 
         if params.lang == "Automatic Detection":
-            lang = None
+            params.lang = None
         else:
             language_code_dict = {value: key for key, value in whisper.tokenizer.LANGUAGES.items()}
-            lang = language_code_dict[params.lang]
+            params.lang = language_code_dict[params.lang]
 
         segments, info = self.model.transcribe(
             audio=audio,
-            language=lang,
+            language=params.lang,
             task="translate" if params.is_translate and self.current_model_size in self.translatable_models else "transcribe",
             beam_size=params.beam_size,
             log_prob_threshold=params.log_prob_threshold,
