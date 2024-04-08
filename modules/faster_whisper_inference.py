@@ -314,7 +314,7 @@ class FasterWhisperInference(BaseInterface):
                                 file_format: str,
                                 ) -> str:
         """
-        Writes subtitle file and returns str of content and output file path
+        Writes subtitle file
 
         Parameters
         ----------
