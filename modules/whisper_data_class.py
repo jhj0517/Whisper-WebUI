@@ -55,8 +55,8 @@ class WhisperGradioComponents:
         Parameters
         ----------
         *params: tuple
-            This is provided in a tuple because the parameters are passed to a function as a list, for example
-            btn.click(fn=function, inputs=[comp1, comp2], outputs=[comp3])
+            This is provided in a tuple because Gradio does not support **kwargs arbitrary.
+            Reference : https://discuss.huggingface.co/t/passing-an-additional-argument-to-a-function/25140/2
 
         Returns
         ----------
