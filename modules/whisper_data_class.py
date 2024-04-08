@@ -11,6 +11,8 @@ class WhisperGradioComponents:
     log_prob_threshold: gr.Number
     no_speech_threshold: gr.Number
     compute_type: gr.Dropdown
+    best_of: gr.Number
+    patience: gr.Number
     """
     A data class to pass Gradio components to the function before Gradio pre-processing.
     See this documentation for more information about Gradio pre-processing: https://www.gradio.app/docs/components
@@ -35,6 +37,10 @@ class WhisperGradioComponents:
     compute_type: gr.Dropdown
         compute type for transcription.
         see more info : https://opennmt.net/CTranslate2/quantization.html
+    best_of: gr.Number
+        Number of candidates when sampling with non-zero temperature.
+    patience: gr.Number
+        Beam search patience factor.
     """
 
     def to_list(self) -> list:
@@ -74,6 +80,8 @@ class WhisperValues:
     log_prob_threshold: float
     no_speech_threshold: float
     compute_type: str
+    best_of: int
+    patience: float
     """
     A data class to use Whisper parameters in the function after Gradio pre-processing.
     See this documentation for more information about Gradio pre-processing: : https://www.gradio.app/docs/components

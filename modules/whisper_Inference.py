@@ -255,6 +255,8 @@ class WhisperInference(BaseInterface):
                                                 no_speech_threshold=params.no_speech_threshold,
                                                 task="translate" if params.is_translate and self.current_model_size in self.translatable_model else "transcribe",
                                                 fp16=True if params.compute_type == "float16" else False,
+                                                best_of=params.best_of,
+                                                patience=params.patience,
                                                 progress_callback=progress_callback)["segments"]
         elapsed_time = time.time() - start_time
 

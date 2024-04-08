@@ -264,6 +264,8 @@ class FasterWhisperInference(BaseInterface):
             beam_size=params.beam_size,
             log_prob_threshold=params.log_prob_threshold,
             no_speech_threshold=params.no_speech_threshold,
+            best_of=params.best_of,
+            patience=params.patience
         )
         progress(0, desc="Loading audio..")
 

@@ -63,6 +63,8 @@ class App:
                         nb_log_prob_threshold = gr.Number(label="Log Probability Threshold", value=-1.0, interactive=True)
                         nb_no_speech_threshold = gr.Number(label="No Speech Threshold", value=0.6, interactive=True)
                         dd_compute_type = gr.Dropdown(label="Compute Type", choices=self.whisper_inf.available_compute_types, value=self.whisper_inf.current_compute_type, interactive=True)
+                        nb_best_of = gr.Number(label="Best Of", value=5, interactive=True)
+                        nb_patience = gr.Number(label="Patience", value=1, interactive=True)
                     with gr.Row():
                         btn_run = gr.Button("GENERATE SUBTITLE FILE", variant="primary")
                     with gr.Row():
@@ -77,7 +79,9 @@ class App:
                                                              beam_size=nb_beam_size,
                                                              log_prob_threshold=nb_log_prob_threshold,
                                                              no_speech_threshold=nb_no_speech_threshold,
-                                                             compute_type=dd_compute_type)
+                                                             compute_type=dd_compute_type,
+                                                             best_of=nb_best_of,
+                                                             patience=nb_patience)
                     btn_run.click(fn=self.whisper_inf.transcribe_file,
                                   inputs=params + whisper_params.to_list(),
                                   outputs=[tb_indicator, files_subtitles])
@@ -109,6 +113,8 @@ class App:
                         nb_log_prob_threshold = gr.Number(label="Log Probability Threshold", value=-1.0, interactive=True)
                         nb_no_speech_threshold = gr.Number(label="No Speech Threshold", value=0.6, interactive=True)
                         dd_compute_type = gr.Dropdown(label="Compute Type", choices=self.whisper_inf.available_compute_types, value=self.whisper_inf.current_compute_type, interactive=True)
+                        nb_best_of = gr.Number(label="Best Of", value=5, interactive=True)
+                        nb_patience = gr.Number(label="Patience", value=1, interactive=True)
                     with gr.Row():
                         btn_run = gr.Button("GENERATE SUBTITLE FILE", variant="primary")
                     with gr.Row():
@@ -123,7 +129,9 @@ class App:
                                                              beam_size=nb_beam_size,
                                                              log_prob_threshold=nb_log_prob_threshold,
                                                              no_speech_threshold=nb_no_speech_threshold,
-                                                             compute_type=dd_compute_type)
+                                                             compute_type=dd_compute_type,
+                                                             best_of=nb_best_of,
+                                                             patience=nb_patience)
                     btn_run.click(fn=self.whisper_inf.transcribe_youtube,
                                   inputs=params + whisper_params.to_list(),
                                   outputs=[tb_indicator, files_subtitles])
@@ -148,6 +156,8 @@ class App:
                         nb_log_prob_threshold = gr.Number(label="Log Probability Threshold", value=-1.0, interactive=True)
                         nb_no_speech_threshold = gr.Number(label="No Speech Threshold", value=0.6, interactive=True)
                         dd_compute_type = gr.Dropdown(label="Compute Type", choices=self.whisper_inf.available_compute_types, value=self.whisper_inf.current_compute_type, interactive=True)
+                        nb_best_of = gr.Number(label="Best Of", value=5, interactive=True)
+                        nb_patience = gr.Number(label="Patience", value=1, interactive=True)
                     with gr.Row():
                         btn_run = gr.Button("GENERATE SUBTITLE FILE", variant="primary")
                     with gr.Row():
@@ -162,7 +172,9 @@ class App:
                                                              beam_size=nb_beam_size,
                                                              log_prob_threshold=nb_log_prob_threshold,
                                                              no_speech_threshold=nb_no_speech_threshold,
-                                                             compute_type=dd_compute_type)
+                                                             compute_type=dd_compute_type,
+                                                             best_of=nb_best_of,
+                                                             patience=nb_patience)
                     btn_run.click(fn=self.whisper_inf.transcribe_mic,
                                   inputs=params + whisper_params.to_list(),
                                   outputs=[tb_indicator, files_subtitles])
