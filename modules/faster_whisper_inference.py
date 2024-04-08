@@ -94,7 +94,7 @@ class FasterWhisperInference(BaseInterface):
             return [result_str, result_file_path]
 
         except Exception as e:
-            print(f"Error transcribing file on line {e}")
+            print(f"Error transcribing file: {e}")
         finally:
             self.release_cuda_memory()
             if not files:
@@ -155,7 +155,7 @@ class FasterWhisperInference(BaseInterface):
             return [result_str, result_file_path]
 
         except Exception as e:
-            print(f"Error transcribing file on line {e}")
+            print(f"Error transcribing file: {e}")
         finally:
             try:
                 if 'yt' not in locals():
@@ -215,7 +215,7 @@ class FasterWhisperInference(BaseInterface):
             result_str = f"Done in {self.format_time(time_for_task)}! Subtitle file is in the outputs folder.\n\n{subtitle}"
             return [result_str, result_file_path]
         except Exception as e:
-            print(f"Error transcribing file on line {e}")
+            print(f"Error transcribing file: {e}")
         finally:
             self.release_cuda_memory()
             self.remove_input_files([mic_audio])
@@ -319,10 +319,9 @@ class FasterWhisperInference(BaseInterface):
         Parameters
         ----------
         file_name: str
-            Size of whisper model 
-        transcribed_segments: str
-            Compute type for transcription.
-            see more info : https://opennmt.net/CTranslate2/quantization.html
+            Output file name
+        transcribed_segments: list
+            Text segments transcribed from audio
         add_timestamp: bool
             Determines whether to add a timestamp to the end of the filename.
         file_format: str
@@ -369,7 +368,7 @@ class FasterWhisperInference(BaseInterface):
 
         Returns
         ----------
-            Time format string
+        Time format string
         """
         hours, rem = divmod(elapsed_time, 3600)
         minutes, seconds = divmod(rem, 60)
