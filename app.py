@@ -8,6 +8,8 @@ from modules.nllb_inference import NLLBInference
 from ui.htmls import *
 from modules.youtube_manager import get_ytmetas
 from modules.deepl_api import DeepLAPI
+from modules.whisper_data_class import *
+
 
 class App:
     def __init__(self, args):
@@ -61,6 +63,8 @@ class App:
                         nb_log_prob_threshold = gr.Number(label="Log Probability Threshold", value=-1.0, interactive=True)
                         nb_no_speech_threshold = gr.Number(label="No Speech Threshold", value=0.6, interactive=True)
                         dd_compute_type = gr.Dropdown(label="Compute Type", choices=self.whisper_inf.available_compute_types, value=self.whisper_inf.current_compute_type, interactive=True)
+                        nb_best_of = gr.Number(label="Best Of", value=5, interactive=True)
+                        nb_patience = gr.Number(label="Patience", value=1, interactive=True)
                     with gr.Row():
                         btn_run = gr.Button("GENERATE SUBTITLE FILE", variant="primary")
                     with gr.Row():
@@ -68,10 +72,18 @@ class App:
                         files_subtitles = gr.Files(label="Downloadable output file", scale=4, interactive=False)
                         btn_openfolder = gr.Button('📂', scale=1)
 
-                    params = [input_file, dd_model, dd_lang, dd_file_format, cb_translate, cb_timestamp]
-                    advanced_params = [nb_beam_size, nb_log_prob_threshold, nb_no_speech_threshold, dd_compute_type]
+                    params = [input_file, dd_file_format, cb_timestamp]
+                    whisper_params = WhisperGradioComponents(model_size=dd_model,
+                                                             lang=dd_lang,
+                                                             is_translate=cb_translate,
+                                                             beam_size=nb_beam_size,
+                                                             log_prob_threshold=nb_log_prob_threshold,
+                                                             no_speech_threshold=nb_no_speech_threshold,
+                                                             compute_type=dd_compute_type,
+                                                             best_of=nb_best_of,
+                                                             patience=nb_patience)
                     btn_run.click(fn=self.whisper_inf.transcribe_file,
-                                  inputs=params + advanced_params,
+                                  inputs=params + whisper_params.to_list(),
                                   outputs=[tb_indicator, files_subtitles])
                     btn_openfolder.click(fn=lambda: self.open_folder("outputs"), inputs=None, outputs=None)
                     dd_model.change(fn=self.on_change_models, inputs=[dd_model], outputs=[cb_translate])
@@ -101,6 +113,8 @@ class App:
                         nb_log_prob_threshold = gr.Number(label="Log Probability Threshold", value=-1.0, interactive=True)
                         nb_no_speech_threshold = gr.Number(label="No Speech Threshold", value=0.6, interactive=True)
                         dd_compute_type = gr.Dropdown(label="Compute Type", choices=self.whisper_inf.available_compute_types, value=self.whisper_inf.current_compute_type, interactive=True)
+                        nb_best_of = gr.Number(label="Best Of", value=5, interactive=True)
+                        nb_patience = gr.Number(label="Patience", value=1, interactive=True)
                     with gr.Row():
                         btn_run = gr.Button("GENERATE SUBTITLE FILE", variant="primary")
                     with gr.Row():
@@ -108,10 +122,18 @@ class App:
                         files_subtitles = gr.Files(label="Downloadable output file", scale=4)
                         btn_openfolder = gr.Button('📂', scale=1)
 
-                    params = [tb_youtubelink, dd_model, dd_lang, dd_file_format, cb_translate, cb_timestamp]
-                    advanced_params = [nb_beam_size, nb_log_prob_threshold, nb_no_speech_threshold, dd_compute_type]
+                    params = [tb_youtubelink, dd_file_format, cb_timestamp]
+                    whisper_params = WhisperGradioComponents(model_size=dd_model,
+                                                             lang=dd_lang,
+                                                             is_translate=cb_translate,
+                                                             beam_size=nb_beam_size,
+                                                             log_prob_threshold=nb_log_prob_threshold,
+                                                             no_speech_threshold=nb_no_speech_threshold,
+                                                             compute_type=dd_compute_type,
+                                                             best_of=nb_best_of,
+                                                             patience=nb_patience)
                     btn_run.click(fn=self.whisper_inf.transcribe_youtube,
-                                  inputs=params + advanced_params,
+                                  inputs=params + whisper_params.to_list(),
                                   outputs=[tb_indicator, files_subtitles])
                     tb_youtubelink.change(get_ytmetas, inputs=[tb_youtubelink],
                                           outputs=[img_thumbnail, tb_title, tb_description])
@@ -134,6 +156,8 @@ class App:
                         nb_log_prob_threshold = gr.Number(label="Log Probability Threshold", value=-1.0, interactive=True)
                         nb_no_speech_threshold = gr.Number(label="No Speech Threshold", value=0.6, interactive=True)
                         dd_compute_type = gr.Dropdown(label="Compute Type", choices=self.whisper_inf.available_compute_types, value=self.whisper_inf.current_compute_type, interactive=True)
+                        nb_best_of = gr.Number(label="Best Of", value=5, interactive=True)
+                        nb_patience = gr.Number(label="Patience", value=1, interactive=True)
                     with gr.Row():
                         btn_run = gr.Button("GENERATE SUBTITLE FILE", variant="primary")
                     with gr.Row():
@@ -141,10 +165,18 @@ class App:
                         files_subtitles = gr.Files(label="Downloadable output file", scale=4)
                         btn_openfolder = gr.Button('📂', scale=1)
 
-                    params = [mic_input, dd_model, dd_lang, dd_file_format, cb_translate]
-                    advanced_params = [nb_beam_size, nb_log_prob_threshold, nb_no_speech_threshold, dd_compute_type]
+                    params = [mic_input, dd_file_format]
+                    whisper_params = WhisperGradioComponents(model_size=dd_model,
+                                                             lang=dd_lang,
+                                                             is_translate=cb_translate,
+                                                             beam_size=nb_beam_size,
+                                                             log_prob_threshold=nb_log_prob_threshold,
+                                                             no_speech_threshold=nb_no_speech_threshold,
+                                                             compute_type=dd_compute_type,
+                                                             best_of=nb_best_of,
+                                                             patience=nb_patience)
                     btn_run.click(fn=self.whisper_inf.transcribe_mic,
-                                  inputs=params + advanced_params,
+                                  inputs=params + whisper_params.to_list(),
                                   outputs=[tb_indicator, files_subtitles])
                     btn_openfolder.click(fn=lambda: self.open_folder("outputs"), inputs=None, outputs=None)
                     dd_model.change(fn=self.on_change_models, inputs=[dd_model], outputs=[cb_translate])
