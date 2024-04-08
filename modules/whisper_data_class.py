@@ -45,30 +45,14 @@ class WhisperGradioComponents:
 
     def to_list(self) -> list:
         """
-        Converts the data class attributes into a list, to pass parameters to a function before Gradio pre-processing.
+        Converts the data class attributes into a list, to pass parameters to a
+        button click event function before Gradio pre-processing.
 
         Returns
         ----------
         A list of Gradio components
         """
         return [getattr(self, f.name) for f in fields(self)]
-
-    @staticmethod
-    def to_values(*params):
-        """
-        Convert a tuple of parameters into a WhisperValues data class, to use parameters in a function after Gradio pre-processing.
-
-        Parameters
-        ----------
-        *params: tuple
-            This is provided in a tuple because Gradio does not support **kwargs arbitrary.
-            Reference : https://discuss.huggingface.co/t/passing-an-additional-argument-to-a-function/25140/2
-
-        Returns
-        ----------
-        A WhisperValues data class
-        """
-        return WhisperValues(*params)
 
 
 @dataclass
@@ -83,6 +67,6 @@ class WhisperValues:
     best_of: int
     patience: float
     """
-    A data class to use Whisper parameters in the function after Gradio pre-processing.
+    A data class to use Whisper parameters in your function after Gradio pre-processing.
     See this documentation for more information about Gradio pre-processing: : https://www.gradio.app/docs/components
     """
