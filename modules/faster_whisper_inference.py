@@ -32,7 +32,7 @@ class FasterWhisperInference(BaseInterface):
         self.default_beam_size = 1
 
     def transcribe_file(self,
-                        fileobjs: list,
+                        files: list,
                         file_format: str,
                         add_timestamp: bool,
                         progress=gr.Progress(),
@@ -43,7 +43,7 @@ class FasterWhisperInference(BaseInterface):
 
         Parameters
         ----------
-        fileobjs: list
+        files: list
             List of files to transcribe from gr.Files()
         file_format: str
             Subtitle File format to write from gr.Dropdown(). Supported format: [SRT, WebVTT, txt]
@@ -56,20 +56,21 @@ class FasterWhisperInference(BaseInterface):
 
         Returns
         ----------
-        A List of
-        String to return to gr.Textbox()
-        Files to return to gr.Files()
+        result_str:
+            Result of transcription to return to gr.Textbox()
+        result_file_path:
+            Output file path to return to gr.Files()
         """
         try:
             files_info = {}
-            for fileobj in fileobjs:
+            for file in files:
                 transcribed_segments, time_for_task = self.transcribe(
-                    fileobj.name,
+                    file.name,
                     progress,
                     *whisper_params,
                 )
 
-                file_name, file_ext = os.path.splitext(os.path.basename(fileobj.name))
+                file_name, file_ext = os.path.splitext(os.path.basename(file.name))
                 file_name = safe_filename(file_name)
                 subtitle, file_path = self.generate_and_write_file(
                     file_name=file_name,
@@ -96,8 +97,8 @@ class FasterWhisperInference(BaseInterface):
             print(f"Error transcribing file on line {e}")
         finally:
             self.release_cuda_memory()
-            if not fileobjs:
-                self.remove_input_files([fileobj.name for fileobj in fileobjs])
+            if not files:
+                self.remove_input_files([file.name for file in files])
 
     def transcribe_youtube(self,
                            youtube_link: str,
@@ -124,9 +125,10 @@ class FasterWhisperInference(BaseInterface):
 
         Returns
         ----------
-        A List of
-        String to return to gr.Textbox()
-        Files to return to gr.Files()
+        result_str:
+            Result of transcription to return to gr.Textbox()
+        result_file_path:
+            Output file path to return to gr.Files()
         """
         try:
             progress(0, desc="Loading Audio from Youtube..")
@@ -142,15 +144,15 @@ class FasterWhisperInference(BaseInterface):
             progress(1, desc="Completed!")
 
             file_name = safe_filename(yt.title)
-            subtitle, file_path = self.generate_and_write_file(
+            subtitle, result_file_path = self.generate_and_write_file(
                 file_name=file_name,
                 transcribed_segments=transcribed_segments,
                 add_timestamp=add_timestamp,
                 file_format=file_format
             )
-            gr_str = f"Done in {self.format_time(time_for_task)}! Subtitle file is in the outputs folder.\n\n{subtitle}"
+            result_str = f"Done in {self.format_time(time_for_task)}! Subtitle file is in the outputs folder.\n\n{subtitle}"
 
-            return [gr_str, file_path]
+            return [result_str, result_file_path]
 
         except Exception as e:
             print(f"Error transcribing file on line {e}")
@@ -189,9 +191,10 @@ class FasterWhisperInference(BaseInterface):
 
         Returns
         ----------
-        A List of
-        String to return to gr.Textbox()
-        Files to return to gr.Files()
+        result_str:
+            Result of transcription to return to gr.Textbox()
+        result_file_path:
+            Output file path to return to gr.Files()
         """
         try:
             progress(0, desc="Loading Audio..")
@@ -202,15 +205,15 @@ class FasterWhisperInference(BaseInterface):
             )
             progress(1, desc="Completed!")
 
-            subtitle, file_path = self.generate_and_write_file(
+            subtitle, result_file_path = self.generate_and_write_file(
                 file_name="Mic",
                 transcribed_segments=transcribed_segments,
                 add_timestamp=True,
                 file_format=file_format
             )
 
-            gr_str = f"Done in {self.format_time(time_for_task)}! Subtitle file is in the outputs folder.\n\n{subtitle}"
-            return [gr_str, file_path]
+            result_str = f"Done in {self.format_time(time_for_task)}! Subtitle file is in the outputs folder.\n\n{subtitle}"
+            return [result_str, result_file_path]
         except Exception as e:
             print(f"Error transcribing file on line {e}")
         finally:
@@ -282,7 +285,17 @@ class FasterWhisperInference(BaseInterface):
                      progress: gr.Progress
                      ):
         """
-        update current model setting
+        Update current model setting
+
+        Parameters
+        ----------
+        model_size: str
+            Size of whisper model
+        compute_type: str
+            Compute type for transcription.
+            see more info : https://opennmt.net/CTranslate2/quantization.html
+        progress: gr.Progress
+            Indicator to show progress directly in gradio.
         """
         progress(0, desc="Initializing Model..")
         self.current_model_size = model_size
@@ -301,7 +314,26 @@ class FasterWhisperInference(BaseInterface):
                                 file_format: str,
                                 ) -> str:
         """
-        This method writes subtitle file and returns str to gr.Textbox
+        Writes subtitle file and returns str of content and output file path
+
+        Parameters
+        ----------
+        file_name: str
+            Size of whisper model 
+        transcribed_segments: str
+            Compute type for transcription.
+            see more info : https://opennmt.net/CTranslate2/quantization.html
+        add_timestamp: bool
+            Determines whether to add a timestamp to the end of the filename.
+        file_format: str
+            File format to write. Supported formats: [SRT, WebVTT, txt]
+
+        Returns
+        ----------
+        content: str
+            Result of the transcription
+        output_path: str
+            output file path
         """
         timestamp = datetime.now().strftime("%m%d%H%M%S")
         if add_timestamp:
@@ -327,6 +359,18 @@ class FasterWhisperInference(BaseInterface):
 
     @staticmethod
     def format_time(elapsed_time: float) -> str:
+        """
+        Get {hours} {minutes} {seconds} time format string
+
+        Parameters
+        ----------
+        elapsed_time: str
+            Elapsed time for transcription
+
+        Returns
+        ----------
+            Time format string
+        """
         hours, rem = divmod(elapsed_time, 3600)
         minutes, seconds = divmod(rem, 60)
 
