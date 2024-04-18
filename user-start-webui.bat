@@ -9,8 +9,7 @@ set PASSWORD=
 set SHARE=
 set THEME=
 set DISABLE_FASTER_WHISPER=
-
-
+set API_OPEN=
 
 
 :: Set args accordingly
@@ -35,7 +34,10 @@ if not "%THEME%"=="" (
 if /I "%DISABLE_FASTER_WHISPER%"=="true" (
     set DISABLE_FASTER_WHISPER_ARG=--disable_faster_whisper
 )
+if /I "%API_OPEN%"=="true" (
+    set API_OPEN=--api_open
+)
 
 :: Call the original .bat script with optional arguments
-start-webui.bat %SERVER_NAME_ARG% %SERVER_PORT_ARG% %USERNAME_ARG% %PASSWORD_ARG% %SHARE_ARG% %THEME_ARG% %DISABLE_FASTER_WHISPER_ARG%
+start-webui.bat %SERVER_NAME_ARG% %SERVER_PORT_ARG% %USERNAME_ARG% %PASSWORD_ARG% %SHARE_ARG% %THEME_ARG% %DISABLE_FASTER_WHISPER_ARG% %API_OPEN%
 pause
