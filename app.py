@@ -266,6 +266,7 @@ parser.add_argument('--username', type=str, default=None, help='Gradio authentic
 parser.add_argument('--password', type=str, default=None, help='Gradio authentication password')
 parser.add_argument('--theme', type=str, default=None, help='Gradio Blocks theme')
 parser.add_argument('--colab', type=bool, default=False, nargs='?', const=True, help='Is colab user or not')
+parser.add_argument('--api_open', type=bool, default=False, nargs='?', const=True, help='enable api or not')
 _args = parser.parse_args()
 
 if __name__ == "__main__":
