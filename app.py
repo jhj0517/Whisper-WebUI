@@ -65,7 +65,7 @@ class App:
                         dd_compute_type = gr.Dropdown(label="Compute Type", choices=self.whisper_inf.available_compute_types, value=self.whisper_inf.current_compute_type, interactive=True)
                         nb_best_of = gr.Number(label="Best Of", value=5, interactive=True)
                         nb_patience = gr.Number(label="Patience", value=1, interactive=True)
-                        cb_condition_on_previous_text = gr.Checkbox(label="Condition On Previous Text", value=False, interactive=True)
+                        cb_condition_on_previous_text = gr.Checkbox(label="Condition On Previous Text", value=True, interactive=True)
                         tb_initial_prompt = gr.Textbox(label="Initial Prompt", value=None, interactive=False)
                     with gr.Row():
                         btn_run = gr.Button("GENERATE SUBTITLE FILE", variant="primary")
@@ -119,7 +119,7 @@ class App:
                         dd_compute_type = gr.Dropdown(label="Compute Type", choices=self.whisper_inf.available_compute_types, value=self.whisper_inf.current_compute_type, interactive=True)
                         nb_best_of = gr.Number(label="Best Of", value=5, interactive=True)
                         nb_patience = gr.Number(label="Patience", value=1, interactive=True)
-                        cb_condition_on_previous_text = gr.Checkbox(label="Condition On Previous Text", value=False, interactive=True)
+                        cb_condition_on_previous_text = gr.Checkbox(label="Condition On Previous Text", value=True, interactive=True)
                         tb_initial_prompt = gr.Textbox(label="Initial Prompt", value=None, interactive=False)
                     with gr.Row():
                         btn_run = gr.Button("GENERATE SUBTITLE FILE", variant="primary")
@@ -166,7 +166,7 @@ class App:
                         dd_compute_type = gr.Dropdown(label="Compute Type", choices=self.whisper_inf.available_compute_types, value=self.whisper_inf.current_compute_type, interactive=True)
                         nb_best_of = gr.Number(label="Best Of", value=5, interactive=True)
                         nb_patience = gr.Number(label="Patience", value=1, interactive=True)
-                        cb_condition_on_previous_text = gr.Checkbox(label="Condition On Previous Text", value=False, interactive=True)
+                        cb_condition_on_previous_text = gr.Checkbox(label="Condition On Previous Text", value=True, interactive=True)
                         tb_initial_prompt = gr.Textbox(label="Initial Prompt", value=None, interactive=False)
                     with gr.Row():
                         btn_run = gr.Button("GENERATE SUBTITLE FILE", variant="primary")
