@@ -66,7 +66,7 @@ class App:
                         nb_best_of = gr.Number(label="Best Of", value=5, interactive=True)
                         nb_patience = gr.Number(label="Patience", value=1, interactive=True)
                         cb_condition_on_previous_text = gr.Checkbox(label="Condition On Previous Text", value=True, interactive=True)
-                        tb_initial_prompt = gr.Textbox(label="Initial Prompt", value=None, interactive=False)
+                        tb_initial_prompt = gr.Textbox(label="Initial Prompt", value=None, interactive=True)
                     with gr.Row():
                         btn_run = gr.Button("GENERATE SUBTITLE FILE", variant="primary")
                     with gr.Row():
@@ -120,7 +120,7 @@ class App:
                         nb_best_of = gr.Number(label="Best Of", value=5, interactive=True)
                         nb_patience = gr.Number(label="Patience", value=1, interactive=True)
                         cb_condition_on_previous_text = gr.Checkbox(label="Condition On Previous Text", value=True, interactive=True)
-                        tb_initial_prompt = gr.Textbox(label="Initial Prompt", value=None, interactive=False)
+                        tb_initial_prompt = gr.Textbox(label="Initial Prompt", value=None, interactive=True)
                     with gr.Row():
                         btn_run = gr.Button("GENERATE SUBTITLE FILE", variant="primary")
                     with gr.Row():
@@ -167,7 +167,7 @@ class App:
                         nb_best_of = gr.Number(label="Best Of", value=5, interactive=True)
                         nb_patience = gr.Number(label="Patience", value=1, interactive=True)
                         cb_condition_on_previous_text = gr.Checkbox(label="Condition On Previous Text", value=True, interactive=True)
-                        tb_initial_prompt = gr.Textbox(label="Initial Prompt", value=None, interactive=False)
+                        tb_initial_prompt = gr.Textbox(label="Initial Prompt", value=None, interactive=True)
                     with gr.Row():
                         btn_run = gr.Button("GENERATE SUBTITLE FILE", variant="primary")
                     with gr.Row():
