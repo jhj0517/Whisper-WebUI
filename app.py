@@ -65,6 +65,8 @@ class App:
                         dd_compute_type = gr.Dropdown(label="Compute Type", choices=self.whisper_inf.available_compute_types, value=self.whisper_inf.current_compute_type, interactive=True)
                         nb_best_of = gr.Number(label="Best Of", value=5, interactive=True)
                         nb_patience = gr.Number(label="Patience", value=1, interactive=True)
+                        cb_condition_on_previous_text = gr.Checkbox(label="Condition On Previous Text", value=False, interactive=True)
+                        tb_initial_prompt = gr.Textbox(label="Initial Prompt", value=None, interactive=False)
                     with gr.Row():
                         btn_run = gr.Button("GENERATE SUBTITLE FILE", variant="primary")
                     with gr.Row():
@@ -81,7 +83,9 @@ class App:
                                                              no_speech_threshold=nb_no_speech_threshold,
                                                              compute_type=dd_compute_type,
                                                              best_of=nb_best_of,
-                                                             patience=nb_patience)
+                                                             patience=nb_patience,
+                                                             condition_on_previous_text=cb_condition_on_previous_text,
+                                                             initial_prompt=tb_initial_prompt)
                     btn_run.click(fn=self.whisper_inf.transcribe_file,
                                   inputs=params + whisper_params.to_list(),
                                   outputs=[tb_indicator, files_subtitles])
@@ -115,6 +119,8 @@ class App:
                         dd_compute_type = gr.Dropdown(label="Compute Type", choices=self.whisper_inf.available_compute_types, value=self.whisper_inf.current_compute_type, interactive=True)
                         nb_best_of = gr.Number(label="Best Of", value=5, interactive=True)
                         nb_patience = gr.Number(label="Patience", value=1, interactive=True)
+                        cb_condition_on_previous_text = gr.Checkbox(label="Condition On Previous Text", value=False, interactive=True)
+                        tb_initial_prompt = gr.Textbox(label="Initial Prompt", value=None, interactive=False)
                     with gr.Row():
                         btn_run = gr.Button("GENERATE SUBTITLE FILE", variant="primary")
                     with gr.Row():
@@ -131,7 +137,9 @@ class App:
                                                              no_speech_threshold=nb_no_speech_threshold,
                                                              compute_type=dd_compute_type,
                                                              best_of=nb_best_of,
-                                                             patience=nb_patience)
+                                                             patience=nb_patience,
+                                                             condition_on_previous_text=cb_condition_on_previous_text,
+                                                             initial_prompt=tb_initial_prompt)
                     btn_run.click(fn=self.whisper_inf.transcribe_youtube,
                                   inputs=params + whisper_params.to_list(),
                                   outputs=[tb_indicator, files_subtitles])
@@ -158,6 +166,8 @@ class App:
                         dd_compute_type = gr.Dropdown(label="Compute Type", choices=self.whisper_inf.available_compute_types, value=self.whisper_inf.current_compute_type, interactive=True)
                         nb_best_of = gr.Number(label="Best Of", value=5, interactive=True)
                         nb_patience = gr.Number(label="Patience", value=1, interactive=True)
+                        cb_condition_on_previous_text = gr.Checkbox(label="Condition On Previous Text", value=False, interactive=True)
+                        tb_initial_prompt = gr.Textbox(label="Initial Prompt", value=None, interactive=False)
                     with gr.Row():
                         btn_run = gr.Button("GENERATE SUBTITLE FILE", variant="primary")
                     with gr.Row():
@@ -174,7 +184,9 @@ class App:
                                                              no_speech_threshold=nb_no_speech_threshold,
                                                              compute_type=dd_compute_type,
                                                              best_of=nb_best_of,
-                                                             patience=nb_patience)
+                                                             patience=nb_patience,
+                                                             condition_on_previous_text=cb_condition_on_previous_text,
+                                                             initial_prompt=tb_initial_prompt)
                     btn_run.click(fn=self.whisper_inf.transcribe_mic,
                                   inputs=params + whisper_params.to_list(),
                                   outputs=[tb_indicator, files_subtitles])
