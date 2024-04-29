@@ -15,6 +15,7 @@ class WhisperGradioComponents:
     best_of: gr.Number
     patience: gr.Number
     condition_on_previous_text: gr.Checkbox
+    initial_prompt: gr.Textbox
     """
     A data class to pass Gradio components to the function before Gradio pre-processing.
     See this documentation for more information about Gradio pre-processing: https://www.gradio.app/docs/components
@@ -52,10 +53,15 @@ class WhisperGradioComponents:
     patience: gr.Number
         Beam search patience factor.
         
-    condition_on_previous_text: bool
+    condition_on_previous_text: gr.Checkbox
         if True, the previous output of the model is provided as a prompt for the next window;
         disabling may make the text inconsistent across windows, but the model becomes less prone to
         getting stuck in a failure loop, such as repetition looping or timestamps going out of sync.
+        
+    initial_prompt: gr.Textbox
+        Optional text to provide as a prompt for the first window. This can be used to provide, or
+        "prompt-engineer" a context for transcription, e.g. custom vocabularies or proper nouns
+        to make it more likely to predict those word correctly.
     """
 
     def to_list(self) -> list:
@@ -82,6 +88,7 @@ class WhisperValues:
     best_of: int
     patience: float
     condition_on_previous_text: bool
+    initial_prompt: Optional[str]
     """
     A data class to use Whisper parameters in your function after Gradio pre-processing.
     See this documentation for more information about Gradio pre-processing: : https://www.gradio.app/docs/components
