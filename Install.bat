@@ -11,6 +11,7 @@ call activate.bat
 
 cd /d "%~dp0"
 pip install -r requirements.txt
+pip install tokenizers==0.19.1
 
 if errorlevel 1 (
     echo.
