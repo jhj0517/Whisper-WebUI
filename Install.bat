@@ -10,7 +10,7 @@ cd /d "%~dp0\venv\Scripts"
 call activate.bat
 
 cd /d "%~dp0"
-pip install -r requirements.txt
+pip install -r requirements.txt -U
 
 if errorlevel 1 (
     echo.
