@@ -12,7 +12,6 @@ COPY requirements.txt .
 RUN python3 -m venv venv && \
     . venv/bin/activate && \
     pip install --no-cache-dir -r requirements.txt
-    pip install tokenizers==0.19.1
 
 
 FROM debian:bookworm-slim AS runtime

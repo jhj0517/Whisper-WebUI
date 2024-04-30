@@ -13,6 +13,5 @@ pip install -r requirements.txt && echo "Requirements installed successfully." |
     deactivate
     exit 1
 }
-pip install tokenizers==0.19.1
 
 deactivate
