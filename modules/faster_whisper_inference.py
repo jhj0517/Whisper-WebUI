@@ -16,6 +16,9 @@ from modules.subtitle_manager import get_srt, get_vtt, get_txt, write_file, safe
 from modules.youtube_manager import get_ytdata, get_ytaudio
 from modules.whisper_data_class import *
 
+# Temporal fix of the issue : https://github.com/jhj0517/Whisper-WebUI/issues/144
+os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
+
 
 class FasterWhisperInference(BaseInterface):
     def __init__(self):
