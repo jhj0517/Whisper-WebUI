@@ -70,8 +70,8 @@ class App:
                     with gr.Row():
                         btn_run = gr.Button("GENERATE SUBTITLE FILE", variant="primary")
                     with gr.Row():
-                        tb_indicator = gr.Textbox(label="Output", scale=4)
-                        files_subtitles = gr.Files(label="Downloadable output file", scale=4, interactive=False)
+                        tb_indicator = gr.Textbox(label="Output", scale=5)
+                        files_subtitles = gr.Files(label="Downloadable output file", scale=3, interactive=False)
                         btn_openfolder = gr.Button('📂', scale=1)
 
                     params = [input_file, dd_file_format, cb_timestamp]
@@ -124,8 +124,8 @@ class App:
                     with gr.Row():
                         btn_run = gr.Button("GENERATE SUBTITLE FILE", variant="primary")
                     with gr.Row():
-                        tb_indicator = gr.Textbox(label="Output", scale=4)
-                        files_subtitles = gr.Files(label="Downloadable output file", scale=4)
+                        tb_indicator = gr.Textbox(label="Output", scale=5)
+                        files_subtitles = gr.Files(label="Downloadable output file", scale=3)
                         btn_openfolder = gr.Button('📂', scale=1)
 
                     params = [tb_youtubelink, dd_file_format, cb_timestamp]
@@ -171,8 +171,8 @@ class App:
                     with gr.Row():
                         btn_run = gr.Button("GENERATE SUBTITLE FILE", variant="primary")
                     with gr.Row():
-                        tb_indicator = gr.Textbox(label="Output", scale=4)
-                        files_subtitles = gr.Files(label="Downloadable output file", scale=4)
+                        tb_indicator = gr.Textbox(label="Output", scale=5)
+                        files_subtitles = gr.Files(label="Downloadable output file", scale=3)
                         btn_openfolder = gr.Button('📂', scale=1)
 
                     params = [mic_input, dd_file_format]
@@ -214,8 +214,8 @@ class App:
                         with gr.Row():
                             btn_run = gr.Button("TRANSLATE SUBTITLE FILE", variant="primary")
                         with gr.Row():
-                            tb_indicator = gr.Textbox(label="Output", scale=4)
-                            files_subtitles = gr.Files(label="Downloadable output file", scale=4)
+                            tb_indicator = gr.Textbox(label="Output", scale=5)
+                            files_subtitles = gr.Files(label="Downloadable output file", scale=3)
                             btn_openfolder = gr.Button('📂', scale=1)
 
                     btn_run.click(fn=self.deepl_api.translate_deepl,
@@ -241,8 +241,8 @@ class App:
                         with gr.Row():
                             btn_run = gr.Button("TRANSLATE SUBTITLE FILE", variant="primary")
                         with gr.Row():
-                            tb_indicator = gr.Textbox(label="Output", scale=4)
-                            files_subtitles = gr.Files(label="Downloadable output file", scale=4)
+                            tb_indicator = gr.Textbox(label="Output", scale=5)
+                            files_subtitles = gr.Files(label="Downloadable output file", scale=3)
                             btn_openfolder = gr.Button('📂', scale=1)
                         with gr.Column():
                             md_vram_table = gr.HTML(NLLB_VRAM_TABLE, elem_id="md_nllb_vram_table")

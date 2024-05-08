@@ -3,5 +3,5 @@ torch
 git+https://github.com/jhj0517/jhj0517-whisper.git
 faster-whisper==1.0.2
 transformers
-gradio==4.14.0
+gradio==4.29.0
 pytube
