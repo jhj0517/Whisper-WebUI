@@ -10,7 +10,7 @@ import torch
 from .base_interface import BaseInterface
 from modules.subtitle_manager import get_srt, get_vtt, get_txt, write_file, safe_filename
 from modules.youtube_manager import get_ytdata, get_ytaudio
-from modules.whisper_data_class import *
+from modules.whisper_parameter import *
 
 DEFAULT_MODEL_SIZE = "large-v3"
 
