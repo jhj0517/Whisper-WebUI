@@ -258,7 +258,8 @@ class WhisperInference(BaseInterface):
                                                 best_of=params.best_of,
                                                 patience=params.patience,
                                                 temperature=params.temperature,
-                                                progress_callback=progress_callback)["segments"]
+                                                compression_ratio_threshold=params.compression_ratio_threshold,
+                                                progress_callback=progress_callback,)["segments"]
         elapsed_time = time.time() - start_time
 
         return segments_result, elapsed_time

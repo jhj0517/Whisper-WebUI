@@ -68,6 +68,7 @@ class App:
                         cb_condition_on_previous_text = gr.Checkbox(label="Condition On Previous Text", value=True, interactive=True)
                         tb_initial_prompt = gr.Textbox(label="Initial Prompt", value=None, interactive=True)
                         sd_temperature = gr.Slider(label="Temperature", value=0, step=0.01, maximum=1.0, interactive=True)
+                        nb_compression_ratio_threshold = gr.Number(label="Compression Ratio Threshold", value=2.4, interactive=True)
                     with gr.Row():
                         btn_run = gr.Button("GENERATE SUBTITLE FILE", variant="primary")
                     with gr.Row():
@@ -87,7 +88,8 @@ class App:
                                                              patience=nb_patience,
                                                              condition_on_previous_text=cb_condition_on_previous_text,
                                                              initial_prompt=tb_initial_prompt,
-                                                             temperature=sd_temperature)
+                                                             temperature=sd_temperature,
+                                                             compression_ratio_threshold=nb_compression_ratio_threshold)
                     btn_run.click(fn=self.whisper_inf.transcribe_file,
                                   inputs=params + whisper_params.to_list(),
                                   outputs=[tb_indicator, files_subtitles])
@@ -124,6 +126,7 @@ class App:
                         cb_condition_on_previous_text = gr.Checkbox(label="Condition On Previous Text", value=True, interactive=True)
                         tb_initial_prompt = gr.Textbox(label="Initial Prompt", value=None, interactive=True)
                         sd_temperature = gr.Slider(label="Temperature", value=0, step=0.01, maximum=1.0, interactive=True)
+                        nb_compression_ratio_threshold = gr.Number(label="Compression Ratio Threshold", value=2.4, interactive=True)
                     with gr.Row():
                         btn_run = gr.Button("GENERATE SUBTITLE FILE", variant="primary")
                     with gr.Row():
@@ -143,7 +146,8 @@ class App:
                                                              patience=nb_patience,
                                                              condition_on_previous_text=cb_condition_on_previous_text,
                                                              initial_prompt=tb_initial_prompt,
-                                                             temperature=sd_temperature)
+                                                             temperature=sd_temperature,
+                                                             compression_ratio_threshold=nb_compression_ratio_threshold)
                     btn_run.click(fn=self.whisper_inf.transcribe_youtube,
                                   inputs=params + whisper_params.to_list(),
                                   outputs=[tb_indicator, files_subtitles])
@@ -192,7 +196,8 @@ class App:
                                                              patience=nb_patience,
                                                              condition_on_previous_text=cb_condition_on_previous_text,
                                                              initial_prompt=tb_initial_prompt,
-                                                             temperature=sd_temperature)
+                                                             temperature=sd_temperature,
+                                                             compression_ratio_threshold=nb_compression_ratio_threshold)
                     btn_run.click(fn=self.whisper_inf.transcribe_mic,
                                   inputs=params + whisper_params.to_list(),
                                   outputs=[tb_indicator, files_subtitles])
