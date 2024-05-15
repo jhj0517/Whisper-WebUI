@@ -70,7 +70,7 @@ class WhisperGradioComponents:
             which will be successively used upon failures according to either
             `compression_ratio_threshold` or `log_prob_threshold`.
             
-    compression_ratio_threshold: float
+    compression_ratio_threshold: gr.Number
         If the gzip compression ratio is above this value, treat as failed
     """
 
