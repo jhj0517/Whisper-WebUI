@@ -257,6 +257,7 @@ class WhisperInference(BaseInterface):
                                                 fp16=True if params.compute_type == "float16" else False,
                                                 best_of=params.best_of,
                                                 patience=params.patience,
+                                                temperature=params.temperature,
                                                 progress_callback=progress_callback)["segments"]
         elapsed_time = time.time() - start_time
 
