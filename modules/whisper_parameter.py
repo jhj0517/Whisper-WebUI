@@ -16,9 +16,10 @@ class WhisperGradioComponents:
     patience: gr.Number
     condition_on_previous_text: gr.Checkbox
     initial_prompt: gr.Textbox
+    temperature: gr.Slider
     """
-    A data class to pass Gradio components to the function before Gradio pre-processing.
-    See this documentation for more information about Gradio pre-processing: https://www.gradio.app/docs/components
+    A data class for Gradio components of the Whisper Parameters. Use "before" Gradio pre-processing.
+    See more about Gradio pre-processing: https://www.gradio.app/docs/components
 
     Attributes
     ----------
@@ -62,12 +63,16 @@ class WhisperGradioComponents:
         Optional text to provide as a prompt for the first window. This can be used to provide, or
         "prompt-engineer" a context for transcription, e.g. custom vocabularies or proper nouns
         to make it more likely to predict those word correctly.
+        
+    temperature: Temperature for sampling. It can be a tuple of temperatures,
+            which will be successively used upon failures according to either
+            `compression_ratio_threshold` or `log_prob_threshold`.
     """
 
     def to_list(self) -> list:
         """
-        Converts the data class attributes into a list, to pass parameters to a
-        button click event function before Gradio pre-processing.
+        Converts the data class attributes into a list. Use "before" Gradio pre-processing.
+        See more about Gradio pre-processing: : https://www.gradio.app/docs/components
 
         Returns
         ----------
@@ -89,7 +94,8 @@ class WhisperValues:
     patience: float
     condition_on_previous_text: bool
     initial_prompt: Optional[str]
+    temperature: float
     """
-    A data class to use Whisper parameters in your function after Gradio pre-processing.
-    See this documentation for more information about Gradio pre-processing: : https://www.gradio.app/docs/components
+    A data class to use Whisper parameters. Use "after" Gradio pre-processing.
+    See more about Gradio pre-processing: : https://www.gradio.app/docs/components
     """

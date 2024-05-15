@@ -14,7 +14,7 @@ import gradio as gr
 from .base_interface import BaseInterface
 from modules.subtitle_manager import get_srt, get_vtt, get_txt, write_file, safe_filename
 from modules.youtube_manager import get_ytdata, get_ytaudio
-from modules.whisper_data_class import *
+from modules.whisper_parameter import *
 
 # Temporal fix of the issue : https://github.com/jhj0517/Whisper-WebUI/issues/144
 os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
@@ -268,7 +268,8 @@ class FasterWhisperInference(BaseInterface):
             log_prob_threshold=params.log_prob_threshold,
             no_speech_threshold=params.no_speech_threshold,
             best_of=params.best_of,
-            patience=params.patience
+            patience=params.patience,
+            temperature=params.temperature
         )
         progress(0, desc="Loading audio..")
 
