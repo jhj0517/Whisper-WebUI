@@ -17,6 +17,7 @@ class WhisperGradioComponents:
     condition_on_previous_text: gr.Checkbox
     initial_prompt: gr.Textbox
     temperature: gr.Slider
+    compression_ratio_threshold: gr.Number
     """
     A data class for Gradio components of the Whisper Parameters. Use "before" Gradio pre-processing.
     See more about Gradio pre-processing: https://www.gradio.app/docs/components
@@ -64,9 +65,13 @@ class WhisperGradioComponents:
         "prompt-engineer" a context for transcription, e.g. custom vocabularies or proper nouns
         to make it more likely to predict those word correctly.
         
-    temperature: Temperature for sampling. It can be a tuple of temperatures,
+    temperature: gr.Slider 
+            Temperature for sampling. It can be a tuple of temperatures,
             which will be successively used upon failures according to either
             `compression_ratio_threshold` or `log_prob_threshold`.
+            
+    compression_ratio_threshold: gr.Number
+        If the gzip compression ratio is above this value, treat as failed
     """
 
     def to_list(self) -> list:
@@ -95,6 +100,7 @@ class WhisperValues:
     condition_on_previous_text: bool
     initial_prompt: Optional[str]
     temperature: float
+    compression_ratio_threshold: float
     """
     A data class to use Whisper parameters. Use "after" Gradio pre-processing.
     See more about Gradio pre-processing: : https://www.gradio.app/docs/components
