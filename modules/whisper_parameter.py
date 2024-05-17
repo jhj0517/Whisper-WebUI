@@ -18,6 +18,7 @@ class WhisperGradioComponents:
     initial_prompt: gr.Textbox
     temperature: gr.Slider
     compression_ratio_threshold: gr.Number
+    vad_filter: gr.Checkbox
     """
     A data class for Gradio components of the Whisper Parameters. Use "before" Gradio pre-processing.
     See more about Gradio pre-processing: https://www.gradio.app/docs/components
@@ -66,12 +67,17 @@ class WhisperGradioComponents:
         to make it more likely to predict those word correctly.
         
     temperature: gr.Slider 
-            Temperature for sampling. It can be a tuple of temperatures,
-            which will be successively used upon failures according to either
-            `compression_ratio_threshold` or `log_prob_threshold`.
+        Temperature for sampling. It can be a tuple of temperatures,
+        which will be successively used upon failures according to either
+        `compression_ratio_threshold` or `log_prob_threshold`.
             
     compression_ratio_threshold: gr.Number
         If the gzip compression ratio is above this value, treat as failed
+        
+    vad_filter: gr.Checkbox
+        Enable the voice activity detection (VAD) to filter out parts of the audio
+        without speech. This step is using the Silero VAD model
+        https://github.com/snakers4/silero-vad.
     """
 
     def to_list(self) -> list:
@@ -101,6 +107,7 @@ class WhisperValues:
     initial_prompt: Optional[str]
     temperature: float
     compression_ratio_threshold: float
+    vad_filter: bool
     """
     A data class to use Whisper parameters. Use "after" Gradio pre-processing.
     See more about Gradio pre-processing: : https://www.gradio.app/docs/components
