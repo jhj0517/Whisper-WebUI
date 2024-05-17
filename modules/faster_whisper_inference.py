@@ -271,6 +271,7 @@ class FasterWhisperInference(BaseInterface):
             patience=params.patience,
             temperature=params.temperature,
             compression_ratio_threshold=params.compression_ratio_threshold,
+            vad_filter=params.vad_filter,
         )
         progress(0, desc="Loading audio..")
 

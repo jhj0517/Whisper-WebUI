@@ -59,6 +59,7 @@ class App:
                     with gr.Row():
                         cb_timestamp = gr.Checkbox(value=True, label="Add a timestamp to the end of the filename", interactive=True)
                     with gr.Accordion("Advanced_Parameters", open=False):
+                        cb_vad_filter = gr.Checkbox(label="Enable Silero VAD Filter", value=False, interactive=True)
                         nb_beam_size = gr.Number(label="Beam Size", value=1, precision=0, interactive=True)
                         nb_log_prob_threshold = gr.Number(label="Log Probability Threshold", value=-1.0, interactive=True)
                         nb_no_speech_threshold = gr.Number(label="No Speech Threshold", value=0.6, interactive=True)
@@ -89,7 +90,8 @@ class App:
                                                              condition_on_previous_text=cb_condition_on_previous_text,
                                                              initial_prompt=tb_initial_prompt,
                                                              temperature=sd_temperature,
-                                                             compression_ratio_threshold=nb_compression_ratio_threshold)
+                                                             compression_ratio_threshold=nb_compression_ratio_threshold,
+                                                             vad_filter=cb_vad_filter)
                     btn_run.click(fn=self.whisper_inf.transcribe_file,
                                   inputs=params + whisper_params.to_list(),
                                   outputs=[tb_indicator, files_subtitles])
@@ -117,6 +119,7 @@ class App:
                         cb_timestamp = gr.Checkbox(value=True, label="Add a timestamp to the end of the filename",
                                                    interactive=True)
                     with gr.Accordion("Advanced_Parameters", open=False):
+                        cb_vad_filter = gr.Checkbox(label="Enable Silero VAD Filter", value=False, interactive=True)
                         nb_beam_size = gr.Number(label="Beam Size", value=1, precision=0, interactive=True)
                         nb_log_prob_threshold = gr.Number(label="Log Probability Threshold", value=-1.0, interactive=True)
                         nb_no_speech_threshold = gr.Number(label="No Speech Threshold", value=0.6, interactive=True)
@@ -147,7 +150,8 @@ class App:
                                                              condition_on_previous_text=cb_condition_on_previous_text,
                                                              initial_prompt=tb_initial_prompt,
                                                              temperature=sd_temperature,
-                                                             compression_ratio_threshold=nb_compression_ratio_threshold)
+                                                             compression_ratio_threshold=nb_compression_ratio_threshold,
+                                                             vad_filter=cb_vad_filter)
                     btn_run.click(fn=self.whisper_inf.transcribe_youtube,
                                   inputs=params + whisper_params.to_list(),
                                   outputs=[tb_indicator, files_subtitles])
@@ -168,6 +172,7 @@ class App:
                     with gr.Row():
                         cb_translate = gr.Checkbox(value=False, label="Translate to English?", interactive=True)
                     with gr.Accordion("Advanced_Parameters", open=False):
+                        cb_vad_filter = gr.Checkbox(label="Enable Silero VAD Filter", value=False, interactive=True)
                         nb_beam_size = gr.Number(label="Beam Size", value=1, precision=0, interactive=True)
                         nb_log_prob_threshold = gr.Number(label="Log Probability Threshold", value=-1.0, interactive=True)
                         nb_no_speech_threshold = gr.Number(label="No Speech Threshold", value=0.6, interactive=True)
@@ -197,7 +202,8 @@ class App:
                                                              condition_on_previous_text=cb_condition_on_previous_text,
                                                              initial_prompt=tb_initial_prompt,
                                                              temperature=sd_temperature,
-                                                             compression_ratio_threshold=nb_compression_ratio_threshold)
+                                                             compression_ratio_threshold=nb_compression_ratio_threshold,
+                                                             vad_filter=cb_vad_filter)
                     btn_run.click(fn=self.whisper_inf.transcribe_mic,
                                   inputs=params + whisper_params.to_list(),
                                   outputs=[tb_indicator, files_subtitles])
