@@ -10,9 +10,10 @@ set SHARE=
 set THEME=
 set DISABLE_FASTER_WHISPER=
 set API_OPEN=
+set WHISPER_MODEL_DIR=
+set FASTER_WHISPER_MODEL_DIR=
 
 
-:: Set args accordingly
 if not "%SERVER_NAME%"=="" (
     set SERVER_NAME_ARG=--server_name %SERVER_NAME%
 )
@@ -37,7 +38,13 @@ if /I "%DISABLE_FASTER_WHISPER%"=="true" (
 if /I "%API_OPEN%"=="true" (
     set API_OPEN=--api_open
 )
+if not "%WHISPER_MODEL_DIR%"=="" (
+    set WHISPER_MODEL_DIR_ARG=--whisper_model_dir "%WHISPER_MODEL_DIR%"
+)
+if not "%FASTER_WHISPER_MODEL_DIR%"=="" (
+    set FASTER_WHISPER_MODEL_DIR_ARG=--faster_whisper_model_dir "%FASTER_WHISPER_MODEL_DIR%"
+)
 
 :: Call the original .bat script with optional arguments
-start-webui.bat %SERVER_NAME_ARG% %SERVER_PORT_ARG% %USERNAME_ARG% %PASSWORD_ARG% %SHARE_ARG% %THEME_ARG% %DISABLE_FASTER_WHISPER_ARG% %API_OPEN%
+start-webui.bat %SERVER_NAME_ARG% %SERVER_PORT_ARG% %USERNAME_ARG% %PASSWORD_ARG% %SHARE_ARG% %THEME_ARG% %DISABLE_FASTER_WHISPER_ARG% %API_OPEN% %WHISPER_MODEL_DIR_ARG% %FASTER_WHISPER_MODEL_DIR_ARG%
 pause

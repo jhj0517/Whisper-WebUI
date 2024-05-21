@@ -32,7 +32,7 @@ class FasterWhisperInference(BaseInterface):
         self.available_compute_types = ctranslate2.get_supported_compute_types(
             "cuda") if self.device == "cuda" else ctranslate2.get_supported_compute_types("cpu")
         self.current_compute_type = "float16" if self.device == "cuda" else "float32"
-        self.default_beam_size = 1
+        self.model_dir = os.path.join("models", "Whisper", "faster-whisper")
 
     def transcribe_file(self,
                         files: list,
@@ -311,7 +311,7 @@ class FasterWhisperInference(BaseInterface):
         self.model = faster_whisper.WhisperModel(
             device=self.device,
             model_size_or_path=model_size,
-            download_root=os.path.join("models", "Whisper", "faster-whisper"),
+            download_root=self.model_dir,
             compute_type=self.current_compute_type
         )
 
