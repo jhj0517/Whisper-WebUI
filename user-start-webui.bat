@@ -39,10 +39,10 @@ if /I "%API_OPEN%"=="true" (
     set API_OPEN=--api_open
 )
 if not "%WHISPER_MODEL_DIR%"=="" (
-    set WHISPER_MODEL_DIR_ARG=--whisper_model_dir %WHISPER_MODEL_DIR%
+    set WHISPER_MODEL_DIR_ARG=--whisper_model_dir "%WHISPER_MODEL_DIR%"
 )
 if not "%FASTER_WHISPER_MODEL_DIR%"=="" (
-    set FASTER_WHISPER_MODEL_DIR_ARG=--faster_whisper_model_dir %FASTER_WHISPER_MODEL_DIR%
+    set FASTER_WHISPER_MODEL_DIR_ARG=--faster_whisper_model_dir "%FASTER_WHISPER_MODEL_DIR%"
 )
 
 :: Call the original .bat script with optional arguments
