@@ -17,8 +17,10 @@ class App:
         self.app = gr.Blocks(css=CSS, theme=self.args.theme)
         self.whisper_inf = WhisperInference() if self.args.disable_faster_whisper else FasterWhisperInference()
         if isinstance(self.whisper_inf, FasterWhisperInference):
+            self.whisper_inf.model_dir = args.faster_whisper_model_dir
             print("Use Faster Whisper implementation")
         else:
+            self.whisper_inf.model_dir = args.whisper_model_dir
             print("Use Open AI Whisper implementation")
         print(f"Device \"{self.whisper_inf.device}\" is detected")
         self.nllb_inf = NLLBInference()
@@ -296,6 +298,8 @@ parser.add_argument('--password', type=str, default=None, help='Gradio authentic
 parser.add_argument('--theme', type=str, default=None, help='Gradio Blocks theme')
 parser.add_argument('--colab', type=bool, default=False, nargs='?', const=True, help='Is colab user or not')
 parser.add_argument('--api_open', type=bool, default=False, nargs='?', const=True, help='enable api or not')
+parser.add_argument('--whisper_model_dir', type=str, default=os.path.join("models", "Whisper"), help='Directory path of the whisper model')
+parser.add_argument('--faster_whisper_model_dir', type=str, default=os.path.join("models", "Whisper", "faster-whisper"), help='Directory path of the faster-whisper model')
 _args = parser.parse_args()
 
 if __name__ == "__main__":
