@@ -51,7 +51,7 @@ class App:
                     with gr.Row():
                         input_file = gr.Files(type="filepath", label="Upload File here")
                     with gr.Row():
-                        dd_model = gr.Dropdown(choices=self.whisper_inf.available_models, value="large-v3",
+                        dd_model = gr.Dropdown(choices=self.whisper_inf.available_models, value="large-v2",
                                                label="Model")
                         dd_lang = gr.Dropdown(choices=["Automatic Detection"] + self.whisper_inf.available_langs,
                                               value="Automatic Detection", label="Language")
@@ -110,7 +110,7 @@ class App:
                             tb_title = gr.Label(label="Youtube Title")
                             tb_description = gr.Textbox(label="Youtube Description", max_lines=15)
                     with gr.Row():
-                        dd_model = gr.Dropdown(choices=self.whisper_inf.available_models, value="large-v3",
+                        dd_model = gr.Dropdown(choices=self.whisper_inf.available_models, value="large-v2",
                                                label="Model")
                         dd_lang = gr.Dropdown(choices=["Automatic Detection"] + self.whisper_inf.available_langs,
                                               value="Automatic Detection", label="Language")
@@ -166,7 +166,7 @@ class App:
                     with gr.Row():
                         mic_input = gr.Microphone(label="Record with Mic", type="filepath", interactive=True)
                     with gr.Row():
-                        dd_model = gr.Dropdown(choices=self.whisper_inf.available_models, value="large-v3",
+                        dd_model = gr.Dropdown(choices=self.whisper_inf.available_models, value="large-v2",
                                                label="Model")
                         dd_lang = gr.Dropdown(choices=["Automatic Detection"] + self.whisper_inf.available_langs,
                                               value="Automatic Detection", label="Language")
