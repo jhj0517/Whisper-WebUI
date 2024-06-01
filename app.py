@@ -1,6 +1,7 @@
 import gradio as gr
 import os
 import argparse
+import webbrowser
 
 from modules.whisper_Inference import WhisperInference
 from modules.faster_whisper_inference import FasterWhisperInference
@@ -60,8 +61,15 @@ class App:
                         cb_translate = gr.Checkbox(value=False, label="Translate to English?", interactive=True)
                     with gr.Row():
                         cb_timestamp = gr.Checkbox(value=True, label="Add a timestamp to the end of the filename", interactive=True)
-                    with gr.Accordion("Advanced_Parameters", open=False):
+                    with gr.Accordion("VAD Options", open=False, visible=not self.args.disable_faster_whisper):
                         cb_vad_filter = gr.Checkbox(label="Enable Silero VAD Filter", value=False, interactive=True)
+                        sd_threshold = gr.Slider(minimum=0.0, maximum=1.0, step=0.01, label="Speech Threshold", value=0.5)
+                        nb_min_speech_duration_ms = gr.Number(label="Minimum Speech Duration (ms)", precision=0, value=250)
+                        nb_max_speech_duration_s = gr.Number(label="Maximum Speech Duration (s)", value=9999)
+                        nb_min_silence_duration_ms = gr.Number(label="Minimum Silence Duration (ms)", precision=0, value=2000)
+                        nb_window_size_sample = gr.Number(label="Window Size (samples)", precision=0, value=1024)
+                        nb_speech_pad_ms = gr.Number(label="Speech Padding (ms)", precision=0, value=400)
+                    with gr.Accordion("Advanced_Parameters", open=False):
                         nb_beam_size = gr.Number(label="Beam Size", value=1, precision=0, interactive=True)
                         nb_log_prob_threshold = gr.Number(label="Log Probability Threshold", value=-1.0, interactive=True)
                         nb_no_speech_threshold = gr.Number(label="No Speech Threshold", value=0.6, interactive=True)
@@ -93,7 +101,14 @@ class App:
                                                              initial_prompt=tb_initial_prompt,
                                                              temperature=sd_temperature,
                                                              compression_ratio_threshold=nb_compression_ratio_threshold,
-                                                             vad_filter=cb_vad_filter)
+                                                             vad_filter=cb_vad_filter,
+                                                             threshold=sd_threshold,
+                                                             min_speech_duration_ms=nb_min_speech_duration_ms,
+                                                             max_speech_duration_s=nb_max_speech_duration_s,
+                                                             min_silence_duration_ms=nb_min_silence_duration_ms,
+                                                             window_size_sample=nb_window_size_sample,
+                                                             speech_pad_ms=nb_speech_pad_ms)
+
                     btn_run.click(fn=self.whisper_inf.transcribe_file,
                                   inputs=params + whisper_params.to_list(),
                                   outputs=[tb_indicator, files_subtitles])
@@ -120,8 +135,15 @@ class App:
                     with gr.Row():
                         cb_timestamp = gr.Checkbox(value=True, label="Add a timestamp to the end of the filename",
                                                    interactive=True)
-                    with gr.Accordion("Advanced_Parameters", open=False):
+                    with gr.Accordion("VAD Options", open=False, visible=not self.args.disable_faster_whisper):
                         cb_vad_filter = gr.Checkbox(label="Enable Silero VAD Filter", value=False, interactive=True)
+                        sd_threshold = gr.Slider(minimum=0.0, maximum=1.0, step=0.01, label="Speech Threshold", value=0.5)
+                        nb_min_speech_duration_ms = gr.Number(label="Minimum Speech Duration (ms)", precision=0, value=250)
+                        nb_max_speech_duration_s = gr.Number(label="Maximum Speech Duration (s)", value=9999)
+                        nb_min_silence_duration_ms = gr.Number(label="Minimum Silence Duration (ms)", precision=0, value=2000)
+                        nb_window_size_sample = gr.Number(label="Window Size (samples)", precision=0, value=1024)
+                        nb_speech_pad_ms = gr.Number(label="Speech Padding (ms)", precision=0, value=400)
+                    with gr.Accordion("Advanced_Parameters", open=False):
                         nb_beam_size = gr.Number(label="Beam Size", value=1, precision=0, interactive=True)
                         nb_log_prob_threshold = gr.Number(label="Log Probability Threshold", value=-1.0, interactive=True)
                         nb_no_speech_threshold = gr.Number(label="No Speech Threshold", value=0.6, interactive=True)
@@ -153,7 +175,13 @@ class App:
                                                              initial_prompt=tb_initial_prompt,
                                                              temperature=sd_temperature,
                                                              compression_ratio_threshold=nb_compression_ratio_threshold,
-                                                             vad_filter=cb_vad_filter)
+                                                             vad_filter=cb_vad_filter,
+                                                             threshold=sd_threshold,
+                                                             min_speech_duration_ms=nb_min_speech_duration_ms,
+                                                             max_speech_duration_s=nb_max_speech_duration_s,
+                                                             min_silence_duration_ms=nb_min_silence_duration_ms,
+                                                             window_size_sample=nb_window_size_sample,
+                                                             speech_pad_ms=nb_speech_pad_ms)
                     btn_run.click(fn=self.whisper_inf.transcribe_youtube,
                                   inputs=params + whisper_params.to_list(),
                                   outputs=[tb_indicator, files_subtitles])
@@ -173,8 +201,15 @@ class App:
                         dd_file_format = gr.Dropdown(["SRT", "WebVTT", "txt"], value="SRT", label="File Format")
                     with gr.Row():
                         cb_translate = gr.Checkbox(value=False, label="Translate to English?", interactive=True)
-                    with gr.Accordion("Advanced_Parameters", open=False):
+                    with gr.Accordion("VAD Options", open=False, visible=not self.args.disable_faster_whisper):
                         cb_vad_filter = gr.Checkbox(label="Enable Silero VAD Filter", value=False, interactive=True)
+                        sd_threshold = gr.Slider(minimum=0.0, maximum=1.0, step=0.01, label="Speech Threshold", value=0.5)
+                        nb_min_speech_duration_ms = gr.Number(label="Minimum Speech Duration (ms)", precision=0, value=250)
+                        nb_max_speech_duration_s = gr.Number(label="Maximum Speech Duration (s)", value=9999)
+                        nb_min_silence_duration_ms = gr.Number(label="Minimum Silence Duration (ms)", precision=0, value=2000)
+                        nb_window_size_sample = gr.Number(label="Window Size (samples)", precision=0, value=1024)
+                        nb_speech_pad_ms = gr.Number(label="Speech Padding (ms)", precision=0, value=400)
+                    with gr.Accordion("Advanced_Parameters", open=False):
                         nb_beam_size = gr.Number(label="Beam Size", value=1, precision=0, interactive=True)
                         nb_log_prob_threshold = gr.Number(label="Log Probability Threshold", value=-1.0, interactive=True)
                         nb_no_speech_threshold = gr.Number(label="No Speech Threshold", value=0.6, interactive=True)
@@ -205,7 +240,13 @@ class App:
                                                              initial_prompt=tb_initial_prompt,
                                                              temperature=sd_temperature,
                                                              compression_ratio_threshold=nb_compression_ratio_threshold,
-                                                             vad_filter=cb_vad_filter)
+                                                             vad_filter=cb_vad_filter,
+                                                             threshold=sd_threshold,
+                                                             min_speech_duration_ms=nb_min_speech_duration_ms,
+                                                             max_speech_duration_s=nb_max_speech_duration_s,
+                                                             min_silence_duration_ms=nb_min_silence_duration_ms,
+                                                             window_size_sample=nb_window_size_sample,
+                                                             speech_pad_ms=nb_speech_pad_ms)
                     btn_run.click(fn=self.whisper_inf.transcribe_mic,
                                   inputs=params + whisper_params.to_list(),
                                   outputs=[tb_indicator, files_subtitles])
@@ -284,6 +325,7 @@ class App:
             launch_args['server_port'] = self.args.server_port
         if self.args.username and self.args.password:
             launch_args['auth'] = (self.args.username, self.args.password)
+
         self.app.queue(api_open=False).launch(**launch_args)
 
 

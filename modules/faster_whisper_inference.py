@@ -6,6 +6,7 @@ from typing import BinaryIO, Union, Tuple, List
 from datetime import datetime
 
 import faster_whisper
+from faster_whisper.vad import VadOptions
 import ctranslate2
 import whisper
 import torch
@@ -260,6 +261,15 @@ class FasterWhisperInference(BaseInterface):
             language_code_dict = {value: key for key, value in whisper.tokenizer.LANGUAGES.items()}
             params.lang = language_code_dict[params.lang]
 
+        vad_options = VadOptions(
+            threshold=params.threshold,
+            min_speech_duration_ms=params.min_speech_duration_ms,
+            max_speech_duration_s=params.max_speech_duration_s,
+            min_silence_duration_ms=params.min_silence_duration_ms,
+            window_size_samples=params.window_size_samples,
+            speech_pad_ms=params.speech_pad_ms
+        )
+
         segments, info = self.model.transcribe(
             audio=audio,
             language=params.lang,
@@ -272,6 +282,7 @@ class FasterWhisperInference(BaseInterface):
             temperature=params.temperature,
             compression_ratio_threshold=params.compression_ratio_threshold,
             vad_filter=params.vad_filter,
+            vad_parameters=vad_options
         )
         progress(0, desc="Loading audio..")
 

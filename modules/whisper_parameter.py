@@ -19,6 +19,12 @@ class WhisperGradioComponents:
     temperature: gr.Slider
     compression_ratio_threshold: gr.Number
     vad_filter: gr.Checkbox
+    threshold: gr.Slider
+    min_speech_duration_ms: gr.Number
+    max_speech_duration_s: gr.Number
+    min_silence_duration_ms: gr.Number
+    window_size_sample: gr.Number
+    speech_pad_ms: gr.Number
     """
     A data class for Gradio components of the Whisper Parameters. Use "before" Gradio pre-processing.
     See more about Gradio pre-processing: https://www.gradio.app/docs/components
@@ -78,6 +84,33 @@ class WhisperGradioComponents:
         Enable the voice activity detection (VAD) to filter out parts of the audio
         without speech. This step is using the Silero VAD model
         https://github.com/snakers4/silero-vad.
+        
+    threshold: gr.Slider
+        This parameter is related with Silero VAD. Speech threshold. 
+        Silero VAD outputs speech probabilities for each audio chunk,
+        probabilities ABOVE this value are considered as SPEECH. It is better to tune this
+        parameter for each dataset separately, but "lazy" 0.5 is pretty good for most datasets.
+        
+    min_speech_duration_ms: gr.Number
+        This parameter is related with Silero VAD. Final speech chunks shorter min_speech_duration_ms are thrown out.
+        
+    max_speech_duration_s: gr.Number
+        This parameter is related with Silero VAD. Maximum duration of speech chunks in seconds. Chunks longer
+        than max_speech_duration_s will be split at the timestamp of the last silence that
+        lasts more than 100ms (if any), to prevent aggressive cutting. Otherwise, they will be
+        split aggressively just before max_speech_duration_s.
+    
+    min_silence_duration_ms: gr.Number
+        This parameter is related with Silero VAD. In the end of each speech chunk wait for min_silence_duration_ms
+        before separating it
+        
+    window_size_samples: gr.Number
+        This parameter is related with Silero VAD. Audio chunks of window_size_samples size are fed to the silero VAD model.
+        WARNING! Silero VAD models were trained using 512, 1024, 1536 samples for 16000 sample rate.
+        Values other than these may affect model performance!!
+        
+    speech_pad_ms: gr.Number
+        This parameter is related with Silero VAD. Final speech chunks are padded by speech_pad_ms each side    
     """
 
     def to_list(self) -> list:
@@ -108,6 +141,12 @@ class WhisperValues:
     temperature: float
     compression_ratio_threshold: float
     vad_filter: bool
+    threshold: float
+    min_speech_duration_ms: int
+    max_speech_duration_s: float
+    min_silence_duration_ms: int
+    window_size_samples: int
+    speech_pad_ms: int
     """
     A data class to use Whisper parameters. Use "after" Gradio pre-processing.
     See more about Gradio pre-processing: : https://www.gradio.app/docs/components
