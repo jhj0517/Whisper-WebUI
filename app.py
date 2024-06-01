@@ -325,6 +325,7 @@ class App:
             launch_args['server_port'] = self.args.server_port
         if self.args.username and self.args.password:
             launch_args['auth'] = (self.args.username, self.args.password)
+        launch_args['inbrowser'] = True
 
         self.app.queue(api_open=False).launch(**launch_args)
 
