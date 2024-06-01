@@ -1,6 +1,7 @@
 import gradio as gr
 import os
 import argparse
+import webbrowser
 
 from modules.whisper_Inference import WhisperInference
 from modules.faster_whisper_inference import FasterWhisperInference
@@ -60,8 +61,8 @@ class App:
                         cb_translate = gr.Checkbox(value=False, label="Translate to English?", interactive=True)
                     with gr.Row():
                         cb_timestamp = gr.Checkbox(value=True, label="Add a timestamp to the end of the filename", interactive=True)
-                    with gr.Accordion("Silero VAD Options", open=False):
-                        cb_vad_filter = gr.Checkbox(label="Enable VAD Filter", value=False, interactive=True)
+                    with gr.Accordion("VAD Options", open=False):
+                        cb_vad_filter = gr.Checkbox(label="Enable Silero VAD Filter", value=False, interactive=True)
                         sd_threshold = gr.Slider(minimum=0.0, maximum=1.0, step=0.01, label="Speech Threshold", value=0.5)
                         nb_min_speech_duration_ms = gr.Number(label="Minimum Speech Duration (ms)", precision=0, value=250)
                         nb_max_speech_duration_s = gr.Number(label="Maximum Speech Duration (s)", value=9999)
@@ -134,8 +135,8 @@ class App:
                     with gr.Row():
                         cb_timestamp = gr.Checkbox(value=True, label="Add a timestamp to the end of the filename",
                                                    interactive=True)
-                    with gr.Accordion("Silero VAD Options", open=False):
-                        cb_vad_filter = gr.Checkbox(label="Enable VAD Filter", value=False, interactive=True)
+                    with gr.Accordion("VAD Options", open=False):
+                        cb_vad_filter = gr.Checkbox(label="Enable Silero VAD Filter", value=False, interactive=True)
                         sd_threshold = gr.Slider(minimum=0.0, maximum=1.0, step=0.01, label="Speech Threshold", value=0.5)
                         nb_min_speech_duration_ms = gr.Number(label="Minimum Speech Duration (ms)", precision=0, value=250)
                         nb_max_speech_duration_s = gr.Number(label="Maximum Speech Duration (s)", value=9999)
@@ -200,8 +201,8 @@ class App:
                         dd_file_format = gr.Dropdown(["SRT", "WebVTT", "txt"], value="SRT", label="File Format")
                     with gr.Row():
                         cb_translate = gr.Checkbox(value=False, label="Translate to English?", interactive=True)
-                    with gr.Accordion("Silero VAD Options", open=False):
-                        cb_vad_filter = gr.Checkbox(label="Enable VAD Filter", value=False, interactive=True)
+                    with gr.Accordion("VAD Options", open=False):
+                        cb_vad_filter = gr.Checkbox(label="Enable Silero VAD Filter", value=False, interactive=True)
                         sd_threshold = gr.Slider(minimum=0.0, maximum=1.0, step=0.01, label="Speech Threshold", value=0.5)
                         nb_min_speech_duration_ms = gr.Number(label="Minimum Speech Duration (ms)", precision=0, value=250)
                         nb_max_speech_duration_s = gr.Number(label="Maximum Speech Duration (s)", value=9999)
@@ -324,6 +325,7 @@ class App:
             launch_args['server_port'] = self.args.server_port
         if self.args.username and self.args.password:
             launch_args['auth'] = (self.args.username, self.args.password)
+
         self.app.queue(api_open=False).launch(**launch_args)
 
 
