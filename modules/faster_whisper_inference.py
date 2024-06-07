@@ -24,6 +24,7 @@ class FasterWhisperInference(BaseInterface):
     def __init__(self):
         super().__init__()
         self.model_dir = os.path.join("models", "Whisper", "faster-whisper")
+        os.makedirs(self.model_dir, exist_ok=True)
         self.current_model_size = None
         self.model = None
         self.model_paths = self.get_model_paths()
