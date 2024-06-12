@@ -99,3 +99,12 @@ This is Whisper's original VRAM usage table for models.
 
 `.en` models are for English only, and the cool thing is that you can use the `Translate to English` option from the "large" models!
 
+## TODO🗓
+
+- [x] Add DeepL API translation
+- [x] Add NLLB Model translation
+- [x] Integrate with faster-whisper
+- [ ] Integrate with insanely-fast-whisper
+- [ ] Integrate with whisperX
+
+
