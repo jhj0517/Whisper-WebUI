@@ -21,7 +21,6 @@ class FasterWhisperInference(WhisperBase):
         super().__init__(
             model_dir=os.path.join("models", "Whisper", "faster-whisper")
         )
-        self.model_dir = os.path.join("models", "Whisper", "faster-whisper")
         self.model_paths = self.get_model_paths()
         self.available_models = self.model_paths.keys()
         self.available_compute_types = ctranslate2.get_supported_compute_types(
