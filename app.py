@@ -1,7 +1,6 @@
 import gradio as gr
 import os
 import argparse
-import webbrowser
 
 from modules.whisper_Inference import WhisperInference
 from modules.faster_whisper_inference import FasterWhisperInference
@@ -289,7 +288,7 @@ class App:
 
                     with gr.TabItem("NLLB"):  # sub tab2
                         with gr.Row():
-                            dd_nllb_model = gr.Dropdown(label="Model", value=self.nllb_inf.default_model_size,
+                            dd_nllb_model = gr.Dropdown(label="Model", value="facebook/nllb-200-1.3B",
                                                         choices=self.nllb_inf.available_models)
                             dd_nllb_sourcelang = gr.Dropdown(label="Source Language",
                                                              choices=self.nllb_inf.available_source_langs)
