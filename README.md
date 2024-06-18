@@ -22,7 +22,6 @@ If you wish to try this on Colab, you can do it in [here](https://colab.research
   - Translate subtitle files using DeepL API
 
 # Installation and Running
-- ## On Windows OS
 ### Prerequisite
 To run this WebUI, you need to have `git`, `python` version 3.8 ~ 3.10, `CUDA` version above 12.0 and `FFmpeg`.
 
@@ -35,17 +34,15 @@ Please follow the links below to install the necessary software:
 After installing FFmpeg, **make sure to add the `FFmpeg/bin` folder to your system PATH!**
 
 ### Automatic Installation
-If you have satisfied the prerequisites listed above, you are now ready to start Whisper-WebUI.
 
-1. Run `Install.bat` from Windows Explorer as a regular, non-administrator user. 
-2. After installation, run the `start-webui.bat`. 
-3. Open your web browser and go to `http://localhost:7860`
+1. Download `Whisper-WebUI.zip` with the file corresponding to your OS from [v1.0.0](https://github.com/jhj0517/Whisper-WebUI/releases/tag/v1.0.0) and extract its contents. 
+2. Run `install.bat` or `install.sh` to install dependencies. (This will create a `venv` directory and install dependencies there.)
+3. Start WebUI with `start-webui.bat` or `start-webui.sh`
+4. To update the WebUI, run `update.bat` or `update.sh`
 
-( If you're running another Web-UI, it will be hosted on a different port , such as `localhost:7861`, `localhost:7862`, and so on )
+And you can also run the project with command line arguments if you like by running `start-webui.bat`, see [wiki](https://github.com/jhj0517/Whisper-WebUI/wiki/Command-Line-Arguments) for a guide to arguments.
 
-And you can also run the project with command line arguments if you like by running `user-start-webui.bat`, see [wiki](https://github.com/jhj0517/Whisper-WebUI/wiki/Command-Line-Arguments) for a guide to arguments.
-
-- ## Docker ( On Other OS )
+- ## Or Run with Docker 
 
 1. Build the image
 
