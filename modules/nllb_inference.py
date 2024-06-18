@@ -1,141 +1,49 @@
 from transformers import AutoTokenizer, AutoModelForSeq2SeqLM, pipeline
 import gradio as gr
-import torch
 import os
-from datetime import datetime
 
-from .base_interface import BaseInterface
-from modules.subtitle_manager import *
-
-DEFAULT_MODEL_SIZE = "facebook/nllb-200-1.3B"
-NLLB_MODELS = ["facebook/nllb-200-3.3B", "facebook/nllb-200-1.3B", "facebook/nllb-200-distilled-600M"]
+from modules.translation_base import TranslationBase
 
 
-class NLLBInference(BaseInterface):
+class NLLBInference(TranslationBase):
     def __init__(self):
-        super().__init__()
-        self.default_model_size = DEFAULT_MODEL_SIZE
-        self.current_model_size = None
-        self.model = None
+        super().__init__(
+            model_dir=os.path.join("models", "NLLB")
+        )
         self.tokenizer = None
-        self.available_models = NLLB_MODELS
+        self.available_models = ["facebook/nllb-200-3.3B", "facebook/nllb-200-1.3B", "facebook/nllb-200-distilled-600M"]
         self.available_source_langs = list(NLLB_AVAILABLE_LANGS.keys())
         self.available_target_langs = list(NLLB_AVAILABLE_LANGS.keys())
-        self.device = 0 if torch.cuda.is_available() else -1
         self.pipeline = None
 
-    def translate_text(self, text):
+    def translate(self,
+                  text: str
+                  ):
         result = self.pipeline(text)
         return result[0]['translation_text']
 
-    def translate_file(self,
-                       fileobjs: list,
-                       model_size: str,
-                       src_lang: str,
-                       tgt_lang: str,
-                       add_timestamp: bool,
-                       progress=gr.Progress()) -> list:
-        """
-        Translate subtitle file from source language to target language
-
-        Parameters
-        ----------
-        fileobjs: list
-            List of files to transcribe from gr.Files()
-        model_size: str
-            Whisper model size from gr.Dropdown()
-        src_lang: str
-            Source language of the file to translate from gr.Dropdown()
-        tgt_lang: str
-            Target language of the file to translate from gr.Dropdown()
-        add_timestamp: bool
-            Boolean value from gr.Checkbox() that determines whether to add a timestamp at the end of the filename.
-        progress: gr.Progress
-            Indicator to show progress directly in gradio.
-            I use a forked version of whisper for this. To see more info : https://github.com/jhj0517/jhj0517-whisper/tree/add-progress-callback
-
-        Returns
-        ----------
-        A List of
-        String to return to gr.Textbox()
-        Files to return to gr.Files()
-        """
-        try:
-            if model_size != self.current_model_size or self.model is None:
-                print("\nInitializing NLLB Model..\n")
-                progress(0, desc="Initializing NLLB Model..")
-                self.current_model_size = model_size
-                self.model = AutoModelForSeq2SeqLM.from_pretrained(pretrained_model_name_or_path=model_size,
-                                                                   cache_dir=os.path.join("models", "NLLB"))
-                self.tokenizer = AutoTokenizer.from_pretrained(pretrained_model_name_or_path=model_size,
-                                                               cache_dir=os.path.join("models", "NLLB", "tokenizers"))
-
-            src_lang = NLLB_AVAILABLE_LANGS[src_lang]
-            tgt_lang = NLLB_AVAILABLE_LANGS[tgt_lang]
-
-            self.pipeline = pipeline("translation",
-                                     model=self.model,
-                                     tokenizer=self.tokenizer,
-                                     src_lang=src_lang,
-                                     tgt_lang=tgt_lang,
-                                     device=self.device)
-
-            files_info = {}
-            for fileobj in fileobjs:
-                file_path = fileobj.name
-                file_name, file_ext = os.path.splitext(os.path.basename(fileobj.name))
-                if file_ext == ".srt":
-                    parsed_dicts = parse_srt(file_path=file_path)
-                    total_progress = len(parsed_dicts)
-                    for index, dic in enumerate(parsed_dicts):
-                        progress(index / total_progress, desc="Translating..")
-                        translated_text = self.translate_text(dic["sentence"])
-                        dic["sentence"] = translated_text
-                    subtitle = get_serialized_srt(parsed_dicts)
-
-                    timestamp = datetime.now().strftime("%m%d%H%M%S")
-                    if add_timestamp:
-                        output_path = os.path.join("outputs", "translations", f"{file_name}-{timestamp}")
-                    else:
-                        output_path = os.path.join("outputs", "translations", f"{file_name}")
-                    output_path += '.srt'
-
-                    write_file(subtitle, output_path)
-
-                elif file_ext == ".vtt":
-                    parsed_dicts = parse_vtt(file_path=file_path)
-                    total_progress = len(parsed_dicts)
-                    for index, dic in enumerate(parsed_dicts):
-                        progress(index / total_progress, desc="Translating..")
-                        translated_text = self.translate_text(dic["sentence"])
-                        dic["sentence"] = translated_text
-                    subtitle = get_serialized_vtt(parsed_dicts)
-
-                    timestamp = datetime.now().strftime("%m%d%H%M%S")
-                    if add_timestamp:
-                        output_path = os.path.join("outputs", "translations", f"{file_name}-{timestamp}")
-                    else:
-                        output_path = os.path.join("outputs", "translations", f"{file_name}")
-                    output_path += '.vtt'
-
-                    write_file(subtitle, output_path)
-
-                files_info[file_name] = subtitle
-
-            total_result = ''
-            for file_name, subtitle in files_info.items():
-                total_result += '------------------------------------\n'
-                total_result += f'{file_name}\n\n'
-                total_result += f'{subtitle}'
-
-            gr_str = f"Done! Subtitle is in the outputs/translation folder.\n\n{total_result}"
-            return [gr_str, output_path]
-        except Exception as e:
-            print(f"Error: {str(e)}")
-        finally:
-            self.release_cuda_memory()
-            self.remove_input_files([fileobj.name for fileobj in fileobjs])
-
+    def update_model(self,
+                     model_size: str,
+                     src_lang: str,
+                     tgt_lang: str,
+                     progress: gr.Progress
+                     ):
+        if model_size != self.current_model_size or self.model is None:
+            print("\nInitializing NLLB Model..\n")
+            progress(0, desc="Initializing NLLB Model..")
+            self.current_model_size = model_size
+            self.model = AutoModelForSeq2SeqLM.from_pretrained(pretrained_model_name_or_path=model_size,
+                                                               cache_dir=self.model_dir)
+            self.tokenizer = AutoTokenizer.from_pretrained(pretrained_model_name_or_path=model_size,
+                                                           cache_dir=os.path.join(self.model_dir, "tokenizers"))
+        src_lang = NLLB_AVAILABLE_LANGS[src_lang]
+        tgt_lang = NLLB_AVAILABLE_LANGS[tgt_lang]
+        self.pipeline = pipeline("translation",
+                                 model=self.model,
+                                 tokenizer=self.tokenizer,
+                                 src_lang=src_lang,
+                                 tgt_lang=tgt_lang,
+                                 device=self.device)
 
 NLLB_AVAILABLE_LANGS = {
     "Acehnese (Arabic script)": "ace_Arab",
