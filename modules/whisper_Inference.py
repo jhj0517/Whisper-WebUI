@@ -29,7 +29,6 @@ class WhisperInference(BaseInterface):
             self.device = "mps"
         else:
             self.device = "cpu"
-        self.device = "cuda" if torch.cuda.is_available() else "cpu"
         self.available_compute_types = ["float16", "float32"]
         self.current_compute_type = "float16" if self.device == "cuda" else "float32"
         self.model_dir = os.path.join("models", "Whisper")
