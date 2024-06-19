@@ -23,7 +23,7 @@ If you wish to try this on Colab, you can do it in [here](https://colab.research
 
 # Installation and Running
 ### Prerequisite
-To run this WebUI, you need to have `git`, `python` version 3.8 ~ 3.10, `FFmpeg` and `CUDA` version above 12.0 (only if you use NVIDIA GPU) 
+To run this WebUI, you need to have `git`, `python` version 3.8 ~ 3.10, `FFmpeg` and `CUDA` (if you use NVIDIA GPU) version above 12.0 
 
 Please follow the links below to install the necessary software:
 - git : [https://git-scm.com/downloads](https://git-scm.com/downloads)
