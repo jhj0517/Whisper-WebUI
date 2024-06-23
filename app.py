@@ -4,6 +4,7 @@ import argparse
 
 from modules.whisper_Inference import WhisperInference
 from modules.faster_whisper_inference import FasterWhisperInference
+from modules.insanely_fast_whisper_inference import InsanelyFastWhisperInference
 from modules.nllb_inference import NLLBInference
 from ui.htmls import *
 from modules.youtube_manager import get_ytmetas
@@ -30,9 +31,9 @@ class App:
         elif whisper_type in ["whisper"]:
             whisper_inf = WhisperInference()
             whisper_inf.model_dir = self.args.whisper_model_dir
-        elif whisper_type in ["insanely_whisper", "insanely-whisper", "insanelywhisper"]:
-            whisper_inf = WhisperInference()
-            whisper_inf.model_dir = self.args.whisper_model_dir
+        elif whisper_type in ["insanely_fast_whisper", "insanely-fast-whisper", "insanelyfastwhisper"]:
+            whisper_inf = InsanelyFastWhisperInference()
+            whisper_inf.model_dir = self.args.insanely_fast_whisper_model_dir
         else:
             whisper_inf = FasterWhisperInference()
             whisper_inf.model_dir = self.args.faster_whisper_model_dir
