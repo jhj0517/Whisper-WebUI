@@ -9,6 +9,8 @@ import gradio as gr
 from huggingface_hub import hf_hub_download
 import whisper
 
+from rich.progress import Progress, TimeElapsedColumn, BarColumn, TextColumn
+
 from modules.whisper_parameter import *
 from modules.whisper_base import WhisperBase
 
@@ -55,14 +57,32 @@ class InsanelyFastWhisperInference(WhisperBase):
 
         if params.lang == "Automatic Detection":
             params.lang = None
+        else:
+            language_code_dict = {value: key for key, value in whisper.tokenizer.LANGUAGES.items()}
+            params.lang = language_code_dict[params.lang]
 
-        progress(0, desc="Transcribing...")
-        segments = self.model(
-            inputs=audio,
-            chunk_length_s=30,
-            batch_size=24,
-            return_timestamps=True,
-        )
+        progress(0, desc="Transcribing...Progress is not shown in insanely-fast-whisper.")
+        with Progress(
+                TextColumn("[progress.description]{task.description}"),
+                BarColumn(style="yellow1", pulse_style="white"),
+                TimeElapsedColumn(),
+        ) as progress:
+            progress.add_task("[yellow]Transcribing...", total=None)
+
+            segments = self.model(
+                inputs=audio,
+                return_timestamps=True,
+                chunk_length_s=30,
+                batch_size=24,
+                generate_kwargs={
+                    "language": params.lang,
+                    "task": "translate" if params.is_translate and self.current_model_size in self.translatable_models else "transcribe",
+                    "no_speech_threshold": params.no_speech_threshold,
+                    "temperature": params.temperature,
+                    "compression_ratio_threshold": params.compression_ratio_threshold
+                }
+            )
+
         segments_result = self.format_result(
             transcribed_result=segments,
         )
@@ -98,7 +118,6 @@ class InsanelyFastWhisperInference(WhisperBase):
 
         self.current_compute_type = compute_type
         self.current_model_size = model_size
-
         self.model = pipeline(
             "automatic-speech-recognition",
             model=os.path.join(self.model_dir, model_size),
@@ -118,8 +137,6 @@ class InsanelyFastWhisperInference(WhisperBase):
         ----------
         transcribed_result: dict
             Transcription result of the insanely_fast_whisper
-        progress: gr.Progress
-            Indicator to show progress directly in gradio.
 
         Returns
         ----------
@@ -129,6 +146,8 @@ class InsanelyFastWhisperInference(WhisperBase):
         result = transcribed_result["chunks"]
         for item in result:
             start, end = item["timestamp"][0], item["timestamp"][1]
+            if end is None:
+                end = start
             item["start"] = start
             item["end"] = end
         return result
