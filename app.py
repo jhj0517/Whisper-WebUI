@@ -31,7 +31,8 @@ class App:
         elif whisper_type in ["whisper"]:
             whisper_inf = WhisperInference()
             whisper_inf.model_dir = self.args.whisper_model_dir
-        elif whisper_type in ["insanely_fast_whisper", "insanely-fast-whisper", "insanelyfastwhisper"]:
+        elif whisper_type in ["insanely_fast_whisper", "insanely-fast-whisper", "insanelyfastwhisper",
+                              "insanely_faster_whisper", "insanely-faster-whisper", "insanelyfasterwhisper"]:
             whisper_inf = InsanelyFastWhisperInference()
             whisper_inf.model_dir = self.args.insanely_fast_whisper_model_dir
         else:
