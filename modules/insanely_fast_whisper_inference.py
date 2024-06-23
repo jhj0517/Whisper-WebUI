@@ -6,7 +6,8 @@ import torch
 from transformers import pipeline
 from transformers.utils import is_flash_attn_2_available
 import gradio as gr
-import wget
+from huggingface_hub import hf_hub_download
+import whisper
 
 from modules.whisper_parameter import *
 from modules.whisper_base import WhisperBase
@@ -17,6 +18,9 @@ class InsanelyFastWhisperInference(WhisperBase):
         super().__init__(
             model_dir=os.path.join("models", "Whisper", "insanely_fast_whisper")
         )
+        openai_models = whisper.available_models()
+        distil_models = ["distil-large-v2", "distil-large-v3", "distil-medium.en", "distil-small.en"]
+        self.available_models = openai_models + distil_models
         self.available_compute_types = ["float16"]
 
     def transcribe(self,
@@ -151,9 +155,9 @@ class InsanelyFastWhisperInference(WhisperBase):
             "vocab.json",
         ]
 
-        download_host = f"https://huggingface.co/openai/whisper-{model_size}/resolve/main"
+        if model_size.startswith("distil"):
+            repo_id = f"distil-whisper/{model_size}"
+        else:
+            repo_id = f"openai/whisper-{model_size}"
         for item in download_list:
-            wget.download(
-                download_host+"/"+item,
-                download_root
-            )
+            hf_hub_download(repo_id=repo_id, filename=item, local_dir=download_root)
