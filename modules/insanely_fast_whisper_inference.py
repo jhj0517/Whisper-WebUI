@@ -1,20 +1,24 @@
+import os
+import time
+import numpy as np
+from typing import BinaryIO, Union, Tuple, List
+import torch
+import transformers
+from transformers import pipeline
+from transformers.utils import is_flash_attn_2_available
 import whisper
 import gradio as gr
-import time
-import os
-from typing import BinaryIO, Union, Tuple, List
-import numpy as np
-import torch
 
-from modules.whisper_base import WhisperBase
 from modules.whisper_parameter import *
+from modules.whisper_base import WhisperBase
 
 
 class InsanelyFastWhisperInference(WhisperBase):
     def __init__(self):
         super().__init__(
-            model_dir=os.path.join("models", "Whisper")
+            model_dir=os.path.join("models", "Whisper", "insanely_fast_whisper")
         )
+        self.available_compute_types = ["float16"]
 
     def transcribe(self,
                    audio: Union[str, np.ndarray, torch.Tensor],
@@ -52,21 +56,14 @@ class InsanelyFastWhisperInference(WhisperBase):
         def progress_callback(progress_value):
             progress(progress_value, desc="Transcribing..")
 
-        segments_result = self.model.transcribe(audio=audio,
-                                                language=params.lang,
-                                                verbose=False,
-                                                beam_size=params.beam_size,
-                                                logprob_threshold=params.log_prob_threshold,
-                                                no_speech_threshold=params.no_speech_threshold,
-                                                task="translate" if params.is_translate and self.current_model_size in self.translatable_models else "transcribe",
-                                                fp16=True if params.compute_type == "float16" else False,
-                                                best_of=params.best_of,
-                                                patience=params.patience,
-                                                temperature=params.temperature,
-                                                compression_ratio_threshold=params.compression_ratio_threshold,
-                                                progress_callback=progress_callback,)["segments"]
+        segments_result = self.model(
+            inputs=audio,
+            chunk_length_s=30,
+            batch_size=24,
+            return_timestamps=True,
+        )
+        segments_result = self.format_result(transcribed_result=segments_result)
         elapsed_time = time.time() - start_time
-
         return segments_result, elapsed_time
 
     def update_model(self,
@@ -90,8 +87,34 @@ class InsanelyFastWhisperInference(WhisperBase):
         progress(0, desc="Initializing Model..")
         self.current_compute_type = compute_type
         self.current_model_size = model_size
-        self.model = whisper.load_model(
-            name=model_size,
+
+        self.model = pipeline(
+            "automatic-speech-recognition",
+            model=os.path.join(self.model_dir, model_size),
+            torch_dtype=self.current_compute_type,
             device=self.device,
-            download_root=self.model_dir
+            model_kwargs={"attn_implementation": "flash_attention_2"} if is_flash_attn_2_available() else {"attn_implementation": "sdpa"},
         )
+
+    @staticmethod
+    def format_result(transcribed_result: dict) -> List[dict]:
+        """
+        Format the transcription result of insanely_fast_whisper as the same with other implementation.
+
+        Parameters
+        ----------
+        transcribed_result: dict
+            Transcription result of the insanely_fast_whisper
+
+        Returns
+        ----------
+        result: List[dict]
+            Formatted result as the same with other implementation
+        """
+        result = transcribed_result["chunks"]
+        for item in result:
+            start, end = item["timestamp"][0], item["timestamp"][1]
+            item["start"] = start
+            item["end"] = end
+        return result
+
