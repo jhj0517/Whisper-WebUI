@@ -5,3 +5,4 @@ faster-whisper==1.0.2
 transformers
 gradio==4.29.0
 pytube
+wget==3.2

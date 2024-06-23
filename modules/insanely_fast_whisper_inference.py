@@ -3,11 +3,10 @@ import time
 import numpy as np
 from typing import BinaryIO, Union, Tuple, List
 import torch
-import transformers
 from transformers import pipeline
 from transformers.utils import is_flash_attn_2_available
-import whisper
 import gradio as gr
+import wget
 
 from modules.whisper_parameter import *
 from modules.whisper_base import WhisperBase
@@ -53,16 +52,16 @@ class InsanelyFastWhisperInference(WhisperBase):
         if params.lang == "Automatic Detection":
             params.lang = None
 
-        def progress_callback(progress_value):
-            progress(progress_value, desc="Transcribing..")
-
-        segments_result = self.model(
+        progress(0, desc="Transcribing...")
+        segments = self.model(
             inputs=audio,
             chunk_length_s=30,
             batch_size=24,
             return_timestamps=True,
         )
-        segments_result = self.format_result(transcribed_result=segments_result)
+        segments_result = self.format_result(
+            transcribed_result=segments,
+        )
         elapsed_time = time.time() - start_time
         return segments_result, elapsed_time
 
@@ -85,6 +84,14 @@ class InsanelyFastWhisperInference(WhisperBase):
             Indicator to show progress directly in gradio.
         """
         progress(0, desc="Initializing Model..")
+        model_path = os.path.join(self.model_dir, model_size)
+        if not os.path.isdir(model_path) or not os.listdir(model_path):
+            self.download_model(
+                model_size=model_size,
+                download_root=model_path,
+                progress=progress
+            )
+
         self.current_compute_type = compute_type
         self.current_model_size = model_size
 
@@ -97,7 +104,9 @@ class InsanelyFastWhisperInference(WhisperBase):
         )
 
     @staticmethod
-    def format_result(transcribed_result: dict) -> List[dict]:
+    def format_result(
+        transcribed_result: dict
+    ) -> List[dict]:
         """
         Format the transcription result of insanely_fast_whisper as the same with other implementation.
 
@@ -105,6 +114,8 @@ class InsanelyFastWhisperInference(WhisperBase):
         ----------
         transcribed_result: dict
             Transcription result of the insanely_fast_whisper
+        progress: gr.Progress
+            Indicator to show progress directly in gradio.
 
         Returns
         ----------
@@ -118,3 +129,31 @@ class InsanelyFastWhisperInference(WhisperBase):
             item["end"] = end
         return result
 
+    @staticmethod
+    def download_model(
+        model_size: str,
+        download_root: str,
+        progress: gr.Progress
+    ):
+        progress(0, 'Initializing model..')
+        print(f'Downloading {model_size} to "{download_root}"....')
+
+        os.makedirs(download_root, exist_ok=True)
+        download_list = [
+            "model.safetensors",
+            "config.json",
+            "generation_config.json",
+            "preprocessor_config.json",
+            "tokenizer.json",
+            "tokenizer_config.json",
+            "added_tokens.json",
+            "special_tokens_map.json",
+            "vocab.json",
+        ]
+
+        download_host = f"https://huggingface.co/openai/whisper-{model_size}/resolve/main"
+        for item in download_list:
+            wget.download(
+                download_host+"/"+item,
+                download_root
+            )
