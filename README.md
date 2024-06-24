@@ -7,6 +7,10 @@ A Gradio-based browser interface for [Whisper](https://github.com/openai/whisper
 If you wish to try this on Colab, you can do it in [here](https://colab.research.google.com/github/jhj0517/Whisper-WebUI/blob/master/notebook/whisper-webui.ipynb)!
 
 # Feature
+- Select the Whisper implementation you want to use between :
+   - [openai/whisper](https://github.com/openai/whisper)
+   - [SYSTRAN/faster-whisper](https://github.com/SYSTRAN/faster-whisper) (used by default)
+   - [insanely-fast-whisper](https://github.com/Vaibhavs10/insanely-fast-whisper)
 - Generate subtitles from various sources, including :
   - Files
   - Youtube
@@ -42,7 +46,7 @@ After installing FFmpeg, **make sure to add the `FFmpeg/bin` folder to your syst
 
 And you can also run the project with command line arguments if you like by running `start-webui.bat`, see [wiki](https://github.com/jhj0517/Whisper-WebUI/wiki/Command-Line-Arguments) for a guide to arguments.
 
-- ## Or Run with Docker 
+- ## Running with Docker 
 
 1. Build the image
 
@@ -80,7 +84,8 @@ According to faster-whisper, the efficiency of the optimized whisper model is as
 | openai/whisper    | fp16      | 5         | 4m30s | 11325MB         | 9439MB          |
 | faster-whisper    | fp16      | 5         | 54s   | 4755MB          | 3244MB          |
 
-If you want to use the original Open AI whisper implementation instead of optimized whisper, you can set the command line argument `--disable_faster_whisper` to `True`. See the [wiki](https://github.com/jhj0517/Whisper-WebUI/wiki/Command-Line-Arguments) for more information.
+If you want to use an implementation other than faster-whisper, use `--whisper_type` arg and the repository name.<br>
+Read [wiki](https://github.com/jhj0517/Whisper-WebUI/wiki/Command-Line-Arguments) for more info about CLI args.
 
 ## Available models
 This is Whisper's original VRAM usage table for models.
@@ -101,7 +106,7 @@ This is Whisper's original VRAM usage table for models.
 - [x] Add DeepL API translation
 - [x] Add NLLB Model translation
 - [x] Integrate with faster-whisper
-- [ ] Integrate with insanely-fast-whisper
+- [x] Integrate with insanely-fast-whisper
 - [ ] Integrate with whisperX
 
 
