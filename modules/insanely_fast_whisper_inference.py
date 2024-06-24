@@ -8,7 +8,6 @@ from transformers.utils import is_flash_attn_2_available
 import gradio as gr
 from huggingface_hub import hf_hub_download
 import whisper
-
 from rich.progress import Progress, TimeElapsedColumn, BarColumn, TextColumn
 
 from modules.whisper_parameter import *
@@ -50,7 +49,7 @@ class InsanelyFastWhisperInference(WhisperBase):
             elapsed time for transcription
         """
         start_time = time.time()
-        params = WhisperValues(*whisper_params)
+        params = WhisperParameters.post_process(*whisper_params)
 
         if params.model_size != self.current_model_size or self.model is None or self.current_compute_type != params.compute_type:
             self.update_model(params.model_size, params.compute_type, progress)

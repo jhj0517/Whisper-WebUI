@@ -4,7 +4,7 @@ from typing import Optional
 
 
 @dataclass
-class WhisperGradioComponents:
+class WhisperParameters:
     model_size: gr.Dropdown
     lang: gr.Dropdown
     is_translate: gr.Checkbox
@@ -115,7 +115,7 @@ class WhisperGradioComponents:
 
     def to_list(self) -> list:
         """
-        Converts the data class attributes into a list. Use "before" Gradio pre-processing.
+        Converts the data class attributes into a list, Use in Gradio UI before Gradio pre-processing.
         See more about Gradio pre-processing: : https://www.gradio.app/docs/components
 
         Returns
@@ -123,6 +123,40 @@ class WhisperGradioComponents:
         A list of Gradio components
         """
         return [getattr(self, f.name) for f in fields(self)]
+
+    @staticmethod
+    def post_process(*args) -> 'WhisperValues':
+        """
+        To use Whisper parameters in function after Gradio post-processing.
+        See more about Gradio post-processing: : https://www.gradio.app/docs/components
+
+        Returns
+        ----------
+        WhisperValues
+           Data class that has values of parameters
+        """
+        return WhisperValues(
+            model_size=args[0],
+            lang=args[1],
+            is_translate=args[2],
+            beam_size=args[3],
+            log_prob_threshold=args[4],
+            no_speech_threshold=args[5],
+            compute_type=args[6],
+            best_of=args[7],
+            patience=args[8],
+            condition_on_previous_text=args[9],
+            initial_prompt=args[10],
+            temperature=args[11],
+            compression_ratio_threshold=args[12],
+            vad_filter=args[13],
+            threshold=args[14],
+            min_speech_duration_ms=args[15],
+            max_speech_duration_s=args[16],
+            min_silence_duration_ms=args[17],
+            window_size_samples=args[18],
+            speech_pad_ms=args[19]
+        )
 
 
 @dataclass
@@ -148,6 +182,5 @@ class WhisperValues:
     window_size_samples: int
     speech_pad_ms: int
     """
-    A data class to use Whisper parameters. Use "after" Gradio pre-processing.
-    See more about Gradio pre-processing: : https://www.gradio.app/docs/components
+    A data class to use Whisper parameters.
     """
