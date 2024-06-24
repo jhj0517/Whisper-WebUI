@@ -74,14 +74,6 @@ class App:
                         cb_translate = gr.Checkbox(value=False, label="Translate to English?", interactive=True)
                     with gr.Row():
                         cb_timestamp = gr.Checkbox(value=True, label="Add a timestamp to the end of the filename", interactive=True)
-                    with gr.Accordion("VAD Options", open=False, visible=isinstance(self.whisper_inf, FasterWhisperInference)):
-                        cb_vad_filter = gr.Checkbox(label="Enable Silero VAD Filter", value=False, interactive=True)
-                        sd_threshold = gr.Slider(minimum=0.0, maximum=1.0, step=0.01, label="Speech Threshold", value=0.5)
-                        nb_min_speech_duration_ms = gr.Number(label="Minimum Speech Duration (ms)", precision=0, value=250)
-                        nb_max_speech_duration_s = gr.Number(label="Maximum Speech Duration (s)", value=9999)
-                        nb_min_silence_duration_ms = gr.Number(label="Minimum Silence Duration (ms)", precision=0, value=2000)
-                        nb_window_size_sample = gr.Number(label="Window Size (samples)", precision=0, value=1024)
-                        nb_speech_pad_ms = gr.Number(label="Speech Padding (ms)", precision=0, value=400)
                     with gr.Accordion("Advanced_Parameters", open=False):
                         nb_beam_size = gr.Number(label="Beam Size", value=1, precision=0, interactive=True)
                         nb_log_prob_threshold = gr.Number(label="Log Probability Threshold", value=-1.0, interactive=True)
@@ -93,6 +85,17 @@ class App:
                         tb_initial_prompt = gr.Textbox(label="Initial Prompt", value=None, interactive=True)
                         sd_temperature = gr.Slider(label="Temperature", value=0, step=0.01, maximum=1.0, interactive=True)
                         nb_compression_ratio_threshold = gr.Number(label="Compression Ratio Threshold", value=2.4, interactive=True)
+                    with gr.Accordion("VAD Options", open=False, visible=isinstance(self.whisper_inf, FasterWhisperInference)):
+                        cb_vad_filter = gr.Checkbox(label="Enable Silero VAD Filter", value=False, interactive=True)
+                        sd_threshold = gr.Slider(minimum=0.0, maximum=1.0, step=0.01, label="Speech Threshold", value=0.5)
+                        nb_min_speech_duration_ms = gr.Number(label="Minimum Speech Duration (ms)", precision=0, value=250)
+                        nb_max_speech_duration_s = gr.Number(label="Maximum Speech Duration (s)", value=9999)
+                        nb_min_silence_duration_ms = gr.Number(label="Minimum Silence Duration (ms)", precision=0, value=2000)
+                        nb_window_size_sample = gr.Number(label="Window Size (samples)", precision=0, value=1024)
+                        nb_speech_pad_ms = gr.Number(label="Speech Padding (ms)", precision=0, value=400)
+                    with gr.Accordion("Insanely Fast Whisper Parameters", open=False, visible=isinstance(self.whisper_inf, InsanelyFastWhisperInference)):
+                        nb_chunk_length_s = gr.Number(label="Chunk Lengths (sec)", value=30, precision=0)
+                        nb_batch_size = gr.Number(label="Batch Size", value=24, precision=0)
                     with gr.Row():
                         btn_run = gr.Button("GENERATE SUBTITLE FILE", variant="primary")
                     with gr.Row():
@@ -101,26 +104,28 @@ class App:
                         btn_openfolder = gr.Button('📂', scale=1)
 
                     params = [input_file, dd_file_format, cb_timestamp]
-                    whisper_params = WhisperGradioComponents(model_size=dd_model,
-                                                             lang=dd_lang,
-                                                             is_translate=cb_translate,
-                                                             beam_size=nb_beam_size,
-                                                             log_prob_threshold=nb_log_prob_threshold,
-                                                             no_speech_threshold=nb_no_speech_threshold,
-                                                             compute_type=dd_compute_type,
-                                                             best_of=nb_best_of,
-                                                             patience=nb_patience,
-                                                             condition_on_previous_text=cb_condition_on_previous_text,
-                                                             initial_prompt=tb_initial_prompt,
-                                                             temperature=sd_temperature,
-                                                             compression_ratio_threshold=nb_compression_ratio_threshold,
-                                                             vad_filter=cb_vad_filter,
-                                                             threshold=sd_threshold,
-                                                             min_speech_duration_ms=nb_min_speech_duration_ms,
-                                                             max_speech_duration_s=nb_max_speech_duration_s,
-                                                             min_silence_duration_ms=nb_min_silence_duration_ms,
-                                                             window_size_sample=nb_window_size_sample,
-                                                             speech_pad_ms=nb_speech_pad_ms)
+                    whisper_params = WhisperParameters(model_size=dd_model,
+                                                       lang=dd_lang,
+                                                       is_translate=cb_translate,
+                                                       beam_size=nb_beam_size,
+                                                       log_prob_threshold=nb_log_prob_threshold,
+                                                       no_speech_threshold=nb_no_speech_threshold,
+                                                       compute_type=dd_compute_type,
+                                                       best_of=nb_best_of,
+                                                       patience=nb_patience,
+                                                       condition_on_previous_text=cb_condition_on_previous_text,
+                                                       initial_prompt=tb_initial_prompt,
+                                                       temperature=sd_temperature,
+                                                       compression_ratio_threshold=nb_compression_ratio_threshold,
+                                                       vad_filter=cb_vad_filter,
+                                                       threshold=sd_threshold,
+                                                       min_speech_duration_ms=nb_min_speech_duration_ms,
+                                                       max_speech_duration_s=nb_max_speech_duration_s,
+                                                       min_silence_duration_ms=nb_min_silence_duration_ms,
+                                                       window_size_sample=nb_window_size_sample,
+                                                       speech_pad_ms=nb_speech_pad_ms,
+                                                       chunk_length_s=nb_chunk_length_s,
+                                                       batch_size=nb_batch_size)
 
                     btn_run.click(fn=self.whisper_inf.transcribe_file,
                                   inputs=params + whisper_params.to_list(),
@@ -148,14 +153,6 @@ class App:
                     with gr.Row():
                         cb_timestamp = gr.Checkbox(value=True, label="Add a timestamp to the end of the filename",
                                                    interactive=True)
-                    with gr.Accordion("VAD Options", open=False, visible=isinstance(self.whisper_inf, FasterWhisperInference)):
-                        cb_vad_filter = gr.Checkbox(label="Enable Silero VAD Filter", value=False, interactive=True)
-                        sd_threshold = gr.Slider(minimum=0.0, maximum=1.0, step=0.01, label="Speech Threshold", value=0.5)
-                        nb_min_speech_duration_ms = gr.Number(label="Minimum Speech Duration (ms)", precision=0, value=250)
-                        nb_max_speech_duration_s = gr.Number(label="Maximum Speech Duration (s)", value=9999)
-                        nb_min_silence_duration_ms = gr.Number(label="Minimum Silence Duration (ms)", precision=0, value=2000)
-                        nb_window_size_sample = gr.Number(label="Window Size (samples)", precision=0, value=1024)
-                        nb_speech_pad_ms = gr.Number(label="Speech Padding (ms)", precision=0, value=400)
                     with gr.Accordion("Advanced_Parameters", open=False):
                         nb_beam_size = gr.Number(label="Beam Size", value=1, precision=0, interactive=True)
                         nb_log_prob_threshold = gr.Number(label="Log Probability Threshold", value=-1.0, interactive=True)
@@ -167,6 +164,18 @@ class App:
                         tb_initial_prompt = gr.Textbox(label="Initial Prompt", value=None, interactive=True)
                         sd_temperature = gr.Slider(label="Temperature", value=0, step=0.01, maximum=1.0, interactive=True)
                         nb_compression_ratio_threshold = gr.Number(label="Compression Ratio Threshold", value=2.4, interactive=True)
+                    with gr.Accordion("VAD Options", open=False, visible=isinstance(self.whisper_inf, FasterWhisperInference)):
+                        cb_vad_filter = gr.Checkbox(label="Enable Silero VAD Filter", value=False, interactive=True)
+                        sd_threshold = gr.Slider(minimum=0.0, maximum=1.0, step=0.01, label="Speech Threshold", value=0.5)
+                        nb_min_speech_duration_ms = gr.Number(label="Minimum Speech Duration (ms)", precision=0, value=250)
+                        nb_max_speech_duration_s = gr.Number(label="Maximum Speech Duration (s)", value=9999)
+                        nb_min_silence_duration_ms = gr.Number(label="Minimum Silence Duration (ms)", precision=0, value=2000)
+                        nb_window_size_sample = gr.Number(label="Window Size (samples)", precision=0, value=1024)
+                        nb_speech_pad_ms = gr.Number(label="Speech Padding (ms)", precision=0, value=400)
+                    with gr.Accordion("Insanely Fast Whisper Parameters", open=False,
+                                      visible=isinstance(self.whisper_inf, InsanelyFastWhisperInference)):
+                        nb_chunk_length_s = gr.Number(label="Chunk Lengths (sec)", value=30, precision=0)
+                        nb_batch_size = gr.Number(label="Batch Size", value=24, precision=0)
                     with gr.Row():
                         btn_run = gr.Button("GENERATE SUBTITLE FILE", variant="primary")
                     with gr.Row():
@@ -175,26 +184,29 @@ class App:
                         btn_openfolder = gr.Button('📂', scale=1)
 
                     params = [tb_youtubelink, dd_file_format, cb_timestamp]
-                    whisper_params = WhisperGradioComponents(model_size=dd_model,
-                                                             lang=dd_lang,
-                                                             is_translate=cb_translate,
-                                                             beam_size=nb_beam_size,
-                                                             log_prob_threshold=nb_log_prob_threshold,
-                                                             no_speech_threshold=nb_no_speech_threshold,
-                                                             compute_type=dd_compute_type,
-                                                             best_of=nb_best_of,
-                                                             patience=nb_patience,
-                                                             condition_on_previous_text=cb_condition_on_previous_text,
-                                                             initial_prompt=tb_initial_prompt,
-                                                             temperature=sd_temperature,
-                                                             compression_ratio_threshold=nb_compression_ratio_threshold,
-                                                             vad_filter=cb_vad_filter,
-                                                             threshold=sd_threshold,
-                                                             min_speech_duration_ms=nb_min_speech_duration_ms,
-                                                             max_speech_duration_s=nb_max_speech_duration_s,
-                                                             min_silence_duration_ms=nb_min_silence_duration_ms,
-                                                             window_size_sample=nb_window_size_sample,
-                                                             speech_pad_ms=nb_speech_pad_ms)
+                    whisper_params = WhisperParameters(model_size=dd_model,
+                                                       lang=dd_lang,
+                                                       is_translate=cb_translate,
+                                                       beam_size=nb_beam_size,
+                                                       log_prob_threshold=nb_log_prob_threshold,
+                                                       no_speech_threshold=nb_no_speech_threshold,
+                                                       compute_type=dd_compute_type,
+                                                       best_of=nb_best_of,
+                                                       patience=nb_patience,
+                                                       condition_on_previous_text=cb_condition_on_previous_text,
+                                                       initial_prompt=tb_initial_prompt,
+                                                       temperature=sd_temperature,
+                                                       compression_ratio_threshold=nb_compression_ratio_threshold,
+                                                       vad_filter=cb_vad_filter,
+                                                       threshold=sd_threshold,
+                                                       min_speech_duration_ms=nb_min_speech_duration_ms,
+                                                       max_speech_duration_s=nb_max_speech_duration_s,
+                                                       min_silence_duration_ms=nb_min_silence_duration_ms,
+                                                       window_size_sample=nb_window_size_sample,
+                                                       speech_pad_ms=nb_speech_pad_ms,
+                                                       chunk_length_s=nb_chunk_length_s,
+                                                       batch_size=nb_batch_size)
+
                     btn_run.click(fn=self.whisper_inf.transcribe_youtube,
                                   inputs=params + whisper_params.to_list(),
                                   outputs=[tb_indicator, files_subtitles])
@@ -214,14 +226,6 @@ class App:
                         dd_file_format = gr.Dropdown(["SRT", "WebVTT", "txt"], value="SRT", label="File Format")
                     with gr.Row():
                         cb_translate = gr.Checkbox(value=False, label="Translate to English?", interactive=True)
-                    with gr.Accordion("VAD Options", open=False, visible=isinstance(self.whisper_inf, FasterWhisperInference)):
-                        cb_vad_filter = gr.Checkbox(label="Enable Silero VAD Filter", value=False, interactive=True)
-                        sd_threshold = gr.Slider(minimum=0.0, maximum=1.0, step=0.01, label="Speech Threshold", value=0.5)
-                        nb_min_speech_duration_ms = gr.Number(label="Minimum Speech Duration (ms)", precision=0, value=250)
-                        nb_max_speech_duration_s = gr.Number(label="Maximum Speech Duration (s)", value=9999)
-                        nb_min_silence_duration_ms = gr.Number(label="Minimum Silence Duration (ms)", precision=0, value=2000)
-                        nb_window_size_sample = gr.Number(label="Window Size (samples)", precision=0, value=1024)
-                        nb_speech_pad_ms = gr.Number(label="Speech Padding (ms)", precision=0, value=400)
                     with gr.Accordion("Advanced_Parameters", open=False):
                         nb_beam_size = gr.Number(label="Beam Size", value=1, precision=0, interactive=True)
                         nb_log_prob_threshold = gr.Number(label="Log Probability Threshold", value=-1.0, interactive=True)
@@ -232,6 +236,18 @@ class App:
                         cb_condition_on_previous_text = gr.Checkbox(label="Condition On Previous Text", value=True, interactive=True)
                         tb_initial_prompt = gr.Textbox(label="Initial Prompt", value=None, interactive=True)
                         sd_temperature = gr.Slider(label="Temperature", value=0, step=0.01, maximum=1.0, interactive=True)
+                    with gr.Accordion("VAD Options", open=False, visible=isinstance(self.whisper_inf, FasterWhisperInference)):
+                        cb_vad_filter = gr.Checkbox(label="Enable Silero VAD Filter", value=False, interactive=True)
+                        sd_threshold = gr.Slider(minimum=0.0, maximum=1.0, step=0.01, label="Speech Threshold", value=0.5)
+                        nb_min_speech_duration_ms = gr.Number(label="Minimum Speech Duration (ms)", precision=0, value=250)
+                        nb_max_speech_duration_s = gr.Number(label="Maximum Speech Duration (s)", value=9999)
+                        nb_min_silence_duration_ms = gr.Number(label="Minimum Silence Duration (ms)", precision=0, value=2000)
+                        nb_window_size_sample = gr.Number(label="Window Size (samples)", precision=0, value=1024)
+                        nb_speech_pad_ms = gr.Number(label="Speech Padding (ms)", precision=0, value=400)
+                    with gr.Accordion("Insanely Fast Whisper Parameters", open=False,
+                                      visible=isinstance(self.whisper_inf, InsanelyFastWhisperInference)):
+                        nb_chunk_length_s = gr.Number(label="Chunk Lengths (sec)", value=30, precision=0)
+                        nb_batch_size = gr.Number(label="Batch Size", value=24, precision=0)
                     with gr.Row():
                         btn_run = gr.Button("GENERATE SUBTITLE FILE", variant="primary")
                     with gr.Row():
@@ -240,26 +256,29 @@ class App:
                         btn_openfolder = gr.Button('📂', scale=1)
 
                     params = [mic_input, dd_file_format]
-                    whisper_params = WhisperGradioComponents(model_size=dd_model,
-                                                             lang=dd_lang,
-                                                             is_translate=cb_translate,
-                                                             beam_size=nb_beam_size,
-                                                             log_prob_threshold=nb_log_prob_threshold,
-                                                             no_speech_threshold=nb_no_speech_threshold,
-                                                             compute_type=dd_compute_type,
-                                                             best_of=nb_best_of,
-                                                             patience=nb_patience,
-                                                             condition_on_previous_text=cb_condition_on_previous_text,
-                                                             initial_prompt=tb_initial_prompt,
-                                                             temperature=sd_temperature,
-                                                             compression_ratio_threshold=nb_compression_ratio_threshold,
-                                                             vad_filter=cb_vad_filter,
-                                                             threshold=sd_threshold,
-                                                             min_speech_duration_ms=nb_min_speech_duration_ms,
-                                                             max_speech_duration_s=nb_max_speech_duration_s,
-                                                             min_silence_duration_ms=nb_min_silence_duration_ms,
-                                                             window_size_sample=nb_window_size_sample,
-                                                             speech_pad_ms=nb_speech_pad_ms)
+                    whisper_params = WhisperParameters(model_size=dd_model,
+                                                       lang=dd_lang,
+                                                       is_translate=cb_translate,
+                                                       beam_size=nb_beam_size,
+                                                       log_prob_threshold=nb_log_prob_threshold,
+                                                       no_speech_threshold=nb_no_speech_threshold,
+                                                       compute_type=dd_compute_type,
+                                                       best_of=nb_best_of,
+                                                       patience=nb_patience,
+                                                       condition_on_previous_text=cb_condition_on_previous_text,
+                                                       initial_prompt=tb_initial_prompt,
+                                                       temperature=sd_temperature,
+                                                       compression_ratio_threshold=nb_compression_ratio_threshold,
+                                                       vad_filter=cb_vad_filter,
+                                                       threshold=sd_threshold,
+                                                       min_speech_duration_ms=nb_min_speech_duration_ms,
+                                                       max_speech_duration_s=nb_max_speech_duration_s,
+                                                       min_silence_duration_ms=nb_min_silence_duration_ms,
+                                                       window_size_sample=nb_window_size_sample,
+                                                       speech_pad_ms=nb_speech_pad_ms,
+                                                       chunk_length_s=nb_chunk_length_s,
+                                                       batch_size=nb_batch_size)
+
                     btn_run.click(fn=self.whisper_inf.transcribe_mic,
                                   inputs=params + whisper_params.to_list(),
                                   outputs=[tb_indicator, files_subtitles])

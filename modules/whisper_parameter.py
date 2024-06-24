@@ -25,8 +25,12 @@ class WhisperParameters:
     min_silence_duration_ms: gr.Number
     window_size_sample: gr.Number
     speech_pad_ms: gr.Number
+    chunk_length_s: gr.Number
+    batch_size: gr.Number
     """
     A data class for Gradio components of the Whisper Parameters. Use "before" Gradio pre-processing.
+    This data class is used to mitigate the key-value problem between Gradio components and function parameters.
+    Related Gradio issue: https://github.com/gradio-app/gradio/issues/2471
     See more about Gradio pre-processing: https://www.gradio.app/docs/components
 
     Attributes
@@ -111,6 +115,13 @@ class WhisperParameters:
         
     speech_pad_ms: gr.Number
         This parameter is related with Silero VAD. Final speech chunks are padded by speech_pad_ms each side    
+        
+    chunk_length_s: gr.Number
+        This parameter is related with insanely-fast-whisper pipe.
+        Maximum length of each chunk
+        
+    batch_size: gr.Number
+        This parameter is related with insanely-fast-whisper pipe. Batch size to pass to the pipe
     """
 
     def to_list(self) -> list:
@@ -155,7 +166,9 @@ class WhisperParameters:
             max_speech_duration_s=args[16],
             min_silence_duration_ms=args[17],
             window_size_samples=args[18],
-            speech_pad_ms=args[19]
+            speech_pad_ms=args[19],
+            chunk_length_s=args[20],
+            batch_size=args[21]
         )
 
 
@@ -181,6 +194,8 @@ class WhisperValues:
     min_silence_duration_ms: int
     window_size_samples: int
     speech_pad_ms: int
+    chunk_length_s: int
+    batch_size: int
     """
     A data class to use Whisper parameters.
     """

@@ -71,8 +71,8 @@ class InsanelyFastWhisperInference(WhisperBase):
             segments = self.model(
                 inputs=audio,
                 return_timestamps=True,
-                chunk_length_s=30,
-                batch_size=24,
+                chunk_length_s=params.chunk_length_s,
+                batch_size=params.batch_size,
                 generate_kwargs={
                     "language": params.lang,
                     "task": "translate" if params.is_translate and self.current_model_size in self.translatable_models else "transcribe",
