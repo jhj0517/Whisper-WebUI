@@ -333,6 +333,8 @@ class App:
             launch_args['server_port'] = self.args.server_port
         if self.args.username and self.args.password:
             launch_args['auth'] = (self.args.username, self.args.password)
+        if self.args.root_path:
+            launch_args['root_path'] = self.args.root_path
         launch_args['inbrowser'] = True
 
         self.app.queue(api_open=False).launch(**launch_args)
@@ -344,6 +346,7 @@ parser.add_argument('--whisper_type', type=str, default="faster-whisper", help='
 parser.add_argument('--share', type=bool, default=False, nargs='?', const=True, help='Gradio share value')
 parser.add_argument('--server_name', type=str, default=None, help='Gradio server host')
 parser.add_argument('--server_port', type=int, default=None, help='Gradio server port')
+parser.add_argument('--root_path', type=str, default=None, help='Gradio root path')
 parser.add_argument('--username', type=str, default=None, help='Gradio authentication username')
 parser.add_argument('--password', type=str, default=None, help='Gradio authentication password')
 parser.add_argument('--theme', type=str, default=None, help='Gradio Blocks theme')
