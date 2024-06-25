@@ -109,6 +109,9 @@ class App:
                     with gr.Accordion("Insanely Fast Whisper Parameters", open=False, visible=isinstance(self.whisper_inf, InsanelyFastWhisperInference)):
                         nb_chunk_length_s = gr.Number(label="Chunk Lengths (sec)", value=30, precision=0)
                         nb_batch_size = gr.Number(label="Batch Size", value=24, precision=0)
+                    with gr.Accordion("Diarization Parameters", open=False):
+                        cb_diarize = gr.Checkbox(label="Enable Diarization")
+                        tb_hf_token = gr.Text(label="HuggingFace Token", value="")
                     with gr.Row():
                         btn_run = gr.Button("GENERATE SUBTITLE FILE", variant="primary")
                     with gr.Row():
@@ -138,7 +141,9 @@ class App:
                                                        window_size_sample=nb_window_size_sample,
                                                        speech_pad_ms=nb_speech_pad_ms,
                                                        chunk_length_s=nb_chunk_length_s,
-                                                       batch_size=nb_batch_size)
+                                                       batch_size=nb_batch_size,
+                                                       is_diarize=cb_diarize,
+                                                       hf_token=tb_hf_token)
 
                     btn_run.click(fn=self.whisper_inf.transcribe_file,
                                   inputs=params + whisper_params.to_list(),
@@ -218,7 +223,9 @@ class App:
                                                        window_size_sample=nb_window_size_sample,
                                                        speech_pad_ms=nb_speech_pad_ms,
                                                        chunk_length_s=nb_chunk_length_s,
-                                                       batch_size=nb_batch_size)
+                                                       batch_size=nb_batch_size,
+                                                       is_diarize=cb_diarize,
+                                                       hf_token=tb_hf_token)
 
                     btn_run.click(fn=self.whisper_inf.transcribe_youtube,
                                   inputs=params + whisper_params.to_list(),
@@ -290,7 +297,9 @@ class App:
                                                        window_size_sample=nb_window_size_sample,
                                                        speech_pad_ms=nb_speech_pad_ms,
                                                        chunk_length_s=nb_chunk_length_s,
-                                                       batch_size=nb_batch_size)
+                                                       batch_size=nb_batch_size,
+                                                       is_diarize=cb_diarize,
+                                                       hf_token=tb_hf_token)
 
                     btn_run.click(fn=self.whisper_inf.transcribe_mic,
                                   inputs=params + whisper_params.to_list(),
