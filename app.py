@@ -19,8 +19,13 @@ class App:
         self.whisper_inf = self.init_whisper()
         print(f"Use \"{self.args.whisper_type}\" implementation")
         print(f"Device \"{self.whisper_inf.device}\" is detected")
-        self.nllb_inf = NLLBInference()
-        self.deepl_api = DeepLAPI()
+        self.nllb_inf = NLLBInference(
+            model_dir=self.args.nllb_model_dir,
+            output_dir=self.args.output_dir
+        )
+        self.deepl_api = DeepLAPI(
+            output_dir=self.args.output_dir
+        )
 
     def init_whisper(self):
         whisper_type = self.args.whisper_type.lower().strip()
