@@ -6,9 +6,13 @@ from modules.translation_base import TranslationBase
 
 
 class NLLBInference(TranslationBase):
-    def __init__(self):
+    def __init__(self,
+                 model_dir: str,
+                 output_dir: str
+                 ):
         super().__init__(
-            model_dir=os.path.join("models", "NLLB")
+            model_dir=model_dir,
+            output_dir=output_dir
         )
         self.tokenizer = None
         self.available_models = ["facebook/nllb-200-3.3B", "facebook/nllb-200-1.3B", "facebook/nllb-200-distilled-600M"]

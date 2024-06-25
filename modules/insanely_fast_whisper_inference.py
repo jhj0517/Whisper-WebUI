@@ -15,9 +15,13 @@ from modules.whisper_base import WhisperBase
 
 
 class InsanelyFastWhisperInference(WhisperBase):
-    def __init__(self):
+    def __init__(self,
+                 model_dir: str,
+                 output_dir: str
+                 ):
         super().__init__(
-            model_dir=os.path.join("models", "Whisper", "insanely_fast_whisper")
+            model_dir=model_dir,
+            output_dir=output_dir
         )
         openai_models = whisper.available_models()
         distil_models = ["distil-large-v2", "distil-large-v3", "distil-medium.en", "distil-small.en"]

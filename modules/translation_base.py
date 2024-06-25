@@ -11,11 +11,14 @@ from modules.subtitle_manager import *
 
 class TranslationBase(ABC):
     def __init__(self,
-                 model_dir: str):
+                 model_dir: str,
+                 output_dir: str):
         super().__init__()
         self.model = None
         self.model_dir = model_dir
+        self.output_dir = output_dir
         os.makedirs(self.model_dir, exist_ok=True)
+        os.makedirs(self.output_dir, exist_ok=True)
         self.current_model_size = None
         self.device = self.get_device()
 
@@ -87,7 +90,7 @@ class TranslationBase(ABC):
 
                     timestamp = datetime.now().strftime("%m%d%H%M%S")
                     if add_timestamp:
-                        output_path = os.path.join("outputs", "translations", f"{file_name}-{timestamp}")
+                        output_path = os.path.join("outputs", "translations", f"{file_name}-{timestamp}.srt")
                     else:
                         output_path = os.path.join("outputs", "translations", f"{file_name}.srt")
 
@@ -102,9 +105,9 @@ class TranslationBase(ABC):
 
                     timestamp = datetime.now().strftime("%m%d%H%M%S")
                     if add_timestamp:
-                        output_path = os.path.join("outputs", "translations", f"{file_name}-{timestamp}")
+                        output_path = os.path.join(self.output_dir, "translations", f"{file_name}-{timestamp}.vtt")
                     else:
-                        output_path = os.path.join("outputs", "translations", f"{file_name}.vtt")
+                        output_path = os.path.join(self.output_dir, "translations", f"{file_name}.vtt")
 
                 write_file(subtitle, output_path)
                 files_info[file_name] = subtitle

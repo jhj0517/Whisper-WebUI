@@ -17,9 +17,13 @@ os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 
 
 class FasterWhisperInference(WhisperBase):
-    def __init__(self):
+    def __init__(self,
+                 model_dir: str,
+                 output_dir: str
+                 ):
         super().__init__(
-            model_dir=os.path.join("models", "Whisper", "faster-whisper")
+            model_dir=model_dir,
+            output_dir=output_dir
         )
         self.model_paths = self.get_model_paths()
         self.available_models = self.model_paths.keys()

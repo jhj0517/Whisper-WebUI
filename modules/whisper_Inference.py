@@ -11,9 +11,13 @@ from modules.whisper_parameter import *
 
 
 class WhisperInference(WhisperBase):
-    def __init__(self):
+    def __init__(self,
+                 model_dir: str,
+                 output_dir: str
+                 ):
         super().__init__(
-            model_dir=os.path.join("models", "Whisper")
+            model_dir=model_dir,
+            output_dir=output_dir
         )
 
     def transcribe(self,
