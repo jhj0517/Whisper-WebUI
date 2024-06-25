@@ -82,11 +82,14 @@ DEEPL_AVAILABLE_SOURCE_LANGS = {
 
 
 class DeepLAPI:
-    def __init__(self):
+    def __init__(self,
+                 output_dir: str
+                 ):
         self.api_interval = 1
         self.max_text_batch_size = 50
         self.available_target_langs = DEEPL_AVAILABLE_TARGET_LANGS
         self.available_source_langs = DEEPL_AVAILABLE_SOURCE_LANGS
+        self.output_dir = output_dir
 
     def translate_deepl(self,
                         auth_key: str,
@@ -111,6 +114,7 @@ class DeepLAPI:
             Boolean value that is about pro user or not from gr.Checkbox().
         progress: gr.Progress
             Indicator to show progress directly in gradio.
+
         Returns
         ----------
         A List of
@@ -140,7 +144,7 @@ class DeepLAPI:
                 timestamp = datetime.now().strftime("%m%d%H%M%S")
 
                 file_name = file_name[:-9]
-                output_path = os.path.join("outputs", "translations", f"{file_name}-{timestamp}.srt")
+                output_path = os.path.join(self.output_dir, "translations", f"{file_name}-{timestamp}.srt")
                 write_file(subtitle, output_path)
 
             elif file_ext == ".vtt":
@@ -160,7 +164,7 @@ class DeepLAPI:
                 timestamp = datetime.now().strftime("%m%d%H%M%S")
 
                 file_name = file_name[:-9]
-                output_path = os.path.join("outputs", "translations", f"{file_name}-{timestamp}.vtt")
+                output_path = os.path.join(self.output_dir, "translations", f"{file_name}-{timestamp}.vtt")
 
                 write_file(subtitle, output_path)
 
