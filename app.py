@@ -26,17 +26,25 @@ class App:
         whisper_type = self.args.whisper_type.lower().strip()
 
         if whisper_type in ["faster_whisper", "faster-whisper", "fasterwhisper"]:
-            whisper_inf = FasterWhisperInference()
+            whisper_inf = FasterWhisperInference(
+                model_dir=self.args.faster_whisper_model_dir
+            )
             whisper_inf.model_dir = self.args.faster_whisper_model_dir
         elif whisper_type in ["whisper"]:
-            whisper_inf = WhisperInference()
+            whisper_inf = WhisperInference(
+                model_dir=self.args.whisper_model_dir
+            )
             whisper_inf.model_dir = self.args.whisper_model_dir
         elif whisper_type in ["insanely_fast_whisper", "insanely-fast-whisper", "insanelyfastwhisper",
                               "insanely_faster_whisper", "insanely-faster-whisper", "insanelyfasterwhisper"]:
-            whisper_inf = InsanelyFastWhisperInference()
+            whisper_inf = InsanelyFastWhisperInference(
+                model_dir=self.args.insanely_fast_whisper_model_dir
+            )
             whisper_inf.model_dir = self.args.insanely_fast_whisper_model_dir
         else:
-            whisper_inf = FasterWhisperInference()
+            whisper_inf = FasterWhisperInference(
+                model_dir=self.args.faster_whisper_model_dir
+            )
             whisper_inf.model_dir = self.args.faster_whisper_model_dir
         return whisper_inf
 
