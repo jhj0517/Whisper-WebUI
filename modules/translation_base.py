@@ -90,7 +90,7 @@ class TranslationBase(ABC):
 
                     timestamp = datetime.now().strftime("%m%d%H%M%S")
                     if add_timestamp:
-                        output_path = os.path.join("outputs", "translations", f"{file_name}-{timestamp}")
+                        output_path = os.path.join("outputs", "translations", f"{file_name}-{timestamp}.srt")
                     else:
                         output_path = os.path.join("outputs", "translations", f"{file_name}.srt")
 
@@ -105,7 +105,7 @@ class TranslationBase(ABC):
 
                     timestamp = datetime.now().strftime("%m%d%H%M%S")
                     if add_timestamp:
-                        output_path = os.path.join(self.output_dir, "translations", f"{file_name}-{timestamp}")
+                        output_path = os.path.join(self.output_dir, "translations", f"{file_name}-{timestamp}.vtt")
                     else:
                         output_path = os.path.join(self.output_dir, "translations", f"{file_name}.vtt")
 
