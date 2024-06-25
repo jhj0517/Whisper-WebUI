@@ -392,6 +392,7 @@ parser.add_argument('--api_open', type=bool, default=False, nargs='?', const=Tru
 parser.add_argument('--whisper_model_dir', type=str, default=os.path.join("models", "Whisper"), help='Directory path of the whisper model')
 parser.add_argument('--faster_whisper_model_dir', type=str, default=os.path.join("models", "Whisper", "faster-whisper"), help='Directory path of the faster-whisper model')
 parser.add_argument('--insanely_fast_whisper_model_dir', type=str, default=os.path.join("models", "Whisper", "insanely-fast-whisper"), help='Directory path of the insanely-fast-whisper model')
+parser.add_argument('--nllb_model_dir', type=str, default=os.path.join("models", "NLLB"), help='Directory path of the Facebook NLLB model')
 parser.add_argument('--output_dir', type=str, default=os.path.join("outputs"), help='Directory path of the outputs')
 _args = parser.parse_args()
 
