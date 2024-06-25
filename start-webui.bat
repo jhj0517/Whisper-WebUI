@@ -1,18 +1,7 @@
 @echo off
 
-goto :activate_venv
+call venv\scripts\activate
+python app.py
 
-:launch
-%PYTHON% app.py %*
-pause
-
-:activate_venv
-set PYTHON="%~dp0\venv\Scripts\Python.exe"
-echo venv %PYTHON%
-goto :launch
-
-:endofscript
-
-echo.
-echo Launch unsuccessful. Exiting.
+echo "launching the app"
 pause

@@ -52,6 +52,6 @@ if not "%INSANELY_FAST_WHISPER_MODEL_DIR%"=="" (
     set INSANELY_FAST_WHISPER_MODEL_DIR_ARG=--insanely_fast_whisper_model_dir "%INSANELY_FAST_WHISPER_MODEL_DIR%"
 )
 
-:: Call the original .bat script with optional arguments
+:: Call the original .bat script with cli arguments
 start-webui.bat %SERVER_NAME_ARG% %SERVER_PORT_ARG% %USERNAME_ARG% %PASSWORD_ARG% %SHARE_ARG% %THEME_ARG% %API_OPEN% %WHISPER_TYPE_ARG% %WHISPER_MODEL_DIR_ARG% %FASTER_WHISPER_MODEL_DIR_ARG% %INSANELY_FAST_WHISPER_MODEL_DIR_ARG%
 pause
