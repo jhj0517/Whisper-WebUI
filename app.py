@@ -27,25 +27,25 @@ class App:
 
         if whisper_type in ["faster_whisper", "faster-whisper", "fasterwhisper"]:
             whisper_inf = FasterWhisperInference(
-                model_dir=self.args.faster_whisper_model_dir
+                model_dir=self.args.faster_whisper_model_dir,
+                output_dir=self.args.output_dir
             )
-            whisper_inf.model_dir = self.args.faster_whisper_model_dir
         elif whisper_type in ["whisper"]:
             whisper_inf = WhisperInference(
-                model_dir=self.args.whisper_model_dir
+                model_dir=self.args.whisper_model_dir,
+                output_dir=self.args.output_dir
             )
-            whisper_inf.model_dir = self.args.whisper_model_dir
         elif whisper_type in ["insanely_fast_whisper", "insanely-fast-whisper", "insanelyfastwhisper",
                               "insanely_faster_whisper", "insanely-faster-whisper", "insanelyfasterwhisper"]:
             whisper_inf = InsanelyFastWhisperInference(
-                model_dir=self.args.insanely_fast_whisper_model_dir
+                model_dir=self.args.insanely_fast_whisper_model_dir,
+                output_dir=self.args.output_dir
             )
-            whisper_inf.model_dir = self.args.insanely_fast_whisper_model_dir
         else:
             whisper_inf = FasterWhisperInference(
-                model_dir=self.args.faster_whisper_model_dir
+                model_dir=self.args.faster_whisper_model_dir,
+                output_dir=self.args.output_dir
             )
-            whisper_inf.model_dir = self.args.faster_whisper_model_dir
         return whisper_inf
 
     @staticmethod
@@ -387,6 +387,7 @@ parser.add_argument('--api_open', type=bool, default=False, nargs='?', const=Tru
 parser.add_argument('--whisper_model_dir', type=str, default=os.path.join("models", "Whisper"), help='Directory path of the whisper model')
 parser.add_argument('--faster_whisper_model_dir', type=str, default=os.path.join("models", "Whisper", "faster-whisper"), help='Directory path of the faster-whisper model')
 parser.add_argument('--insanely_fast_whisper_model_dir', type=str, default=os.path.join("models", "Whisper", "insanely-fast-whisper"), help='Directory path of the insanely-fast-whisper model')
+parser.add_argument('--output_dir', type=str, default=os.path.join("outputs"), help='Directory path of the outputs')
 _args = parser.parse_args()
 
 if __name__ == "__main__":

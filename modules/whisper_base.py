@@ -15,10 +15,14 @@ from modules.whisper_parameter import *
 
 class WhisperBase(ABC):
     def __init__(self,
-                 model_dir: str):
+                 model_dir: str,
+                 output_dir: str
+                 ):
         self.model = None
         self.current_model_size = None
         self.model_dir = model_dir
+        self.output_dir = output_dir
+        os.makedirs(self.output_dir, exist_ok=True)
         os.makedirs(self.model_dir, exist_ok=True)
         self.available_models = whisper.available_models()
         self.available_langs = sorted(list(whisper.tokenizer.LANGUAGES.values()))
@@ -88,7 +92,8 @@ class WhisperBase(ABC):
                     file_name=file_name,
                     transcribed_segments=transcribed_segments,
                     add_timestamp=add_timestamp,
-                    file_format=file_format
+                    file_format=file_format,
+                    output_dir=self.output_dir
                 )
                 files_info[file_name] = {"subtitle": subtitle, "time_for_task": time_for_task, "path": file_path}
 
@@ -152,7 +157,8 @@ class WhisperBase(ABC):
                 file_name="Mic",
                 transcribed_segments=transcribed_segments,
                 add_timestamp=True,
-                file_format=file_format
+                file_format=file_format,
+                output_dir=self.output_dir
             )
 
             result_str = f"Done in {self.format_time(time_for_task)}! Subtitle file is in the outputs folder.\n\n{subtitle}"
@@ -211,7 +217,8 @@ class WhisperBase(ABC):
                 file_name=file_name,
                 transcribed_segments=transcribed_segments,
                 add_timestamp=add_timestamp,
-                file_format=file_format
+                file_format=file_format,
+                output_dir=self.output_dir
             )
             result_str = f"Done in {self.format_time(time_for_task)}! Subtitle file is in the outputs folder.\n\n{subtitle}"
 
@@ -237,6 +244,7 @@ class WhisperBase(ABC):
                                 transcribed_segments: list,
                                 add_timestamp: bool,
                                 file_format: str,
+                                output_dir: str
                                 ) -> str:
         """
         Writes subtitle file
@@ -251,6 +259,8 @@ class WhisperBase(ABC):
             Determines whether to add a timestamp to the end of the filename.
         file_format: str
             File format to write. Supported formats: [SRT, WebVTT, txt]
+        output_dir: str
+            Directory path of the output
 
         Returns
         ----------
@@ -261,9 +271,9 @@ class WhisperBase(ABC):
         """
         timestamp = datetime.now().strftime("%m%d%H%M%S")
         if add_timestamp:
-            output_path = os.path.join("outputs", f"{file_name}-{timestamp}")
+            output_path = os.path.join(output_dir, f"{file_name}-{timestamp}")
         else:
-            output_path = os.path.join("outputs", f"{file_name}")
+            output_path = os.path.join(output_dir, f"{file_name}")
 
         if file_format == "SRT":
             content = get_srt(transcribed_segments)
