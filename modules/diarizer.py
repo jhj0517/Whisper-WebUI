@@ -9,7 +9,7 @@ from modules.diarize_pipeline import DiarizationPipeline
 
 class Diarizer:
     def __init__(self,
-                 model_dir: str = os.path.join("models", "Whisper", "whisperx")
+                 model_dir: str = os.path.join("models", "Diarization")
                  ):
         self.device = self.get_device()
         self.available_device = self.get_available_device()

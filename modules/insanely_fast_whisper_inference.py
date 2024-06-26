@@ -9,6 +9,7 @@ import gradio as gr
 from huggingface_hub import hf_hub_download
 import whisper
 from rich.progress import Progress, TimeElapsedColumn, BarColumn, TextColumn
+from argparse import Namespace
 
 from modules.whisper_parameter import *
 from modules.whisper_base import WhisperBase
@@ -17,11 +18,13 @@ from modules.whisper_base import WhisperBase
 class InsanelyFastWhisperInference(WhisperBase):
     def __init__(self,
                  model_dir: str,
-                 output_dir: str
+                 output_dir: str,
+                 args: Namespace
                  ):
         super().__init__(
             model_dir=model_dir,
-            output_dir=output_dir
+            output_dir=output_dir,
+            args=args
         )
         openai_models = whisper.available_models()
         distil_models = ["distil-large-v2", "distil-large-v3", "distil-medium.en", "distil-small.en"]

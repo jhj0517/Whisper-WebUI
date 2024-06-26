@@ -11,7 +11,7 @@ class DiarizationPipeline:
     def __init__(
         self,
         model_name="pyannote/speaker-diarization-3.1",
-        cache_dir: str = os.path.join("models", "Whisper", "whisperx"),
+        cache_dir: str = os.path.join("models", "Diarization"),
         use_auth_token=None,
         device: Optional[Union[str, torch.device]] = "cpu",
     ):

@@ -7,6 +7,7 @@ from abc import ABC, abstractmethod
 from typing import BinaryIO, Union, Tuple, List
 import numpy as np
 from datetime import datetime
+from argparse import Namespace
 import time
 
 from modules.subtitle_manager import get_srt, get_vtt, get_txt, write_file, safe_filename
@@ -18,7 +19,8 @@ from modules.diarizer import Diarizer
 class WhisperBase(ABC):
     def __init__(self,
                  model_dir: str,
-                 output_dir: str
+                 output_dir: str,
+                 args: Namespace
                  ):
         self.model = None
         self.current_model_size = None
@@ -32,7 +34,9 @@ class WhisperBase(ABC):
         self.device = self.get_device()
         self.available_compute_types = ["float16", "float32"]
         self.current_compute_type = "float16" if self.device == "cuda" else "float32"
-        self.diarizer = Diarizer()
+        self.diarizer = Diarizer(
+            model_dir=args.diarization_model_dir
+        )
 
     @abstractmethod
     def transcribe(self,

@@ -7,6 +7,7 @@ from faster_whisper.vad import VadOptions
 import ctranslate2
 import whisper
 import gradio as gr
+from argparse import Namespace
 
 from modules.whisper_parameter import *
 from modules.whisper_base import WhisperBase
@@ -15,11 +16,13 @@ from modules.whisper_base import WhisperBase
 class FasterWhisperInference(WhisperBase):
     def __init__(self,
                  model_dir: str,
-                 output_dir: str
+                 output_dir: str,
+                 args: Namespace
                  ):
         super().__init__(
             model_dir=model_dir,
-            output_dir=output_dir
+            output_dir=output_dir,
+            args=args
         )
         self.model_paths = self.get_model_paths()
         self.available_models = self.model_paths.keys()

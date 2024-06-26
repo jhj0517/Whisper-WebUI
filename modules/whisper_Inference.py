@@ -5,6 +5,7 @@ import os
 from typing import BinaryIO, Union, Tuple, List
 import numpy as np
 import torch
+from argparse import Namespace
 
 from modules.whisper_base import WhisperBase
 from modules.whisper_parameter import *
@@ -13,11 +14,13 @@ from modules.whisper_parameter import *
 class WhisperInference(WhisperBase):
     def __init__(self,
                  model_dir: str,
-                 output_dir: str
+                 output_dir: str,
+                 args: Namespace
                  ):
         super().__init__(
             model_dir=model_dir,
-            output_dir=output_dir
+            output_dir=output_dir,
+            args=args
         )
 
     def transcribe(self,

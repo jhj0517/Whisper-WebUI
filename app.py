@@ -36,23 +36,27 @@ class App:
         if whisper_type in ["faster_whisper", "faster-whisper", "fasterwhisper"]:
             whisper_inf = FasterWhisperInference(
                 model_dir=self.args.faster_whisper_model_dir,
-                output_dir=self.args.output_dir
+                output_dir=self.args.output_dir,
+                args=self.args
             )
         elif whisper_type in ["whisper"]:
             whisper_inf = WhisperInference(
                 model_dir=self.args.whisper_model_dir,
-                output_dir=self.args.output_dir
+                output_dir=self.args.output_dir,
+                args=self.args
             )
         elif whisper_type in ["insanely_fast_whisper", "insanely-fast-whisper", "insanelyfastwhisper",
                               "insanely_faster_whisper", "insanely-faster-whisper", "insanelyfasterwhisper"]:
             whisper_inf = InsanelyFastWhisperInference(
                 model_dir=self.args.insanely_fast_whisper_model_dir,
-                output_dir=self.args.output_dir
+                output_dir=self.args.output_dir,
+                args=self.args
             )
         else:
             whisper_inf = FasterWhisperInference(
                 model_dir=self.args.faster_whisper_model_dir,
-                output_dir=self.args.output_dir
+                output_dir=self.args.output_dir,
+                args=self.args
             )
         return whisper_inf
 
@@ -90,7 +94,7 @@ class App:
                         cb_translate = gr.Checkbox(value=False, label="Translate to English?", interactive=True)
                     with gr.Row():
                         cb_timestamp = gr.Checkbox(value=True, label="Add a timestamp to the end of the filename", interactive=True)
-                    with gr.Accordion("Advanced_Parameters", open=False):
+                    with gr.Accordion("Advanced Parameters", open=False):
                         nb_beam_size = gr.Number(label="Beam Size", value=1, precision=0, interactive=True)
                         nb_log_prob_threshold = gr.Number(label="Log Probability Threshold", value=-1.0, interactive=True)
                         nb_no_speech_threshold = gr.Number(label="No Speech Threshold", value=0.6, interactive=True)
@@ -101,7 +105,7 @@ class App:
                         tb_initial_prompt = gr.Textbox(label="Initial Prompt", value=None, interactive=True)
                         sd_temperature = gr.Slider(label="Temperature", value=0, step=0.01, maximum=1.0, interactive=True)
                         nb_compression_ratio_threshold = gr.Number(label="Compression Ratio Threshold", value=2.4, interactive=True)
-                    with gr.Accordion("VAD Options", open=False, visible=isinstance(self.whisper_inf, FasterWhisperInference)):
+                    with gr.Accordion("VAD", open=False, visible=isinstance(self.whisper_inf, FasterWhisperInference)):
                         cb_vad_filter = gr.Checkbox(label="Enable Silero VAD Filter", value=False, interactive=True)
                         sd_threshold = gr.Slider(minimum=0.0, maximum=1.0, step=0.01, label="Speech Threshold", value=0.5)
                         nb_min_speech_duration_ms = gr.Number(label="Minimum Speech Duration (ms)", precision=0, value=250)
@@ -109,12 +113,14 @@ class App:
                         nb_min_silence_duration_ms = gr.Number(label="Minimum Silence Duration (ms)", precision=0, value=2000)
                         nb_window_size_sample = gr.Number(label="Window Size (samples)", precision=0, value=1024)
                         nb_speech_pad_ms = gr.Number(label="Speech Padding (ms)", precision=0, value=400)
+                    with gr.Accordion("Diarization", open=False):
+                        cb_diarize = gr.Checkbox(label="Enable Diarization")
+                        tb_hf_token = gr.Text(label="HuggingFace Token", value="",
+                                              info="This is only needed the first time you download the model. If you already have models, you don't need to enter.")
+                        dd_diarization_device = gr.Dropdown(label="Device", choices=self.whisper_inf.diarizer.get_available_device(), value=self.whisper_inf.diarizer.get_device())
                     with gr.Accordion("Insanely Fast Whisper Parameters", open=False, visible=isinstance(self.whisper_inf, InsanelyFastWhisperInference)):
                         nb_chunk_length_s = gr.Number(label="Chunk Lengths (sec)", value=30, precision=0)
                         nb_batch_size = gr.Number(label="Batch Size", value=24, precision=0)
-                    with gr.Accordion("Diarization Parameters", open=False):
-                        cb_diarize = gr.Checkbox(label="Enable Diarization")
-                        tb_hf_token = gr.Text(label="HuggingFace Token", value="")
                     with gr.Row():
                         btn_run = gr.Button("GENERATE SUBTITLE FILE", variant="primary")
                     with gr.Row():
@@ -146,7 +152,8 @@ class App:
                                                        chunk_length_s=nb_chunk_length_s,
                                                        batch_size=nb_batch_size,
                                                        is_diarize=cb_diarize,
-                                                       hf_token=tb_hf_token)
+                                                       hf_token=tb_hf_token,
+                                                       diarization_device=dd_diarization_device)
 
                     btn_run.click(fn=self.whisper_inf.transcribe_file,
                                   inputs=params + whisper_params.as_list(),
@@ -174,7 +181,7 @@ class App:
                     with gr.Row():
                         cb_timestamp = gr.Checkbox(value=True, label="Add a timestamp to the end of the filename",
                                                    interactive=True)
-                    with gr.Accordion("Advanced_Parameters", open=False):
+                    with gr.Accordion("Advanced Parameters", open=False):
                         nb_beam_size = gr.Number(label="Beam Size", value=1, precision=0, interactive=True)
                         nb_log_prob_threshold = gr.Number(label="Log Probability Threshold", value=-1.0, interactive=True)
                         nb_no_speech_threshold = gr.Number(label="No Speech Threshold", value=0.6, interactive=True)
@@ -185,7 +192,7 @@ class App:
                         tb_initial_prompt = gr.Textbox(label="Initial Prompt", value=None, interactive=True)
                         sd_temperature = gr.Slider(label="Temperature", value=0, step=0.01, maximum=1.0, interactive=True)
                         nb_compression_ratio_threshold = gr.Number(label="Compression Ratio Threshold", value=2.4, interactive=True)
-                    with gr.Accordion("VAD Options", open=False, visible=isinstance(self.whisper_inf, FasterWhisperInference)):
+                    with gr.Accordion("VAD", open=False, visible=isinstance(self.whisper_inf, FasterWhisperInference)):
                         cb_vad_filter = gr.Checkbox(label="Enable Silero VAD Filter", value=False, interactive=True)
                         sd_threshold = gr.Slider(minimum=0.0, maximum=1.0, step=0.01, label="Speech Threshold", value=0.5)
                         nb_min_speech_duration_ms = gr.Number(label="Minimum Speech Duration (ms)", precision=0, value=250)
@@ -193,6 +200,11 @@ class App:
                         nb_min_silence_duration_ms = gr.Number(label="Minimum Silence Duration (ms)", precision=0, value=2000)
                         nb_window_size_sample = gr.Number(label="Window Size (samples)", precision=0, value=1024)
                         nb_speech_pad_ms = gr.Number(label="Speech Padding (ms)", precision=0, value=400)
+                    with gr.Accordion("Diarization", open=False):
+                        cb_diarize = gr.Checkbox(label="Enable Diarization")
+                        tb_hf_token = gr.Text(label="HuggingFace Token", value="",
+                                              info="This is only needed the first time you download the model. If you already have models, you don't need to enter.")
+                        dd_diarization_device = gr.Dropdown(label="Device", choices=self.whisper_inf.diarizer.get_available_device(), value=self.whisper_inf.diarizer.get_device())
                     with gr.Accordion("Insanely Fast Whisper Parameters", open=False,
                                       visible=isinstance(self.whisper_inf, InsanelyFastWhisperInference)):
                         nb_chunk_length_s = gr.Number(label="Chunk Lengths (sec)", value=30, precision=0)
@@ -228,7 +240,8 @@ class App:
                                                        chunk_length_s=nb_chunk_length_s,
                                                        batch_size=nb_batch_size,
                                                        is_diarize=cb_diarize,
-                                                       hf_token=tb_hf_token)
+                                                       hf_token=tb_hf_token,
+                                                       diarization_device=dd_diarization_device)
 
                     btn_run.click(fn=self.whisper_inf.transcribe_youtube,
                                   inputs=params + whisper_params.as_list(),
@@ -249,7 +262,7 @@ class App:
                         dd_file_format = gr.Dropdown(["SRT", "WebVTT", "txt"], value="SRT", label="File Format")
                     with gr.Row():
                         cb_translate = gr.Checkbox(value=False, label="Translate to English?", interactive=True)
-                    with gr.Accordion("Advanced_Parameters", open=False):
+                    with gr.Accordion("Advanced Parameters", open=False):
                         nb_beam_size = gr.Number(label="Beam Size", value=1, precision=0, interactive=True)
                         nb_log_prob_threshold = gr.Number(label="Log Probability Threshold", value=-1.0, interactive=True)
                         nb_no_speech_threshold = gr.Number(label="No Speech Threshold", value=0.6, interactive=True)
@@ -259,7 +272,7 @@ class App:
                         cb_condition_on_previous_text = gr.Checkbox(label="Condition On Previous Text", value=True, interactive=True)
                         tb_initial_prompt = gr.Textbox(label="Initial Prompt", value=None, interactive=True)
                         sd_temperature = gr.Slider(label="Temperature", value=0, step=0.01, maximum=1.0, interactive=True)
-                    with gr.Accordion("VAD Options", open=False, visible=isinstance(self.whisper_inf, FasterWhisperInference)):
+                    with gr.Accordion("VAD", open=False, visible=isinstance(self.whisper_inf, FasterWhisperInference)):
                         cb_vad_filter = gr.Checkbox(label="Enable Silero VAD Filter", value=False, interactive=True)
                         sd_threshold = gr.Slider(minimum=0.0, maximum=1.0, step=0.01, label="Speech Threshold", value=0.5)
                         nb_min_speech_duration_ms = gr.Number(label="Minimum Speech Duration (ms)", precision=0, value=250)
@@ -267,6 +280,11 @@ class App:
                         nb_min_silence_duration_ms = gr.Number(label="Minimum Silence Duration (ms)", precision=0, value=2000)
                         nb_window_size_sample = gr.Number(label="Window Size (samples)", precision=0, value=1024)
                         nb_speech_pad_ms = gr.Number(label="Speech Padding (ms)", precision=0, value=400)
+                    with gr.Accordion("Diarization", open=False):
+                        cb_diarize = gr.Checkbox(label="Enable Diarization")
+                        tb_hf_token = gr.Text(label="HuggingFace Token", value="",
+                                              info="This is only needed the first time you download the model. If you already have models, you don't need to enter.")
+                        dd_diarization_device = gr.Dropdown(label="Device", choices=self.whisper_inf.diarizer.get_available_device(), value=self.whisper_inf.diarizer.get_device())
                     with gr.Accordion("Insanely Fast Whisper Parameters", open=False,
                                       visible=isinstance(self.whisper_inf, InsanelyFastWhisperInference)):
                         nb_chunk_length_s = gr.Number(label="Chunk Lengths (sec)", value=30, precision=0)
@@ -302,7 +320,8 @@ class App:
                                                        chunk_length_s=nb_chunk_length_s,
                                                        batch_size=nb_batch_size,
                                                        is_diarize=cb_diarize,
-                                                       hf_token=tb_hf_token)
+                                                       hf_token=tb_hf_token,
+                                                       diarization_device=dd_diarization_device)
 
                     btn_run.click(fn=self.whisper_inf.transcribe_mic,
                                   inputs=params + whisper_params.as_list(),
@@ -404,6 +423,7 @@ parser.add_argument('--api_open', type=bool, default=False, nargs='?', const=Tru
 parser.add_argument('--whisper_model_dir', type=str, default=os.path.join("models", "Whisper"), help='Directory path of the whisper model')
 parser.add_argument('--faster_whisper_model_dir', type=str, default=os.path.join("models", "Whisper", "faster-whisper"), help='Directory path of the faster-whisper model')
 parser.add_argument('--insanely_fast_whisper_model_dir', type=str, default=os.path.join("models", "Whisper", "insanely-fast-whisper"), help='Directory path of the insanely-fast-whisper model')
+parser.add_argument('--diarization_model_dir', type=str, default=os.path.join("models", "Diarization"), help='Directory path of the diarization model')
 parser.add_argument('--nllb_model_dir', type=str, default=os.path.join("models", "NLLB"), help='Directory path of the Facebook NLLB model')
 parser.add_argument('--output_dir', type=str, default=os.path.join("outputs"), help='Directory path of the outputs')
 _args = parser.parse_args()

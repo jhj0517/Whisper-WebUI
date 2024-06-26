@@ -29,6 +29,7 @@ class WhisperParameters:
     batch_size: gr.Number
     is_diarize: gr.Checkbox
     hf_token: gr.Textbox
+    diarization_device: gr.Dropdown
     """
     A data class for Gradio components of the Whisper Parameters. Use "before" Gradio pre-processing.
     This data class is used to mitigate the key-value problem between Gradio components and function parameters.
@@ -131,6 +132,9 @@ class WhisperParameters:
     hf_token: gr.Textbox
         This parameter is related with whisperx. Huggingface token is needed to download diarization models.
         Read more about : https://huggingface.co/pyannote/speaker-diarization-3.1#requirements
+        
+    diarization_device: gr.Dropdown
+        This parameter is related with whisperx. Device to run diarization model
     """
 
     def as_list(self) -> list:
@@ -180,6 +184,7 @@ class WhisperParameters:
             batch_size=args[21],
             is_diarize=args[22],
             hf_token=args[23],
+            diarization_device=args[24]
         )
 
 
@@ -209,6 +214,7 @@ class WhisperValues:
     batch_size: int
     is_diarize: bool
     hf_token: str
+    diarization_device: str
     """
     A data class to use Whisper parameters.
     """
