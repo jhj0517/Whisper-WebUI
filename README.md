@@ -25,7 +25,9 @@ If you wish to try this on Colab, you can do it in [here](https://colab.research
   - Translate subtitle files using Facebook NLLB models
   - Translate subtitle files using DeepL API
 - Speaker diarization with [pyannote](https://huggingface.co/pyannote/speaker-diarization-3.1) model as a post-processing.
-   - You need Huggingface token and mannually go to https://huggingface.co/pyannote/speaker-diarization-3.1 and accept their requirements to download the model.
+   - To download the model, you need a Huggingface token and must manually visit sites listed below to accept their conditions.
+      1. https://huggingface.co/pyannote/speaker-diarization-3.1
+      2. https://huggingface.co/pyannote/segmentation-3.0
 
 # Installation and Running
 ### Prerequisite
