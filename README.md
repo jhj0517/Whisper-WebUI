@@ -24,6 +24,8 @@ If you wish to try this on Colab, you can do it in [here](https://colab.research
 - Text to Text Translation
   - Translate subtitle files using Facebook NLLB models
   - Translate subtitle files using DeepL API
+- Speaker diarization with [pyannote](https://huggingface.co/pyannote/speaker-diarization-3.1) model as a post-processing.
+   - You need Huggingface token and mannually go to https://huggingface.co/pyannote/speaker-diarization-3.1 and accept their requirements to download the model.
 
 # Installation and Running
 ### Prerequisite
@@ -107,6 +109,7 @@ This is Whisper's original VRAM usage table for models.
 - [x] Add NLLB Model translation
 - [x] Integrate with faster-whisper
 - [x] Integrate with insanely-fast-whisper
-- [ ] Integrate with whisperX
+- [x] Integrate with whisperX ( Only speaker diarization part )
+- [ ] Add fast api script
 
 
