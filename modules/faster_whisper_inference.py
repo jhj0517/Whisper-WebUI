@@ -12,8 +12,6 @@ import gradio as gr
 from modules.whisper_parameter import *
 from modules.whisper_base import WhisperBase
 
-# Temporal fix of the issue : https://github.com/jhj0517/Whisper-WebUI/issues/144
-os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 
 
 class FasterWhisperInference(WhisperBase):
