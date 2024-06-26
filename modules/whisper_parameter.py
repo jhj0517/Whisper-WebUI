@@ -133,7 +133,7 @@ class WhisperParameters:
         Read more about : https://huggingface.co/pyannote/speaker-diarization-3.1#requirements
     """
 
-    def to_list(self) -> list:
+    def as_list(self) -> list:
         """
         Converts the data class attributes into a list, Use in Gradio UI before Gradio pre-processing.
         See more about Gradio pre-processing: : https://www.gradio.app/docs/components
@@ -145,7 +145,7 @@ class WhisperParameters:
         return [getattr(self, f.name) for f in fields(self)]
 
     @staticmethod
-    def post_process(*args) -> 'WhisperValues':
+    def as_value(*args) -> 'WhisperValues':
         """
         To use Whisper parameters in function after Gradio post-processing.
         See more about Gradio post-processing: : https://www.gradio.app/docs/components

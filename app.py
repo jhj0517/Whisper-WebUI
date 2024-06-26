@@ -149,7 +149,7 @@ class App:
                                                        hf_token=tb_hf_token)
 
                     btn_run.click(fn=self.whisper_inf.transcribe_file,
-                                  inputs=params + whisper_params.to_list(),
+                                  inputs=params + whisper_params.as_list(),
                                   outputs=[tb_indicator, files_subtitles])
                     btn_openfolder.click(fn=lambda: self.open_folder("outputs"), inputs=None, outputs=None)
                     dd_model.change(fn=self.on_change_models, inputs=[dd_model], outputs=[cb_translate])
@@ -231,7 +231,7 @@ class App:
                                                        hf_token=tb_hf_token)
 
                     btn_run.click(fn=self.whisper_inf.transcribe_youtube,
-                                  inputs=params + whisper_params.to_list(),
+                                  inputs=params + whisper_params.as_list(),
                                   outputs=[tb_indicator, files_subtitles])
                     tb_youtubelink.change(get_ytmetas, inputs=[tb_youtubelink],
                                           outputs=[img_thumbnail, tb_title, tb_description])
@@ -305,7 +305,7 @@ class App:
                                                        hf_token=tb_hf_token)
 
                     btn_run.click(fn=self.whisper_inf.transcribe_mic,
-                                  inputs=params + whisper_params.to_list(),
+                                  inputs=params + whisper_params.as_list(),
                                   outputs=[tb_indicator, files_subtitles])
                     btn_openfolder.click(fn=lambda: self.open_folder("outputs"), inputs=None, outputs=None)
                     dd_model.change(fn=self.on_change_models, inputs=[dd_model], outputs=[cb_translate])

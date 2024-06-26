@@ -52,7 +52,7 @@ class FasterWhisperInference(WhisperBase):
         """
         start_time = time.time()
 
-        params = WhisperParameters.post_process(*whisper_params)
+        params = WhisperParameters.as_value(*whisper_params)
 
         if params.model_size != self.current_model_size or self.model is None or self.current_compute_type != params.compute_type:
             self.update_model(params.model_size, params.compute_type, progress)
