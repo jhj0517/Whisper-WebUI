@@ -106,7 +106,7 @@ class App:
                         nb_compression_ratio_threshold = gr.Number(label="Compression Ratio Threshold", value=2.4, interactive=True)
                     with gr.Accordion("VAD", open=False, visible=isinstance(self.whisper_inf, FasterWhisperInference)):
                         cb_vad_filter = gr.Checkbox(label="Enable Silero VAD Filter", value=False, interactive=True)
-                        sd_threshold = gr.Slider(minimum=0.0, maximum=1.0, step=0.01, label="Speech Threshold", value=0.5)
+                        sd_threshold = gr.Slider(minimum=0.0, maximum=1.0, step=0.01, label="Speech Threshold", value=0.5, info="Lower it to be more sensitive to small sounds.")
                         nb_min_speech_duration_ms = gr.Number(label="Minimum Speech Duration (ms)", precision=0, value=250)
                         nb_max_speech_duration_s = gr.Number(label="Maximum Speech Duration (s)", value=9999)
                         nb_min_silence_duration_ms = gr.Number(label="Minimum Silence Duration (ms)", precision=0, value=2000)
@@ -193,7 +193,7 @@ class App:
                         nb_compression_ratio_threshold = gr.Number(label="Compression Ratio Threshold", value=2.4, interactive=True)
                     with gr.Accordion("VAD", open=False, visible=isinstance(self.whisper_inf, FasterWhisperInference)):
                         cb_vad_filter = gr.Checkbox(label="Enable Silero VAD Filter", value=False, interactive=True)
-                        sd_threshold = gr.Slider(minimum=0.0, maximum=1.0, step=0.01, label="Speech Threshold", value=0.5)
+                        sd_threshold = gr.Slider(minimum=0.0, maximum=1.0, step=0.01, label="Speech Threshold", value=0.5, info="Lower it to be more sensitive to small sounds.")
                         nb_min_speech_duration_ms = gr.Number(label="Minimum Speech Duration (ms)", precision=0, value=250)
                         nb_max_speech_duration_s = gr.Number(label="Maximum Speech Duration (s)", value=9999)
                         nb_min_silence_duration_ms = gr.Number(label="Minimum Silence Duration (ms)", precision=0, value=2000)
@@ -273,7 +273,7 @@ class App:
                         sd_temperature = gr.Slider(label="Temperature", value=0, step=0.01, maximum=1.0, interactive=True)
                     with gr.Accordion("VAD", open=False, visible=isinstance(self.whisper_inf, FasterWhisperInference)):
                         cb_vad_filter = gr.Checkbox(label="Enable Silero VAD Filter", value=False, interactive=True)
-                        sd_threshold = gr.Slider(minimum=0.0, maximum=1.0, step=0.01, label="Speech Threshold", value=0.5)
+                        sd_threshold = gr.Slider(minimum=0.0, maximum=1.0, step=0.01, label="Speech Threshold", value=0.5, info="Lower it to be more sensitive to small sounds.")
                         nb_min_speech_duration_ms = gr.Number(label="Minimum Speech Duration (ms)", precision=0, value=250)
                         nb_max_speech_duration_s = gr.Number(label="Maximum Speech Duration (s)", value=9999)
                         nb_min_silence_duration_ms = gr.Number(label="Minimum Silence Duration (ms)", precision=0, value=2000)
