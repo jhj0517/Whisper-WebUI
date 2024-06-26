@@ -1,6 +1,7 @@
 import os
 import time
 import numpy as np
+import torch
 from typing import BinaryIO, Union, Tuple, List
 import faster_whisper
 from faster_whisper.vad import VadOptions
@@ -25,6 +26,7 @@ class FasterWhisperInference(WhisperBase):
             args=args
         )
         self.model_paths = self.get_model_paths()
+        self.device = self.get_device()
         self.available_models = self.model_paths.keys()
         self.available_compute_types = ctranslate2.get_supported_compute_types(
             "cuda") if self.device == "cuda" else ctranslate2.get_supported_compute_types("cpu")
@@ -155,3 +157,12 @@ class FasterWhisperInference(WhisperBase):
             if model_name not in whisper.available_models():
                 model_paths[model_name] = os.path.join(webui_dir, self.model_dir, model_name)
         return model_paths
+
+    @staticmethod
+    def get_device():
+        if torch.cuda.is_available():
+            return "cuda"
+        elif torch.backends.mps.is_available():
+            return "auto"
+        else:
+            return "cpu"
