@@ -1,10 +1,14 @@
 import numpy as np
 import pandas as pd
+import sys
+import os
+sys.stderr = open(os.devnull, 'w')
 from pyannote.audio import Pipeline
+sys.stderr.close()
 from typing import Optional, Union
 import torch
-import whisperx
-import os
+
+from modules.diarize.audio_loader import load_audio, SAMPLE_RATE
 
 
 class DiarizationPipeline:
@@ -25,10 +29,10 @@ class DiarizationPipeline:
 
     def __call__(self, audio: Union[str, np.ndarray], min_speakers=None, max_speakers=None):
         if isinstance(audio, str):
-            audio = whisperx.load_audio(audio)
+            audio = load_audio(audio)
         audio_data = {
             'waveform': torch.from_numpy(audio[None, :]),
-            'sample_rate': whisperx.audio.SAMPLE_RATE
+            'sample_rate': SAMPLE_RATE
         }
         segments = self.model(audio_data, min_speakers=min_speakers, max_speakers=max_speakers)
         diarize_df = pd.DataFrame(segments.itertracks(yield_label=True), columns=['segment', 'label', 'speaker'])
