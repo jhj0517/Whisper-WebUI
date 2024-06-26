@@ -2,7 +2,7 @@ from transformers import AutoTokenizer, AutoModelForSeq2SeqLM, pipeline
 import gradio as gr
 import os
 
-from modules.translation_base import TranslationBase
+from modules.translation.translation_base import TranslationBase
 
 
 class NLLBInference(TranslationBase):

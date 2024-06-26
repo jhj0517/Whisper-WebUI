@@ -5,8 +5,8 @@ from abc import ABC, abstractmethod
 from typing import List
 from datetime import datetime
 
-from modules.whisper_parameter import *
-from modules.subtitle_manager import *
+from modules.whisper.whisper_parameter import *
+from modules.utils.subtitle_manager import *
 
 
 class TranslationBase(ABC):
@@ -90,9 +90,9 @@ class TranslationBase(ABC):
 
                     timestamp = datetime.now().strftime("%m%d%H%M%S")
                     if add_timestamp:
-                        output_path = os.path.join("outputs", "translations", f"{file_name}-{timestamp}.srt")
+                        output_path = os.path.join("outputs", "", f"{file_name}-{timestamp}.srt")
                     else:
-                        output_path = os.path.join("outputs", "translations", f"{file_name}.srt")
+                        output_path = os.path.join("outputs", "", f"{file_name}.srt")
 
                 elif file_ext == ".vtt":
                     parsed_dicts = parse_vtt(file_path=file_path)
@@ -105,9 +105,9 @@ class TranslationBase(ABC):
 
                     timestamp = datetime.now().strftime("%m%d%H%M%S")
                     if add_timestamp:
-                        output_path = os.path.join(self.output_dir, "translations", f"{file_name}-{timestamp}.vtt")
+                        output_path = os.path.join(self.output_dir, "", f"{file_name}-{timestamp}.vtt")
                     else:
-                        output_path = os.path.join(self.output_dir, "translations", f"{file_name}.vtt")
+                        output_path = os.path.join(self.output_dir, "", f"{file_name}.vtt")
 
                 write_file(subtitle, output_path)
                 files_info[file_name] = subtitle

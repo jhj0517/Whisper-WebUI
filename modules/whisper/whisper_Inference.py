@@ -1,23 +1,25 @@
 import whisper
 import gradio as gr
 import time
-import os
 from typing import BinaryIO, Union, Tuple, List
 import numpy as np
 import torch
+from argparse import Namespace
 
-from modules.whisper_base import WhisperBase
-from modules.whisper_parameter import *
+from modules.whisper.whisper_base import WhisperBase
+from modules.whisper.whisper_parameter import *
 
 
 class WhisperInference(WhisperBase):
     def __init__(self,
                  model_dir: str,
-                 output_dir: str
+                 output_dir: str,
+                 args: Namespace
                  ):
         super().__init__(
             model_dir=model_dir,
-            output_dir=output_dir
+            output_dir=output_dir,
+            args=args
         )
 
     def transcribe(self,
@@ -35,7 +37,7 @@ class WhisperInference(WhisperBase):
         progress: gr.Progress
             Indicator to show progress directly in gradio.
         *whisper_params: tuple
-            Gradio components related to Whisper. see whisper_data_class.py for details.
+            Parameters related with whisper. This will be dealt with "WhisperParameters" data class
 
         Returns
         ----------
@@ -45,7 +47,7 @@ class WhisperInference(WhisperBase):
             elapsed time for transcription
         """
         start_time = time.time()
-        params = WhisperParameters.post_process(*whisper_params)
+        params = WhisperParameters.as_value(*whisper_params)
 
         if params.model_size != self.current_model_size or self.model is None or self.current_compute_type != params.compute_type:
             self.update_model(params.model_size, params.compute_type, progress)

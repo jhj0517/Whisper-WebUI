@@ -9,19 +9,22 @@ import gradio as gr
 from huggingface_hub import hf_hub_download
 import whisper
 from rich.progress import Progress, TimeElapsedColumn, BarColumn, TextColumn
+from argparse import Namespace
 
-from modules.whisper_parameter import *
-from modules.whisper_base import WhisperBase
+from modules.whisper.whisper_parameter import *
+from modules.whisper.whisper_base import WhisperBase
 
 
 class InsanelyFastWhisperInference(WhisperBase):
     def __init__(self,
                  model_dir: str,
-                 output_dir: str
+                 output_dir: str,
+                 args: Namespace
                  ):
         super().__init__(
             model_dir=model_dir,
-            output_dir=output_dir
+            output_dir=output_dir,
+            args=args
         )
         openai_models = whisper.available_models()
         distil_models = ["distil-large-v2", "distil-large-v3", "distil-medium.en", "distil-small.en"]
@@ -43,7 +46,7 @@ class InsanelyFastWhisperInference(WhisperBase):
         progress: gr.Progress
             Indicator to show progress directly in gradio.
         *whisper_params: tuple
-            Gradio components related to Whisper. see whisper_data_class.py for details.
+            Parameters related with whisper. This will be dealt with "WhisperParameters" data class
 
         Returns
         ----------
@@ -53,7 +56,7 @@ class InsanelyFastWhisperInference(WhisperBase):
             elapsed time for transcription
         """
         start_time = time.time()
-        params = WhisperParameters.post_process(*whisper_params)
+        params = WhisperParameters.as_value(*whisper_params)
 
         if params.model_size != self.current_model_size or self.model is None or self.current_compute_type != params.compute_type:
             self.update_model(params.model_size, params.compute_type, progress)

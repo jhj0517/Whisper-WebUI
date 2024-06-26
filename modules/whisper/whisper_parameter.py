@@ -27,6 +27,9 @@ class WhisperParameters:
     speech_pad_ms: gr.Number
     chunk_length_s: gr.Number
     batch_size: gr.Number
+    is_diarize: gr.Checkbox
+    hf_token: gr.Textbox
+    diarization_device: gr.Dropdown
     """
     A data class for Gradio components of the Whisper Parameters. Use "before" Gradio pre-processing.
     This data class is used to mitigate the key-value problem between Gradio components and function parameters.
@@ -122,9 +125,19 @@ class WhisperParameters:
         
     batch_size: gr.Number
         This parameter is related with insanely-fast-whisper pipe. Batch size to pass to the pipe
+        
+    is_diarize: gr.Checkbox
+        This parameter is related with whisperx. Boolean value that determines whether to diarize or not.
+        
+    hf_token: gr.Textbox
+        This parameter is related with whisperx. Huggingface token is needed to download diarization models.
+        Read more about : https://huggingface.co/pyannote/speaker-diarization-3.1#requirements
+        
+    diarization_device: gr.Dropdown
+        This parameter is related with whisperx. Device to run diarization model
     """
 
-    def to_list(self) -> list:
+    def as_list(self) -> list:
         """
         Converts the data class attributes into a list, Use in Gradio UI before Gradio pre-processing.
         See more about Gradio pre-processing: : https://www.gradio.app/docs/components
@@ -136,7 +149,7 @@ class WhisperParameters:
         return [getattr(self, f.name) for f in fields(self)]
 
     @staticmethod
-    def post_process(*args) -> 'WhisperValues':
+    def as_value(*args) -> 'WhisperValues':
         """
         To use Whisper parameters in function after Gradio post-processing.
         See more about Gradio post-processing: : https://www.gradio.app/docs/components
@@ -168,7 +181,10 @@ class WhisperParameters:
             window_size_samples=args[18],
             speech_pad_ms=args[19],
             chunk_length_s=args[20],
-            batch_size=args[21]
+            batch_size=args[21],
+            is_diarize=args[22],
+            hf_token=args[23],
+            diarization_device=args[24]
         )
 
 
@@ -196,6 +212,9 @@ class WhisperValues:
     speech_pad_ms: int
     chunk_length_s: int
     batch_size: int
+    is_diarize: bool
+    hf_token: str
+    diarization_device: str
     """
     A data class to use Whisper parameters.
     """

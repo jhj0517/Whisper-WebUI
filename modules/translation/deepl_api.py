@@ -4,7 +4,7 @@ import os
 from datetime import datetime
 import gradio as gr
 
-from modules.subtitle_manager import *
+from modules.utils.subtitle_manager import *
 
 """
 This is written with reference to the DeepL API documentation.
@@ -144,7 +144,7 @@ class DeepLAPI:
                 timestamp = datetime.now().strftime("%m%d%H%M%S")
 
                 file_name = file_name[:-9]
-                output_path = os.path.join(self.output_dir, "translations", f"{file_name}-{timestamp}.srt")
+                output_path = os.path.join(self.output_dir, "", f"{file_name}-{timestamp}.srt")
                 write_file(subtitle, output_path)
 
             elif file_ext == ".vtt":
@@ -164,7 +164,7 @@ class DeepLAPI:
                 timestamp = datetime.now().strftime("%m%d%H%M%S")
 
                 file_name = file_name[:-9]
-                output_path = os.path.join(self.output_dir, "translations", f"{file_name}-{timestamp}.vtt")
+                output_path = os.path.join(self.output_dir, "", f"{file_name}-{timestamp}.vtt")
 
                 write_file(subtitle, output_path)
 

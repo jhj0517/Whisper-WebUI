@@ -1,22 +1,24 @@
 import os
 import torch
-from typing import List
 import whisper
 import gradio as gr
 from abc import ABC, abstractmethod
 from typing import BinaryIO, Union, Tuple, List
 import numpy as np
 from datetime import datetime
+from argparse import Namespace
 
-from modules.subtitle_manager import get_srt, get_vtt, get_txt, write_file, safe_filename
-from modules.youtube_manager import get_ytdata, get_ytaudio
-from modules.whisper_parameter import *
+from modules.utils.subtitle_manager import get_srt, get_vtt, get_txt, write_file, safe_filename
+from modules.utils.youtube_manager import get_ytdata, get_ytaudio
+from modules.whisper.whisper_parameter import *
+from modules.diarize.diarizer import Diarizer
 
 
 class WhisperBase(ABC):
     def __init__(self,
                  model_dir: str,
-                 output_dir: str
+                 output_dir: str,
+                 args: Namespace
                  ):
         self.model = None
         self.current_model_size = None
@@ -30,6 +32,9 @@ class WhisperBase(ABC):
         self.device = self.get_device()
         self.available_compute_types = ["float16", "float32"]
         self.current_compute_type = "float16" if self.device == "cuda" else "float32"
+        self.diarizer = Diarizer(
+            model_dir=args.diarization_model_dir
+        )
 
     @abstractmethod
     def transcribe(self,
@@ -46,6 +51,55 @@ class WhisperBase(ABC):
                      progress: gr.Progress
                      ):
         pass
+
+    def run(self,
+            audio: Union[str, BinaryIO, np.ndarray],
+            progress: gr.Progress,
+            *whisper_params,
+            ) -> Tuple[List[dict], float]:
+        """
+        Run transcription with conditional post-processing.
+        The diarization will be performed in post-processing if enabled.
+
+        Parameters
+        ----------
+        audio: Union[str, BinaryIO, np.ndarray]
+            Audio input. This can be file path or binary type.
+        progress: gr.Progress
+            Indicator to show progress directly in gradio.
+        *whisper_params: tuple
+            Parameters related with whisper. This will be dealt with "WhisperParameters" data class
+
+        Returns
+        ----------
+        segments_result: List[dict]
+            list of dicts that includes start, end timestamps and transcribed text
+        elapsed_time: float
+            elapsed time for running
+        """
+        params = WhisperParameters.as_value(*whisper_params)
+
+        if params.lang == "Automatic Detection":
+            params.lang = None
+        else:
+            language_code_dict = {value: key for key, value in whisper.tokenizer.LANGUAGES.items()}
+            params.lang = language_code_dict[params.lang]
+
+        result, elapsed_time = self.transcribe(
+            audio,
+            progress,
+            *whisper_params
+        )
+
+        if params.is_diarize:
+            result, elapsed_time_diarization = self.diarizer.run(
+                audio=audio,
+                use_auth_token=params.hf_token,
+                transcribed_result=result,
+                device=self.device
+            )
+            elapsed_time += elapsed_time_diarization
+        return result, elapsed_time
 
     def transcribe_file(self,
                         files: list,
@@ -68,7 +122,7 @@ class WhisperBase(ABC):
         progress: gr.Progress
             Indicator to show progress directly in gradio.
         *whisper_params: tuple
-            Gradio components related to Whisper. see whisper_data_class.py for details.
+            Parameters related with whisper. This will be dealt with "WhisperParameters" data class
 
         Returns
         ----------
@@ -80,7 +134,7 @@ class WhisperBase(ABC):
         try:
             files_info = {}
             for file in files:
-                transcribed_segments, time_for_task = self.transcribe(
+                transcribed_segments, time_for_task = self.run(
                     file.name,
                     progress,
                     *whisper_params,
@@ -135,7 +189,7 @@ class WhisperBase(ABC):
         progress: gr.Progress
             Indicator to show progress directly in gradio.
         *whisper_params: tuple
-            Gradio components related to Whisper. see whisper_data_class.py for details.
+            Parameters related with whisper. This will be dealt with "WhisperParameters" data class
 
         Returns
         ----------
@@ -146,7 +200,7 @@ class WhisperBase(ABC):
         """
         try:
             progress(0, desc="Loading Audio..")
-            transcribed_segments, time_for_task = self.transcribe(
+            transcribed_segments, time_for_task = self.run(
                 mic_audio,
                 progress,
                 *whisper_params,
@@ -190,7 +244,7 @@ class WhisperBase(ABC):
         progress: gr.Progress
             Indicator to show progress directly in gradio.
         *whisper_params: tuple
-            Gradio components related to Whisper. see whisper_data_class.py for details.
+            Parameters related with whisper. This will be dealt with "WhisperParameters" data class
 
         Returns
         ----------
@@ -204,7 +258,7 @@ class WhisperBase(ABC):
             yt = get_ytdata(youtube_link)
             audio = get_ytaudio(yt)
 
-            transcribed_segments, time_for_task = self.transcribe(
+            transcribed_segments, time_for_task = self.run(
                 audio,
                 progress,
                 *whisper_params,
