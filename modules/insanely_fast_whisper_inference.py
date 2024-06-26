@@ -43,7 +43,7 @@ class InsanelyFastWhisperInference(WhisperBase):
         progress: gr.Progress
             Indicator to show progress directly in gradio.
         *whisper_params: tuple
-            Gradio components related to Whisper. see whisper_data_class.py for details.
+            Parameters related with whisper. This will be dealt with "WhisperParameters" data class
 
         Returns
         ----------

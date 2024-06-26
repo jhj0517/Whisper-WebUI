@@ -2,7 +2,6 @@ import os
 import time
 import numpy as np
 from typing import BinaryIO, Union, Tuple, List
-
 import faster_whisper
 from faster_whisper.vad import VadOptions
 import ctranslate2
@@ -11,7 +10,6 @@ import gradio as gr
 
 from modules.whisper_parameter import *
 from modules.whisper_base import WhisperBase
-
 
 
 class FasterWhisperInference(WhisperBase):
@@ -43,7 +41,7 @@ class FasterWhisperInference(WhisperBase):
         progress: gr.Progress
             Indicator to show progress directly in gradio.
         *whisper_params: tuple
-            Gradio components related to Whisper. see whisper_data_class.py for details.
+            Parameters related with whisper. This will be dealt with "WhisperParameters" data class
 
         Returns
         ----------

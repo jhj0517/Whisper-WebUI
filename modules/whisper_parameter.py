@@ -130,6 +130,7 @@ class WhisperParameters:
         
     hf_token: gr.Textbox
         This parameter is related with whisperx. Huggingface token is needed to download diarization models.
+        Read more about : https://huggingface.co/pyannote/speaker-diarization-3.1#requirements
     """
 
     def to_list(self) -> list:
