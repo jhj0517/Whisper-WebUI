@@ -1,19 +1,18 @@
 import os
 import torch
 from typing import List
-import whisperx
 import whisper
 import gradio as gr
 from abc import ABC, abstractmethod
 from typing import BinaryIO, Union, Tuple, List
 import numpy as np
 from datetime import datetime
-from dataclasses import astuple
 import time
 
 from modules.subtitle_manager import get_srt, get_vtt, get_txt, write_file, safe_filename
 from modules.youtube_manager import get_ytdata, get_ytaudio
 from modules.whisper_parameter import *
+from modules.diarizer import Diarizer
 
 
 class WhisperBase(ABC):
@@ -24,20 +23,16 @@ class WhisperBase(ABC):
         self.model = None
         self.current_model_size = None
         self.model_dir = model_dir
-        self.diarization_model_dir = os.path.join(self.model_dir, "..", "whisperx")
         self.output_dir = output_dir
         os.makedirs(self.output_dir, exist_ok=True)
         os.makedirs(self.model_dir, exist_ok=True)
-        os.makedirs(self.diarization_model_dir, exist_ok=True)
         self.available_models = whisper.available_models()
         self.available_langs = sorted(list(whisper.tokenizer.LANGUAGES.values()))
         self.translatable_models = ["large", "large-v1", "large-v2", "large-v3"]
         self.device = self.get_device()
         self.available_compute_types = ["float16", "float32"]
         self.current_compute_type = "float16" if self.device == "cuda" else "float32"
-        self.diarization_model = None
-        self.diarization_model_metadata = None
-        self.diarization_pipe = None
+        self.diarizer = Diarizer()
 
     @abstractmethod
     def transcribe(self,
@@ -59,8 +54,28 @@ class WhisperBase(ABC):
             audio: Union[str, BinaryIO, np.ndarray],
             progress: gr.Progress,
             *whisper_params,
-            ):
-        params = WhisperParameters.post_process(*whisper_params)
+            ) -> Tuple[List[dict], float]:
+        """
+        Run transcription with conditional post-processing.
+        The diarization will be performed in post-processing if enabled.
+
+        Parameters
+        ----------
+        audio: Union[str, BinaryIO, np.ndarray]
+            Audio input. This can be file path or binary type.
+        progress: gr.Progress
+            Indicator to show progress directly in gradio.
+        *whisper_params: tuple
+            Parameters related with whisper. This will be dealt with "WhisperParameters" data class
+
+        Returns
+        ----------
+        segments_result: List[dict]
+            list of dicts that includes start, end timestamps and transcribed text
+        elapsed_time: float
+            elapsed time for running
+        """
+        params = WhisperParameters.as_value(*whisper_params)
 
         if params.lang == "Automatic Detection":
             params.lang = None
@@ -75,65 +90,14 @@ class WhisperBase(ABC):
         )
 
         if params.is_diarize:
-            if params.lang is None:
-                print("Diarization Failed!! You have to specify the language explicitly to use diarization")
-            else:
-                result, elapsed_time_diarization = self.diarize(
-                    audio=audio,
-                    language_code=params.lang,
-                    use_auth_token=params.hf_token,
-                    transcribed_result=result
-                )
-                elapsed_time += elapsed_time_diarization
-        return result, elapsed_time
-
-    def diarize(self,
-                audio: str,
-                language_code: str,
-                use_auth_token: str,
-                transcribed_result: List[dict]
-                ):
-        start_time = time.time()
-
-        if (self.diarization_model is None or
-                self.diarization_model_metadata is None or
-                self.diarization_pipe is None):
-            self._update_diarization_model(
-                language_code=language_code,
-                use_auth_token=use_auth_token
+            result, elapsed_time_diarization = self.diarizer.run(
+                audio=audio,
+                use_auth_token=params.hf_token,
+                transcribed_result=result,
+                device=self.device
             )
-
-        audio = whisperx.load_audio(audio)
-        diarization_segments = self.diarization_pipe(audio)
-        diarized_result = whisperx.assign_word_speakers(
-            diarization_segments,
-            {"segments": transcribed_result}
-        )
-
-        for segment in diarized_result["segments"]:
-            speaker = "None"
-            if "speaker" in segment:
-                speaker = segment["speaker"]
-
-            segment["text"] = speaker + "|" + segment["text"][1:]
-
-        elapsed_time = time.time() - start_time
-        return diarized_result["segments"], elapsed_time
-
-    def _update_diarization_model(self,
-                                  use_auth_token: str,
-                                  language_code: str
-                                  ):
-        print("loading diarization model...")
-        self.diarization_model, self.diarization_model_metadata = whisperx.load_align_model(
-            language_code=language_code,
-            device=self.device,
-            model_dir=self.diarization_model_dir,
-        )
-        self.diarization_pipe = whisperx.DiarizationPipeline(
-            use_auth_token=use_auth_token,
-            device=self.device
-        )
+            elapsed_time += elapsed_time_diarization
+        return result, elapsed_time
 
     def transcribe_file(self,
                         files: list,
@@ -156,7 +120,7 @@ class WhisperBase(ABC):
         progress: gr.Progress
             Indicator to show progress directly in gradio.
         *whisper_params: tuple
-            Gradio components related to Whisper. see whisper_data_class.py for details.
+            Parameters related with whisper. This will be dealt with "WhisperParameters" data class
 
         Returns
         ----------
@@ -223,7 +187,7 @@ class WhisperBase(ABC):
         progress: gr.Progress
             Indicator to show progress directly in gradio.
         *whisper_params: tuple
-            Gradio components related to Whisper. see whisper_data_class.py for details.
+            Parameters related with whisper. This will be dealt with "WhisperParameters" data class
 
         Returns
         ----------
@@ -278,7 +242,7 @@ class WhisperBase(ABC):
         progress: gr.Progress
             Indicator to show progress directly in gradio.
         *whisper_params: tuple
-            Gradio components related to Whisper. see whisper_data_class.py for details.
+            Parameters related with whisper. This will be dealt with "WhisperParameters" data class
 
         Returns
         ----------
