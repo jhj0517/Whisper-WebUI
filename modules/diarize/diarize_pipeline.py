@@ -1,10 +1,7 @@
 import numpy as np
 import pandas as pd
-import sys
 import os
-sys.stderr = open(os.devnull, 'w')
 from pyannote.audio import Pipeline
-sys.stderr.close()
 from typing import Optional, Union
 import torch
 

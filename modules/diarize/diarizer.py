@@ -2,6 +2,7 @@ import os
 import torch
 from typing import List
 import time
+import logging
 
 from modules.diarize.diarize_pipeline import DiarizationPipeline, assign_word_speakers
 from modules.diarize.audio_loader import load_audio
@@ -55,6 +56,7 @@ class Diarizer:
             )
 
         audio = load_audio(audio)
+
         diarization_segments = self.pipe(audio)
         diarized_result = assign_word_speakers(
             diarization_segments,
@@ -96,11 +98,15 @@ class Diarizer:
             )
             return
 
+        logger = logging.getLogger("speechbrain.utils.train_logger")
+        # Disable redundant torchvision warning message
+        logger.disabled = True
         self.pipe = DiarizationPipeline(
             use_auth_token=use_auth_token,
             device=device,
             cache_dir=self.model_dir
         )
+        logger.disabled = False
 
     @staticmethod
     def get_device():
