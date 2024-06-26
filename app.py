@@ -115,7 +115,7 @@ class App:
                     with gr.Accordion("Diarization", open=False):
                         cb_diarize = gr.Checkbox(label="Enable Diarization")
                         tb_hf_token = gr.Text(label="HuggingFace Token", value="",
-                                              info="This is only needed the first time you download the model. If you already have models, you don't need to enter."
+                                              info="This is only needed the first time you download the model. If you already have models, you don't need to enter. "
                                                     "To download the model, you must manually go to \"https://huggingface.co/pyannote/speaker-diarization-3.1\" and agree to their requirement.")
                         dd_diarization_device = gr.Dropdown(label="Device", choices=self.whisper_inf.diarizer.get_available_device(), value=self.whisper_inf.diarizer.get_device())
                     with gr.Accordion("Insanely Fast Whisper Parameters", open=False, visible=isinstance(self.whisper_inf, InsanelyFastWhisperInference)):
@@ -203,7 +203,7 @@ class App:
                     with gr.Accordion("Diarization", open=False):
                         cb_diarize = gr.Checkbox(label="Enable Diarization")
                         tb_hf_token = gr.Text(label="HuggingFace Token", value="",
-                                              info="This is only needed the first time you download the model. If you already have models, you don't need to enter."
+                                              info="This is only needed the first time you download the model. If you already have models, you don't need to enter. "
                                                     "To download the model, you must manually go to \"https://huggingface.co/pyannote/speaker-diarization-3.1\" and agree to their requirement.")
                         dd_diarization_device = gr.Dropdown(label="Device", choices=self.whisper_inf.diarizer.get_available_device(), value=self.whisper_inf.diarizer.get_device())
                     with gr.Accordion("Insanely Fast Whisper Parameters", open=False,
@@ -284,7 +284,7 @@ class App:
                     with gr.Accordion("Diarization", open=False):
                         cb_diarize = gr.Checkbox(label="Enable Diarization")
                         tb_hf_token = gr.Text(label="HuggingFace Token", value="",
-                                              info="This is only needed the first time you download the model. If you already have models, you don't need to enter."
+                                              info="This is only needed the first time you download the model. If you already have models, you don't need to enter. "
                                                    "To download the model, you must manually go to \"https://huggingface.co/pyannote/speaker-diarization-3.1\" and agree to their requirement.")
                         dd_diarization_device = gr.Dropdown(label="Device",
                                                             choices=self.whisper_inf.diarizer.get_available_device(),
