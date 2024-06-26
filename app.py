@@ -1,15 +1,14 @@
-import gradio as gr
 import os
 import argparse
 
-from modules.whisper_Inference import WhisperInference
-from modules.faster_whisper_inference import FasterWhisperInference
-from modules.insanely_fast_whisper_inference import InsanelyFastWhisperInference
-from modules.nllb_inference import NLLBInference
+from modules.whisper.whisper_Inference import WhisperInference
+from modules.whisper.faster_whisper_inference import FasterWhisperInference
+from modules.whisper.insanely_fast_whisper_inference import InsanelyFastWhisperInference
+from modules.translation.nllb_inference import NLLBInference
 from ui.htmls import *
-from modules.youtube_manager import get_ytmetas
-from modules.deepl_api import DeepLAPI
-from modules.whisper_parameter import *
+from modules.utils.youtube_manager import get_ytmetas
+from modules.translation.deepl_api import DeepLAPI
+from modules.whisper.whisper_parameter import *
 
 
 class App:

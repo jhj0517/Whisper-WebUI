@@ -1,14 +1,13 @@
 import whisper
 import gradio as gr
 import time
-import os
 from typing import BinaryIO, Union, Tuple, List
 import numpy as np
 import torch
 from argparse import Namespace
 
-from modules.whisper_base import WhisperBase
-from modules.whisper_parameter import *
+from modules.whisper.whisper_base import WhisperBase
+from modules.whisper.whisper_parameter import *
 
 
 class WhisperInference(WhisperBase):

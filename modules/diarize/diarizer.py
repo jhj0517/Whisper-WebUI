@@ -1,11 +1,10 @@
 import os
-import whisperx
 import torch
 from typing import List
 import time
 
-from modules.diarize_pipeline import DiarizationPipeline
-
+from modules.diarize.diarize_pipeline import DiarizationPipeline, assign_word_speakers
+from modules.diarize.audio_loader import load_audio
 
 class Diarizer:
     def __init__(self,
@@ -55,9 +54,9 @@ class Diarizer:
                 use_auth_token=use_auth_token
             )
 
-        audio = whisperx.load_audio(audio)
+        audio = load_audio(audio)
         diarization_segments = self.pipe(audio)
-        diarized_result = whisperx.assign_word_speakers(
+        diarized_result = assign_word_speakers(
             diarization_segments,
             {"segments": transcribed_result}
         )

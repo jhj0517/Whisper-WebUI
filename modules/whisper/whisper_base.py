@@ -1,6 +1,5 @@
 import os
 import torch
-from typing import List
 import whisper
 import gradio as gr
 from abc import ABC, abstractmethod
@@ -8,12 +7,11 @@ from typing import BinaryIO, Union, Tuple, List
 import numpy as np
 from datetime import datetime
 from argparse import Namespace
-import time
 
-from modules.subtitle_manager import get_srt, get_vtt, get_txt, write_file, safe_filename
-from modules.youtube_manager import get_ytdata, get_ytaudio
-from modules.whisper_parameter import *
-from modules.diarizer import Diarizer
+from modules.utils.subtitle_manager import get_srt, get_vtt, get_txt, write_file, safe_filename
+from modules.utils.youtube_manager import get_ytdata, get_ytaudio
+from modules.whisper.whisper_parameter import *
+from modules.diarize.diarizer import Diarizer
 
 
 class WhisperBase(ABC):

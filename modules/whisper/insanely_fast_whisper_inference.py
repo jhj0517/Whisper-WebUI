@@ -11,8 +11,8 @@ import whisper
 from rich.progress import Progress, TimeElapsedColumn, BarColumn, TextColumn
 from argparse import Namespace
 
-from modules.whisper_parameter import *
-from modules.whisper_base import WhisperBase
+from modules.whisper.whisper_parameter import *
+from modules.whisper.whisper_base import WhisperBase
 
 
 class InsanelyFastWhisperInference(WhisperBase):
