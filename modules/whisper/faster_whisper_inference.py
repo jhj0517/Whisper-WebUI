@@ -62,21 +62,6 @@ class FasterWhisperInference(WhisperBase):
         if params.model_size != self.current_model_size or self.model is None or self.current_compute_type != params.compute_type:
             self.update_model(params.model_size, params.compute_type, progress)
 
-        if params.lang == "Automatic Detection":
-            params.lang = None
-        else:
-            language_code_dict = {value: key for key, value in whisper.tokenizer.LANGUAGES.items()}
-            params.lang = language_code_dict[params.lang]
-
-        vad_options = VadOptions(
-            threshold=params.threshold,
-            min_speech_duration_ms=params.min_speech_duration_ms,
-            max_speech_duration_s=params.max_speech_duration_s,
-            min_silence_duration_ms=params.min_silence_duration_ms,
-            window_size_samples=params.window_size_samples,
-            speech_pad_ms=params.speech_pad_ms
-        )
-
         segments, info = self.model.transcribe(
             audio=audio,
             language=params.lang,
@@ -88,8 +73,6 @@ class FasterWhisperInference(WhisperBase):
             patience=params.patience,
             temperature=params.temperature,
             compression_ratio_threshold=params.compression_ratio_threshold,
-            vad_filter=params.vad_filter,
-            vad_parameters=vad_options
         )
         progress(0, desc="Loading audio..")
 

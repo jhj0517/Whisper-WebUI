@@ -52,9 +52,6 @@ class WhisperInference(WhisperBase):
         if params.model_size != self.current_model_size or self.model is None or self.current_compute_type != params.compute_type:
             self.update_model(params.model_size, params.compute_type, progress)
 
-        if params.lang == "Automatic Detection":
-            params.lang = None
-
         def progress_callback(progress_value):
             progress(progress_value, desc="Transcribing..")
 
