@@ -62,8 +62,9 @@ class WhisperBase(ABC):
             *whisper_params,
             ) -> Tuple[List[dict], float]:
         """
-        Run transcription with conditional post-processing.
-        The diarization will be performed in post-processing if enabled.
+        Run transcription with conditional pre-processing and post-processing.
+        The VAD will be performed to remove noise from the audio input in pre-processing, if enabled.
+        The diarization will be performed in post-processing, if enabled.
 
         Parameters
         ----------
