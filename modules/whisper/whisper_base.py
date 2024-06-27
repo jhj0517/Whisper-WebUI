@@ -7,11 +7,14 @@ from typing import BinaryIO, Union, Tuple, List
 import numpy as np
 from datetime import datetime
 from argparse import Namespace
+from faster_whisper.vad import VadOptions
+from dataclasses import astuple
 
 from modules.utils.subtitle_manager import get_srt, get_vtt, get_txt, write_file, safe_filename
 from modules.utils.youtube_manager import get_ytdata, get_ytaudio
 from modules.whisper.whisper_parameter import *
 from modules.diarize.diarizer import Diarizer
+from modules.vad.silero_vad import SileroVAD
 
 
 class WhisperBase(ABC):
@@ -35,6 +38,7 @@ class WhisperBase(ABC):
         self.diarizer = Diarizer(
             model_dir=args.diarization_model_dir
         )
+        self.vad = SileroVAD()
 
     @abstractmethod
     def transcribe(self,
@@ -79,6 +83,21 @@ class WhisperBase(ABC):
         """
         params = WhisperParameters.as_value(*whisper_params)
 
+        if params.vad_filter:
+            vad_options = VadOptions(
+                threshold=params.threshold,
+                min_speech_duration_ms=params.min_speech_duration_ms,
+                max_speech_duration_s=params.max_speech_duration_s,
+                min_silence_duration_ms=params.min_silence_duration_ms,
+                window_size_samples=params.window_size_samples,
+                speech_pad_ms=params.speech_pad_ms
+            )
+            self.vad.run(
+                audio=audio,
+                vad_parameters=vad_options,
+                progress=progress
+            )
+
         if params.lang == "Automatic Detection":
             params.lang = None
         else:
@@ -88,7 +107,7 @@ class WhisperBase(ABC):
         result, elapsed_time = self.transcribe(
             audio,
             progress,
-            *whisper_params
+            *astuple(params)
         )
 
         if params.is_diarize:
