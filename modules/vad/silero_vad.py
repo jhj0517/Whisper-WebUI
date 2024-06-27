@@ -106,7 +106,7 @@ class SileroVAD:
 
         speech_probs = []
         for current_start_sample in range(0, audio_length_samples, window_size_samples):
-            progress(current_start_sample/audio_length_samples, desc="Pre-processing input using VAD...")
+            progress(current_start_sample/audio_length_samples, desc="Detecting speeches only using VAD...")
 
             chunk = audio[current_start_sample: current_start_sample + window_size_samples]
             if len(chunk) < window_size_samples:
