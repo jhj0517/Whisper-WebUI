@@ -61,12 +61,6 @@ class InsanelyFastWhisperInference(WhisperBase):
         if params.model_size != self.current_model_size or self.model is None or self.current_compute_type != params.compute_type:
             self.update_model(params.model_size, params.compute_type, progress)
 
-        if params.lang == "Automatic Detection":
-            params.lang = None
-        else:
-            language_code_dict = {value: key for key, value in whisper.tokenizer.LANGUAGES.items()}
-            params.lang = language_code_dict[params.lang]
-
         progress(0, desc="Transcribing...Progress is not shown in insanely-fast-whisper.")
         with Progress(
                 TextColumn("[progress.description]{task.description}"),
