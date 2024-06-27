@@ -7,6 +7,7 @@ import logging
 from modules.diarize.diarize_pipeline import DiarizationPipeline, assign_word_speakers
 from modules.diarize.audio_loader import load_audio
 
+
 class Diarizer:
     def __init__(self,
                  model_dir: str = os.path.join("models", "Diarization")
@@ -67,7 +68,7 @@ class Diarizer:
             speaker = "None"
             if "speaker" in segment:
                 speaker = segment["speaker"]
-            segment["text"] = speaker + "|" + segment["text"][1:]
+            segment["text"] = speaker + "|" + segment["text"].strip()
 
         elapsed_time = time.time() - start_time
         return diarized_result["segments"], elapsed_time
