@@ -10,7 +10,7 @@ If you wish to try this on Colab, you can do it in [here](https://colab.research
 - Select the Whisper implementation you want to use between :
    - [openai/whisper](https://github.com/openai/whisper)
    - [SYSTRAN/faster-whisper](https://github.com/SYSTRAN/faster-whisper) (used by default)
-   - [insanely-fast-whisper](https://github.com/Vaibhavs10/insanely-fast-whisper)
+   - [Vaibhavs10/insanely-fast-whisper](https://github.com/Vaibhavs10/insanely-fast-whisper)
 - Generate subtitles from various sources, including :
   - Files
   - Youtube
