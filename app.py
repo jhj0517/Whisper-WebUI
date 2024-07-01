@@ -106,7 +106,7 @@ class App:
                         nb_best_of = gr.Number(label="Best Of", value=5, interactive=True)
                         nb_patience = gr.Number(label="Patience", value=1, interactive=True)
                         cb_condition_on_previous_text = gr.Checkbox(label="Condition On Previous Text", value=True, interactive=True)
-                        tb_initial_prompt = gr.Textbox(label="Initial Prompt", value=None, interactive=True)
+                        tb_initial_prompt = gr.Textbox(label="Initial Prompt", value="", interactive=True)
                         sd_temperature = gr.Slider(label="Temperature", value=0, step=0.01, maximum=1.0, interactive=True)
                         nb_compression_ratio_threshold = gr.Number(label="Compression Ratio Threshold", value=2.4, interactive=True)
                     with gr.Accordion("VAD", open=False):
@@ -194,7 +194,7 @@ class App:
                         nb_best_of = gr.Number(label="Best Of", value=5, interactive=True)
                         nb_patience = gr.Number(label="Patience", value=1, interactive=True)
                         cb_condition_on_previous_text = gr.Checkbox(label="Condition On Previous Text", value=True, interactive=True)
-                        tb_initial_prompt = gr.Textbox(label="Initial Prompt", value=None, interactive=True)
+                        tb_initial_prompt = gr.Textbox(label="Initial Prompt", value="", interactive=True)
                         sd_temperature = gr.Slider(label="Temperature", value=0, step=0.01, maximum=1.0, interactive=True)
                         nb_compression_ratio_threshold = gr.Number(label="Compression Ratio Threshold", value=2.4, interactive=True)
                     with gr.Accordion("VAD", open=False):
@@ -276,7 +276,7 @@ class App:
                         nb_best_of = gr.Number(label="Best Of", value=5, interactive=True)
                         nb_patience = gr.Number(label="Patience", value=1, interactive=True)
                         cb_condition_on_previous_text = gr.Checkbox(label="Condition On Previous Text", value=True, interactive=True)
-                        tb_initial_prompt = gr.Textbox(label="Initial Prompt", value=None, interactive=True)
+                        tb_initial_prompt = gr.Textbox(label="Initial Prompt", value="", interactive=True)
                         sd_temperature = gr.Slider(label="Temperature", value=0, step=0.01, maximum=1.0, interactive=True)
                     with gr.Accordion("VAD", open=False):
                         cb_vad_filter = gr.Checkbox(label="Enable Silero VAD Filter", value=False, interactive=True)

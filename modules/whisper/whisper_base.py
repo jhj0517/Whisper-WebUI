@@ -106,6 +106,9 @@ class WhisperBase(ABC):
             language_code_dict = {value: key for key, value in whisper.tokenizer.LANGUAGES.items()}
             params.lang = language_code_dict[params.lang]
 
+        if not params.initial_prompt:
+            params.initial_prompt = None
+
         result, elapsed_time = self.transcribe(
             audio,
             progress,
