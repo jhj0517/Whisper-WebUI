@@ -27,9 +27,6 @@ class App:
         )
 
     def init_whisper(self):
-        # Temporal fix of the issue : https://github.com/jhj0517/Whisper-WebUI/issues/144
-        os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
-
         whisper_type = self.args.whisper_type.lower().strip()
 
         if whisper_type in ["faster_whisper", "faster-whisper", "fasterwhisper"]:

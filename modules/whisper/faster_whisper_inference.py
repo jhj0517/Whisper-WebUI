@@ -25,6 +25,9 @@ class FasterWhisperInference(WhisperBase):
             output_dir=output_dir,
             args=args
         )
+        # Temporal fix of the issue : https://github.com/jhj0517/Whisper-WebUI/issues/144
+        os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
+
         self.model_paths = self.get_model_paths()
         self.device = self.get_device()
         self.available_models = self.model_paths.keys()
@@ -91,7 +94,7 @@ class FasterWhisperInference(WhisperBase):
     def update_model(self,
                      model_size: str,
                      compute_type: str,
-                     progress: gr.Progress
+                     progress: gr.Progress = gr.Progress()
                      ):
         """
         Update current model setting
