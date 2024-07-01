@@ -200,7 +200,7 @@ class WhisperValues:
     best_of: int
     patience: float
     condition_on_previous_text: bool
-    initial_prompt: Optional[str]
+    initial_prompt: str
     temperature: float
     compression_ratio_threshold: float
     vad_filter: bool
