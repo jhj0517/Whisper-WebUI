@@ -416,7 +416,11 @@ class App:
             launch_args['root_path'] = self.args.root_path
         launch_args['inbrowser'] = True
 
-        self.app.queue(api_open=False).launch(**launch_args)
+        queue_args = {}
+        if self.args.api_open:
+            queue_args["api_open"] = self.args.api_open
+
+        self.app.queue(**queue_args).launch(**launch_args)
 
 
 # Create the parser for command-line arguments
