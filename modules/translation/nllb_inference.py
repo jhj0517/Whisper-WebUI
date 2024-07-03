@@ -21,9 +21,13 @@ class NLLBInference(TranslationBase):
         self.pipeline = None
 
     def translate(self,
-                  text: str
+                  text: str,
+                  max_length: int
                   ):
-        result = self.pipeline(text)
+        result = self.pipeline(
+            text,
+            max_length=max_length
+        )
         return result[0]['translation_text']
 
     def update_model(self,

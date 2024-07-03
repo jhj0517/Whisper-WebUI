@@ -24,7 +24,8 @@ class TranslationBase(ABC):
 
     @abstractmethod
     def translate(self,
-                  text: str
+                  text: str,
+                  max_length: int
                   ):
         pass
 
@@ -42,6 +43,7 @@ class TranslationBase(ABC):
                        model_size: str,
                        src_lang: str,
                        tgt_lang: str,
+                       max_length: int,
                        add_timestamp: bool,
                        progress=gr.Progress()) -> list:
         """
@@ -57,6 +59,8 @@ class TranslationBase(ABC):
             Source language of the file to translate from gr.Dropdown()
         tgt_lang: str
             Target language of the file to translate from gr.Dropdown()
+        max_length: int
+            Max length per line to translate
         add_timestamp: bool
             Boolean value from gr.Checkbox() that determines whether to add a timestamp at the end of the filename.
         progress: gr.Progress
@@ -84,7 +88,7 @@ class TranslationBase(ABC):
                     total_progress = len(parsed_dicts)
                     for index, dic in enumerate(parsed_dicts):
                         progress(index / total_progress, desc="Translating..")
-                        translated_text = self.translate(dic["sentence"])
+                        translated_text = self.translate(dic["sentence"], max_length=max_length)
                         dic["sentence"] = translated_text
                     subtitle = get_serialized_srt(parsed_dicts)
 
@@ -99,7 +103,7 @@ class TranslationBase(ABC):
                     total_progress = len(parsed_dicts)
                     for index, dic in enumerate(parsed_dicts):
                         progress(index / total_progress, desc="Translating..")
-                        translated_text = self.translate(dic["sentence"])
+                        translated_text = self.translate(dic["sentence"], max_length=max_length)
                         dic["sentence"] = translated_text
                     subtitle = get_serialized_vtt(parsed_dicts)
 
@@ -124,7 +128,6 @@ class TranslationBase(ABC):
             print(f"Error: {str(e)}")
         finally:
             self.release_cuda_memory()
-            self.remove_input_files([fileobj.name for fileobj in fileobjs])
 
     @staticmethod
     def get_device():
