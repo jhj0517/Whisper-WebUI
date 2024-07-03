@@ -20,7 +20,7 @@ class App:
         print(f"Device \"{self.whisper_inf.device}\" is detected")
         self.nllb_inf = NLLBInference(
             model_dir=self.args.nllb_model_dir,
-            output_dir=self.args.output_dir
+            output_dir=os.path.join(self.args.output_dir, "translations")
         )
         self.deepl_api = DeepLAPI(
             output_dir=self.args.output_dir
@@ -376,6 +376,8 @@ class App:
                             dd_nllb_targetlang = gr.Dropdown(label="Target Language",
                                                              choices=self.nllb_inf.available_target_langs)
                         with gr.Row():
+                            nb_max_length = gr.Number(label="Max Length Per Line", value=200, precision=0)
+                        with gr.Row():
                             cb_timestamp = gr.Checkbox(value=True, label="Add a timestamp to the end of the filename",
                                                        interactive=True)
                         with gr.Row():
@@ -388,7 +390,7 @@ class App:
                             md_vram_table = gr.HTML(NLLB_VRAM_TABLE, elem_id="md_nllb_vram_table")
 
                     btn_run.click(fn=self.nllb_inf.translate_file,
-                                  inputs=[file_subs, dd_nllb_model, dd_nllb_sourcelang, dd_nllb_targetlang, cb_timestamp],
+                                  inputs=[file_subs, dd_nllb_model, dd_nllb_sourcelang, dd_nllb_targetlang, nb_max_length, cb_timestamp],
                                   outputs=[tb_indicator, files_subtitles])
 
                     btn_openfolder.click(fn=lambda: self.open_folder(os.path.join("outputs", "translations")),
