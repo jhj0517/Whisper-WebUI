@@ -75,5 +75,6 @@ if __name__ == "__main__":
             payload=payload
         )
 
-        with open("vad_test.wav", "wb") as vad_output_file:
+        output_path = "vad_test.wav"
+        with open(output_path, "wb") as vad_output_file:
             vad_output_file.write(response.content)
