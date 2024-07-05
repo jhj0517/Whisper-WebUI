@@ -84,7 +84,7 @@ class App:
                     with gr.Column():
                         input_file = gr.Files(type="filepath", label="Upload File here")
                         tb_input_folder = gr.Textbox(label="Input Folder Path (Optional)",
-                                                     info="Optional: Specify the folder path where the input files are located, if you prefer to use local files instead of uploading them" 
+                                                     info="Optional: Specify the folder path where the input files are located, if you prefer to use local files instead of uploading them." 
                                                           " Leave this field empty if you do not wish to use a local path.",
                                                      visible=self.args.colab,
                                                      value="")
