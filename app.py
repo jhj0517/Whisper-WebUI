@@ -81,8 +81,13 @@ class App:
                     gr.Markdown(MARKDOWN, elem_id="md_project")
             with gr.Tabs():
                 with gr.TabItem("File"):  # tab1
-                    with gr.Row():
+                    with gr.Column():
                         input_file = gr.Files(type="filepath", label="Upload File here")
+                        tb_input_folder = gr.Textbox(label="Input Folder Path (Optional)",
+                                                     info="Optional: Specify the folder path where the input files are located, if you prefer to use local files instead of uploading them" 
+                                                          " Leave this field empty if you do not wish to use a local path.",
+                                                     visible=self.args.colab,
+                                                     value="")
                     with gr.Row():
                         dd_model = gr.Dropdown(choices=self.whisper_inf.available_models, value="large-v2",
                                                label="Model")
@@ -128,7 +133,7 @@ class App:
                         files_subtitles = gr.Files(label="Downloadable output file", scale=3, interactive=False)
                         btn_openfolder = gr.Button('📂', scale=1)
 
-                    params = [input_file, dd_file_format, cb_timestamp]
+                    params = [input_file, tb_input_folder, dd_file_format, cb_timestamp]
                     whisper_params = WhisperParameters(model_size=dd_model,
                                                        lang=dd_lang,
                                                        is_translate=cb_translate,

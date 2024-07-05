@@ -12,6 +12,7 @@ from dataclasses import astuple
 
 from modules.utils.subtitle_manager import get_srt, get_vtt, get_txt, write_file, safe_filename
 from modules.utils.youtube_manager import get_ytdata, get_ytaudio
+from modules.utils.files_manager import get_media_files, format_gradio_files
 from modules.whisper.whisper_parameter import *
 from modules.diarize.diarizer import Diarizer
 from modules.vad.silero_vad import SileroVAD
@@ -123,6 +124,7 @@ class WhisperBase(ABC):
 
     def transcribe_file(self,
                         files: list,
+                        input_folder_path: str,
                         file_format: str,
                         add_timestamp: bool,
                         progress=gr.Progress(),
@@ -135,6 +137,9 @@ class WhisperBase(ABC):
         ----------
         files: list
             List of files to transcribe from gr.Files()
+        input_folder_path: str
+            Input folder path to transcribe from gr.Textbox(). If this is provided, `files` will be ignored and
+            this will be used instead.
         file_format: str
             Subtitle File format to write from gr.Dropdown(). Supported format: [SRT, WebVTT, txt]
         add_timestamp: bool
@@ -152,6 +157,10 @@ class WhisperBase(ABC):
             Output file path to return to gr.Files()
         """
         try:
+            if input_folder_path:
+                files = get_media_files(input_folder_path)
+                files = format_gradio_files(files)
+
             files_info = {}
             for file in files:
                 transcribed_segments, time_for_task = self.run(
