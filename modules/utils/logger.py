@@ -1,6 +1,14 @@
 import logging
 
 
+def get_gradio_logger():
+    return get_logger("Whisper-WebUI")
+
+
+def get_backend_logger():
+    return get_logger("Whisper-WebUI-Backend")
+
+
 def get_logger(name: str):
     logger = logging.getLogger(name)
 
