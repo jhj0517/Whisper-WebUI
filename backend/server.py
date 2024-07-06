@@ -24,7 +24,7 @@ import requests
 import io
 
 from modules.whisper.faster_whisper_inference import FasterWhisperInference
-from modules.utils.logger import get_logger
+from modules.utils.logger import get_backend_logger
 from modules.vad.silero_vad import SileroVAD
 from modules.diarize.diarizer import Diarizer
 from modules.diarize.audio_loader import SAMPLE_RATE
@@ -41,7 +41,7 @@ backend_app.add_middleware(
 vad_inferencer = None
 whisper_inferencer = None
 diarization_inferencer = None
-logger = get_logger("Whisper-WebUI-Backend")
+logger = get_backend_logger()
 
 
 def format_stream_result(generator: Generator[dict[str, Any], Any, None]):
