@@ -114,5 +114,6 @@ This is Whisper's original VRAM usage table for models.
 - [x] Integrate with insanely-fast-whisper
 - [x] Integrate with whisperX ( Only speaker diarization part )
 - [ ] Add fast api script
+- [ ] Support real-time transcription for microphone
 
 
