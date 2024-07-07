@@ -306,7 +306,7 @@ class WhisperValues:
     prepend_punctuations: Optional[str]
     append_punctuations: Optional[str]
     max_new_tokens: int
-    chunk_length: float
+    chunk_length: int
     hallucination_silence_threshold: float
     hotwords: Optional[str]
     language_detection_threshold: float

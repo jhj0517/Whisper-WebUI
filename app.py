@@ -142,7 +142,7 @@ class App:
                                                                     info="If word_timestamps is True, merge these punctuation symbols with the previous word.")
                                 nb_max_new_tokens = gr.Number(label="Max New Tokens", value=None, precision=0,
                                                               info="Maximum number of new tokens to generate per-chunk. If not set, the maximum will be set by the default max_length.")
-                                nb_chunk_length = gr.Number(label="Chunk Length", value=None,
+                                nb_chunk_length = gr.Number(label="Chunk Length", value=None, precision=0,
                                                             info="The length of audio segments. If it is not None, it will overwrite the default chunk_length of the FeatureExtractor.")
                                 nb_hallucination_silence_threshold = gr.Number(label="Hallucination Silence Threshold",
                                                                                value=None,
@@ -296,7 +296,7 @@ class App:
                                                                     info="If word_timestamps is True, merge these punctuation symbols with the previous word.")
                                 nb_max_new_tokens = gr.Number(label="Max New Tokens", value=None, precision=0,
                                                               info="Maximum number of new tokens to generate per-chunk. If not set, the maximum will be set by the default max_length.")
-                                nb_chunk_length = gr.Number(label="Chunk Length", value=None,
+                                nb_chunk_length = gr.Number(label="Chunk Length", value=None, precision=0,
                                                             info="The length of audio segments. If it is not None, it will overwrite the default chunk_length of the FeatureExtractor.")
                                 nb_hallucination_silence_threshold = gr.Number(label="Hallucination Silence Threshold",
                                                                                value=None,
@@ -442,7 +442,7 @@ class App:
                                                                     info="If word_timestamps is True, merge these punctuation symbols with the previous word.")
                                 nb_max_new_tokens = gr.Number(label="Max New Tokens", value=None, precision=0,
                                                               info="Maximum number of new tokens to generate per-chunk. If not set, the maximum will be set by the default max_length.")
-                                nb_chunk_length = gr.Number(label="Chunk Length", value=None,
+                                nb_chunk_length = gr.Number(label="Chunk Length", value=None, precision=0,
                                                             info="The length of audio segments. If it is not None, it will overwrite the default chunk_length of the FeatureExtractor.")
                                 nb_hallucination_silence_threshold = gr.Number(label="Hallucination Silence Threshold",
                                                                                value=None,
