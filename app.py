@@ -125,7 +125,7 @@ class App:
                                                                   info="Penalty applied to the score of previously generated tokens (set > 1 to penalize).")
                                 nb_no_repeat_ngram_size = gr.Number(label="No Repeat N-gram Size", value=0, precision=0,
                                                                     info="Prevent repetitions of n-grams with this size (set 0 to disable).")
-                                tb_prefix = gr.Textbox(label="Prefix", value="",
+                                tb_prefix = gr.Textbox(label="Prefix", value=None,
                                                        info="Optional text to provide as a prefix for the first window.")
                                 cb_suppress_blank = gr.Checkbox(label="Suppress Blank", value=True,
                                                                 info="Suppress blank outputs at the beginning of the sampling.")
@@ -147,7 +147,7 @@ class App:
                                 nb_hallucination_silence_threshold = gr.Number(label="Hallucination Silence Threshold",
                                                                                value=None,
                                                                                info="When word_timestamps is True, skip silent periods longer than this threshold (in seconds) when a possible hallucination is detected.")
-                                tb_hotwords = gr.Textbox(label="Hotwords", value="",
+                                tb_hotwords = gr.Textbox(label="Hotwords", value=None,
                                                          info="Hotwords/hint phrases to provide the model with. Has no effect if prefix is not None.")
                                 nb_language_detection_threshold = gr.Number(label="Language Detection Threshold",
                                                                             value=None,
@@ -155,6 +155,10 @@ class App:
                                 nb_language_detection_segments = gr.Number(label="Language Detection Segments", value=1,
                                                                            precision=0,
                                                                            info="Number of segments to consider for the language detection.")
+
+                        with gr.Group(visible=isinstance(self.whisper_inf, InsanelyFastWhisperInference)):
+                            nb_chunk_length_s = gr.Number(label="Chunk Lengths (sec)", value=30, precision=0)
+                            nb_batch_size = gr.Number(label="Batch Size", value=24, precision=0)
                     with gr.Accordion("VAD", open=False):
                         cb_vad_filter = gr.Checkbox(label="Enable Silero VAD Filter", value=False, interactive=True)
                         sd_threshold = gr.Slider(minimum=0.0, maximum=1.0, step=0.01, label="Speech Threshold",
@@ -173,10 +177,6 @@ class App:
                         dd_diarization_device = gr.Dropdown(label="Device",
                                                             choices=self.whisper_inf.diarizer.get_available_device(),
                                                             value=self.whisper_inf.diarizer.get_device())
-                    with gr.Accordion("Insanely Fast Whisper Parameters", open=False,
-                                      visible=isinstance(self.whisper_inf, InsanelyFastWhisperInference)):
-                        nb_chunk_length_s = gr.Number(label="Chunk Lengths (sec)", value=30, precision=0)
-                        nb_batch_size = gr.Number(label="Batch Size", value=24, precision=0)
                     with gr.Row():
                         btn_run = gr.Button("GENERATE SUBTITLE FILE", variant="primary")
                     with gr.Row():
@@ -279,7 +279,7 @@ class App:
                                                                   info="Penalty applied to the score of previously generated tokens (set > 1 to penalize).")
                                 nb_no_repeat_ngram_size = gr.Number(label="No Repeat N-gram Size", value=0, precision=0,
                                                                     info="Prevent repetitions of n-grams with this size (set 0 to disable).")
-                                tb_prefix = gr.Textbox(label="Prefix", value="",
+                                tb_prefix = gr.Textbox(label="Prefix", value=None,
                                                        info="Optional text to provide as a prefix for the first window.")
                                 cb_suppress_blank = gr.Checkbox(label="Suppress Blank", value=True,
                                                                 info="Suppress blank outputs at the beginning of the sampling.")
@@ -301,7 +301,7 @@ class App:
                                 nb_hallucination_silence_threshold = gr.Number(label="Hallucination Silence Threshold",
                                                                                value=None,
                                                                                info="When word_timestamps is True, skip silent periods longer than this threshold (in seconds) when a possible hallucination is detected.")
-                                tb_hotwords = gr.Textbox(label="Hotwords", value="",
+                                tb_hotwords = gr.Textbox(label="Hotwords", value=None,
                                                          info="Hotwords/hint phrases to provide the model with. Has no effect if prefix is not None.")
                                 nb_language_detection_threshold = gr.Number(label="Language Detection Threshold",
                                                                             value=None,
@@ -309,6 +309,10 @@ class App:
                                 nb_language_detection_segments = gr.Number(label="Language Detection Segments", value=1,
                                                                            precision=0,
                                                                            info="Number of segments to consider for the language detection.")
+
+                        with gr.Group(visible=isinstance(self.whisper_inf, InsanelyFastWhisperInference)):
+                            nb_chunk_length_s = gr.Number(label="Chunk Lengths (sec)", value=30, precision=0)
+                            nb_batch_size = gr.Number(label="Batch Size", value=24, precision=0)
                     with gr.Accordion("VAD", open=False):
                         cb_vad_filter = gr.Checkbox(label="Enable Silero VAD Filter", value=False, interactive=True)
                         sd_threshold = gr.Slider(minimum=0.0, maximum=1.0, step=0.01, label="Speech Threshold",
@@ -327,10 +331,6 @@ class App:
                         dd_diarization_device = gr.Dropdown(label="Device",
                                                             choices=self.whisper_inf.diarizer.get_available_device(),
                                                             value=self.whisper_inf.diarizer.get_device())
-                    with gr.Accordion("Insanely Fast Whisper Parameters", open=False,
-                                      visible=isinstance(self.whisper_inf, InsanelyFastWhisperInference)):
-                        nb_chunk_length_s = gr.Number(label="Chunk Lengths (sec)", value=30, precision=0)
-                        nb_batch_size = gr.Number(label="Batch Size", value=24, precision=0)
                     with gr.Row():
                         btn_run = gr.Button("GENERATE SUBTITLE FILE", variant="primary")
                     with gr.Row():
@@ -425,7 +425,7 @@ class App:
                                                                   info="Penalty applied to the score of previously generated tokens (set > 1 to penalize).")
                                 nb_no_repeat_ngram_size = gr.Number(label="No Repeat N-gram Size", value=0, precision=0,
                                                                     info="Prevent repetitions of n-grams with this size (set 0 to disable).")
-                                tb_prefix = gr.Textbox(label="Prefix", value="",
+                                tb_prefix = gr.Textbox(label="Prefix", value=None,
                                                        info="Optional text to provide as a prefix for the first window.")
                                 cb_suppress_blank = gr.Checkbox(label="Suppress Blank", value=True,
                                                                 info="Suppress blank outputs at the beginning of the sampling.")
@@ -447,7 +447,7 @@ class App:
                                 nb_hallucination_silence_threshold = gr.Number(label="Hallucination Silence Threshold",
                                                                                value=None,
                                                                                info="When word_timestamps is True, skip silent periods longer than this threshold (in seconds) when a possible hallucination is detected.")
-                                tb_hotwords = gr.Textbox(label="Hotwords", value="",
+                                tb_hotwords = gr.Textbox(label="Hotwords", value=None,
                                                          info="Hotwords/hint phrases to provide the model with. Has no effect if prefix is not None.")
                                 nb_language_detection_threshold = gr.Number(label="Language Detection Threshold",
                                                                             value=None,
@@ -455,6 +455,11 @@ class App:
                                 nb_language_detection_segments = gr.Number(label="Language Detection Segments", value=1,
                                                                            precision=0,
                                                                            info="Number of segments to consider for the language detection.")
+
+                        with gr.Group(visible=isinstance(self.whisper_inf, InsanelyFastWhisperInference)):
+                            nb_chunk_length_s = gr.Number(label="Chunk Lengths (sec)", value=30, precision=0)
+                            nb_batch_size = gr.Number(label="Batch Size", value=24, precision=0)
+
                     with gr.Accordion("VAD", open=False):
                         cb_vad_filter = gr.Checkbox(label="Enable Silero VAD Filter", value=False, interactive=True)
                         sd_threshold = gr.Slider(minimum=0.0, maximum=1.0, step=0.01, label="Speech Threshold",
@@ -473,10 +478,6 @@ class App:
                         dd_diarization_device = gr.Dropdown(label="Device",
                                                             choices=self.whisper_inf.diarizer.get_available_device(),
                                                             value=self.whisper_inf.diarizer.get_device())
-                    with gr.Accordion("Insanely Fast Whisper Parameters", open=False,
-                                      visible=isinstance(self.whisper_inf, InsanelyFastWhisperInference)):
-                        nb_chunk_length_s = gr.Number(label="Chunk Lengths (sec)", value=30, precision=0)
-                        nb_batch_size = gr.Number(label="Batch Size", value=24, precision=0)
                     with gr.Row():
                         btn_run = gr.Button("GENERATE SUBTITLE FILE", variant="primary")
                     with gr.Row():
