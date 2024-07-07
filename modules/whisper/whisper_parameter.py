@@ -23,7 +23,6 @@ class WhisperParameters:
     min_speech_duration_ms: gr.Number
     max_speech_duration_s: gr.Number
     min_silence_duration_ms: gr.Number
-    window_size_sample: gr.Number
     speech_pad_ms: gr.Number
     chunk_length_s: gr.Number
     batch_size: gr.Number
@@ -111,11 +110,6 @@ class WhisperParameters:
         This parameter is related with Silero VAD. In the end of each speech chunk wait for min_silence_duration_ms
         before separating it
         
-    window_size_samples: gr.Number
-        This parameter is related with Silero VAD. Audio chunks of window_size_samples size are fed to the silero VAD model.
-        WARNING! Silero VAD models were trained using 512, 1024, 1536 samples for 16000 sample rate.
-        Values other than these may affect model performance!!
-        
     speech_pad_ms: gr.Number
         This parameter is related with Silero VAD. Final speech chunks are padded by speech_pad_ms each side    
         
@@ -178,13 +172,12 @@ class WhisperParameters:
             min_speech_duration_ms=args[15],
             max_speech_duration_s=args[16],
             min_silence_duration_ms=args[17],
-            window_size_samples=args[18],
-            speech_pad_ms=args[19],
-            chunk_length_s=args[20],
-            batch_size=args[21],
-            is_diarize=args[22],
-            hf_token=args[23],
-            diarization_device=args[24]
+            speech_pad_ms=args[18],
+            chunk_length_s=args[19],
+            batch_size=args[20],
+            is_diarize=args[21],
+            hf_token=args[22],
+            diarization_device=args[23]
         )
 
 
@@ -208,7 +201,6 @@ class WhisperValues:
     min_speech_duration_ms: int
     max_speech_duration_s: float
     min_silence_duration_ms: int
-    window_size_samples: int
     speech_pad_ms: int
     chunk_length_s: int
     batch_size: int

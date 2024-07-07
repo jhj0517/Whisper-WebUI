@@ -115,7 +115,6 @@ class App:
                         nb_min_speech_duration_ms = gr.Number(label="Minimum Speech Duration (ms)", precision=0, value=250)
                         nb_max_speech_duration_s = gr.Number(label="Maximum Speech Duration (s)", value=9999)
                         nb_min_silence_duration_ms = gr.Number(label="Minimum Silence Duration (ms)", precision=0, value=2000)
-                        nb_window_size_sample = gr.Number(label="Window Size (samples)", precision=0, value=1024)
                         nb_speech_pad_ms = gr.Number(label="Speech Padding (ms)", precision=0, value=400)
                     with gr.Accordion("Diarization", open=False):
                         cb_diarize = gr.Checkbox(label="Enable Diarization")
@@ -152,7 +151,6 @@ class App:
                                                        min_speech_duration_ms=nb_min_speech_duration_ms,
                                                        max_speech_duration_s=nb_max_speech_duration_s,
                                                        min_silence_duration_ms=nb_min_silence_duration_ms,
-                                                       window_size_sample=nb_window_size_sample,
                                                        speech_pad_ms=nb_speech_pad_ms,
                                                        chunk_length_s=nb_chunk_length_s,
                                                        batch_size=nb_batch_size,
@@ -203,7 +201,6 @@ class App:
                         nb_min_speech_duration_ms = gr.Number(label="Minimum Speech Duration (ms)", precision=0, value=250)
                         nb_max_speech_duration_s = gr.Number(label="Maximum Speech Duration (s)", value=9999)
                         nb_min_silence_duration_ms = gr.Number(label="Minimum Silence Duration (ms)", precision=0, value=2000)
-                        nb_window_size_sample = gr.Number(label="Window Size (samples)", precision=0, value=1024)
                         nb_speech_pad_ms = gr.Number(label="Speech Padding (ms)", precision=0, value=400)
                     with gr.Accordion("Diarization", open=False):
                         cb_diarize = gr.Checkbox(label="Enable Diarization")
@@ -241,7 +238,6 @@ class App:
                                                        min_speech_duration_ms=nb_min_speech_duration_ms,
                                                        max_speech_duration_s=nb_max_speech_duration_s,
                                                        min_silence_duration_ms=nb_min_silence_duration_ms,
-                                                       window_size_sample=nb_window_size_sample,
                                                        speech_pad_ms=nb_speech_pad_ms,
                                                        chunk_length_s=nb_chunk_length_s,
                                                        batch_size=nb_batch_size,
@@ -284,7 +280,6 @@ class App:
                         nb_min_speech_duration_ms = gr.Number(label="Minimum Speech Duration (ms)", precision=0, value=250)
                         nb_max_speech_duration_s = gr.Number(label="Maximum Speech Duration (s)", value=9999)
                         nb_min_silence_duration_ms = gr.Number(label="Minimum Silence Duration (ms)", precision=0, value=2000)
-                        nb_window_size_sample = gr.Number(label="Window Size (samples)", precision=0, value=1024)
                         nb_speech_pad_ms = gr.Number(label="Speech Padding (ms)", precision=0, value=400)
                     with gr.Accordion("Diarization", open=False):
                         cb_diarize = gr.Checkbox(label="Enable Diarization")
@@ -324,7 +319,6 @@ class App:
                                                        min_speech_duration_ms=nb_min_speech_duration_ms,
                                                        max_speech_duration_s=nb_max_speech_duration_s,
                                                        min_silence_duration_ms=nb_min_silence_duration_ms,
-                                                       window_size_sample=nb_window_size_sample,
                                                        speech_pad_ms=nb_speech_pad_ms,
                                                        chunk_length_s=nb_chunk_length_s,
                                                        batch_size=nb_batch_size,
