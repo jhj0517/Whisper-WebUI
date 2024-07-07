@@ -1,4 +1,4 @@
-from faster_whisper.vad import VadOptions
+from faster_whisper.vad import VadOptions, get_vad_model
 import numpy as np
 from typing import BinaryIO, Union, List, Optional
 import warnings
@@ -9,6 +9,8 @@ import gradio as gr
 class SileroVAD:
     def __init__(self):
         self.sampling_rate = 16000
+        self.window_size_samples = 512
+        self.model = None
 
     def run(self,
             audio: Union[str, BinaryIO, np.ndarray],
@@ -54,8 +56,8 @@ class SileroVAD:
 
         return audio
 
-    @staticmethod
     def get_speech_timestamps(
+        self,
         audio: np.ndarray,
         vad_options: Optional[VadOptions] = None,
         progress: gr.Progress = gr.Progress(),
@@ -72,22 +74,16 @@ class SileroVAD:
         Returns:
           List of dicts containing begin and end samples of each speech chunk.
         """
-        if vad_options is None:
-            vad_options = VadOptions(**kwargs)
+
+        if self.model is None:
+            self.update_model()
 
         threshold = vad_options.threshold
         min_speech_duration_ms = vad_options.min_speech_duration_ms
         max_speech_duration_s = vad_options.max_speech_duration_s
         min_silence_duration_ms = vad_options.min_silence_duration_ms
-        window_size_samples = vad_options.window_size_samples
+        window_size_samples = self.window_size_samples
         speech_pad_ms = vad_options.speech_pad_ms
-
-        if window_size_samples not in [512, 1024, 1536]:
-            warnings.warn(
-                "Unusual window_size_samples! Supported window_size_samples:\n"
-                " - [512, 1024, 1536] for 16000 sampling_rate"
-            )
-
         sampling_rate = 16000
         min_speech_samples = sampling_rate * min_speech_duration_ms / 1000
         speech_pad_samples = sampling_rate * speech_pad_ms / 1000
@@ -101,8 +97,7 @@ class SileroVAD:
 
         audio_length_samples = len(audio)
 
-        model = faster_whisper.vad.get_vad_model()
-        state = model.get_initial_state(batch_size=1)
+        state, context = self.model.get_initial_states(batch_size=1)
 
         speech_probs = []
         for current_start_sample in range(0, audio_length_samples, window_size_samples):
@@ -111,7 +106,7 @@ class SileroVAD:
             chunk = audio[current_start_sample: current_start_sample + window_size_samples]
             if len(chunk) < window_size_samples:
                 chunk = np.pad(chunk, (0, int(window_size_samples - len(chunk))))
-            speech_prob, state = model(chunk, state, sampling_rate)
+            speech_prob, state, context = self.model(chunk, state, context, sampling_rate)
             speech_probs.append(speech_prob)
 
         triggered = False
@@ -206,6 +201,9 @@ class SileroVAD:
                 )
 
         return speeches
+
+    def update_model(self):
+        self.model = get_vad_model()
 
     @staticmethod
     def collect_chunks(audio: np.ndarray, chunks: List[dict]) -> np.ndarray:
