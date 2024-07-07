@@ -78,6 +78,9 @@ class SileroVAD:
         if self.model is None:
             self.update_model()
 
+        if vad_options is None:
+            vad_options = VadOptions(**kwargs)
+
         threshold = vad_options.threshold
         min_speech_duration_ms = vad_options.min_speech_duration_ms
         max_speech_duration_s = vad_options.max_speech_duration_s
