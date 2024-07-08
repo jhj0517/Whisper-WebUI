@@ -125,28 +125,28 @@ class App:
                                                                   info="Penalty applied to the score of previously generated tokens (set > 1 to penalize).")
                                 nb_no_repeat_ngram_size = gr.Number(label="No Repeat N-gram Size", value=0, precision=0,
                                                                     info="Prevent repetitions of n-grams with this size (set 0 to disable).")
-                                tb_prefix = gr.Textbox(label="Prefix", value=None,
+                                tb_prefix = gr.Textbox(label="Prefix", value=lambda: None,  # Bug Fix https://github.com/gradio-app/gradio/issues/6728
                                                        info="Optional text to provide as a prefix for the first window.")
                                 cb_suppress_blank = gr.Checkbox(label="Suppress Blank", value=True,
                                                                 info="Suppress blank outputs at the beginning of the sampling.")
-                                tb_suppress_tokens = gr.Textbox(label="Suppress Tokens", value="-1",
+                                tb_suppress_tokens = gr.Textbox(label="Suppress Tokens", value="[-1]",
                                                                 info="List of token IDs to suppress. -1 will suppress a default set of symbols as defined in the model config.json file.")
                                 nb_max_initial_timestamp = gr.Number(label="Max Initial Timestamp", value=1.0,
                                                                      info="The initial timestamp cannot be later than this.")
                                 cb_word_timestamps = gr.Checkbox(label="Word Timestamps", value=False,
                                                                  info="Extract word-level timestamps using the cross-attention pattern and dynamic time warping, and include the timestamps for each word in each segment.")
                                 tb_prepend_punctuations = gr.Textbox(label="Prepend Punctuations", value="\"'“¿([{-",
-                                                                     info="If word_timestamps is True, merge these punctuation symbols with the next word.")
+                                                                     info="If 'Word Timestamps' is True, merge these punctuation symbols with the next word.")
                                 tb_append_punctuations = gr.Textbox(label="Append Punctuations",
                                                                     value="\"'.。,，!！?？:：”)]}、",
-                                                                    info="If word_timestamps is True, merge these punctuation symbols with the previous word.")
-                                nb_max_new_tokens = gr.Number(label="Max New Tokens", value=None, precision=0,
+                                                                    info="If 'Word Timestamps' is True, merge these punctuation symbols with the previous word.")
+                                nb_max_new_tokens = gr.Number(label="Max New Tokens", value=lambda: None, precision=0,
                                                               info="Maximum number of new tokens to generate per-chunk. If not set, the maximum will be set by the default max_length.")
-                                nb_chunk_length = gr.Number(label="Chunk Length", value=None, precision=0,
+                                nb_chunk_length = gr.Number(label="Chunk Length", value=lambda: None, precision=0,
                                                             info="The length of audio segments. If it is not None, it will overwrite the default chunk_length of the FeatureExtractor.")
-                                nb_hallucination_silence_threshold = gr.Number(label="Hallucination Silence Threshold",
-                                                                               value=None,
-                                                                               info="When word_timestamps is True, skip silent periods longer than this threshold (in seconds) when a possible hallucination is detected.")
+                                nb_hallucination_silence_threshold = gr.Number(label="Hallucination Silence Threshold (sec)",
+                                                                               value=lambda: None,
+                                                                               info="When 'Word Timestamps' is True, skip silent periods longer than this threshold (in seconds) when a possible hallucination is detected.")
                                 tb_hotwords = gr.Textbox(label="Hotwords", value=None,
                                                          info="Hotwords/hint phrases to provide the model with. Has no effect if prefix is not None.")
                                 nb_language_detection_threshold = gr.Number(label="Language Detection Threshold",
@@ -279,28 +279,29 @@ class App:
                                                                   info="Penalty applied to the score of previously generated tokens (set > 1 to penalize).")
                                 nb_no_repeat_ngram_size = gr.Number(label="No Repeat N-gram Size", value=0, precision=0,
                                                                     info="Prevent repetitions of n-grams with this size (set 0 to disable).")
-                                tb_prefix = gr.Textbox(label="Prefix", value=None,
+                                tb_prefix = gr.Textbox(label="Prefix", value=lambda: None, # Bug Fix https://github.com/gradio-app/gradio/issues/6728
                                                        info="Optional text to provide as a prefix for the first window.")
                                 cb_suppress_blank = gr.Checkbox(label="Suppress Blank", value=True,
                                                                 info="Suppress blank outputs at the beginning of the sampling.")
-                                tb_suppress_tokens = gr.Textbox(label="Suppress Tokens", value="-1",
+                                tb_suppress_tokens = gr.Textbox(label="Suppress Tokens", value="[-1]",
                                                                 info="List of token IDs to suppress. -1 will suppress a default set of symbols as defined in the model config.json file.")
                                 nb_max_initial_timestamp = gr.Number(label="Max Initial Timestamp", value=1.0,
                                                                      info="The initial timestamp cannot be later than this.")
                                 cb_word_timestamps = gr.Checkbox(label="Word Timestamps", value=False,
                                                                  info="Extract word-level timestamps using the cross-attention pattern and dynamic time warping, and include the timestamps for each word in each segment.")
                                 tb_prepend_punctuations = gr.Textbox(label="Prepend Punctuations", value="\"'“¿([{-",
-                                                                     info="If word_timestamps is True, merge these punctuation symbols with the next word.")
+                                                                     info="If 'Word Timestamps' is True, merge these punctuation symbols with the next word.")
                                 tb_append_punctuations = gr.Textbox(label="Append Punctuations",
                                                                     value="\"'.。,，!！?？:：”)]}、",
-                                                                    info="If word_timestamps is True, merge these punctuation symbols with the previous word.")
-                                nb_max_new_tokens = gr.Number(label="Max New Tokens", value=None, precision=0,
+                                                                    info="If 'Word Timestamps' is True, merge these punctuation symbols with the previous word.")
+                                nb_max_new_tokens = gr.Number(label="Max New Tokens", value=lambda: None, precision=0,
                                                               info="Maximum number of new tokens to generate per-chunk. If not set, the maximum will be set by the default max_length.")
-                                nb_chunk_length = gr.Number(label="Chunk Length", value=None, precision=0,
+                                nb_chunk_length = gr.Number(label="Chunk Length", value=lambda: None, precision=0,
                                                             info="The length of audio segments. If it is not None, it will overwrite the default chunk_length of the FeatureExtractor.")
-                                nb_hallucination_silence_threshold = gr.Number(label="Hallucination Silence Threshold",
-                                                                               value=None,
-                                                                               info="When word_timestamps is True, skip silent periods longer than this threshold (in seconds) when a possible hallucination is detected.")
+                                nb_hallucination_silence_threshold = gr.Number(
+                                    label="Hallucination Silence Threshold (sec)",
+                                    value=lambda: None,
+                                    info="When 'Word Timestamps' is True, skip silent periods longer than this threshold (in seconds) when a possible hallucination is detected.")
                                 tb_hotwords = gr.Textbox(label="Hotwords", value=None,
                                                          info="Hotwords/hint phrases to provide the model with. Has no effect if prefix is not None.")
                                 nb_language_detection_threshold = gr.Number(label="Language Detection Threshold",
@@ -425,28 +426,29 @@ class App:
                                                                   info="Penalty applied to the score of previously generated tokens (set > 1 to penalize).")
                                 nb_no_repeat_ngram_size = gr.Number(label="No Repeat N-gram Size", value=0, precision=0,
                                                                     info="Prevent repetitions of n-grams with this size (set 0 to disable).")
-                                tb_prefix = gr.Textbox(label="Prefix", value=None,
+                                tb_prefix = gr.Textbox(label="Prefix", value=lambda: None,  # Bug Fix https://github.com/gradio-app/gradio/issues/6728
                                                        info="Optional text to provide as a prefix for the first window.")
                                 cb_suppress_blank = gr.Checkbox(label="Suppress Blank", value=True,
                                                                 info="Suppress blank outputs at the beginning of the sampling.")
-                                tb_suppress_tokens = gr.Textbox(label="Suppress Tokens", value="-1",
+                                tb_suppress_tokens = gr.Textbox(label="Suppress Tokens", value="[-1]",
                                                                 info="List of token IDs to suppress. -1 will suppress a default set of symbols as defined in the model config.json file.")
                                 nb_max_initial_timestamp = gr.Number(label="Max Initial Timestamp", value=1.0,
                                                                      info="The initial timestamp cannot be later than this.")
                                 cb_word_timestamps = gr.Checkbox(label="Word Timestamps", value=False,
                                                                  info="Extract word-level timestamps using the cross-attention pattern and dynamic time warping, and include the timestamps for each word in each segment.")
                                 tb_prepend_punctuations = gr.Textbox(label="Prepend Punctuations", value="\"'“¿([{-",
-                                                                     info="If word_timestamps is True, merge these punctuation symbols with the next word.")
+                                                                     info="If 'Word Timestamps' is True, merge these punctuation symbols with the next word.")
                                 tb_append_punctuations = gr.Textbox(label="Append Punctuations",
                                                                     value="\"'.。,，!！?？:：”)]}、",
-                                                                    info="If word_timestamps is True, merge these punctuation symbols with the previous word.")
-                                nb_max_new_tokens = gr.Number(label="Max New Tokens", value=None, precision=0,
+                                                                    info="If 'Word Timestamps' is True, merge these punctuation symbols with the previous word.")
+                                nb_max_new_tokens = gr.Number(label="Max New Tokens", value=lambda: None, precision=0,
                                                               info="Maximum number of new tokens to generate per-chunk. If not set, the maximum will be set by the default max_length.")
-                                nb_chunk_length = gr.Number(label="Chunk Length", value=None, precision=0,
+                                nb_chunk_length = gr.Number(label="Chunk Length", value=lambda: None, precision=0,
                                                             info="The length of audio segments. If it is not None, it will overwrite the default chunk_length of the FeatureExtractor.")
-                                nb_hallucination_silence_threshold = gr.Number(label="Hallucination Silence Threshold",
-                                                                               value=None,
-                                                                               info="When word_timestamps is True, skip silent periods longer than this threshold (in seconds) when a possible hallucination is detected.")
+                                nb_hallucination_silence_threshold = gr.Number(
+                                    label="Hallucination Silence Threshold (sec)",
+                                    value=lambda: None,
+                                    info="When 'Word Timestamps' is True, skip silent periods longer than this threshold (in seconds) when a possible hallucination is detected.")
                                 tb_hotwords = gr.Textbox(label="Hotwords", value=None,
                                                          info="Hotwords/hint phrases to provide the model with. Has no effect if prefix is not None.")
                                 nb_language_detection_threshold = gr.Number(label="Language Detection Threshold",
