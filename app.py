@@ -73,18 +73,28 @@ class App:
             cb_timestamp = gr.Checkbox(value=True, label="Add a timestamp to the end of the filename",
                                        interactive=True)
         with gr.Accordion("Advanced Parameters", open=False):
-            nb_beam_size = gr.Number(label="Beam Size", value=1, precision=0, interactive=True)
-            nb_log_prob_threshold = gr.Number(label="Log Probability Threshold", value=-1.0, interactive=True)
-            nb_no_speech_threshold = gr.Number(label="No Speech Threshold", value=0.6, interactive=True)
+            nb_beam_size = gr.Number(label="Beam Size", value=1, precision=0, interactive=True,
+                                     info="Beam size to use for decoding.")
+            nb_log_prob_threshold = gr.Number(label="Log Probability Threshold", value=-1.0, interactive=True,
+                                              info="If the average log probability over sampled tokens is below this value, treat as failed.")
+            nb_no_speech_threshold = gr.Number(label="No Speech Threshold", value=0.6, interactive=True,
+                                               info="If the No Speech Probability is higher than this value AND the average log probability over sampled tokens is below 'Log Prob Threshold', consider the segment as silent.")
             dd_compute_type = gr.Dropdown(label="Compute Type", choices=self.whisper_inf.available_compute_types,
-                                          value=self.whisper_inf.current_compute_type, interactive=True)
-            nb_best_of = gr.Number(label="Best Of", value=5, interactive=True)
-            nb_patience = gr.Number(label="Patience", value=1, interactive=True)
+                                          value=self.whisper_inf.current_compute_type, interactive=True,
+                                          info="Select the type of computation to perform.")
+            nb_best_of = gr.Number(label="Best Of", value=5, interactive=True,
+                                   info="Number of candidates when sampling with non-zero temperature.")
+            nb_patience = gr.Number(label="Patience", value=1, interactive=True,
+                                    info="Beam search patience factor.")
             cb_condition_on_previous_text = gr.Checkbox(label="Condition On Previous Text", value=True,
-                                                        interactive=True)
-            tb_initial_prompt = gr.Textbox(label="Initial Prompt", value=None, interactive=True)
-            sd_temperature = gr.Slider(label="Temperature", value=0, step=0.01, maximum=1.0, interactive=True)
-            nb_compression_ratio_threshold = gr.Number(label="Compression Ratio Threshold", value=2.4, interactive=True)
+                                                        interactive=True,
+                                                        info="Condition on previous text during decoding.")
+            tb_initial_prompt = gr.Textbox(label="Initial Prompt", value=None, interactive=True,
+                                           info="Initial prompt to use for decoding.")
+            sd_temperature = gr.Slider(label="Temperature", value=0, step=0.01, maximum=1.0, interactive=True,
+                                       info="Temperature for sampling. It can be a tuple of temperatures, which will be successively used upon failures according to either `compression_ratio_threshold` or `log_prob_threshold`.")
+            nb_compression_ratio_threshold = gr.Number(label="Compression Ratio Threshold", value=2.4, interactive=True,
+                                                       info="If the gzip compression ratio is above this value, treat as failed.")
             with gr.Group(visible=isinstance(self.whisper_inf, FasterWhisperInference)):
                 nb_length_penalty = gr.Number(label="Length Penalty", value=1,
                                               info="Exponential length penalty constant.")
