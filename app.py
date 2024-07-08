@@ -60,21 +60,6 @@ class App:
             )
         return whisper_inf
 
-    @staticmethod
-    def open_folder(folder_path: str):
-        if os.path.exists(folder_path):
-            os.system(f"start {folder_path}")
-        else:
-            print(f"The folder {folder_path} does not exist.")
-
-    @staticmethod
-    def on_change_models(model_size: str):
-        translatable_model = ["large", "large-v1", "large-v2", "large-v3"]
-        if model_size not in translatable_model:
-            return gr.Checkbox(visible=False, value=False, interactive=False)
-        else:
-            return gr.Checkbox(visible=True, value=False, label="Translate to English?", interactive=True)
-
     def launch(self):
         with self.app:
             with gr.Row():
@@ -617,6 +602,21 @@ class App:
         launch_args['inbrowser'] = True
 
         self.app.queue(api_open=False).launch(**launch_args)
+
+    @staticmethod
+    def open_folder(folder_path: str):
+        if os.path.exists(folder_path):
+            os.system(f"start {folder_path}")
+        else:
+            print(f"The folder {folder_path} does not exist.")
+
+    @staticmethod
+    def on_change_models(model_size: str):
+        translatable_model = ["large", "large-v1", "large-v2", "large-v3"]
+        if model_size not in translatable_model:
+            return gr.Checkbox(visible=False, value=False, interactive=False)
+        else:
+            return gr.Checkbox(visible=True, value=False, label="Translate to English?", interactive=True)
 
 
 # Create the parser for command-line arguments
