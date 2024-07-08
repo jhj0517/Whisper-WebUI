@@ -225,48 +225,7 @@ class WhisperParameters:
         WhisperValues
            Data class that has values of parameters
         """
-        return WhisperValues(
-            model_size=args[0],
-            lang=args[1],
-            is_translate=args[2],
-            beam_size=args[3],
-            log_prob_threshold=args[4],
-            no_speech_threshold=args[5],
-            compute_type=args[6],
-            best_of=args[7],
-            patience=args[8],
-            condition_on_previous_text=args[9],
-            initial_prompt=args[10],
-            temperature=args[11],
-            compression_ratio_threshold=args[12],
-            vad_filter=args[13],
-            threshold=args[14],
-            min_speech_duration_ms=args[15],
-            max_speech_duration_s=args[16],
-            min_silence_duration_ms=args[17],
-            speech_pad_ms=args[18],
-            chunk_length_s=args[19],
-            batch_size=args[20],
-            is_diarize=args[21],
-            hf_token=args[22],
-            diarization_device=args[23],
-            length_penalty=args[24],
-            repetition_penalty=args[25],
-            no_repeat_ngram_size=args[26],
-            prefix=args[27],
-            suppress_blank=args[28],
-            suppress_tokens=args[29],
-            max_initial_timestamp=args[30],
-            word_timestamps=args[31],
-            prepend_punctuations=args[32],
-            append_punctuations=args[33],
-            max_new_tokens=args[34],
-            chunk_length=args[35],
-            hallucination_silence_threshold=args[36],
-            hotwords=args[37],
-            language_detection_threshold=args[38],
-            language_detection_segments=args[39]
-        )
+        return WhisperValues(*args)
 
 
 @dataclass
@@ -305,11 +264,11 @@ class WhisperValues:
     word_timestamps: bool
     prepend_punctuations: Optional[str]
     append_punctuations: Optional[str]
-    max_new_tokens: int
-    chunk_length: int
-    hallucination_silence_threshold: float
+    max_new_tokens: Optional[int]
+    chunk_length: Optional[int]
+    hallucination_silence_threshold: Optional[float]
     hotwords: Optional[str]
-    language_detection_threshold: float
+    language_detection_threshold: Optional[float]
     language_detection_segments: int
     """
     A data class to use Whisper parameters.
