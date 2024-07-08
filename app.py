@@ -78,7 +78,7 @@ class App:
             nb_log_prob_threshold = gr.Number(label="Log Probability Threshold", value=-1.0, interactive=True,
                                               info="If the average log probability over sampled tokens is below this value, treat as failed.")
             nb_no_speech_threshold = gr.Number(label="No Speech Threshold", value=0.6, interactive=True,
-                                               info="If the No Speech Probability is higher than this value AND the average log probability over sampled tokens is below 'Log Prob Threshold', consider the segment as silent.")
+                                               info="If the no speech probability is higher than this value AND the average log probability over sampled tokens is below 'Log Prob Threshold', consider the segment as silent.")
             dd_compute_type = gr.Dropdown(label="Compute Type", choices=self.whisper_inf.available_compute_types,
                                           value=self.whisper_inf.current_compute_type, interactive=True,
                                           info="Select the type of computation to perform.")
@@ -89,10 +89,14 @@ class App:
             cb_condition_on_previous_text = gr.Checkbox(label="Condition On Previous Text", value=True,
                                                         interactive=True,
                                                         info="Condition on previous text during decoding.")
+            sld_prompt_reset_on_temperature = gr.Slider(label="Prompt Reset On Temperature", value=0.5,
+                                                        minimum=0, maximum=1, step=0.01, interactive=True,
+                                                        info="Resets prompt if temperature is above this value."
+                                                             " Arg has effect only if 'Condition On Previous Text' is True.")
             tb_initial_prompt = gr.Textbox(label="Initial Prompt", value=None, interactive=True,
                                            info="Initial prompt to use for decoding.")
             sd_temperature = gr.Slider(label="Temperature", value=0, step=0.01, maximum=1.0, interactive=True,
-                                       info="Temperature for sampling. It can be a tuple of temperatures, which will be successively used upon failures according to either `compression_ratio_threshold` or `log_prob_threshold`.")
+                                       info="Temperature for sampling. It can be a tuple of temperatures, which will be successively used upon failures according to either `Compression Ratio Threshold` or `Log Prob Threshold`.")
             nb_compression_ratio_threshold = gr.Number(label="Compression Ratio Threshold", value=2.4, interactive=True,
                                                        info="If the gzip compression ratio is above this value, treat as failed.")
             with gr.Group(visible=isinstance(self.whisper_inf, FasterWhisperInference)):
@@ -170,7 +174,8 @@ class App:
                 append_punctuations=tb_append_punctuations, max_new_tokens=nb_max_new_tokens, chunk_length=nb_chunk_length,
                 hallucination_silence_threshold=nb_hallucination_silence_threshold, hotwords=tb_hotwords,
                 language_detection_threshold=nb_language_detection_threshold,
-                language_detection_segments=nb_language_detection_segments
+                language_detection_segments=nb_language_detection_segments,
+                prompt_reset_on_temperature=sld_prompt_reset_on_temperature
             ),
             dd_file_format,
             cb_timestamp

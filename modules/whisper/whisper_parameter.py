@@ -15,6 +15,7 @@ class WhisperParameters:
     best_of: gr.Number
     patience: gr.Number
     condition_on_previous_text: gr.Checkbox
+    prompt_reset_on_temperature: gr.Slider
     initial_prompt: gr.Textbox
     temperature: gr.Slider
     compression_ratio_threshold: gr.Number
@@ -240,6 +241,7 @@ class WhisperValues:
     best_of: int
     patience: float
     condition_on_previous_text: bool
+    prompt_reset_on_temperature: float
     initial_prompt: Optional[str]
     temperature: float
     compression_ratio_threshold: float

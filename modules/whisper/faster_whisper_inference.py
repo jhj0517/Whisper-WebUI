@@ -91,7 +91,8 @@ class FasterWhisperInference(WhisperBase):
             hallucination_silence_threshold=params.hallucination_silence_threshold,
             hotwords=params.hotwords,
             language_detection_threshold=params.language_detection_threshold,
-            language_detection_segments=params.language_detection_segments
+            language_detection_segments=params.language_detection_segments,
+            prompt_reset_on_temperature=params.prompt_reset_on_temperature
         )
         progress(0, desc="Loading audio..")
 
