@@ -5,6 +5,7 @@ import torch
 from typing import BinaryIO, Union, Tuple, List
 import faster_whisper
 from faster_whisper.vad import VadOptions
+import ast
 import ctranslate2
 import whisper
 import gradio as gr
@@ -62,6 +63,8 @@ class FasterWhisperInference(WhisperBase):
         if params.model_size != self.current_model_size or self.model is None or self.current_compute_type != params.compute_type:
             self.update_model(params.model_size, params.compute_type, progress)
 
+        params.suppress_tokens = self.format_suppress_tokens_str(params.suppress_tokens)
+
         segments, info = self.model.transcribe(
             audio=audio,
             language=params.lang,
@@ -73,6 +76,23 @@ class FasterWhisperInference(WhisperBase):
             patience=params.patience,
             temperature=params.temperature,
             compression_ratio_threshold=params.compression_ratio_threshold,
+            length_penalty=params.length_penalty,
+            repetition_penalty=params.repetition_penalty,
+            no_repeat_ngram_size=params.no_repeat_ngram_size,
+            prefix=params.prefix,
+            suppress_blank=params.suppress_blank,
+            suppress_tokens=params.suppress_tokens,
+            max_initial_timestamp=params.max_initial_timestamp,
+            word_timestamps=params.word_timestamps,
+            prepend_punctuations=params.prepend_punctuations,
+            append_punctuations=params.append_punctuations,
+            max_new_tokens=params.max_new_tokens,
+            chunk_length=params.chunk_length,
+            hallucination_silence_threshold=params.hallucination_silence_threshold,
+            hotwords=params.hotwords,
+            language_detection_threshold=params.language_detection_threshold,
+            language_detection_segments=params.language_detection_segments,
+            prompt_reset_on_temperature=params.prompt_reset_on_temperature
         )
         progress(0, desc="Loading audio..")
 
@@ -147,3 +167,13 @@ class FasterWhisperInference(WhisperBase):
             return "cuda"
         else:
             return "auto"
+
+    @staticmethod
+    def format_suppress_tokens_str(suppress_tokens_str: str) -> List[int]:
+        try:
+            suppress_tokens = ast.literal_eval(suppress_tokens_str)
+            if not isinstance(suppress_tokens, list) or not all(isinstance(item, int) for item in suppress_tokens):
+                raise ValueError("Invalid Suppress Tokens. The value must be type of List[int]")
+            return suppress_tokens
+        except Exception as e:
+            raise ValueError("Invalid Suppress Tokens. The value must be type of List[int]")

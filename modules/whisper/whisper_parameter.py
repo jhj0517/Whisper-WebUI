@@ -15,6 +15,7 @@ class WhisperParameters:
     best_of: gr.Number
     patience: gr.Number
     condition_on_previous_text: gr.Checkbox
+    prompt_reset_on_temperature: gr.Slider
     initial_prompt: gr.Textbox
     temperature: gr.Slider
     compression_ratio_threshold: gr.Number
@@ -29,6 +30,22 @@ class WhisperParameters:
     is_diarize: gr.Checkbox
     hf_token: gr.Textbox
     diarization_device: gr.Dropdown
+    length_penalty: gr.Number
+    repetition_penalty: gr.Number
+    no_repeat_ngram_size: gr.Number
+    prefix: gr.Textbox
+    suppress_blank: gr.Checkbox
+    suppress_tokens: gr.Textbox
+    max_initial_timestamp: gr.Number
+    word_timestamps: gr.Checkbox
+    prepend_punctuations: gr.Textbox
+    append_punctuations: gr.Textbox
+    max_new_tokens: gr.Number
+    chunk_length: gr.Number
+    hallucination_silence_threshold: gr.Number
+    hotwords: gr.Textbox
+    language_detection_threshold: gr.Number
+    language_detection_segments: gr.Number
     """
     A data class for Gradio components of the Whisper Parameters. Use "before" Gradio pre-processing.
     This data class is used to mitigate the key-value problem between Gradio components and function parameters.
@@ -129,6 +146,62 @@ class WhisperParameters:
         
     diarization_device: gr.Dropdown
         This parameter is related with whisperx. Device to run diarization model
+        
+    length_penalty: 
+        This parameter is related to faster-whisper. Exponential length penalty constant.
+    
+    repetition_penalty: 
+        This parameter is related to faster-whisper. Penalty applied to the score of previously generated tokens
+        (set > 1 to penalize).
+
+    no_repeat_ngram_size:
+        This parameter is related to faster-whisper. Prevent repetitions of n-grams with this size (set 0 to disable).
+
+    prefix:
+        This parameter is related to faster-whisper. Optional text to provide as a prefix for the first window.
+
+    suppress_blank:
+        This parameter is related to faster-whisper. Suppress blank outputs at the beginning of the sampling.
+
+    suppress_tokens:
+        This parameter is related to faster-whisper. List of token IDs to suppress. -1 will suppress a default set
+        of symbols as defined in the model config.json file.
+
+    max_initial_timestamp:
+        This parameter is related to faster-whisper. The initial timestamp cannot be later than this.
+
+    word_timestamps:
+        This parameter is related to faster-whisper. Extract word-level timestamps using the cross-attention pattern
+        and dynamic time warping, and include the timestamps for each word in each segment.
+
+    prepend_punctuations:
+        This parameter is related to faster-whisper. If word_timestamps is True, merge these punctuation symbols
+        with the next word.
+
+    append_punctuations:
+        This parameter is related to faster-whisper. If word_timestamps is True, merge these punctuation symbols
+        with the previous word.
+
+    max_new_tokens:
+        This parameter is related to faster-whisper. Maximum number of new tokens to generate per-chunk. If not set,
+        the maximum will be set by the default max_length.
+
+    chunk_length:
+        This parameter is related to faster-whisper. The length of audio segments. If it is not None, it will overwrite the
+        default chunk_length of the FeatureExtractor.
+
+    hallucination_silence_threshold:
+        This parameter is related to faster-whisper. When word_timestamps is True, skip silent periods longer than this threshold
+        (in seconds) when a possible hallucination is detected.
+
+    hotwords:
+        This parameter is related to faster-whisper. Hotwords/hint phrases to provide the model with. Has no effect if prefix is not None.
+
+    language_detection_threshold:
+        This parameter is related to faster-whisper. If the maximum probability of the language tokens is higher than this value, the language is detected.
+
+    language_detection_segments:
+        This parameter is related to faster-whisper. Number of segments to consider for the language detection.
     """
 
     def as_list(self) -> list:
@@ -153,32 +226,7 @@ class WhisperParameters:
         WhisperValues
            Data class that has values of parameters
         """
-        return WhisperValues(
-            model_size=args[0],
-            lang=args[1],
-            is_translate=args[2],
-            beam_size=args[3],
-            log_prob_threshold=args[4],
-            no_speech_threshold=args[5],
-            compute_type=args[6],
-            best_of=args[7],
-            patience=args[8],
-            condition_on_previous_text=args[9],
-            initial_prompt=args[10],
-            temperature=args[11],
-            compression_ratio_threshold=args[12],
-            vad_filter=args[13],
-            threshold=args[14],
-            min_speech_duration_ms=args[15],
-            max_speech_duration_s=args[16],
-            min_silence_duration_ms=args[17],
-            speech_pad_ms=args[18],
-            chunk_length_s=args[19],
-            batch_size=args[20],
-            is_diarize=args[21],
-            hf_token=args[22],
-            diarization_device=args[23]
-        )
+        return WhisperValues(*args)
 
 
 @dataclass
@@ -193,6 +241,7 @@ class WhisperValues:
     best_of: int
     patience: float
     condition_on_previous_text: bool
+    prompt_reset_on_temperature: float
     initial_prompt: Optional[str]
     temperature: float
     compression_ratio_threshold: float
@@ -207,6 +256,22 @@ class WhisperValues:
     is_diarize: bool
     hf_token: str
     diarization_device: str
+    length_penalty: float
+    repetition_penalty: float
+    no_repeat_ngram_size: int
+    prefix: Optional[str]
+    suppress_blank: bool
+    suppress_tokens: Optional[str]
+    max_initial_timestamp: float
+    word_timestamps: bool
+    prepend_punctuations: Optional[str]
+    append_punctuations: Optional[str]
+    max_new_tokens: Optional[int]
+    chunk_length: Optional[int]
+    hallucination_silence_threshold: Optional[float]
+    hotwords: Optional[str]
+    language_detection_threshold: Optional[float]
+    language_detection_segments: int
     """
     A data class to use Whisper parameters.
     """
