@@ -24,7 +24,7 @@ class App:
             output_dir=os.path.join(self.args.output_dir, "translations")
         )
         self.deepl_api = DeepLAPI(
-            output_dir=self.args.output_dir
+            output_dir=os.path.join(self.args.output_dir, "translations")
         )
 
     def init_whisper(self):
