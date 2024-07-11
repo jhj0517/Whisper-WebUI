@@ -141,10 +141,17 @@ class App:
             cb_vad_filter = gr.Checkbox(label="Enable Silero VAD Filter", value=False, interactive=True)
             sd_threshold = gr.Slider(minimum=0.0, maximum=1.0, step=0.01, label="Speech Threshold", value=0.5,
                                      info="Lower it to be more sensitive to small sounds.")
-            nb_min_speech_duration_ms = gr.Number(label="Minimum Speech Duration (ms)", precision=0, value=250)
-            nb_max_speech_duration_s = gr.Number(label="Maximum Speech Duration (s)", value=9999)
-            nb_min_silence_duration_ms = gr.Number(label="Minimum Silence Duration (ms)", precision=0, value=2000)
-            nb_speech_pad_ms = gr.Number(label="Speech Padding (ms)", precision=0, value=400)
+            nb_min_speech_duration_ms = gr.Number(label="Minimum Speech Duration (ms)", precision=0, value=250,
+                                                  info="Final speech chunks shorter than this time are thrown out")
+            nb_max_speech_duration_s = gr.Number(label="Maximum Speech Duration (s)", value=9999,
+                                                 info="Maximum duration of speech chunks in \"seconds\". Chunks longer"
+                                                        " than this time will be split at the timestamp of the last silence that"
+                                                        " lasts more than 100ms (if any), to prevent aggressive cutting.")
+            nb_min_silence_duration_ms = gr.Number(label="Minimum Silence Duration (ms)", precision=0, value=2000,
+                                                   info="In the end of each speech chunk wait for this time"
+                                                        " before separating it")
+            nb_speech_pad_ms = gr.Number(label="Speech Padding (ms)", precision=0, value=400,
+                                         info="Final speech chunks are padded by this time each side")
 
         with gr.Accordion("Diarization", open=False):
             cb_diarize = gr.Checkbox(label="Enable Diarization")
