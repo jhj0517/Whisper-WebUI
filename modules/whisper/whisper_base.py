@@ -93,7 +93,7 @@ class WhisperBase(ABC):
                 min_silence_duration_ms=params.min_silence_duration_ms,
                 speech_pad_ms=params.speech_pad_ms
             )
-            self.vad.run(
+            audio = self.vad.run(
                 audio=audio,
                 vad_parameters=vad_options,
                 progress=progress
