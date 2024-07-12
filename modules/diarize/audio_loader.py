@@ -2,6 +2,8 @@ import os
 import subprocess
 from functools import lru_cache
 from typing import Optional, Union
+from scipy.io.wavfile import write
+import tempfile
 
 import numpy as np
 import torch
