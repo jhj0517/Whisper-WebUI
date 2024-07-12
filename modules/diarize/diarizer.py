@@ -1,6 +1,7 @@
 import os
 import torch
-from typing import List
+from typing import List, Union, BinaryIO
+import numpy as np
 import time
 import logging
 
@@ -20,7 +21,7 @@ class Diarizer:
         self.pipe = None
 
     def run(self,
-            audio: str,
+            audio: Union[str, BinaryIO, np.ndarray],
             transcribed_result: List[dict],
             use_auth_token: str,
             device: str
