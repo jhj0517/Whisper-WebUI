@@ -168,15 +168,17 @@ class DeepLAPI:
 
                 write_file(subtitle, output_path)
 
-            files_info[file_name] = subtitle
+            files_info[file_name] = {"subtitle": subtitle, "path": output_path}
         total_result = ''
-        for file_name, subtitle in files_info.items():
+        result_file_path = []
+        for file_name, info in files_info.items():
             total_result += '------------------------------------\n'
             total_result += f'{file_name}\n\n'
-            total_result += f'{subtitle}'
+            total_result += f'{info["subtitle"]}'
+            result_file_path.append(info["path"])
 
         gr_str = f"Done! Subtitle is in the outputs/translation folder.\n\n{total_result}"
-        return [gr_str, output_path]
+        return [gr_str, result_file_path]
 
     def request_deepl_translate(self,
                                 auth_key: str,
