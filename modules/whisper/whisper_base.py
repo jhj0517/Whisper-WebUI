@@ -96,6 +96,7 @@ class WhisperBase(ABC):
             audio = self.vad.run(
                 audio=audio,
                 vad_parameters=vad_options,
+                silence_non_speech=True,
                 progress=progress
             )
 
