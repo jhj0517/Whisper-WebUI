@@ -1,3 +1,5 @@
+# Adapted from https://github.com/SYSTRAN/faster-whisper/blob/master/faster_whisper/vad.py
+
 from faster_whisper.vad import VadOptions, get_vad_model
 import numpy as np
 from typing import BinaryIO, Union, List, Optional

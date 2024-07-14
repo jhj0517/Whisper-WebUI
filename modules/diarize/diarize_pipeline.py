@@ -1,3 +1,5 @@
+# Adapted from https://github.com/m-bain/whisperX/blob/main/whisperx/diarize.py
+
 import numpy as np
 import pandas as pd
 import os

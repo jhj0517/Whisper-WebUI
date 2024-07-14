@@ -1,3 +1,5 @@
+# Adapted from https://github.com/m-bain/whisperX/blob/main/whisperx/audio.py
+
 import os
 import subprocess
 from functools import lru_cache
