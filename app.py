@@ -73,7 +73,7 @@ class App:
             cb_timestamp = gr.Checkbox(value=True, label="Add a timestamp to the end of the filename",
                                        interactive=True)
         with gr.Accordion("Advanced Parameters", open=False):
-            nb_beam_size = gr.Number(label="Beam Size", value=1, precision=0, interactive=True,
+            nb_beam_size = gr.Number(label="Beam Size", value=5, precision=0, interactive=True,
                                      info="Beam size to use for decoding.")
             nb_log_prob_threshold = gr.Number(label="Log Probability Threshold", value=-1.0, interactive=True,
                                               info="If the average log probability over sampled tokens is below this value, treat as failed.")
@@ -137,7 +137,7 @@ class App:
                 nb_chunk_length_s = gr.Number(label="Chunk Lengths (sec)", value=30, precision=0)
                 nb_batch_size = gr.Number(label="Batch Size", value=24, precision=0)
 
-        with gr.Accordion("VAD", open=False):
+        with gr.Accordion("VAD", open=False, visible=isinstance(self.whisper_inf, FasterWhisperInference)):
             cb_vad_filter = gr.Checkbox(label="Enable Silero VAD Filter", value=False, interactive=True)
             sd_threshold = gr.Slider(minimum=0.0, maximum=1.0, step=0.01, label="Speech Threshold", value=0.5,
                                      info="Lower it to be more sensitive to small sounds.")

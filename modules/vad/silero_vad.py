@@ -1,6 +1,8 @@
+# Adapted from https://github.com/SYSTRAN/faster-whisper/blob/master/faster_whisper/vad.py
+
 from faster_whisper.vad import VadOptions, get_vad_model
 import numpy as np
-from typing import BinaryIO, Union, List, Optional, Tuple
+from typing import BinaryIO, Union, List, Optional
 import warnings
 import faster_whisper
 import gradio as gr
@@ -15,7 +17,6 @@ class SileroVAD:
     def run(self,
             audio: Union[str, BinaryIO, np.ndarray],
             vad_parameters: VadOptions,
-            silence_non_speech: bool = True,
             progress: gr.Progress = gr.Progress()):
         """
         Run VAD
@@ -26,8 +27,6 @@ class SileroVAD:
             Audio path or file binary or Audio numpy array
         vad_parameters:
             Options for VAD processing.
-        silence_non_speech: bool
-            If True, non-speech parts will be silenced instead of being removed.
         progress: gr.Progress
             Indicator to show progress directly in gradio.
 
@@ -43,32 +42,19 @@ class SileroVAD:
             audio = faster_whisper.decode_audio(audio, sampling_rate=sampling_rate)
 
         duration = audio.shape[0] / sampling_rate
+        duration_after_vad = duration
 
         if vad_parameters is None:
             vad_parameters = VadOptions()
         elif isinstance(vad_parameters, dict):
             vad_parameters = VadOptions(**vad_parameters)
-
         speech_chunks = self.get_speech_timestamps(
             audio=audio,
             vad_options=vad_parameters,
             progress=progress
         )
-
-        audio, duration_diff = self.collect_chunks(
-            audio=audio,
-            chunks=speech_chunks,
-            silence_non_speech=silence_non_speech
-        )
-
-        if silence_non_speech:
-            print(
-                f"VAD filter silenced {self.format_timestamp(duration_diff)} of audio.",
-            )
-        else:
-            print(
-                f"VAD filter removed {self.format_timestamp(duration_diff)} of audio",
-            )
+        audio = self.collect_chunks(audio, speech_chunks)
+        duration_after_vad = audio.shape[0] / sampling_rate
 
         return audio
 
@@ -224,41 +210,13 @@ class SileroVAD:
     def update_model(self):
         self.model = get_vad_model()
 
-    def collect_chunks(
-        self,
-        audio: np.ndarray,
-        chunks: List[dict],
-        silence_non_speech: bool = True,
-    ) -> Tuple[np.ndarray, float]:
-        """Collects and concatenate audio chunks.
-
-        Args:
-          audio: One dimensional float array.
-          chunks: List of dictionaries containing start and end samples of speech chunks
-          silence_non_speech: If True, non-speech parts will be silenced instead of being removed.
-
-        Returns:
-          Tuple containing:
-            - Processed audio as a numpy array
-            - Duration of non-speech (silenced or removed) audio in seconds
-        """
+    @staticmethod
+    def collect_chunks(audio: np.ndarray, chunks: List[dict]) -> np.ndarray:
+        """Collects and concatenates audio chunks."""
         if not chunks:
-            return np.array([], dtype=np.float32), 0.0
+            return np.array([], dtype=np.float32)
 
-        total_samples = audio.shape[0]
-        speech_samples_count = sum(chunk["end"] - chunk["start"] for chunk in chunks)
-        non_speech_samples_count = total_samples - speech_samples_count
-        non_speech_duration = non_speech_samples_count / self.sampling_rate
-
-        if not silence_non_speech:
-            processed_audio = np.concatenate([audio[chunk["start"]: chunk["end"]] for chunk in chunks])
-        else:
-            processed_audio = np.zeros_like(audio)
-            for chunk in chunks:
-                start, end = chunk['start'], chunk['end']
-                processed_audio[start:end] = audio[start:end]
-
-        return processed_audio, non_speech_duration
+        return np.concatenate([audio[chunk["start"]: chunk["end"]] for chunk in chunks])
 
     @staticmethod
     def format_timestamp(
@@ -282,3 +240,4 @@ class SileroVAD:
         return (
             f"{hours_marker}{minutes:02d}:{seconds:02d}{decimal_marker}{milliseconds:03d}"
         )
+
