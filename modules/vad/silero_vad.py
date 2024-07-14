@@ -240,15 +240,15 @@ class SileroVAD:
         Returns:
           Tuple containing:
             - Processed audio as a numpy array
-            - Duration of changed (silenced or removed) audio in seconds
+            - Duration of non-speech (silenced or removed) audio in seconds
         """
         if not chunks:
             return np.array([], dtype=np.float32), 0.0
 
         total_samples = audio.shape[0]
-        speech_samples = sum(chunk["end"] - chunk["start"] for chunk in chunks)
-        changed_samples = total_samples - speech_samples
-        duration_difference = changed_samples / self.sampling_rate
+        speech_samples_count = sum(chunk["end"] - chunk["start"] for chunk in chunks)
+        non_speech_samples_count = total_samples - speech_samples_count
+        non_speech_duration = non_speech_samples_count / self.sampling_rate
 
         if not silence_non_speech:
             processed_audio = np.concatenate([audio[chunk["start"]: chunk["end"]] for chunk in chunks])
@@ -258,7 +258,7 @@ class SileroVAD:
                 start, end = chunk['start'], chunk['end']
                 processed_audio[start:end] = audio[start:end]
 
-        return processed_audio, duration_difference
+        return processed_audio, non_speech_duration
 
     @staticmethod
     def format_timestamp(
