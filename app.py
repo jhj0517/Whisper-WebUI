@@ -73,7 +73,7 @@ class App:
             cb_timestamp = gr.Checkbox(value=True, label="Add a timestamp to the end of the filename",
                                        interactive=True)
         with gr.Accordion("Advanced Parameters", open=False):
-            nb_beam_size = gr.Number(label="Beam Size", value=1, precision=0, interactive=True,
+            nb_beam_size = gr.Number(label="Beam Size", value=5, precision=0, interactive=True,
                                      info="Beam size to use for decoding.")
             nb_log_prob_threshold = gr.Number(label="Log Probability Threshold", value=-1.0, interactive=True,
                                               info="If the average log probability over sampled tokens is below this value, treat as failed.")
