@@ -85,20 +85,6 @@ class WhisperBase(ABC):
         """
         params = WhisperParameters.as_value(*whisper_params)
 
-        if params.vad_filter:
-            vad_options = VadOptions(
-                threshold=params.threshold,
-                min_speech_duration_ms=params.min_speech_duration_ms,
-                max_speech_duration_s=params.max_speech_duration_s,
-                min_silence_duration_ms=params.min_silence_duration_ms,
-                speech_pad_ms=params.speech_pad_ms
-            )
-            audio = self.vad.run(
-                audio=audio,
-                vad_parameters=vad_options,
-                progress=progress
-            )
-
         if params.lang == "Automatic Detection":
             params.lang = None
         else:
