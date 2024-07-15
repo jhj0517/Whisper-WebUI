@@ -2,9 +2,10 @@
 
 from faster_whisper.vad import VadOptions, get_vad_model
 import numpy as np
-from typing import BinaryIO, Union, List, Optional
+from typing import BinaryIO, Union, List, Optional, Tuple
 import warnings
 import faster_whisper
+from faster_whisper.transcribe import SpeechTimestampsMap, Segment
 import gradio as gr
 
 
@@ -17,7 +18,8 @@ class SileroVAD:
     def run(self,
             audio: Union[str, BinaryIO, np.ndarray],
             vad_parameters: VadOptions,
-            progress: gr.Progress = gr.Progress()):
+            progress: gr.Progress = gr.Progress()
+            ) -> Tuple[np.ndarray, List[dict]]:
         """
         Run VAD
 
@@ -32,8 +34,10 @@ class SileroVAD:
 
         Returns
         ----------
-        audio: np.ndarray
+        np.ndarray
             Pre-processed audio with VAD
+        List[dict]
+            Chunks of speeches to be used to restore the timestamps later
         """
 
         sampling_rate = self.sampling_rate
@@ -56,7 +60,7 @@ class SileroVAD:
         audio = self.collect_chunks(audio, speech_chunks)
         duration_after_vad = audio.shape[0] / sampling_rate
 
-        return audio
+        return audio, speech_chunks
 
     def get_speech_timestamps(
         self,
@@ -240,4 +244,21 @@ class SileroVAD:
         return (
             f"{hours_marker}{minutes:02d}:{seconds:02d}{decimal_marker}{milliseconds:03d}"
         )
+
+    def restore_speech_timestamps(
+        self,
+        segments: List[dict],
+        speech_chunks: List[dict],
+        sampling_rate: Optional[int] = None,
+    ) -> List[dict]:
+        if sampling_rate is None:
+            sampling_rate = self.sampling_rate
+
+        ts_map = SpeechTimestampsMap(speech_chunks, sampling_rate)
+
+        for segment in segments:
+            segment["start"] = ts_map.get_original_time(segment["start"])
+            segment["end"] = ts_map.get_original_time(segment["end"])
+
+        return segments
 
