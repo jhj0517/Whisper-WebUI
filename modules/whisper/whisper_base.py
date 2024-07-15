@@ -91,11 +91,37 @@ class WhisperBase(ABC):
             language_code_dict = {value: key for key, value in whisper.tokenizer.LANGUAGES.items()}
             params.lang = language_code_dict[params.lang]
 
+        speech_chunks = None
+        if params.vad_filter:
+            # Explicit value set for float('inf') from gr.Number()
+            if params.max_speech_duration_s >= 9999:
+                params.max_speech_duration_s = float('inf')
+
+            vad_options = VadOptions(
+                threshold=params.threshold,
+                min_speech_duration_ms=params.min_speech_duration_ms,
+                max_speech_duration_s=params.max_speech_duration_s,
+                min_silence_duration_ms=params.min_silence_duration_ms,
+                speech_pad_ms=params.speech_pad_ms
+            )
+
+            audio, speech_chunks = self.vad.run(
+                audio=audio,
+                vad_parameters=vad_options,
+                progress=progress
+            )
+
         result, elapsed_time = self.transcribe(
             audio,
             progress,
             *astuple(params)
         )
+
+        if params.vad_filter:
+            result = self.vad.restore_speech_timestamps(
+                segments=result,
+                speech_chunks=speech_chunks,
+            )
 
         if params.is_diarize:
             result, elapsed_time_diarization = self.diarizer.run(
