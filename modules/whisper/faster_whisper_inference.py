@@ -71,20 +71,6 @@ class FasterWhisperInference(WhisperBase):
         if not params.hotwords:
             params.hotwords = None
 
-        vad_options = None
-        if params.vad_filter:
-            # Explicit value set for float('inf') from gr.Number()
-            if params.max_speech_duration_s >= 9999:
-                params.max_speech_duration_s = float('inf')
-
-            vad_options = VadOptions(
-                threshold=params.threshold,
-                min_speech_duration_ms=params.min_speech_duration_ms,
-                max_speech_duration_s=params.max_speech_duration_s,
-                min_silence_duration_ms=params.min_silence_duration_ms,
-                speech_pad_ms=params.speech_pad_ms
-            )
-
         params.suppress_tokens = self.format_suppress_tokens_str(params.suppress_tokens)
 
         segments, info = self.model.transcribe(
@@ -115,8 +101,6 @@ class FasterWhisperInference(WhisperBase):
             language_detection_threshold=params.language_detection_threshold,
             language_detection_segments=params.language_detection_segments,
             prompt_reset_on_temperature=params.prompt_reset_on_temperature,
-            vad_filter=params.vad_filter,
-            vad_parameters=vad_options
         )
         progress(0, desc="Loading audio..")
 
