@@ -2,7 +2,7 @@ import os
 import argparse
 import gradio as gr
 
-from modules.whisper.whisper_Inference import WhisperInference
+from modules.whisper.whisper_factory import WhisperFactory
 from modules.whisper.faster_whisper_inference import FasterWhisperInference
 from modules.whisper.insanely_fast_whisper_inference import InsanelyFastWhisperInference
 from modules.translation.nllb_inference import NLLBInference
@@ -16,7 +16,12 @@ class App:
     def __init__(self, args):
         self.args = args
         self.app = gr.Blocks(css=CSS, theme=self.args.theme)
-        self.whisper_inf = self.init_whisper()
+        self.whisper_inf = WhisperFactory.create_whisper_inference(
+            whisper_type=self.args.whisper_type,
+            model_dir=self.args.faster_whisper_model_dir,
+            output_dir=self.args.output_dir,
+            args=self.args
+        )
         print(f"Use \"{self.args.whisper_type}\" implementation")
         print(f"Device \"{self.whisper_inf.device}\" is detected")
         self.nllb_inf = NLLBInference(
@@ -26,39 +31,6 @@ class App:
         self.deepl_api = DeepLAPI(
             output_dir=os.path.join(self.args.output_dir, "translations")
         )
-
-    def init_whisper(self):
-        # Temporal fix of the issue : https://github.com/jhj0517/Whisper-WebUI/issues/144
-        os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
-
-        whisper_type = self.args.whisper_type.lower().strip()
-
-        if whisper_type in ["faster_whisper", "faster-whisper", "fasterwhisper"]:
-            whisper_inf = FasterWhisperInference(
-                model_dir=self.args.faster_whisper_model_dir,
-                output_dir=self.args.output_dir,
-                args=self.args
-            )
-        elif whisper_type in ["whisper"]:
-            whisper_inf = WhisperInference(
-                model_dir=self.args.whisper_model_dir,
-                output_dir=self.args.output_dir,
-                args=self.args
-            )
-        elif whisper_type in ["insanely_fast_whisper", "insanely-fast-whisper", "insanelyfastwhisper",
-                              "insanely_faster_whisper", "insanely-faster-whisper", "insanelyfasterwhisper"]:
-            whisper_inf = InsanelyFastWhisperInference(
-                model_dir=self.args.insanely_fast_whisper_model_dir,
-                output_dir=self.args.output_dir,
-                args=self.args
-            )
-        else:
-            whisper_inf = FasterWhisperInference(
-                model_dir=self.args.faster_whisper_model_dir,
-                output_dir=self.args.output_dir,
-                args=self.args
-            )
-        return whisper_inf
 
     def create_whisper_parameters(self):
         with gr.Row():
