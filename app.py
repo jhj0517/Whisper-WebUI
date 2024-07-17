@@ -18,9 +18,10 @@ class App:
         self.app = gr.Blocks(css=CSS, theme=self.args.theme)
         self.whisper_inf = WhisperFactory.create_whisper_inference(
             whisper_type=self.args.whisper_type,
-            model_dir=self.args.faster_whisper_model_dir,
+            whisper_model_dir=self.args.whisper_model_dir,
+            faster_whisper_model_dir=self.args.faster_whisper_model_dir,
+            insanely_fast_whisper_model_dir=self.args.insanely_fast_whisper_model_dir,
             output_dir=self.args.output_dir,
-            args=self.args
         )
         print(f"Use \"{self.args.whisper_type}\" implementation")
         print(f"Device \"{self.whisper_inf.device}\" is detected")
