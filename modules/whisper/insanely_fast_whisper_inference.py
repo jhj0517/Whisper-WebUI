@@ -17,15 +17,20 @@ from modules.whisper.whisper_base import WhisperBase
 
 class InsanelyFastWhisperInference(WhisperBase):
     def __init__(self,
-                 model_dir: str,
-                 output_dir: str,
-                 args: Namespace
+                 model_dir: Optional[str] = None,
+                 diarization_model_dir: Optional[str] = None,
+                 output_dir: Optional[str] = None,
                  ):
         super().__init__(
             model_dir=model_dir,
             output_dir=output_dir,
-            args=args
+            diarization_model_dir=diarization_model_dir
         )
+        if model_dir is None:
+            model_dir = os.path.join("models", "Whisper", "insanely-fast-whisper")
+        self.model_dir = model_dir
+        os.makedirs(self.model_dir, exist_ok=True)
+
         openai_models = whisper.available_models()
         distil_models = ["distil-large-v2", "distil-large-v3", "distil-medium.en", "distil-small.en"]
         self.available_models = openai_models + distil_models
