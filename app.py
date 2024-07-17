@@ -304,25 +304,18 @@ class App:
                                          outputs=None)
 
         # Launch the app with optional gradio settings
-        launch_args = {}
-        if self.args.share:
-            launch_args['share'] = self.args.share
-        if self.args.server_name:
-            launch_args['server_name'] = self.args.server_name
-        if self.args.server_port:
-            launch_args['server_port'] = self.args.server_port
-        if self.args.username and self.args.password:
-            launch_args['auth'] = (self.args.username, self.args.password)
-        if self.args.root_path:
-            launch_args['root_path'] = self.args.root_path
-        if self.args.inbrowser:
-            launch_args['inbrowser'] = self.args.inbrowser
+        args = self.args
 
-        que_args = {}
-        if self.args.api_open:
-            que_args['api_open'] = self.args.api_open
-
-        self.app.queue(**que_args).launch(**launch_args)
+        self.app.queue(
+            api_open=args.api_open
+        ).launch(
+            share=args.share,
+            server_name=args.server_name,
+            server_port=args.server_port,
+            auth=(args.username, args.password) if args.username and args.password else None,
+            root_path=args.root_path,
+            inbrowser=args.inbrowser
+        )
 
     @staticmethod
     def open_folder(folder_path: str):
