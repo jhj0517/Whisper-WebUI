@@ -315,9 +315,14 @@ class App:
             launch_args['auth'] = (self.args.username, self.args.password)
         if self.args.root_path:
             launch_args['root_path'] = self.args.root_path
-        launch_args['inbrowser'] = True
+        if self.args.inbrowser:
+            launch_args['inbrowser'] = self.args.inbrowser
 
-        self.app.queue(api_open=False).launch(**launch_args)
+        que_args = {}
+        if self.args.api_open:
+            que_args['api_open'] = self.args.api_open
+
+        self.app.queue(**que_args).launch(**launch_args)
 
     @staticmethod
     def open_folder(folder_path: str):
@@ -347,7 +352,8 @@ parser.add_argument('--username', type=str, default=None, help='Gradio authentic
 parser.add_argument('--password', type=str, default=None, help='Gradio authentication password')
 parser.add_argument('--theme', type=str, default=None, help='Gradio Blocks theme')
 parser.add_argument('--colab', type=bool, default=False, nargs='?', const=True, help='Is colab user or not')
-parser.add_argument('--api_open', type=bool, default=False, nargs='?', const=True, help='enable api or not')
+parser.add_argument('--api_open', type=bool, default=False, nargs='?', const=True, help='Enable api or not in Gradio')
+parser.add_argument('--inbrowser', type=bool, default=True, nargs='?', const=True, help='Whether to automatically start Gradio app or not')
 parser.add_argument('--whisper_model_dir', type=str, default=os.path.join("models", "Whisper"),
                     help='Directory path of the whisper model')
 parser.add_argument('--faster_whisper_model_dir', type=str, default=os.path.join("models", "Whisper", "faster-whisper"),
