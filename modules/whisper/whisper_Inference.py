@@ -12,14 +12,14 @@ from modules.whisper.whisper_parameter import *
 
 class WhisperInference(WhisperBase):
     def __init__(self,
-                 model_dir: str,
-                 output_dir: str,
-                 args: Namespace
+                 model_dir: Optional[str] = None,
+                 diarization_model_dir: Optional[str] = None,
+                 output_dir: Optional[str] = None,
                  ):
         super().__init__(
             model_dir=model_dir,
             output_dir=output_dir,
-            args=args
+            diarization_model_dir=diarization_model_dir
         )
 
     def transcribe(self,

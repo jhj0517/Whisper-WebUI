@@ -6,7 +6,6 @@ from abc import ABC, abstractmethod
 from typing import BinaryIO, Union, Tuple, List
 import numpy as np
 from datetime import datetime
-from argparse import Namespace
 from faster_whisper.vad import VadOptions
 from dataclasses import astuple
 
@@ -20,26 +19,34 @@ from modules.vad.silero_vad import SileroVAD
 
 class WhisperBase(ABC):
     def __init__(self,
-                 model_dir: str,
-                 output_dir: str,
-                 args: Namespace
+                 model_dir: Optional[str] = None,
+                 diarization_model_dir: Optional[str] = None,
+                 output_dir: Optional[str] = None,
                  ):
-        self.model = None
-        self.current_model_size = None
+        if model_dir is None:
+            model_dir = os.path.join("models", "Whisper")
+        if diarization_model_dir is None:
+            diarization_model_dir = os.path.join("models", "Diarization")
+        if output_dir is None:
+            output_dir = os.path.join("outputs")
+
         self.model_dir = model_dir
         self.output_dir = output_dir
         os.makedirs(self.output_dir, exist_ok=True)
         os.makedirs(self.model_dir, exist_ok=True)
+        self.diarizer = Diarizer(
+            model_dir=diarization_model_dir
+        )
+        self.vad = SileroVAD()
+
+        self.model = None
+        self.current_model_size = None
         self.available_models = whisper.available_models()
         self.available_langs = sorted(list(whisper.tokenizer.LANGUAGES.values()))
         self.translatable_models = ["large", "large-v1", "large-v2", "large-v3"]
         self.device = self.get_device()
         self.available_compute_types = ["float16", "float32"]
         self.current_compute_type = "float16" if self.device == "cuda" else "float32"
-        self.diarizer = Diarizer(
-            model_dir=args.diarization_model_dir
-        )
-        self.vad = SileroVAD()
 
     @abstractmethod
     def transcribe(self,
@@ -47,6 +54,7 @@ class WhisperBase(ABC):
                    progress: gr.Progress,
                    *whisper_params,
                    ):
+        """Inference whisper model to transcribe"""
         pass
 
     @abstractmethod
@@ -55,6 +63,7 @@ class WhisperBase(ABC):
                      compute_type: str,
                      progress: gr.Progress
                      ):
+        """Initialize whisper model"""
         pass
 
     def run(self,
