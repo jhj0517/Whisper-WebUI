@@ -304,20 +304,18 @@ class App:
                                          outputs=None)
 
         # Launch the app with optional gradio settings
-        launch_args = {}
-        if self.args.share:
-            launch_args['share'] = self.args.share
-        if self.args.server_name:
-            launch_args['server_name'] = self.args.server_name
-        if self.args.server_port:
-            launch_args['server_port'] = self.args.server_port
-        if self.args.username and self.args.password:
-            launch_args['auth'] = (self.args.username, self.args.password)
-        if self.args.root_path:
-            launch_args['root_path'] = self.args.root_path
-        launch_args['inbrowser'] = True
+        args = self.args
 
-        self.app.queue(api_open=False).launch(**launch_args)
+        self.app.queue(
+            api_open=args.api_open
+        ).launch(
+            share=args.share,
+            server_name=args.server_name,
+            server_port=args.server_port,
+            auth=(args.username, args.password) if args.username and args.password else None,
+            root_path=args.root_path,
+            inbrowser=args.inbrowser
+        )
 
     @staticmethod
     def open_folder(folder_path: str):
@@ -347,7 +345,8 @@ parser.add_argument('--username', type=str, default=None, help='Gradio authentic
 parser.add_argument('--password', type=str, default=None, help='Gradio authentication password')
 parser.add_argument('--theme', type=str, default=None, help='Gradio Blocks theme')
 parser.add_argument('--colab', type=bool, default=False, nargs='?', const=True, help='Is colab user or not')
-parser.add_argument('--api_open', type=bool, default=False, nargs='?', const=True, help='enable api or not')
+parser.add_argument('--api_open', type=bool, default=False, nargs='?', const=True, help='Enable api or not in Gradio')
+parser.add_argument('--inbrowser', type=bool, default=True, nargs='?', const=True, help='Whether to automatically start Gradio app or not')
 parser.add_argument('--whisper_model_dir', type=str, default=os.path.join("models", "Whisper"),
                     help='Directory path of the whisper model')
 parser.add_argument('--faster_whisper_model_dir', type=str, default=os.path.join("models", "Whisper", "faster-whisper"),
