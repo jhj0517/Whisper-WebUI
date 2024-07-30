@@ -97,6 +97,7 @@ class DeepLAPI:
                         source_lang: str,
                         target_lang: str,
                         is_pro: bool,
+                        add_timestamp: bool,
                         progress=gr.Progress()) -> list:
         """
         Translate subtitle files using DeepL API
@@ -112,6 +113,8 @@ class DeepLAPI:
             Target language of the file to transcribe from gr.Dropdown()
         is_pro: str
             Boolean value that is about pro user or not from gr.Checkbox().
+        add_timestamp: bool
+            Boolean value from gr.Checkbox() that determines whether to add a timestamp at the end of the filename.
         progress: gr.Progress
             Indicator to show progress directly in gradio.
 
@@ -141,10 +144,12 @@ class DeepLAPI:
                     progress(batch_end / len(parsed_dicts), desc="Translating..")
 
                 subtitle = get_serialized_srt(parsed_dicts)
-                timestamp = datetime.now().strftime("%m%d%H%M%S")
 
-                file_name = file_name[:-9]
-                output_path = os.path.join(self.output_dir, "", f"{file_name}-{timestamp}.srt")
+                if add_timestamp:
+                    timestamp = datetime.now().strftime("%m%d%H%M%S")
+                    file_name += f"-{timestamp}"
+
+                output_path = os.path.join(self.output_dir, "", f"{file_name}.srt")
                 write_file(subtitle, output_path)
 
             elif file_ext == ".vtt":
@@ -161,11 +166,12 @@ class DeepLAPI:
                     progress(batch_end / len(parsed_dicts), desc="Translating..")
 
                 subtitle = get_serialized_vtt(parsed_dicts)
-                timestamp = datetime.now().strftime("%m%d%H%M%S")
 
-                file_name = file_name[:-9]
-                output_path = os.path.join(self.output_dir, "", f"{file_name}-{timestamp}.vtt")
+                if add_timestamp:
+                    timestamp = datetime.now().strftime("%m%d%H%M%S")
+                    file_name += f"-{timestamp}"
 
+                output_path = os.path.join(self.output_dir, "", f"{file_name}.vtt")
                 write_file(subtitle, output_path)
 
             files_info[file_name] = {"subtitle": subtitle, "path": output_path}
