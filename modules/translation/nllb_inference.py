@@ -7,8 +7,8 @@ from modules.translation.translation_base import TranslationBase
 
 class NLLBInference(TranslationBase):
     def __init__(self,
-                 model_dir: str,
-                 output_dir: str
+                 model_dir: str = os.path.join("models", "NLLB"),
+                 output_dir: str = os.path.join("outputs", "translations")
                  ):
         super().__init__(
             model_dir=model_dir,

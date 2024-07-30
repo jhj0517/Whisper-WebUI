@@ -83,7 +83,7 @@ DEEPL_AVAILABLE_SOURCE_LANGS = {
 
 class DeepLAPI:
     def __init__(self,
-                 output_dir: str
+                 output_dir: str = os.path.join("outputs", "translations")
                  ):
         self.api_interval = 1
         self.max_text_batch_size = 50

@@ -11,8 +11,9 @@ from modules.utils.subtitle_manager import *
 
 class TranslationBase(ABC):
     def __init__(self,
-                 model_dir: str,
-                 output_dir: str):
+                 model_dir: str = os.path.join("models", "NLLB"),
+                 output_dir: str = os.path.join("outputs", "translations")
+                 ):
         super().__init__()
         self.model = None
         self.model_dir = model_dir
