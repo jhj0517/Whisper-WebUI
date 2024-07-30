@@ -11,11 +11,11 @@ class WhisperFactory:
     @staticmethod
     def create_whisper_inference(
         whisper_type: str,
-        whisper_model_dir: Optional[str] = None,
-        faster_whisper_model_dir: Optional[str] = None,
-        insanely_fast_whisper_model_dir: Optional[str] = None,
-        diarization_model_dir: Optional[str] = None,
-        output_dir: Optional[str] = None,
+        whisper_model_dir: str = os.path.join("models", "Whisper"),
+        faster_whisper_model_dir: str = os.path.join("models", "Whisper", "faster-whisper"),
+        insanely_fast_whisper_model_dir: str = os.path.join("models", "Whisper", "insanely-fast-whisper"),
+        diarization_model_dir: str = os.path.join("models", "Diarization"),
+        output_dir: str = os.path.join("outputs"),
     ) -> "WhisperBase":
         """
         Create a whisper inference class based on the provided whisper_type.

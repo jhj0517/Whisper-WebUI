@@ -19,17 +19,10 @@ from modules.vad.silero_vad import SileroVAD
 
 class WhisperBase(ABC):
     def __init__(self,
-                 model_dir: Optional[str] = None,
-                 diarization_model_dir: Optional[str] = None,
-                 output_dir: Optional[str] = None,
+                 model_dir: str = os.path.join("models", "Whisper"),
+                 diarization_model_dir: str = os.path.join("models", "Diarization"),
+                 output_dir: str = os.path.join("outputs"),
                  ):
-        if model_dir is None:
-            model_dir = os.path.join("models", "Whisper")
-        if diarization_model_dir is None:
-            diarization_model_dir = os.path.join("models", "Diarization")
-        if output_dir is None:
-            output_dir = os.path.join("outputs")
-
         self.model_dir = model_dir
         self.output_dir = output_dir
         os.makedirs(self.output_dir, exist_ok=True)
