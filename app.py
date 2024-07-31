@@ -258,6 +258,9 @@ class App:
                         with gr.Row():
                             cb_deepl_ispro = gr.Checkbox(label="Pro User?", value=False)
                         with gr.Row():
+                            cb_timestamp = gr.Checkbox(value=True, label="Add a timestamp to the end of the filename",
+                                                       interactive=True)
+                        with gr.Row():
                             btn_run = gr.Button("TRANSLATE SUBTITLE FILE", variant="primary")
                         with gr.Row():
                             tb_indicator = gr.Textbox(label="Output", scale=5)
@@ -266,7 +269,7 @@ class App:
 
                     btn_run.click(fn=self.deepl_api.translate_deepl,
                                   inputs=[tb_authkey, file_subs, dd_deepl_sourcelang, dd_deepl_targetlang,
-                                          cb_deepl_ispro],
+                                          cb_deepl_ispro, cb_timestamp],
                                   outputs=[tb_indicator, files_subtitles])
 
                     btn_openfolder.click(fn=lambda: self.open_folder(os.path.join("outputs", "translations")),

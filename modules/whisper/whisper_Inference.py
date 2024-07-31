@@ -4,6 +4,7 @@ import time
 from typing import BinaryIO, Union, Tuple, List
 import numpy as np
 import torch
+import os
 from argparse import Namespace
 
 from modules.whisper.whisper_base import WhisperBase
@@ -12,9 +13,9 @@ from modules.whisper.whisper_parameter import *
 
 class WhisperInference(WhisperBase):
     def __init__(self,
-                 model_dir: Optional[str] = None,
-                 diarization_model_dir: Optional[str] = None,
-                 output_dir: Optional[str] = None,
+                 model_dir: str = os.path.join("models", "Whisper"),
+                 diarization_model_dir: str = os.path.join("models", "Diarization"),
+                 output_dir: str = os.path.join("outputs"),
                  ):
         super().__init__(
             model_dir=model_dir,

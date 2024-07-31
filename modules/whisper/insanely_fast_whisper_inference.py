@@ -17,17 +17,15 @@ from modules.whisper.whisper_base import WhisperBase
 
 class InsanelyFastWhisperInference(WhisperBase):
     def __init__(self,
-                 model_dir: Optional[str] = None,
-                 diarization_model_dir: Optional[str] = None,
-                 output_dir: Optional[str] = None,
+                 model_dir: str = os.path.join("models", "Whisper", "insanely-fast-whisper"),
+                 diarization_model_dir: str = os.path.join("models", "Diarization"),
+                 output_dir: str = os.path.join("outputs"),
                  ):
         super().__init__(
             model_dir=model_dir,
             output_dir=output_dir,
             diarization_model_dir=diarization_model_dir
         )
-        if model_dir is None:
-            model_dir = os.path.join("models", "Whisper", "insanely-fast-whisper")
         self.model_dir = model_dir
         os.makedirs(self.model_dir, exist_ok=True)
 
