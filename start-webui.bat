@@ -1,7 +1,7 @@
 @echo off
 
 call venv\scripts\activate
-python app.py
+python app.py %*
 
 echo "launching the app"
 pause
