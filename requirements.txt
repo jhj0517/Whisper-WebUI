@@ -1,3 +1,5 @@
+# Remove the --extra-index-url line below if you're not using Nvidia GPU.
+# If you're using it, Update CUDA version to yours, /cu121 , /cu124 ... etc ( CUDA 12.1 is minimum )
 --extra-index-url https://download.pytorch.org/whl/cu121
 torch
 git+https://github.com/jhj0517/jhj0517-whisper.git
