@@ -40,10 +40,13 @@ class NLLBInference(TranslationBase):
             print("\nInitializing NLLB Model..\n")
             progress(0, desc="Initializing NLLB Model..")
             self.current_model_size = model_size
+            local_files_only = self.is_model_exists(self.current_model_size)
             self.model = AutoModelForSeq2SeqLM.from_pretrained(pretrained_model_name_or_path=model_size,
-                                                               cache_dir=self.model_dir)
+                                                               cache_dir=self.model_dir,
+                                                               local_files_only=local_files_only)
             self.tokenizer = AutoTokenizer.from_pretrained(pretrained_model_name_or_path=model_size,
-                                                           cache_dir=os.path.join(self.model_dir, "tokenizers"))
+                                                           cache_dir=os.path.join(self.model_dir, "tokenizers"),
+                                                           local_files_only=local_files_only)
         src_lang = NLLB_AVAILABLE_LANGS[src_lang]
         tgt_lang = NLLB_AVAILABLE_LANGS[tgt_lang]
         self.pipeline = pipeline("translation",
@@ -52,6 +55,18 @@ class NLLBInference(TranslationBase):
                                  src_lang=src_lang,
                                  tgt_lang=tgt_lang,
                                  device=self.device)
+
+    def is_model_exists(self,
+                        model_size: str):
+        """Check if model exists or not (Only facebook model)"""
+        prefix = "models--facebook--"
+        _id, model_size_name = model_size.split("/")
+        model_dir_name = prefix + model_size_name
+        model_dir_path = os.path.join(self.model_dir, model_dir_name)
+        if os.path.exists(model_dir_path) and os.listdir(model_dir_path):
+            return True
+        return False
+
 
 NLLB_AVAILABLE_LANGS = {
     "Acehnese (Arabic script)": "ace_Arab",
