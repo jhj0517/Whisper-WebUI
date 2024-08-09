@@ -108,16 +108,18 @@ class TranslationBase(ABC):
                     subtitle=subtitle,
                     output_dir=self.output_dir
                 )
-                files_info[file_name] = subtitle
+                files_info[file_name] = {"subtitle": subtitle, "path": output_path}
 
             total_result = ''
-            for file_name, subtitle in files_info.items():
+            for file_name, info in files_info.items():
                 total_result += '------------------------------------\n'
                 total_result += f'{file_name}\n\n'
-                total_result += f'{subtitle}'
-
+                total_result += f'{info["subtitle"]}'
             gr_str = f"Done! Subtitle is in the outputs/translation folder.\n\n{total_result}"
-            return [gr_str, output_path]
+
+            output_file_paths = [item["path"] for key, item in files_info.items()]
+            return [gr_str, output_file_paths]
+
         except Exception as e:
             print(f"Error: {str(e)}")
         finally:
