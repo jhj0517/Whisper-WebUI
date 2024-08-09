@@ -145,13 +145,6 @@ class DeepLAPI:
 
                 subtitle = get_serialized_srt(parsed_dicts)
 
-                if add_timestamp:
-                    timestamp = datetime.now().strftime("%m%d%H%M%S")
-                    file_name += f"-{timestamp}"
-
-                output_path = os.path.join(self.output_dir, "", f"{file_name}.srt")
-                write_file(subtitle, output_path)
-
             elif file_ext == ".vtt":
                 parsed_dicts = parse_vtt(file_path=file_path)
 
@@ -167,24 +160,24 @@ class DeepLAPI:
 
                 subtitle = get_serialized_vtt(parsed_dicts)
 
-                if add_timestamp:
-                    timestamp = datetime.now().strftime("%m%d%H%M%S")
-                    file_name += f"-{timestamp}"
+            if add_timestamp:
+                timestamp = datetime.now().strftime("%m%d%H%M%S")
+                file_name += f"-{timestamp}"
 
-                output_path = os.path.join(self.output_dir, "", f"{file_name}.vtt")
-                write_file(subtitle, output_path)
+            output_path = os.path.join(self.output_dir, f"{file_name}{file_ext}")
+            write_file(subtitle, output_path)
 
             files_info[file_name] = {"subtitle": subtitle, "path": output_path}
+
         total_result = ''
-        result_file_path = []
         for file_name, info in files_info.items():
             total_result += '------------------------------------\n'
             total_result += f'{file_name}\n\n'
             total_result += f'{info["subtitle"]}'
-            result_file_path.append(info["path"])
-
         gr_str = f"Done! Subtitle is in the outputs/translation folder.\n\n{total_result}"
-        return [gr_str, result_file_path]
+
+        output_file_paths = [item["path"] for key, item in files_info.items()]
+        return [gr_str, output_file_paths]
 
     def request_deepl_translate(self,
                                 auth_key: str,

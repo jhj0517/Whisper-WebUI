@@ -93,12 +93,6 @@ class TranslationBase(ABC):
                         dic["sentence"] = translated_text
                     subtitle = get_serialized_srt(parsed_dicts)
 
-                    timestamp = datetime.now().strftime("%m%d%H%M%S")
-                    if add_timestamp:
-                        output_path = os.path.join("outputs", "", f"{file_name}-{timestamp}.srt")
-                    else:
-                        output_path = os.path.join("outputs", "", f"{file_name}.srt")
-
                 elif file_ext == ".vtt":
                     parsed_dicts = parse_vtt(file_path=file_path)
                     total_progress = len(parsed_dicts)
@@ -108,23 +102,25 @@ class TranslationBase(ABC):
                         dic["sentence"] = translated_text
                     subtitle = get_serialized_vtt(parsed_dicts)
 
+                if add_timestamp:
                     timestamp = datetime.now().strftime("%m%d%H%M%S")
-                    if add_timestamp:
-                        output_path = os.path.join(self.output_dir, "", f"{file_name}-{timestamp}.vtt")
-                    else:
-                        output_path = os.path.join(self.output_dir, "", f"{file_name}.vtt")
+                    file_name += f"-{timestamp}"
 
+                output_path = os.path.join(self.output_dir, f"{file_name}{file_ext}")
                 write_file(subtitle, output_path)
-                files_info[file_name] = subtitle
+
+                files_info[file_name] = {"subtitle": subtitle, "path": output_path}
 
             total_result = ''
-            for file_name, subtitle in files_info.items():
+            for file_name, info in files_info.items():
                 total_result += '------------------------------------\n'
                 total_result += f'{file_name}\n\n'
-                total_result += f'{subtitle}'
-
+                total_result += f'{info["subtitle"]}'
             gr_str = f"Done! Subtitle is in the outputs/translation folder.\n\n{total_result}"
-            return [gr_str, output_path]
+
+            output_file_paths = [item["path"] for key, item in files_info.items()]
+            return [gr_str, output_file_paths]
+
         except Exception as e:
             print(f"Error: {str(e)}")
         finally:
