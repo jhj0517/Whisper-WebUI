@@ -93,12 +93,6 @@ class TranslationBase(ABC):
                         dic["sentence"] = translated_text
                     subtitle = get_serialized_srt(parsed_dicts)
 
-                    timestamp = datetime.now().strftime("%m%d%H%M%S")
-                    if add_timestamp:
-                        output_path = os.path.join("outputs", "", f"{file_name}-{timestamp}.srt")
-                    else:
-                        output_path = os.path.join("outputs", "", f"{file_name}.srt")
-
                 elif file_ext == ".vtt":
                     parsed_dicts = parse_vtt(file_path=file_path)
                     total_progress = len(parsed_dicts)
@@ -108,13 +102,12 @@ class TranslationBase(ABC):
                         dic["sentence"] = translated_text
                     subtitle = get_serialized_vtt(parsed_dicts)
 
-                    timestamp = datetime.now().strftime("%m%d%H%M%S")
-                    if add_timestamp:
-                        output_path = os.path.join(self.output_dir, "", f"{file_name}-{timestamp}.vtt")
-                    else:
-                        output_path = os.path.join(self.output_dir, "", f"{file_name}.vtt")
-
-                write_file(subtitle, output_path)
+                subtitle, output_path = self.generate_and_write_file(
+                    file_name=f"{file_name}{file_ext}",
+                    add_timestamp=add_timestamp,
+                    subtitle=subtitle,
+                    output_dir=self.output_dir
+                )
                 files_info[file_name] = subtitle
 
             total_result = ''
@@ -129,6 +122,45 @@ class TranslationBase(ABC):
             print(f"Error: {str(e)}")
         finally:
             self.release_cuda_memory()
+
+    @staticmethod
+    def generate_and_write_file(file_name: str,
+                                subtitle: str,
+                                add_timestamp: bool,
+                                output_dir: str
+                                ) -> str:
+        """
+        Writes subtitle file
+
+        Parameters
+        ----------
+        file_name: str
+            Output file name
+        subtitle: str
+            Translated subtitle content
+        add_timestamp: bool
+            Determines whether to add a timestamp to the end of the filename.
+        file_format: str
+            File format to write. Supported formats: [SRT, WebVTT, txt]
+        output_dir: str
+            Directory path of the output
+
+        Returns
+        ----------
+        content: str
+            Result of the transcription
+        output_path: str
+            output file path
+        """
+        file_name, file_ext = os.path.splitext(file_name)
+        if add_timestamp:
+            timestamp = datetime.now().strftime("%m%d%H%M%S")
+            output_path = os.path.join(output_dir, f"{file_name}-{timestamp}{file_ext}")
+        else:
+            output_path = os.path.join(output_dir, f"{file_name}{file_ext}")
+
+        write_file(subtitle, output_path)
+        return subtitle, output_path
 
     @staticmethod
     def get_device():
