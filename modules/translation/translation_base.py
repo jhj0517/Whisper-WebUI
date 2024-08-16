@@ -140,15 +140,13 @@ class TranslationBase(ABC):
             Translated subtitle content
         add_timestamp: bool
             Determines whether to add a timestamp to the end of the filename.
-        file_format: str
-            File format to write. Supported formats: [SRT, WebVTT, txt]
         output_dir: str
             Directory path of the output
 
         Returns
         ----------
-        content: str
-            Result of the transcription
+        subtitle: str
+            Result of the translation
         output_path: str
             output file path
         """
