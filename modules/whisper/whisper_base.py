@@ -183,7 +183,6 @@ class WhisperBase(ABC):
                 )
 
                 file_name, file_ext = os.path.splitext(os.path.basename(file.name))
-                file_name = safe_filename(file_name)
                 subtitle, file_path = self.generate_and_write_file(
                     file_name=file_name,
                     transcribed_segments=transcribed_segments,
@@ -365,8 +364,8 @@ class WhisperBase(ABC):
         output_path: str
             output file path
         """
-        timestamp = datetime.now().strftime("%m%d%H%M%S")
         if add_timestamp:
+            timestamp = datetime.now().strftime("%m%d%H%M%S")
             output_path = os.path.join(output_dir, f"{file_name}-{timestamp}")
         else:
             output_path = os.path.join(output_dir, f"{file_name}")
@@ -374,17 +373,16 @@ class WhisperBase(ABC):
         if file_format == "SRT":
             content = get_srt(transcribed_segments)
             output_path += '.srt'
-            write_file(content, output_path)
 
         elif file_format == "WebVTT":
             content = get_vtt(transcribed_segments)
             output_path += '.vtt'
-            write_file(content, output_path)
 
         elif file_format == "txt":
             content = get_txt(transcribed_segments)
             output_path += '.txt'
-            write_file(content, output_path)
+
+        write_file(content, output_path)
         return content, output_path
 
     @staticmethod
