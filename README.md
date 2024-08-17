@@ -33,7 +33,7 @@ If you wish to try this on Colab, you can do it in [here](https://colab.research
 # Installation and Running
 ### Prerequisite
 To run this WebUI, you need to have `git`, `python` version 3.8 ~ 3.10, `FFmpeg`. <br>
-And if you use NVIDIA GPU, you need and `CUDA` version above 12.0.
+And if you use NVIDIA GPU, you need and `CUDA` version above 12.1. If you're using a different GPU or CUDA version, edit the [`requirements.txt`](https://github.com/jhj0517/Whisper-WebUI/blob/master/requirements.txt) to match your environment.
 
 Please follow the links below to install the necessary software:
 - git : [https://git-scm.com/downloads](https://git-scm.com/downloads)
