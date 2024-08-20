@@ -114,7 +114,7 @@ This is Whisper's original VRAM usage table for models.
 - [x] Integrate with faster-whisper
 - [x] Integrate with insanely-fast-whisper
 - [x] Integrate with whisperX ( Only speaker diarization part )
-- [ ] Add background music separation pre-processing with [Sepformer-wham](https://huggingface.co/speechbrain/sepformer-wham)  
+- [ ] Add background music separation pre-processing with [MVSEP-MDX23](https://github.com/ZFTurbo/MVSEP-MDX23-music-separation-model)  
 - [ ] Add fast api script
 - [ ] Support real-time transcription for microphone
 
