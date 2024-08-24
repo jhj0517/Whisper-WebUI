@@ -54,32 +54,27 @@ And you can also run the project with command line arguments if you like to, see
 
 - ## Running with Docker 
 
-1. Build the image
+1. Git clone the repository
 
 ```sh
-docker build -t whisper-webui:latest . 
-```
+git clone https://github.com/jhj0517/Whisper-WebUI.git
+``
 
-2. Run the container with commands
+2. Build the image ( Image is about ~7GB )
 
-- For bash :
 ```sh
-docker run --gpus all -d \
--v /path/to/models:/Whisper-WebUI/models \
--v /path/to/outputs:/Whisper-WebUI/outputs \
--p 7860:7860 \
--it \
-whisper-webui:latest --server_name 0.0.0.0 --server_port 7860
+docker compose build 
 ```
-- For PowerShell:
-```shell
-docker run --gpus all -d `
--v /path/to/models:/Whisper-WebUI/models `
--v /path/to/outputs:/Whisper-WebUI/outputs `
--p 7860:7860 `
--it `
-whisper-webui:latest --server_name 0.0.0.0 --server_port 7860
+
+3. Run the container 
+
+```sh
+docker compose up
 ```
+
+4. Connect to the WebUI with your browser at `http://localhost:7860`
+
+If needed, update the [`docker-compose.yaml`](https://github.com/jhj0517/Whisper-WebUI/blob/master/docker-compose.yaml) to match your environment.
 
 # VRAM Usages
 This project is integrated with [faster-whisper](https://github.com/guillaumekln/faster-whisper) by default for better VRAM usage and transcription speed.
