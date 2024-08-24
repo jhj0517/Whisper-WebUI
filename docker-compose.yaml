@@ -6,11 +6,11 @@ services:
     image: jhj0517/whisper-webui:latest
 
     volumes:
-      # Update paths to mount models and output paths to your custom paths, e.g:
+      # Update paths to mount models and output paths to your custom paths like this, e.g:
       # - C:/whisper-models/custom-path:/sam2-playground/models
       # - C:/whisper-webui-outputs/custom-path:/sam2-playground/outputs
-      - C:\Whisper_Project\Whisper-WebUI\models:/Whisper-WebUI/models
-      - C:\Whisper_Project\Whisper-WebUI\outputs:/Whisper-WebUI/outputs
+      - /Whisper-WebUI/models
+      - /Whisper-WebUI/outputs
 
     ports:
       - "7860:7860"
