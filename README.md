@@ -58,7 +58,7 @@ And you can also run the project with command line arguments if you like to, see
 
 ```sh
 git clone https://github.com/jhj0517/Whisper-WebUI.git
-``
+```
 
 2. Build the image ( Image is about ~7GB )
 
