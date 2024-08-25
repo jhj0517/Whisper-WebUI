@@ -74,7 +74,7 @@ docker compose up
 
 4. Connect to the WebUI with your browser at `http://localhost:7860`
 
-If needed, update the [`docker-compose.yaml`](https://github.com/jhj0517/Whisper-WebUI/blob/feauter/add-compose/docker-compose.yaml) to match your environment.
+If needed, update the [`docker-compose.yaml`](https://github.com/jhj0517/Whisper-WebUI/blob/master/docker-compose.yaml) to match your environment.
 
 # VRAM Usages
 This project is integrated with [faster-whisper](https://github.com/guillaumekln/faster-whisper) by default for better VRAM usage and transcription speed.
