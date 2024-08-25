@@ -86,6 +86,7 @@ class FasterWhisperInference(WhisperBase):
             best_of=params.best_of,
             patience=params.patience,
             temperature=params.temperature,
+            initial_prompt=params.initial_prompt,
             compression_ratio_threshold=params.compression_ratio_threshold,
             length_penalty=params.length_penalty,
             repetition_penalty=params.repetition_penalty,
