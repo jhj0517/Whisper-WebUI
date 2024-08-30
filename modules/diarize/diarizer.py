@@ -50,10 +50,10 @@ class Diarizer:
         """
         start_time = time.time()
 
-        if (device is None or
-            device != self.device or
-            self.pipe is None):
+        if device is None:
             device = self.device
+
+        if device != self.device or self.pipe is None:
             self.update_pipe(
                 device=device,
                 use_auth_token=use_auth_token
@@ -91,6 +91,7 @@ class Diarizer:
         device: str
             Device for diarization.
         """
+        self.device = device
 
         os.makedirs(self.model_dir, exist_ok=True)
 
