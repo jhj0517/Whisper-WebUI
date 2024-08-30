@@ -1,6 +1,6 @@
 import os
 import torch
-from typing import List, Union, BinaryIO
+from typing import List, Union, BinaryIO, Optional
 import numpy as np
 import time
 import logging
@@ -24,7 +24,7 @@ class Diarizer:
             audio: Union[str, BinaryIO, np.ndarray],
             transcribed_result: List[dict],
             use_auth_token: str,
-            device: str
+            device: Optional[str] = None
             ):
         """
         Diarize transcribed result as a post-processing
@@ -38,7 +38,7 @@ class Diarizer:
         use_auth_token: str
             Huggingface token with READ permission. This is only needed the first time you download the model.
             You must manually go to the website https://huggingface.co/pyannote/speaker-diarization-3.1 and agree to their TOS to download the model.
-        device: str
+        device: Optional[str]
             Device for diarization.
 
         Returns
@@ -50,8 +50,10 @@ class Diarizer:
         """
         start_time = time.time()
 
-        if (device != self.device
-                or self.pipe is None):
+        if (device is None or
+            device != self.device or
+            self.pipe is None):
+            device = self.device
             self.update_pipe(
                 device=device,
                 use_auth_token=use_auth_token
