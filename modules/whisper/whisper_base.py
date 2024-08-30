@@ -130,7 +130,6 @@ class WhisperBase(ABC):
                 audio=audio,
                 use_auth_token=params.hf_token,
                 transcribed_result=result,
-                device=self.device
             )
             elapsed_time += elapsed_time_diarization
         return result, elapsed_time
