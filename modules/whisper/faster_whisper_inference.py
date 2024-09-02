@@ -11,15 +11,16 @@ import whisper
 import gradio as gr
 from argparse import Namespace
 
+from modules.utils.paths import (FASTER_WHISPER_MODELS_DIR, DIARIZATION_MODELS_DIR, OUTPUT_DIR)
 from modules.whisper.whisper_parameter import *
 from modules.whisper.whisper_base import WhisperBase
 
 
 class FasterWhisperInference(WhisperBase):
     def __init__(self,
-                 model_dir: str = os.path.join("models", "Whisper", "faster-whisper"),
-                 diarization_model_dir: str = os.path.join("models", "Diarization"),
-                 output_dir: str = os.path.join("outputs"),
+                 model_dir: str = FASTER_WHISPER_MODELS_DIR,
+                 diarization_model_dir: str = DIARIZATION_MODELS_DIR,
+                 output_dir: str = OUTPUT_DIR,
                  ):
         super().__init__(
             model_dir=model_dir,
@@ -163,14 +164,12 @@ class FasterWhisperInference(WhisperBase):
         wrong_dirs = [".locks"]
         existing_models = list(set(existing_models) - set(wrong_dirs))
 
-        webui_dir = os.getcwd()
-
         for model_name in existing_models:
             if faster_whisper_prefix in model_name:
                 model_name = model_name[len(faster_whisper_prefix):]
 
             if model_name not in whisper.available_models():
-                model_paths[model_name] = os.path.join(webui_dir, self.model_dir, model_name)
+                model_paths[model_name] = os.path.join(self.model_dir, model_name)
         return model_paths
 
     @staticmethod

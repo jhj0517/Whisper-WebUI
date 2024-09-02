@@ -8,7 +8,7 @@ INSANELY_FAST_WHISPER_MODELS_DIR = os.path.join(WHISPER_MODELS_DIR, "insanely-fa
 NLLB_MODELS_DIR = os.path.join(MODELS_DIR, "NLLB")
 DIARIZATION_MODELS_DIR = os.path.join(MODELS_DIR, "Diarization")
 CONFIGS_DIR = os.path.join(WEBUI_DIR, "configs")
-DEFAULT_PARAMETERS_PATH = os.path.join(CONFIGS_DIR, "default_parameters.yaml")
+DEFAULT_PARAMETERS_CONFIG_PATH = os.path.join(CONFIGS_DIR, "default_parameters.yaml")
 OUTPUT_DIR = os.path.join(WEBUI_DIR, "outputs")
 TRANSLATION_OUTPUT_DIR = os.path.join(OUTPUT_DIR, "translations")
 

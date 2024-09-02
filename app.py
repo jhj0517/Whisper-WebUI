@@ -3,6 +3,8 @@ import argparse
 import gradio as gr
 import yaml
 
+from modules.utils.paths import (FASTER_WHISPER_MODELS_DIR, DIARIZATION_MODELS_DIR, OUTPUT_DIR, WHISPER_MODELS_DIR,
+                                 INSANELY_FAST_WHISPER_MODELS_DIR, NLLB_MODELS_DIR, DEFAULT_PARAMETERS_CONFIG_PATH)
 from modules.whisper.whisper_factory import WhisperFactory
 from modules.whisper.faster_whisper_inference import FasterWhisperInference
 from modules.whisper.insanely_fast_whisper_inference import InsanelyFastWhisperInference
@@ -33,9 +35,7 @@ class App:
         self.deepl_api = DeepLAPI(
             output_dir=os.path.join(self.args.output_dir, "translations")
         )
-
-        default_param_path = os.path.join("configs", "default_parameters.yaml")
-        with open(default_param_path, 'r', encoding='utf-8') as file:
+        with open(DEFAULT_PARAMETERS_CONFIG_PATH, 'r', encoding='utf-8') as file:
             self.default_params = yaml.safe_load(file)
 
     def create_whisper_parameters(self):
@@ -290,7 +290,7 @@ class App:
                                           cb_deepl_ispro, cb_timestamp],
                                   outputs=[tb_indicator, files_subtitles])
 
-                    btn_openfolder.click(fn=lambda: self.open_folder(os.path.join("outputs", "translations")),
+                    btn_openfolder.click(fn=lambda: self.open_folder(os.path.join(self.args.output_dir, "translations")),
                                          inputs=None,
                                          outputs=None)
 
@@ -321,7 +321,7 @@ class App:
                                           nb_max_length, cb_timestamp],
                                   outputs=[tb_indicator, files_subtitles])
 
-                    btn_openfolder.click(fn=lambda: self.open_folder(os.path.join("outputs", "translations")),
+                    btn_openfolder.click(fn=lambda: self.open_folder(os.path.join(self.args.output_dir, "translations")),
                                          inputs=None,
                                          outputs=None)
 
@@ -369,18 +369,18 @@ parser.add_argument('--theme', type=str, default=None, help='Gradio Blocks theme
 parser.add_argument('--colab', type=bool, default=False, nargs='?', const=True, help='Is colab user or not')
 parser.add_argument('--api_open', type=bool, default=False, nargs='?', const=True, help='Enable api or not in Gradio')
 parser.add_argument('--inbrowser', type=bool, default=True, nargs='?', const=True, help='Whether to automatically start Gradio app or not')
-parser.add_argument('--whisper_model_dir', type=str, default=os.path.join("models", "Whisper"),
+parser.add_argument('--whisper_model_dir', type=str, default=WHISPER_MODELS_DIR,
                     help='Directory path of the whisper model')
-parser.add_argument('--faster_whisper_model_dir', type=str, default=os.path.join("models", "Whisper", "faster-whisper"),
+parser.add_argument('--faster_whisper_model_dir', type=str, default=FASTER_WHISPER_MODELS_DIR,
                     help='Directory path of the faster-whisper model')
 parser.add_argument('--insanely_fast_whisper_model_dir', type=str,
-                    default=os.path.join("models", "Whisper", "insanely-fast-whisper"),
+                    default=INSANELY_FAST_WHISPER_MODELS_DIR,
                     help='Directory path of the insanely-fast-whisper model')
-parser.add_argument('--diarization_model_dir', type=str, default=os.path.join("models", "Diarization"),
+parser.add_argument('--diarization_model_dir', type=str, default=DIARIZATION_MODELS_DIR,
                     help='Directory path of the diarization model')
-parser.add_argument('--nllb_model_dir', type=str, default=os.path.join("models", "NLLB"),
+parser.add_argument('--nllb_model_dir', type=str, default=NLLB_MODELS_DIR,
                     help='Directory path of the Facebook NLLB model')
-parser.add_argument('--output_dir', type=str, default=os.path.join("outputs"), help='Directory path of the outputs')
+parser.add_argument('--output_dir', type=str, default=OUTPUT_DIR, help='Directory path of the outputs')
 _args = parser.parse_args()
 
 if __name__ == "__main__":

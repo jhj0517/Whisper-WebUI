@@ -7,15 +7,16 @@ import torch
 import os
 from argparse import Namespace
 
+from modules.utils.paths import (WHISPER_MODELS_DIR, DIARIZATION_MODELS_DIR, OUTPUT_DIR)
 from modules.whisper.whisper_base import WhisperBase
 from modules.whisper.whisper_parameter import *
 
 
 class WhisperInference(WhisperBase):
     def __init__(self,
-                 model_dir: str = os.path.join("models", "Whisper"),
-                 diarization_model_dir: str = os.path.join("models", "Diarization"),
-                 output_dir: str = os.path.join("outputs"),
+                 model_dir: str = WHISPER_MODELS_DIR,
+                 diarization_model_dir: str = DIARIZATION_MODELS_DIR,
+                 output_dir: str = OUTPUT_DIR,
                  ):
         super().__init__(
             model_dir=model_dir,

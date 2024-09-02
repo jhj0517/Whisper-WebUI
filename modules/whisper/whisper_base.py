@@ -9,6 +9,7 @@ from datetime import datetime
 from faster_whisper.vad import VadOptions
 from dataclasses import astuple
 
+from modules.utils.paths import (WHISPER_MODELS_DIR, DIARIZATION_MODELS_DIR, OUTPUT_DIR)
 from modules.utils.subtitle_manager import get_srt, get_vtt, get_txt, write_file, safe_filename
 from modules.utils.youtube_manager import get_ytdata, get_ytaudio
 from modules.utils.files_manager import get_media_files, format_gradio_files
@@ -19,9 +20,9 @@ from modules.vad.silero_vad import SileroVAD
 
 class WhisperBase(ABC):
     def __init__(self,
-                 model_dir: str = os.path.join("models", "Whisper"),
-                 diarization_model_dir: str = os.path.join("models", "Diarization"),
-                 output_dir: str = os.path.join("outputs"),
+                 model_dir: str = WHISPER_MODELS_DIR,
+                 diarization_model_dir: str = DIARIZATION_MODELS_DIR,
+                 output_dir: str = OUTPUT_DIR,
                  ):
         self.model_dir = model_dir
         self.output_dir = output_dir

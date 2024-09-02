@@ -4,6 +4,7 @@ import os
 from datetime import datetime
 import gradio as gr
 
+from modules.utils.paths import TRANSLATION_OUTPUT_DIR
 from modules.utils.subtitle_manager import *
 
 """
@@ -83,7 +84,7 @@ DEEPL_AVAILABLE_SOURCE_LANGS = {
 
 class DeepLAPI:
     def __init__(self,
-                 output_dir: str = os.path.join("outputs", "translations")
+                 output_dir: str = TRANSLATION_OUTPUT_DIR
                  ):
         self.api_interval = 1
         self.max_text_batch_size = 50
