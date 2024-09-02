@@ -9,7 +9,7 @@ from datetime import datetime
 from faster_whisper.vad import VadOptions
 from dataclasses import astuple
 
-from modules.utils.paths import (WHISPER_MODELS_DIR, DIARIZATION_MODELS_DIR, OUTPUT_DIR)
+from modules.utils.paths import (WHISPER_MODELS_DIR, DIARIZATION_MODELS_DIR, OUTPUT_DIR, DEFAULT_PARAMETERS_CONFIG_PATH)
 from modules.utils.subtitle_manager import get_srt, get_vtt, get_txt, write_file, safe_filename
 from modules.utils.youtube_manager import get_ytdata, get_ytaudio
 from modules.utils.files_manager import get_media_files, format_gradio_files
@@ -93,6 +93,8 @@ class WhisperBase(ABC):
         else:
             language_code_dict = {value: key for key, value in whisper.tokenizer.LANGUAGES.items()}
             params.lang = language_code_dict[params.lang]
+
+        self.cache_parameters(params)
 
         speech_chunks = None
         if params.vad_filter:
@@ -435,3 +437,10 @@ class WhisperBase(ABC):
         for file_path in file_paths:
             if file_path and os.path.exists(file_path):
                 os.remove(file_path)
+
+    @staticmethod
+    def cache_parameters(whisper_params: WhisperValues):
+        cached_yaml = whisper_params.to_yaml()
+
+        with open(DEFAULT_PARAMETERS_CONFIG_PATH, 'w', encoding='utf-8') as file:
+            file.write(cached_yaml)
