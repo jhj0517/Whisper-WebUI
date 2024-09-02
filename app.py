@@ -6,7 +6,7 @@ from modules.whisper.whisper_factory import WhisperFactory
 from modules.whisper.faster_whisper_inference import FasterWhisperInference
 from modules.whisper.insanely_fast_whisper_inference import InsanelyFastWhisperInference
 from modules.translation.nllb_inference import NLLBInference
-from ui.htmls import *
+from modules.ui.htmls import *
 from modules.utils.youtube_manager import get_ytmetas
 from modules.translation.deepl_api import DeepLAPI
 from modules.whisper.whisper_parameter import *
