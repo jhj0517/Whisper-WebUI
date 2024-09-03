@@ -5,6 +5,7 @@ import yaml
 
 from modules.utils.paths import (FASTER_WHISPER_MODELS_DIR, DIARIZATION_MODELS_DIR, OUTPUT_DIR, WHISPER_MODELS_DIR,
                                  INSANELY_FAST_WHISPER_MODELS_DIR, NLLB_MODELS_DIR, DEFAULT_PARAMETERS_CONFIG_PATH)
+from modules.utils.files_manager import load_yaml
 from modules.whisper.whisper_factory import WhisperFactory
 from modules.whisper.faster_whisper_inference import FasterWhisperInference
 from modules.whisper.insanely_fast_whisper_inference import InsanelyFastWhisperInference
@@ -35,8 +36,7 @@ class App:
         self.deepl_api = DeepLAPI(
             output_dir=os.path.join(self.args.output_dir, "translations")
         )
-        with open(DEFAULT_PARAMETERS_CONFIG_PATH, 'r', encoding='utf-8') as file:
-            self.default_params = yaml.safe_load(file)
+        self.default_params = load_yaml(DEFAULT_PARAMETERS_CONFIG_PATH)
 
     def create_whisper_parameters(self):
         whisper_params = self.default_params["whisper"]
@@ -180,6 +180,10 @@ class App:
         )
 
     def launch(self):
+        translation_params = self.default_params["translation"]
+        deepl_params = translation_params["deepl"]
+        nllb_params = translation_params["nllb"]
+
         with self.app:
             with gr.Row():
                 with gr.Column():
@@ -264,17 +268,15 @@ class App:
 
                     with gr.TabItem("DeepL API"):  # sub tab1
                         with gr.Row():
-                            tb_authkey = gr.Textbox(label="Your Auth Key (API KEY)",
-                                                    value="")
+                            tb_api_key = gr.Textbox(label="Your Auth Key (API KEY)", value=deepl_params["api_key"])
                         with gr.Row():
-                            dd_deepl_sourcelang = gr.Dropdown(label="Source Language", value="Automatic Detection",
-                                                              choices=list(
+                            dd_source_lang = gr.Dropdown(label="Source Language", value=deepl_params["source_lang"],
+                                                          choices=list(
                                                                   self.deepl_api.available_source_langs.keys()))
-                            dd_deepl_targetlang = gr.Dropdown(label="Target Language", value="English",
-                                                              choices=list(
-                                                                  self.deepl_api.available_target_langs.keys()))
+                            dd_target_lang = gr.Dropdown(label="Target Language", value=deepl_params["target_lang"],
+                                                         choices=list(self.deepl_api.available_target_langs.keys()))
                         with gr.Row():
-                            cb_deepl_ispro = gr.Checkbox(label="Pro User?", value=False)
+                            cb_is_pro = gr.Checkbox(label="Pro User?", value=deepl_params["is_pro"])
                         with gr.Row():
                             cb_timestamp = gr.Checkbox(value=True, label="Add a timestamp to the end of the filename",
                                                        interactive=True)
@@ -286,8 +288,8 @@ class App:
                             btn_openfolder = gr.Button('📂', scale=1)
 
                     btn_run.click(fn=self.deepl_api.translate_deepl,
-                                  inputs=[tb_authkey, file_subs, dd_deepl_sourcelang, dd_deepl_targetlang,
-                                          cb_deepl_ispro, cb_timestamp],
+                                  inputs=[tb_api_key, file_subs, dd_source_lang, dd_target_lang,
+                                          cb_is_pro, cb_timestamp],
                                   outputs=[tb_indicator, files_subtitles])
 
                     btn_openfolder.click(fn=lambda: self.open_folder(os.path.join(self.args.output_dir, "translations")),
@@ -296,14 +298,15 @@ class App:
 
                     with gr.TabItem("NLLB"):  # sub tab2
                         with gr.Row():
-                            dd_nllb_model = gr.Dropdown(label="Model", value="facebook/nllb-200-1.3B",
+                            dd_model_size = gr.Dropdown(label="Model", value=nllb_params["model_size"],
                                                         choices=self.nllb_inf.available_models)
-                            dd_nllb_sourcelang = gr.Dropdown(label="Source Language",
-                                                             choices=self.nllb_inf.available_source_langs)
-                            dd_nllb_targetlang = gr.Dropdown(label="Target Language",
-                                                             choices=self.nllb_inf.available_target_langs)
+                            dd_source_lang = gr.Dropdown(label="Source Language", value=nllb_params["source_lang"],
+                                                         choices=self.nllb_inf.available_source_langs)
+                            dd_target_lang = gr.Dropdown(label="Target Language", value=nllb_params["target_lang"],
+                                                         choices=self.nllb_inf.available_target_langs)
                         with gr.Row():
-                            nb_max_length = gr.Number(label="Max Length Per Line", value=200, precision=0)
+                            nb_max_length = gr.Number(label="Max Length Per Line", value=nllb_params["max_length"],
+                                                      precision=0)
                         with gr.Row():
                             cb_timestamp = gr.Checkbox(value=True, label="Add a timestamp to the end of the filename",
                                                        interactive=True)
@@ -317,7 +320,7 @@ class App:
                             md_vram_table = gr.HTML(NLLB_VRAM_TABLE, elem_id="md_nllb_vram_table")
 
                     btn_run.click(fn=self.nllb_inf.translate_file,
-                                  inputs=[file_subs, dd_nllb_model, dd_nllb_sourcelang, dd_nllb_targetlang,
+                                  inputs=[file_subs, dd_model_size, dd_source_lang, dd_target_lang,
                                           nb_max_length, cb_timestamp],
                                   outputs=[tb_indicator, files_subtitles])
 
