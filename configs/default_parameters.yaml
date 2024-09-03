@@ -12,7 +12,7 @@ whisper:
   initial_prompt: null
   temperature: 0
   compression_ratio_threshold: 2.4
-  chunk_length_s: null
+  chunk_length_s: 30
   batch_size: 24
   length_penalty: 1
   repetition_penalty: 1
