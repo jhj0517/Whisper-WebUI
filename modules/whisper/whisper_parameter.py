@@ -293,7 +293,7 @@ class WhisperValues:
                 "initial_prompt": None if not self.initial_prompt else self.initial_prompt,
                 "temperature": self.temperature,
                 "compression_ratio_threshold": self.compression_ratio_threshold,
-                "chunk_length_s": None if not self.chunk_length_s else self.chunk_length_s,
+                "chunk_length_s": None if self.chunk_length_s is None else self.chunk_length_s,
                 "batch_size": self.batch_size,
                 "length_penalty": self.length_penalty,
                 "repetition_penalty": self.repetition_penalty,
