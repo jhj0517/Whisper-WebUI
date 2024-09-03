@@ -1,7 +1,40 @@
 import os
 import fnmatch
-
+import yaml
 from gradio.utils import NamedString
+
+from modules.utils.paths import DEFAULT_PARAMETERS_CONFIG_PATH
+
+
+class YAMLDumper(yaml.SafeDumper):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.add_representer(str, self.str_presenter)
+
+    def write_line_break(self, data=None):
+        super().write_line_break(data)
+        if len(self.indents) == 1:
+            super().write_line_break()
+
+    @staticmethod
+    def str_presenter(dumper, data):
+        special_chars = set(' \n\t:-[]{},&*#?|>!%@`"\'')
+        if any(char in special_chars for char in data) or data == '':
+            return dumper.represent_scalar('tag:yaml.org,2002:str', data, style='"')
+        return dumper.represent_scalar('tag:yaml.org,2002:str', data)
+
+
+def load_yaml(path: str = DEFAULT_PARAMETERS_CONFIG_PATH):
+    with open(path, 'r', encoding='utf-8') as file:
+        config = yaml.safe_load(file)
+    return config
+
+
+def save_yaml(data: dict, path: str = DEFAULT_PARAMETERS_CONFIG_PATH):
+    data = yaml.dump(data, sort_keys=False, default_flow_style=False, Dumper=YAMLDumper, allow_unicode=True)
+    with open(path, 'w', encoding='utf-8') as file:
+        file.write(data)
+    return path
 
 
 def get_media_files(folder_path, include_sub_directory=False):
