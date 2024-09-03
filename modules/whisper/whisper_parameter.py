@@ -1,6 +1,6 @@
 from dataclasses import dataclass, fields
 import gradio as gr
-from typing import Optional
+from typing import Optional, Dict
 import yaml
 
 
@@ -277,7 +277,7 @@ class WhisperValues:
     A data class to use Whisper parameters.
     """
 
-    def to_yaml(self) -> str:
+    def to_yaml(self) -> Dict:
         data = {
             "whisper": {
                 "model_size": self.model_size,
@@ -325,4 +325,4 @@ class WhisperValues:
                 "hf_token": self.hf_token
             }
         }
-        return yaml.dump(data, sort_keys=False, default_flow_style=False)
+        return data
