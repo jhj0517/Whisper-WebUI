@@ -281,7 +281,7 @@ class WhisperValues:
         data = {
             "whisper": {
                 "model_size": self.model_size,
-                "lang": self.lang,
+                "lang": "Automatic Detection" if self.lang is None else self.lang,
                 "is_translate": self.is_translate,
                 "beam_size": self.beam_size,
                 "log_prob_threshold": self.log_prob_threshold,
@@ -290,15 +290,15 @@ class WhisperValues:
                 "patience": self.patience,
                 "condition_on_previous_text": self.condition_on_previous_text,
                 "prompt_reset_on_temperature": self.prompt_reset_on_temperature,
-                "initial_prompt": self.initial_prompt,
+                "initial_prompt": None if not self.initial_prompt else self.initial_prompt,
                 "temperature": self.temperature,
                 "compression_ratio_threshold": self.compression_ratio_threshold,
-                "chunk_length_s": self.chunk_length_s,
+                "chunk_length_s": None if not self.chunk_length_s else self.chunk_length_s,
                 "batch_size": self.batch_size,
                 "length_penalty": self.length_penalty,
                 "repetition_penalty": self.repetition_penalty,
                 "no_repeat_ngram_size": self.no_repeat_ngram_size,
-                "prefix": self.prefix,
+                "prefix": None if not self.prefix else self.prefix,
                 "suppress_blank": self.suppress_blank,
                 "suppress_tokens": self.suppress_tokens,
                 "max_initial_timestamp": self.max_initial_timestamp,
@@ -308,7 +308,7 @@ class WhisperValues:
                 "max_new_tokens": self.max_new_tokens,
                 "chunk_length": self.chunk_length,
                 "hallucination_silence_threshold": self.hallucination_silence_threshold,
-                "hotwords": self.hotwords,
+                "hotwords": None if not self.hotwords else self.hotwords,
                 "language_detection_threshold": self.language_detection_threshold,
                 "language_detection_segments": self.language_detection_segments,
             },
@@ -325,4 +325,4 @@ class WhisperValues:
                 "hf_token": self.hf_token
             }
         }
-        return yaml.dump(data, default_flow_style=False)
+        return yaml.dump(data, sort_keys=False, default_flow_style=False)
