@@ -1,9 +1,9 @@
 whisper:
-  model_size: "large-v2"
-  lang: "Automatic Detection"
+  model_size: large-v2
+  lang: Automatic Detection
   is_translate: false
   beam_size: 5
-  log_prob_threshold: -1.0
+  log_prob_threshold: -1
   no_speech_threshold: 0.6
   best_of: 5
   patience: 1
@@ -41,6 +41,16 @@ vad:
 
 diarization:
   is_diarize: false
-  hf_token: ""
+  hf_token: ''
 
-
+translation:
+  deepl:
+    api_key: ''
+    is_pro: false
+    source_lang: Automatic Detection
+    target_lang: English
+  nllb:
+    model_size: facebook/nllb-200-1.3B
+    source_lang: ''
+    target_lang: ''
+    max_length: 200
