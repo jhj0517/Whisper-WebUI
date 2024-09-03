@@ -7,6 +7,8 @@ from datetime import datetime
 
 from modules.whisper.whisper_parameter import *
 from modules.utils.subtitle_manager import *
+from modules.utils.files_manager import load_yaml, save_yaml
+from modules.utils.paths import DEFAULT_PARAMETERS_CONFIG_PATH
 
 
 class TranslationBase(ABC):
@@ -75,6 +77,11 @@ class TranslationBase(ABC):
         Files to return to gr.Files()
         """
         try:
+            self.cache_parameters(model_size=model_size,
+                                  src_lang=src_lang,
+                                  tgt_lang=tgt_lang,
+                                  max_length=max_length)
+
             self.update_model(model_size=model_size,
                               src_lang=src_lang,
                               tgt_lang=tgt_lang,
@@ -149,3 +156,17 @@ class TranslationBase(ABC):
         for file_path in file_paths:
             if file_path and os.path.exists(file_path):
                 os.remove(file_path)
+
+    @staticmethod
+    def cache_parameters(model_size: str,
+                         src_lang: str,
+                         tgt_lang: str,
+                         max_length: int):
+        cached_params = load_yaml(DEFAULT_PARAMETERS_CONFIG_PATH)
+        cached_params["translation"]["nllb"] = {
+            "model_size": model_size,
+            "src_lang": src_lang,
+            "tgt_lang": tgt_lang,
+            "max_length": max_length
+        }
+        save_yaml(cached_params, DEFAULT_PARAMETERS_CONFIG_PATH)

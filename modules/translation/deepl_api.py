@@ -4,8 +4,9 @@ import os
 from datetime import datetime
 import gradio as gr
 
-from modules.utils.paths import TRANSLATION_OUTPUT_DIR
+from modules.utils.paths import TRANSLATION_OUTPUT_DIR, DEFAULT_PARAMETERS_CONFIG_PATH
 from modules.utils.subtitle_manager import *
+from modules.utils.files_manager import load_yaml, save_yaml
 
 """
 This is written with reference to the DeepL API documentation.
@@ -125,6 +126,12 @@ class DeepLAPI:
         String to return to gr.Textbox()
         Files to return to gr.Files()
         """
+        self.cache_parameters(
+            api_key=auth_key,
+            is_pro=is_pro,
+            source_lang=source_lang,
+            target_lang=target_lang
+        )
 
         files_info = {}
         for fileobj in fileobjs:
@@ -200,3 +207,17 @@ class DeepLAPI:
         response = requests.post(url, headers=headers, data=data).json()
         time.sleep(self.api_interval)
         return response["translations"]
+
+    @staticmethod
+    def cache_parameters(api_key: str,
+                         is_pro: bool,
+                         source_lang: str,
+                         target_lang: str):
+        cached_params = load_yaml(DEFAULT_PARAMETERS_CONFIG_PATH)
+        cached_params["translation"]["deepl"] = {
+            "api_key": api_key,
+            "is_pro": is_pro,
+            "source_lang": source_lang,
+            "target_lang": target_lang
+        }
+        save_yaml(cached_params, DEFAULT_PARAMETERS_CONFIG_PATH)
