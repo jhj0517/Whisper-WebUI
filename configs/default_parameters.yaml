@@ -51,6 +51,6 @@ translation:
     target_lang: "English"
   nllb:
     model_size: "facebook/nllb-200-1.3B"
-    source_lang: ""
-    target_lang: ""
+    source_lang: null
+    target_lang: null
     max_length: 200
