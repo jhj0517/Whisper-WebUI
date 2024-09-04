@@ -62,7 +62,8 @@ class WhisperBase(ABC):
 
     def run(self,
             audio: Union[str, BinaryIO, np.ndarray],
-            progress: gr.Progress,
+            progress: gr.Progress = gr.Progress(),
+            add_timestamp: bool = True,
             *whisper_params,
             ) -> Tuple[List[dict], float]:
         """
@@ -76,6 +77,8 @@ class WhisperBase(ABC):
             Audio input. This can be file path or binary type.
         progress: gr.Progress
             Indicator to show progress directly in gradio.
+        add_timestamp: bool
+            Whether to add a timestamp at the end of the filename.
         *whisper_params: tuple
             Parameters related with whisper. This will be dealt with "WhisperParameters" data class
 
@@ -88,13 +91,16 @@ class WhisperBase(ABC):
         """
         params = WhisperParameters.as_value(*whisper_params)
 
+        self.cache_parameters(
+            whisper_params=params,
+            add_timestamp=add_timestamp
+        )
+
         if params.lang == "Automatic Detection":
             params.lang = None
         else:
             language_code_dict = {value: key for key, value in whisper.tokenizer.LANGUAGES.items()}
             params.lang = language_code_dict[params.lang]
-
-        self.cache_parameters(params)
 
         speech_chunks = None
         if params.vad_filter:
@@ -181,6 +187,7 @@ class WhisperBase(ABC):
                 transcribed_segments, time_for_task = self.run(
                     file.name,
                     progress,
+                    add_timestamp,
                     *whisper_params,
                 )
 
@@ -304,6 +311,7 @@ class WhisperBase(ABC):
             transcribed_segments, time_for_task = self.run(
                 audio,
                 progress,
+                add_timestamp,
                 *whisper_params,
             )
 
@@ -439,9 +447,13 @@ class WhisperBase(ABC):
                 os.remove(file_path)
 
     @staticmethod
-    def cache_parameters(whisper_params: WhisperValues):
+    def cache_parameters(
+        whisper_params: WhisperValues,
+        add_timestamp: bool
+    ):
         cached_params = load_yaml(DEFAULT_PARAMETERS_CONFIG_PATH)
         cached_whisper_param = whisper_params.to_yaml()
         cached_yaml = {**cached_params, **cached_whisper_param}
+        cached_yaml["whisper"]["add_timestamp"] = add_timestamp
 
         save_yaml(cached_yaml, DEFAULT_PARAMETERS_CONFIG_PATH)
