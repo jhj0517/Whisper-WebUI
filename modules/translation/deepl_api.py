@@ -130,7 +130,8 @@ class DeepLAPI:
             api_key=auth_key,
             is_pro=is_pro,
             source_lang=source_lang,
-            target_lang=target_lang
+            target_lang=target_lang,
+            add_timestamp=add_timestamp
         )
 
         files_info = {}
@@ -212,7 +213,8 @@ class DeepLAPI:
     def cache_parameters(api_key: str,
                          is_pro: bool,
                          source_lang: str,
-                         target_lang: str):
+                         target_lang: str,
+                         add_timestamp: bool):
         cached_params = load_yaml(DEFAULT_PARAMETERS_CONFIG_PATH)
         cached_params["translation"]["deepl"] = {
             "api_key": api_key,
@@ -220,4 +222,5 @@ class DeepLAPI:
             "source_lang": source_lang,
             "target_lang": target_lang
         }
+        cached_params["translation"]["add_timestamp"] = add_timestamp
         save_yaml(cached_params, DEFAULT_PARAMETERS_CONFIG_PATH)

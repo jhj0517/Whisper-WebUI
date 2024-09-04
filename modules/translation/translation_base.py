@@ -80,7 +80,8 @@ class TranslationBase(ABC):
             self.cache_parameters(model_size=model_size,
                                   src_lang=src_lang,
                                   tgt_lang=tgt_lang,
-                                  max_length=max_length)
+                                  max_length=max_length,
+                                  add_timestamp=add_timestamp)
 
             self.update_model(model_size=model_size,
                               src_lang=src_lang,
@@ -161,12 +162,14 @@ class TranslationBase(ABC):
     def cache_parameters(model_size: str,
                          src_lang: str,
                          tgt_lang: str,
-                         max_length: int):
+                         max_length: int,
+                         add_timestamp: bool):
         cached_params = load_yaml(DEFAULT_PARAMETERS_CONFIG_PATH)
         cached_params["translation"]["nllb"] = {
             "model_size": model_size,
             "src_lang": src_lang,
             "tgt_lang": tgt_lang,
-            "max_length": max_length
+            "max_length": max_length,
         }
+        cached_params["translation"]["add_timestamp"] = add_timestamp
         save_yaml(cached_params, DEFAULT_PARAMETERS_CONFIG_PATH)
