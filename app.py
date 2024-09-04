@@ -53,7 +53,7 @@ class App:
             cb_translate = gr.Checkbox(value=whisper_params["is_translate"], label="Translate to English?",
                                        interactive=True)
         with gr.Row():
-            cb_timestamp = gr.Checkbox(value=True, label="Add a timestamp to the end of the filename",
+            cb_timestamp = gr.Checkbox(value=whisper_params["add_timestamp"], label="Add a timestamp to the end of the filename",
                                        interactive=True)
         with gr.Accordion("Advanced Parameters", open=False):
             nb_beam_size = gr.Number(label="Beam Size", value=whisper_params["beam_size"], precision=0, interactive=True,
@@ -278,7 +278,7 @@ class App:
                         with gr.Row():
                             cb_is_pro = gr.Checkbox(label="Pro User?", value=deepl_params["is_pro"])
                         with gr.Row():
-                            cb_timestamp = gr.Checkbox(value=True, label="Add a timestamp to the end of the filename",
+                            cb_timestamp = gr.Checkbox(value=translation_params["add_timestamp"], label="Add a timestamp to the end of the filename",
                                                        interactive=True)
                         with gr.Row():
                             btn_run = gr.Button("TRANSLATE SUBTITLE FILE", variant="primary")
@@ -308,7 +308,7 @@ class App:
                             nb_max_length = gr.Number(label="Max Length Per Line", value=nllb_params["max_length"],
                                                       precision=0)
                         with gr.Row():
-                            cb_timestamp = gr.Checkbox(value=True, label="Add a timestamp to the end of the filename",
+                            cb_timestamp = gr.Checkbox(value=translation_params["add_timestamp"], label="Add a timestamp to the end of the filename",
                                                        interactive=True)
                         with gr.Row():
                             btn_run = gr.Button("TRANSLATE SUBTITLE FILE", variant="primary")
