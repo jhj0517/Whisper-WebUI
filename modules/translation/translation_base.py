@@ -8,13 +8,13 @@ from datetime import datetime
 from modules.whisper.whisper_parameter import *
 from modules.utils.subtitle_manager import *
 from modules.utils.files_manager import load_yaml, save_yaml
-from modules.utils.paths import DEFAULT_PARAMETERS_CONFIG_PATH
+from modules.utils.paths import DEFAULT_PARAMETERS_CONFIG_PATH, NLLB_MODELS_DIR, TRANSLATION_OUTPUT_DIR
 
 
 class TranslationBase(ABC):
     def __init__(self,
-                 model_dir: str = os.path.join("models", "NLLB"),
-                 output_dir: str = os.path.join("outputs", "translations")
+                 model_dir: str = NLLB_MODELS_DIR,
+                 output_dir: str = TRANSLATION_OUTPUT_DIR
                  ):
         super().__init__()
         self.model = None
