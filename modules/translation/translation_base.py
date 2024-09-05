@@ -167,8 +167,8 @@ class TranslationBase(ABC):
         cached_params = load_yaml(DEFAULT_PARAMETERS_CONFIG_PATH)
         cached_params["translation"]["nllb"] = {
             "model_size": model_size,
-            "src_lang": src_lang,
-            "tgt_lang": tgt_lang,
+            "source_lang": src_lang,
+            "target_lang": tgt_lang,
             "max_length": max_length,
         }
         cached_params["translation"]["add_timestamp"] = add_timestamp
