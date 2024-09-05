@@ -11,15 +11,16 @@ import whisper
 from rich.progress import Progress, TimeElapsedColumn, BarColumn, TextColumn
 from argparse import Namespace
 
+from modules.utils.paths import (INSANELY_FAST_WHISPER_MODELS_DIR, DIARIZATION_MODELS_DIR, OUTPUT_DIR)
 from modules.whisper.whisper_parameter import *
 from modules.whisper.whisper_base import WhisperBase
 
 
 class InsanelyFastWhisperInference(WhisperBase):
     def __init__(self,
-                 model_dir: str = os.path.join("models", "Whisper", "insanely-fast-whisper"),
-                 diarization_model_dir: str = os.path.join("models", "Diarization"),
-                 output_dir: str = os.path.join("outputs"),
+                 model_dir: str = INSANELY_FAST_WHISPER_MODELS_DIR,
+                 diarization_model_dir: str = DIARIZATION_MODELS_DIR,
+                 output_dir: str = OUTPUT_DIR,
                  ):
         super().__init__(
             model_dir=model_dir,

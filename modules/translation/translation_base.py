@@ -7,12 +7,14 @@ from datetime import datetime
 
 from modules.whisper.whisper_parameter import *
 from modules.utils.subtitle_manager import *
+from modules.utils.files_manager import load_yaml, save_yaml
+from modules.utils.paths import DEFAULT_PARAMETERS_CONFIG_PATH, NLLB_MODELS_DIR, TRANSLATION_OUTPUT_DIR
 
 
 class TranslationBase(ABC):
     def __init__(self,
-                 model_dir: str = os.path.join("models", "NLLB"),
-                 output_dir: str = os.path.join("outputs", "translations")
+                 model_dir: str = NLLB_MODELS_DIR,
+                 output_dir: str = TRANSLATION_OUTPUT_DIR
                  ):
         super().__init__()
         self.model = None
@@ -75,6 +77,12 @@ class TranslationBase(ABC):
         Files to return to gr.Files()
         """
         try:
+            self.cache_parameters(model_size=model_size,
+                                  src_lang=src_lang,
+                                  tgt_lang=tgt_lang,
+                                  max_length=max_length,
+                                  add_timestamp=add_timestamp)
+
             self.update_model(model_size=model_size,
                               src_lang=src_lang,
                               tgt_lang=tgt_lang,
@@ -149,3 +157,19 @@ class TranslationBase(ABC):
         for file_path in file_paths:
             if file_path and os.path.exists(file_path):
                 os.remove(file_path)
+
+    @staticmethod
+    def cache_parameters(model_size: str,
+                         src_lang: str,
+                         tgt_lang: str,
+                         max_length: int,
+                         add_timestamp: bool):
+        cached_params = load_yaml(DEFAULT_PARAMETERS_CONFIG_PATH)
+        cached_params["translation"]["nllb"] = {
+            "model_size": model_size,
+            "source_lang": src_lang,
+            "target_lang": tgt_lang,
+            "max_length": max_length,
+        }
+        cached_params["translation"]["add_timestamp"] = add_timestamp
+        save_yaml(cached_params, DEFAULT_PARAMETERS_CONFIG_PATH)

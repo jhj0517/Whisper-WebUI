@@ -5,13 +5,14 @@ import numpy as np
 import time
 import logging
 
+from modules.utils.paths import DIARIZATION_MODELS_DIR
 from modules.diarize.diarize_pipeline import DiarizationPipeline, assign_word_speakers
 from modules.diarize.audio_loader import load_audio
 
 
 class Diarizer:
     def __init__(self,
-                 model_dir: str = os.path.join("models", "Diarization")
+                 model_dir: str = DIARIZATION_MODELS_DIR
                  ):
         self.device = self.get_device()
         self.available_device = self.get_available_device()

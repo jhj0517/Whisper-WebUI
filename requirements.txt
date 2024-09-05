@@ -11,4 +11,5 @@ faster-whisper==1.0.3
 transformers==4.42.3
 gradio==4.29.0
 pytubefix
+ruamel.yaml==0.18.6
 pyannote.audio==3.3.1

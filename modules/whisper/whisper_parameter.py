@@ -1,6 +1,7 @@
 from dataclasses import dataclass, fields
 import gradio as gr
-from typing import Optional
+from typing import Optional, Dict
+import yaml
 
 
 @dataclass
@@ -275,3 +276,53 @@ class WhisperValues:
     """
     A data class to use Whisper parameters.
     """
+
+    def to_yaml(self) -> Dict:
+        data = {
+            "whisper": {
+                "model_size": self.model_size,
+                "lang": "Automatic Detection" if self.lang is None else self.lang,
+                "is_translate": self.is_translate,
+                "beam_size": self.beam_size,
+                "log_prob_threshold": self.log_prob_threshold,
+                "no_speech_threshold": self.no_speech_threshold,
+                "best_of": self.best_of,
+                "patience": self.patience,
+                "condition_on_previous_text": self.condition_on_previous_text,
+                "prompt_reset_on_temperature": self.prompt_reset_on_temperature,
+                "initial_prompt": None if not self.initial_prompt else self.initial_prompt,
+                "temperature": self.temperature,
+                "compression_ratio_threshold": self.compression_ratio_threshold,
+                "chunk_length_s": None if self.chunk_length_s is None else self.chunk_length_s,
+                "batch_size": self.batch_size,
+                "length_penalty": self.length_penalty,
+                "repetition_penalty": self.repetition_penalty,
+                "no_repeat_ngram_size": self.no_repeat_ngram_size,
+                "prefix": None if not self.prefix else self.prefix,
+                "suppress_blank": self.suppress_blank,
+                "suppress_tokens": self.suppress_tokens,
+                "max_initial_timestamp": self.max_initial_timestamp,
+                "word_timestamps": self.word_timestamps,
+                "prepend_punctuations": self.prepend_punctuations,
+                "append_punctuations": self.append_punctuations,
+                "max_new_tokens": self.max_new_tokens,
+                "chunk_length": self.chunk_length,
+                "hallucination_silence_threshold": self.hallucination_silence_threshold,
+                "hotwords": None if not self.hotwords else self.hotwords,
+                "language_detection_threshold": self.language_detection_threshold,
+                "language_detection_segments": self.language_detection_segments,
+            },
+            "vad": {
+                "vad_filter": self.vad_filter,
+                "threshold": self.threshold,
+                "min_speech_duration_ms": self.min_speech_duration_ms,
+                "max_speech_duration_s": self.max_speech_duration_s,
+                "min_silence_duration_ms": self.min_silence_duration_ms,
+                "speech_pad_ms": self.speech_pad_ms,
+            },
+            "diarization": {
+                "is_diarize": self.is_diarize,
+                "hf_token": self.hf_token
+            }
+        }
+        return data

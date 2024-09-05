@@ -2,13 +2,14 @@ from transformers import AutoTokenizer, AutoModelForSeq2SeqLM, pipeline
 import gradio as gr
 import os
 
+from modules.utils.paths import TRANSLATION_OUTPUT_DIR, NLLB_MODELS_DIR
 from modules.translation.translation_base import TranslationBase
 
 
 class NLLBInference(TranslationBase):
     def __init__(self,
-                 model_dir: str = os.path.join("models", "NLLB"),
-                 output_dir: str = os.path.join("outputs", "translations")
+                 model_dir: str = NLLB_MODELS_DIR,
+                 output_dir: str = TRANSLATION_OUTPUT_DIR
                  ):
         super().__init__(
             model_dir=model_dir,

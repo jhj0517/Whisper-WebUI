@@ -9,9 +9,10 @@ from datetime import datetime
 from faster_whisper.vad import VadOptions
 from dataclasses import astuple
 
+from modules.utils.paths import (WHISPER_MODELS_DIR, DIARIZATION_MODELS_DIR, OUTPUT_DIR, DEFAULT_PARAMETERS_CONFIG_PATH)
 from modules.utils.subtitle_manager import get_srt, get_vtt, get_txt, write_file, safe_filename
 from modules.utils.youtube_manager import get_ytdata, get_ytaudio
-from modules.utils.files_manager import get_media_files, format_gradio_files
+from modules.utils.files_manager import get_media_files, format_gradio_files, load_yaml, save_yaml
 from modules.whisper.whisper_parameter import *
 from modules.diarize.diarizer import Diarizer
 from modules.vad.silero_vad import SileroVAD
@@ -19,9 +20,9 @@ from modules.vad.silero_vad import SileroVAD
 
 class WhisperBase(ABC):
     def __init__(self,
-                 model_dir: str = os.path.join("models", "Whisper"),
-                 diarization_model_dir: str = os.path.join("models", "Diarization"),
-                 output_dir: str = os.path.join("outputs"),
+                 model_dir: str = WHISPER_MODELS_DIR,
+                 diarization_model_dir: str = DIARIZATION_MODELS_DIR,
+                 output_dir: str = OUTPUT_DIR,
                  ):
         self.model_dir = model_dir
         self.output_dir = output_dir
@@ -61,7 +62,8 @@ class WhisperBase(ABC):
 
     def run(self,
             audio: Union[str, BinaryIO, np.ndarray],
-            progress: gr.Progress,
+            progress: gr.Progress = gr.Progress(),
+            add_timestamp: bool = True,
             *whisper_params,
             ) -> Tuple[List[dict], float]:
         """
@@ -75,6 +77,8 @@ class WhisperBase(ABC):
             Audio input. This can be file path or binary type.
         progress: gr.Progress
             Indicator to show progress directly in gradio.
+        add_timestamp: bool
+            Whether to add a timestamp at the end of the filename.
         *whisper_params: tuple
             Parameters related with whisper. This will be dealt with "WhisperParameters" data class
 
@@ -86,6 +90,11 @@ class WhisperBase(ABC):
             elapsed time for running
         """
         params = WhisperParameters.as_value(*whisper_params)
+
+        self.cache_parameters(
+            whisper_params=params,
+            add_timestamp=add_timestamp
+        )
 
         if params.lang == "Automatic Detection":
             params.lang = None
@@ -178,6 +187,7 @@ class WhisperBase(ABC):
                 transcribed_segments, time_for_task = self.run(
                     file.name,
                     progress,
+                    add_timestamp,
                     *whisper_params,
                 )
 
@@ -301,6 +311,7 @@ class WhisperBase(ABC):
             transcribed_segments, time_for_task = self.run(
                 audio,
                 progress,
+                add_timestamp,
                 *whisper_params,
             )
 
@@ -434,3 +445,15 @@ class WhisperBase(ABC):
         for file_path in file_paths:
             if file_path and os.path.exists(file_path):
                 os.remove(file_path)
+
+    @staticmethod
+    def cache_parameters(
+        whisper_params: WhisperValues,
+        add_timestamp: bool
+    ):
+        cached_params = load_yaml(DEFAULT_PARAMETERS_CONFIG_PATH)
+        cached_whisper_param = whisper_params.to_yaml()
+        cached_yaml = {**cached_params, **cached_whisper_param}
+        cached_yaml["whisper"]["add_timestamp"] = add_timestamp
+
+        save_yaml(cached_yaml, DEFAULT_PARAMETERS_CONFIG_PATH)

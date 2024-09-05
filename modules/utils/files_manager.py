@@ -1,7 +1,31 @@
 import os
 import fnmatch
-
+from ruamel.yaml import YAML
 from gradio.utils import NamedString
+
+from modules.utils.paths import DEFAULT_PARAMETERS_CONFIG_PATH
+
+
+def load_yaml(path: str = DEFAULT_PARAMETERS_CONFIG_PATH):
+    yaml = YAML(typ="safe")
+    yaml.preserve_quotes = True
+    with open(path, 'r', encoding='utf-8') as file:
+        config = yaml.load(file)
+    return config
+
+
+def save_yaml(data: dict, path: str = DEFAULT_PARAMETERS_CONFIG_PATH):
+    yaml = YAML(typ="safe")
+    yaml.map_indent = 2
+    yaml.sequence_indent = 4
+    yaml.sequence_dash_offset = 2
+    yaml.preserve_quotes = True
+    yaml.default_flow_style = False
+    yaml.sort_base_mapping_type_on_output = False
+
+    with open(path, 'w', encoding='utf-8') as file:
+        yaml.dump(data, file)
+    return path
 
 
 def get_media_files(folder_path, include_sub_directory=False):

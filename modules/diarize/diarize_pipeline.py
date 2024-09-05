@@ -7,6 +7,7 @@ from pyannote.audio import Pipeline
 from typing import Optional, Union
 import torch
 
+from modules.utils.paths import DIARIZATION_MODELS_DIR
 from modules.diarize.audio_loader import load_audio, SAMPLE_RATE
 
 
@@ -14,7 +15,7 @@ class DiarizationPipeline:
     def __init__(
         self,
         model_name="pyannote/speaker-diarization-3.1",
-        cache_dir: str = os.path.join("models", "Diarization"),
+        cache_dir: str = DIARIZATION_MODELS_DIR,
         use_auth_token=None,
         device: Optional[Union[str, torch.device]] = "cpu",
     ):
