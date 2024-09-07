@@ -254,7 +254,7 @@ class App:
                         files_subtitles = gr.Files(label="Downloadable output file", scale=3)
                         btn_openfolder = gr.Button('📂', scale=1)
 
-                    params = [mic_input, dd_file_format]
+                    params = [mic_input, dd_file_format, cb_timestamp]
 
                     btn_run.click(fn=self.whisper_inf.transcribe_mic,
                                   inputs=params + whisper_params.as_list(),
