@@ -27,21 +27,23 @@ class MusicSeparator:
 
     def separate(self,
                  audio_file_path: str,
-                 sample_rate: int = 44100):
+                 sample_rate: int = 44100,
+                 save_file: bool = True):
         if self.model is None:
             self.model = self.update_model()
 
-        filename = audio_file_path
-        instrumental_output_path = os.path.join(self.output_dir, "instrumental", filename)
-        vocals_output_path = os.path.join(self.output_dir, "vocals", filename)
-
         result = self.model(audio_file_path)
-        instrumental, vocals = result["instrumental"], result["vocals"]
+        instrumental, vocals = result["instrumental"].T, result["vocals"].T
 
-        sf.write('instrumental.wav', instrumental.T, sample_rate, format="WAV")
-        sf.write('vocals.wav', vocals.T, sample_rate, format="WAV")
+        if save_file:
+            filename = audio_file_path
+            instrumental_output_path = os.path.join(self.output_dir, "instrumental", filename)
+            vocals_output_path = os.path.join(self.output_dir, "vocals", filename)
 
-        return instrumental_output_path, vocals_output_path
+            sf.write(instrumental_output_path, instrumental, sample_rate, format="WAV")
+            sf.write(vocals_output_path, vocals, sample_rate, format="WAV")
+
+        return instrumental, vocals
 
     @staticmethod
     def get_device():
