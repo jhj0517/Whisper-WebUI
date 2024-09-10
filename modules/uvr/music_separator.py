@@ -1,5 +1,6 @@
 # Credit to Team UVR : https://github.com/Anjok07/ultimatevocalremovergui
 from typing import Optional
+import torchaudio
 import soundfile as sf
 import os
 import torch
@@ -16,7 +17,7 @@ class MusicSeparator:
         self.available_devices = ["cpu", "cuda"]
         self.model_dir = model_dir
         self.output_dir = output_dir
-        self.sample_rate = 16000
+        self.audio_info = None
         self.available_models = ["UVR-MDX-NET-Inst_1", "UVR-MDX-NET-Inst_HQ_1"]
         self.default_model = self.available_models[0]
         self.current_model_size = self.default_model
@@ -52,6 +53,9 @@ class MusicSeparator:
         if device is None:
             device = self.device
 
+        self.audio_info = torchaudio.info(audio_file_path)
+        sample_rate = self.audio_info.sample_rate
+
         model_config = {
             "segment": segment_size,
             "split": True
@@ -73,8 +77,8 @@ class MusicSeparator:
             instrumental_output_path = os.path.join(self.output_dir, "instrumental", filename)
             vocals_output_path = os.path.join(self.output_dir, "vocals", filename)
 
-            sf.write(instrumental_output_path, instrumental, self.sample_rate, format="WAV")
-            sf.write(vocals_output_path, vocals, self.sample_rate, format="WAV")
+            sf.write(instrumental_output_path, instrumental, sample_rate, format="WAV")
+            sf.write(vocals_output_path, vocals, sample_rate, format="WAV")
 
         return instrumental, vocals
 
