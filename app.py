@@ -36,10 +36,6 @@ class App:
         self.deepl_api = DeepLAPI(
             output_dir=os.path.join(self.args.output_dir, "translations")
         )
-        self.music_separator = MusicSeparator(
-            model_dir=self.args.uvr_model_dir,
-            output_dir=os.path.join(self.args.output_dir, "UVR")
-        )
         self.default_params = load_yaml(DEFAULT_PARAMETERS_CONFIG_PATH)
         print(f"Use \"{self.args.whisper_type}\" implementation")
         print(f"Device \"{self.whisper_inf.device}\" is detected")
@@ -154,10 +150,10 @@ class App:
         with gr.Accordion("BGM Separation", open=False):
             cb_bgm_separation = gr.Checkbox(label="Enable BGM separation", value=uvr_params["is_separate_bgm"],
                                             interactive=True)
-            dd_uvr_device = gr.Dropdown(label="Device", value=self.music_separator.device,
-                                        choices=self.music_separator.available_devices)
+            dd_uvr_device = gr.Dropdown(label="Device", value=self.whisper_inf.music_separator.device,
+                                        choices=self.whisper_inf.music_separator.available_devices)
             dd_uvr_model_size = gr.Dropdown(label="Model", value=uvr_params["model_size"],
-                                            choices=self.music_separator.available_models)
+                                            choices=self.whisper_inf.music_separator.available_models)
             nb_uvr_segment_size = gr.Number(label="Segment Size", value=uvr_params["segment_size"], precision=0)
             cb_uvr_save_file = gr.Checkbox(label="Save Separated Files to Output Directory",
                                            value=uvr_params["save_file"], interactive=True)
