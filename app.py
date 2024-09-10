@@ -4,9 +4,11 @@ import gradio as gr
 import yaml
 
 from modules.utils.paths import (FASTER_WHISPER_MODELS_DIR, DIARIZATION_MODELS_DIR, OUTPUT_DIR, WHISPER_MODELS_DIR,
-                                 INSANELY_FAST_WHISPER_MODELS_DIR, NLLB_MODELS_DIR, DEFAULT_PARAMETERS_CONFIG_PATH)
+                                 INSANELY_FAST_WHISPER_MODELS_DIR, NLLB_MODELS_DIR, DEFAULT_PARAMETERS_CONFIG_PATH,
+                                 UVR_MODELS_DIR)
 from modules.utils.files_manager import load_yaml
 from modules.whisper.whisper_factory import WhisperFactory
+from modules.uvr.music_separator import MusicSeparator
 from modules.whisper.faster_whisper_inference import FasterWhisperInference
 from modules.whisper.insanely_fast_whisper_inference import InsanelyFastWhisperInference
 from modules.translation.nllb_inference import NLLBInference
@@ -27,8 +29,6 @@ class App:
             insanely_fast_whisper_model_dir=self.args.insanely_fast_whisper_model_dir,
             output_dir=self.args.output_dir,
         )
-        print(f"Use \"{self.args.whisper_type}\" implementation")
-        print(f"Device \"{self.whisper_inf.device}\" is detected")
         self.nllb_inf = NLLBInference(
             model_dir=self.args.nllb_model_dir,
             output_dir=os.path.join(self.args.output_dir, "translations")
@@ -36,7 +36,13 @@ class App:
         self.deepl_api = DeepLAPI(
             output_dir=os.path.join(self.args.output_dir, "translations")
         )
+        self.music_separator = MusicSeparator(
+            model_dir=self.args.uvr_model_dir,
+            output_dir=os.path.join(self.args.output_dir, "UVR")
+        )
         self.default_params = load_yaml(DEFAULT_PARAMETERS_CONFIG_PATH)
+        print(f"Use \"{self.args.whisper_type}\" implementation")
+        print(f"Device \"{self.whisper_inf.device}\" is detected")
 
     def create_whisper_parameters(self):
         whisper_params = self.default_params["whisper"]
@@ -383,6 +389,8 @@ parser.add_argument('--diarization_model_dir', type=str, default=DIARIZATION_MOD
                     help='Directory path of the diarization model')
 parser.add_argument('--nllb_model_dir', type=str, default=NLLB_MODELS_DIR,
                     help='Directory path of the Facebook NLLB model')
+parser.add_argument('--uvr_model_dir', type=str, default=UVR_MODELS_DIR,
+                    help='Directory path of the UVR model')
 parser.add_argument('--output_dir', type=str, default=OUTPUT_DIR, help='Directory path of the outputs')
 _args = parser.parse_args()
 
