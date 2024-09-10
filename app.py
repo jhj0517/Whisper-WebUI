@@ -130,6 +130,15 @@ class App:
                                               precision=0)
                 nb_batch_size = gr.Number(label="Batch Size", value=whisper_params["batch_size"], precision=0)
 
+        with gr.Accordion("BGM Separation", open=False):
+            cb_bgm_separation = gr.Checkbox(label="Enable BGM separation", value=uvr_params["is_separate_bgm"],
+                                            interactive=True)
+            dd_uvr_device = gr.Dropdown(label="Device", value=self.whisper_inf.music_separator.device,
+                                        choices=self.whisper_inf.music_separator.available_devices)
+            dd_uvr_model_size = gr.Dropdown(label="Model", value=uvr_params["model_size"],
+                                            choices=self.whisper_inf.music_separator.available_models)
+            nb_uvr_segment_size = gr.Number(label="Segment Size", value=uvr_params["segment_size"], precision=0)
+
         with gr.Accordion("VAD", open=False):
             cb_vad_filter = gr.Checkbox(label="Enable Silero VAD Filter", value=vad_params["vad_filter"],
                                         interactive=True)
@@ -146,15 +155,6 @@ class App:
                                                         " before separating it")
             nb_speech_pad_ms = gr.Number(label="Speech Padding (ms)", precision=0, value=vad_params["speech_pad_ms"],
                                          info="Final speech chunks are padded by this time each side")
-
-        with gr.Accordion("BGM Separation", open=False):
-            cb_bgm_separation = gr.Checkbox(label="Enable BGM separation", value=uvr_params["is_separate_bgm"],
-                                            interactive=True)
-            dd_uvr_device = gr.Dropdown(label="Device", value=self.whisper_inf.music_separator.device,
-                                        choices=self.whisper_inf.music_separator.available_devices)
-            dd_uvr_model_size = gr.Dropdown(label="Model", value=uvr_params["model_size"],
-                                            choices=self.whisper_inf.music_separator.available_models)
-            nb_uvr_segment_size = gr.Number(label="Segment Size", value=uvr_params["segment_size"], precision=0)
 
         with gr.Accordion("Diarization", open=False):
             cb_diarize = gr.Checkbox(label="Enable Diarization", value=diarization_params["is_diarize"])
