@@ -57,8 +57,7 @@ class MusicSeparator:
                  audio_file_path: str,
                  model_name: str,
                  device: Optional[str] = None,
-                 segment_size: int = 256,
-                 save_file: bool = True):
+                 segment_size: int = 256):
         if device is None:
             device = self.device
 
