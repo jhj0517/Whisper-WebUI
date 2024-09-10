@@ -9,7 +9,9 @@ from datetime import datetime
 from faster_whisper.vad import VadOptions
 from dataclasses import astuple
 
-from modules.utils.paths import (WHISPER_MODELS_DIR, DIARIZATION_MODELS_DIR, OUTPUT_DIR, DEFAULT_PARAMETERS_CONFIG_PATH)
+from modules.uvr.music_separator import MusicSeparator
+from modules.utils.paths import (WHISPER_MODELS_DIR, DIARIZATION_MODELS_DIR, OUTPUT_DIR, DEFAULT_PARAMETERS_CONFIG_PATH,
+                                 UVR_MODELS_DIR)
 from modules.utils.subtitle_manager import get_srt, get_vtt, get_txt, write_file, safe_filename
 from modules.utils.youtube_manager import get_ytdata, get_ytaudio
 from modules.utils.files_manager import get_media_files, format_gradio_files, load_yaml, save_yaml
@@ -22,6 +24,7 @@ class WhisperBase(ABC):
     def __init__(self,
                  model_dir: str = WHISPER_MODELS_DIR,
                  diarization_model_dir: str = DIARIZATION_MODELS_DIR,
+                 uvr_model_dir: str = UVR_MODELS_DIR,
                  output_dir: str = OUTPUT_DIR,
                  ):
         self.model_dir = model_dir
@@ -32,6 +35,10 @@ class WhisperBase(ABC):
             model_dir=diarization_model_dir
         )
         self.vad = SileroVAD()
+        self.music_separator = MusicSeparator(
+            model_dir=uvr_model_dir,
+            output_dir=os.path.join(output_dir, "UVR")
+        )
 
         self.model = None
         self.current_model_size = None
@@ -102,7 +109,15 @@ class WhisperBase(ABC):
             language_code_dict = {value: key for key, value in whisper.tokenizer.LANGUAGES.items()}
             params.lang = language_code_dict[params.lang]
 
-        speech_chunks = None
+        if params.is_bgm_separate:
+            music, audio = self.music_separator.separate(
+                audio_file_path=audio,
+                model_name=params.uvr_model_size,
+                device=params.uvr_device,
+                segment_size=params.uvr_segment_size,
+            )
+            self.music_separator.offload()
+
         if params.vad_filter:
             # Explicit value set for float('inf') from gr.Number()
             if params.max_speech_duration_s >= 9999:
