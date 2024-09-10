@@ -48,6 +48,7 @@ class App:
         whisper_params = self.default_params["whisper"]
         vad_params = self.default_params["vad"]
         diarization_params = self.default_params["diarization"]
+        uvr_params = self.default_params["bgm-separation"]
 
         with gr.Row():
             dd_model = gr.Dropdown(choices=self.whisper_inf.available_models, value=whisper_params["model_size"],
@@ -150,6 +151,17 @@ class App:
             nb_speech_pad_ms = gr.Number(label="Speech Padding (ms)", precision=0, value=vad_params["speech_pad_ms"],
                                          info="Final speech chunks are padded by this time each side")
 
+        with gr.Accordion("BGM Separation", open=False):
+            cb_bgm_separation = gr.Checkbox(label="Enable BGM separation", value=uvr_params["is_separate_bgm"],
+                                            interactive=True)
+            dd_uvr_device = gr.Dropdown(label="Device", value=self.music_separator.device,
+                                        choices=self.music_separator.available_devices)
+            dd_uvr_model_size = gr.Dropdown(label="Model", value=uvr_params["model_size"],
+                                            choices=self.music_separator.available_models)
+            nb_uvr_segment_size = gr.Number(label="Segment Size", value=uvr_params["segment_size"], precision=0)
+            cb_uvr_save_file = gr.Checkbox(label="Save Separated Files to Output Directory",
+                                           value=uvr_params["save_file"], interactive=True)
+
         with gr.Accordion("Diarization", open=False):
             cb_diarize = gr.Checkbox(label="Enable Diarization", value=diarization_params["is_diarize"])
             tb_hf_token = gr.Text(label="HuggingFace Token", value=diarization_params["hf_token"],
@@ -179,7 +191,9 @@ class App:
                 hallucination_silence_threshold=nb_hallucination_silence_threshold, hotwords=tb_hotwords,
                 language_detection_threshold=nb_language_detection_threshold,
                 language_detection_segments=nb_language_detection_segments,
-                prompt_reset_on_temperature=sld_prompt_reset_on_temperature
+                prompt_reset_on_temperature=sld_prompt_reset_on_temperature, is_bgm_separate=cb_bgm_separation,
+                uvr_device=dd_uvr_device, uvr_model_size=dd_uvr_model_size, uvr_segment_size=nb_uvr_segment_size,
+                uvr_save_file=cb_uvr_save_file
             ),
             dd_file_format,
             cb_timestamp
