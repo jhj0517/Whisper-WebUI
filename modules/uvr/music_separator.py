@@ -5,6 +5,7 @@ import soundfile as sf
 import os
 import torch
 import gc
+import gradio as gr
 
 from uvr.models import MDX, Demucs, VrNetwork, MDXC
 
@@ -57,7 +58,8 @@ class MusicSeparator:
                  audio_file_path: str,
                  model_name: str,
                  device: Optional[str] = None,
-                 segment_size: int = 256):
+                 segment_size: int = 256,
+                 progress: gr.Progress = gr.Progress()):
         if device is None:
             device = self.device
 
@@ -78,6 +80,7 @@ class MusicSeparator:
                 self.current_model_size != model_name or
                 self.model_config != model_config or
                 self.audio_info.sample_rate != sample_rate):
+            progress(0, desc="Initializing UVR Model..")
             self.update_model(
                 model_name=model_name,
                 device=device,
@@ -85,6 +88,7 @@ class MusicSeparator:
             )
             self.model.sample_rate = sample_rate
 
+        progress(0, desc="Separating background music from the audio..")
         result = self.model(audio_file_path)
         instrumental, vocals = result["instrumental"].T, result["vocals"].T
 

@@ -115,6 +115,7 @@ class WhisperBase(ABC):
                 model_name=params.uvr_model_size,
                 device=params.uvr_device,
                 segment_size=params.uvr_segment_size,
+                progress=progress
             )
             self.music_separator.offload()
 
