@@ -4,6 +4,7 @@ import torchaudio
 import soundfile as sf
 import os
 import torch
+import gc
 
 from uvr.models import MDX, Demucs, VrNetwork, MDXC
 
@@ -30,6 +31,14 @@ class MusicSeparator:
                      model_name: str = "UVR-MDX-NET-Inst_1",
                      device: Optional[str] = None,
                      segment_size: int = 256):
+        """
+        Update model with the given model name
+
+        Args:
+            model_name (str): Model name.
+            device (str): Device to use for the model.
+            segment_size (int): Segment size for the prediction.
+        """
         if device is None:
             device = self.device
 
@@ -61,7 +70,10 @@ class MusicSeparator:
             "split": True
         }
 
-        if self.model is None or self.current_model_size != model_name or self.model_config != model_config:
+        if (self.model is None or
+                self.current_model_size != model_name or
+                self.model_config != model_config or
+                self.audio_info.sample_rate != sample_rate):
             self.update_model(
                 model_name=model_name,
                 device=device,
@@ -85,3 +97,12 @@ class MusicSeparator:
     @staticmethod
     def get_device():
         return "cuda" if torch.cuda.is_available() else "cpu"
+
+    def offload(self):
+        if self.model is not None:
+            del self.model
+            self.model = None
+        if self.device == "cuda":
+            torch.cuda.empty_cache()
+        gc.collect()
+        self.audio_info = None
