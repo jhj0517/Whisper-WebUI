@@ -65,6 +65,11 @@ class MusicSeparator:
         self.audio_info = torchaudio.info(audio_file_path)
         sample_rate = self.audio_info.sample_rate
 
+        filename, ext = os.path.splitext(audio_file_path)
+        filename = os.path.basename(filename) + ".wav"
+        instrumental_output_path = os.path.join(self.output_dir, "instrumental", filename)
+        vocals_output_path = os.path.join(self.output_dir, "vocals", filename)
+
         model_config = {
             "segment": segment_size,
             "split": True
@@ -84,16 +89,10 @@ class MusicSeparator:
         result = self.model(audio_file_path)
         instrumental, vocals = result["instrumental"].T, result["vocals"].T
 
-        if save_file:
-            filename, ext = os.path.splitext(audio_file_path)
-            filename = os.path.basename(filename) + ".wav"
-            instrumental_output_path = os.path.join(self.output_dir, "instrumental", filename)
-            vocals_output_path = os.path.join(self.output_dir, "vocals", filename)
+        sf.write(instrumental_output_path, instrumental, sample_rate, format="WAV")
+        sf.write(vocals_output_path, vocals, sample_rate, format="WAV")
 
-            sf.write(instrumental_output_path, instrumental, sample_rate, format="WAV")
-            sf.write(vocals_output_path, vocals, sample_rate, format="WAV")
-
-        return instrumental, vocals
+        return instrumental_output_path, vocals_output_path
 
     @staticmethod
     def get_device():
