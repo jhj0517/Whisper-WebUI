@@ -79,6 +79,7 @@ class MusicSeparator:
                 device=device,
                 segment_size=segment_size
             )
+            self.model.sample_rate = sample_rate
 
         result = self.model(audio_file_path)
         instrumental, vocals = result["instrumental"].T, result["vocals"].T
