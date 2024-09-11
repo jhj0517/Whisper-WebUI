@@ -22,7 +22,7 @@ class MusicSeparator:
         self.model_dir = model_dir
         self.output_dir = output_dir
         self.audio_info = None
-        self.available_models = ["UVR-MDX-NET-Inst_HQ_4", "MDX23C-8KFFT-InstVoc_HQ", "UVR-MDX-NET_Crowd_HQ_1"]
+        self.available_models = ["UVR-MDX-NET-Inst_HQ_4", "UVR-MDX-NET-Inst_3"]
         self.default_model = self.available_models[0]
         self.current_model_size = self.default_model
         self.model_config = {
