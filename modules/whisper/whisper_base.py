@@ -2,6 +2,7 @@ import os
 import torch
 import whisper
 import gradio as gr
+import torchaudio
 from abc import ABC, abstractmethod
 from typing import BinaryIO, Union, Tuple, List
 import numpy as np
@@ -111,12 +112,19 @@ class WhisperBase(ABC):
 
         if params.is_bgm_separate:
             music, audio = self.music_separator.separate(
-                audio_file_path=audio,
+                audio=audio,
                 model_name=params.uvr_model_size,
                 device=params.uvr_device,
                 segment_size=params.uvr_segment_size,
+                save_file=params.uvr_save_file,
                 progress=progress
             )
+
+            if audio.ndim >= 2:
+                audio = audio.mean(axis=1)
+                origin_sample_rate = self.music_separator.audio_info.sample_rate
+                audio = self.resample_audio(audio=audio, original_sample_rate=origin_sample_rate)
+
             self.music_separator.offload()
 
         if params.vad_filter:
@@ -473,3 +481,18 @@ class WhisperBase(ABC):
         cached_yaml["whisper"]["add_timestamp"] = add_timestamp
 
         save_yaml(cached_yaml, DEFAULT_PARAMETERS_CONFIG_PATH)
+
+    @staticmethod
+    def resample_audio(audio: Union[str, np.ndarray],
+                       new_sample_rate: int = 16000,
+                       original_sample_rate: Optional[int] = None,) -> np.ndarray:
+        """Resamples audio to 16k sample rate, standard on Whisper model"""
+        if isinstance(audio, str):
+            audio, original_sample_rate = torchaudio.load(audio)
+        else:
+            if original_sample_rate is None:
+                raise ValueError("original_sample_rate must be provided when audio is numpy array.")
+            audio = torch.from_numpy(audio)
+        resampler = torchaudio.transforms.Resample(orig_freq=original_sample_rate, new_freq=new_sample_rate)
+        resampled_audio = resampler(audio).numpy()
+        return resampled_audio
