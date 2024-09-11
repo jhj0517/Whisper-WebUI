@@ -45,9 +45,10 @@ diarization:
   hf_token: ""
 
 bgm_separation:
-    is_separate_bgm: false
-    model_size: "UVR-MDX-NET-Inst_HQ_1"
-    segment_size: 256
+  is_separate_bgm: false
+  model_size: "UVR-MDX-NET-Inst_HQ_1"
+  segment_size: 256
+  save_file: true
 
 translation:
   deepl:

@@ -51,6 +51,7 @@ class WhisperParameters:
     uvr_model_size: gr.Dropdown
     uvr_device: gr.Dropdown
     uvr_segment_size: gr.Number
+    uvr_save_file: gr.Checkbox
     """
     A data class for Gradio components of the Whisper Parameters. Use "before" Gradio pre-processing.
     This data class is used to mitigate the key-value problem between Gradio components and function parameters.
@@ -219,6 +220,9 @@ class WhisperParameters:
         
     uvr_segment_size: gr.Number
         This parameter is related to UVR. Segment size for UVR model.
+        
+    uvr_save_file: gr.Checkbox
+        This parameter is related to UVR. Boolean value that determines whether to save the file or not.
     """
 
     def as_list(self) -> list:
@@ -293,6 +297,7 @@ class WhisperValues:
     uvr_model_size: str
     uvr_device: str
     uvr_segment_size: int
+    uvr_save_file: bool
     """
     A data class to use Whisper parameters.
     """
@@ -348,6 +353,7 @@ class WhisperValues:
                 "is_separate_bgm": self.is_bgm_separate,
                 "model_size": self.uvr_model_size,
                 "segment_size": self.uvr_segment_size,
+                "save_file": self.uvr_save_file,
             },
         }
         return data
