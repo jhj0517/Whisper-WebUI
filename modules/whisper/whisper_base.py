@@ -122,7 +122,10 @@ class WhisperBase(ABC):
 
             if audio.ndim >= 2:
                 audio = audio.mean(axis=1)
-                origin_sample_rate = self.music_separator.audio_info.sample_rate
+                if self.music_separator.audio_info is not None:
+                    origin_sample_rate = self.music_separator.audio_info.sample_rate
+                else:
+                    origin_sample_rate = 16000
                 audio = self.resample_audio(audio=audio, original_sample_rate=origin_sample_rate)
 
             self.music_separator.offload()
