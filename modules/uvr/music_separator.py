@@ -67,9 +67,9 @@ class MusicSeparator:
         sample_rate = self.audio_info.sample_rate
 
         filename, ext = os.path.splitext(audio_file_path)
-        filename = os.path.basename(filename) + ".wav"
-        instrumental_output_path = os.path.join(self.output_dir, "instrumental", filename)
-        vocals_output_path = os.path.join(self.output_dir, "vocals", filename)
+        filename, ext = os.path.basename(filename), ".wav"
+        instrumental_output_path = os.path.join(self.output_dir, "instrumental", f"{filename}-instrumental{ext}")
+        vocals_output_path = os.path.join(self.output_dir, "vocals", f"{filename}-vocals{ext}")
 
         model_config = {
             "segment": segment_size,
