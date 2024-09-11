@@ -1,11 +1,13 @@
 # Credit to Team UVR : https://github.com/Anjok07/ultimatevocalremovergui
-from typing import Optional
+from typing import Optional, Union
+import numpy as np
 import torchaudio
 import soundfile as sf
 import os
 import torch
 import gc
 import gradio as gr
+from datetime import datetime
 
 from uvr.models import MDX, Demucs, VrNetwork, MDXC
 
@@ -55,21 +57,22 @@ class MusicSeparator:
                          model_dir=self.model_dir)
 
     def separate(self,
-                 audio_file_path: str,
+                 audio: Union[str, np.ndarray],
                  model_name: str,
                  device: Optional[str] = None,
                  segment_size: int = 256,
+                 save_file: bool = False,
                  progress: gr.Progress = gr.Progress()):
-        if device is None:
-            device = self.device
 
-        self.audio_info = torchaudio.info(audio_file_path)
-        sample_rate = self.audio_info.sample_rate
-
-        filename, ext = os.path.splitext(audio_file_path)
-        filename, ext = os.path.basename(filename), ".wav"
-        instrumental_output_path = os.path.join(self.output_dir, "instrumental", f"{filename}-instrumental{ext}")
-        vocals_output_path = os.path.join(self.output_dir, "vocals", f"{filename}-vocals{ext}")
+        if isinstance(audio, str):
+            self.audio_info = torchaudio.info(audio)
+            sample_rate = self.audio_info.sample_rate
+            output_filename, ext = os.path.splitext(audio)
+            output_filename, ext = os.path.basename(audio), ".wav"
+        else:
+            sample_rate = 16000
+            timestamp = datetime.now().strftime("%m%d%H%M%S")
+            output_filename, ext = f"UVR-{timestamp}", ".wav"
 
         model_config = {
             "segment": segment_size,
@@ -79,7 +82,8 @@ class MusicSeparator:
         if (self.model is None or
                 self.current_model_size != model_name or
                 self.model_config != model_config or
-                self.audio_info.sample_rate != sample_rate):
+                self.audio_info.sample_rate != sample_rate or
+                self.device != device):
             progress(0, desc="Initializing UVR Model..")
             self.update_model(
                 model_name=model_name,
@@ -89,13 +93,16 @@ class MusicSeparator:
             self.model.sample_rate = sample_rate
 
         progress(0, desc="Separating background music from the audio..")
-        result = self.model(audio_file_path)
+        result = self.model(audio)
         instrumental, vocals = result["instrumental"].T, result["vocals"].T
 
-        sf.write(instrumental_output_path, instrumental, sample_rate, format="WAV")
-        sf.write(vocals_output_path, vocals, sample_rate, format="WAV")
+        if save_file:
+            instrumental_output_path = os.path.join(self.output_dir, "instrumental", f"{output_filename}-instrumental{ext}")
+            vocals_output_path = os.path.join(self.output_dir, "vocals", f"{output_filename}-vocals{ext}")
+            sf.write(instrumental_output_path, instrumental, sample_rate, format="WAV")
+            sf.write(vocals_output_path, vocals, sample_rate, format="WAV")
 
-        return instrumental_output_path, vocals_output_path
+        return instrumental, vocals
 
     @staticmethod
     def get_device():
