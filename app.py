@@ -138,7 +138,7 @@ class App:
             dd_uvr_model_size = gr.Dropdown(label="Model", value=uvr_params["model_size"],
                                             choices=self.whisper_inf.music_separator.available_models)
             nb_uvr_segment_size = gr.Number(label="Segment Size", value=uvr_params["segment_size"], precision=0)
-            cb_uvr_save_file = gr.Checkbox(label="Save separate files to output", value=uvr_params["save_file"])
+            cb_uvr_save_file = gr.Checkbox(label="Save separated files to output", value=uvr_params["save_file"])
 
         with gr.Accordion("VAD", open=False):
             cb_vad_filter = gr.Checkbox(label="Enable Silero VAD Filter", value=vad_params["vad_filter"],
