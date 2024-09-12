@@ -122,10 +122,10 @@ class WhisperBase(ABC):
 
             if audio.ndim >= 2:
                 audio = audio.mean(axis=1)
-                if self.music_separator.audio_info is not None:
-                    origin_sample_rate = self.music_separator.audio_info.sample_rate
-                else:
+                if self.music_separator.audio_info is None:
                     origin_sample_rate = 16000
+                else:
+                    origin_sample_rate = self.music_separator.audio_info.sample_rate
                 audio = self.resample_audio(audio=audio, original_sample_rate=origin_sample_rate)
 
             self.music_separator.offload()
@@ -460,12 +460,14 @@ class WhisperBase(ABC):
 
     @staticmethod
     def release_cuda_memory():
+        """Release memory"""
         if torch.cuda.is_available():
             torch.cuda.empty_cache()
             torch.cuda.reset_max_memory_allocated()
 
     @staticmethod
     def remove_input_files(file_paths: List[str]):
+        """Remove gradio cached files"""
         if not file_paths:
             return
 
@@ -478,6 +480,7 @@ class WhisperBase(ABC):
         whisper_params: WhisperValues,
         add_timestamp: bool
     ):
+        """cache parameters to the yaml file"""
         cached_params = load_yaml(DEFAULT_PARAMETERS_CONFIG_PATH)
         cached_whisper_param = whisper_params.to_yaml()
         cached_yaml = {**cached_params, **cached_whisper_param}
