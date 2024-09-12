@@ -197,6 +197,7 @@ class App:
         translation_params = self.default_params["translation"]
         deepl_params = translation_params["deepl"]
         nllb_params = translation_params["nllb"]
+        uvr_params = self.default_params["bgm_separation"]
 
         with self.app:
             with gr.Row():
@@ -341,6 +342,29 @@ class App:
                     btn_openfolder.click(fn=lambda: self.open_folder(os.path.join(self.args.output_dir, "translations")),
                                          inputs=None,
                                          outputs=None)
+                with gr.TabItem("BGM Separation"):
+                    files_audio = gr.Files(type="filepath", label="Upload Audio Files to separate background music")
+                    dd_uvr_device = gr.Dropdown(label="Device", value=self.whisper_inf.music_separator.device,
+                                                choices=self.whisper_inf.music_separator.available_devices)
+                    dd_uvr_model_size = gr.Dropdown(label="Model", value=uvr_params["model_size"],
+                                                    choices=self.whisper_inf.music_separator.available_models)
+                    nb_uvr_segment_size = gr.Number(label="Segment Size", value=uvr_params["segment_size"], precision=0)
+                    cb_uvr_save_file = gr.Checkbox(label="Save separated files to output",
+                                                   value=uvr_params["save_file"])
+                    btn_run = gr.Button("SEPARATE BACKGROUND MUSIC", variant="primary")
+                    with gr.Row():
+                        with gr.Column(scale=8):
+                            ad_instrumental = gr.Audio(label="Instrumental")
+                            ad_vocals = gr.Audio(label="Vocals")
+                        with gr.Column(scale=1):
+                            btn_openfolder = gr.Button('📂', scale=1)
+
+                    btn_run.click(fn=self.whisper_inf.music_separator.separate,
+                                  inputs=[files_audio, dd_uvr_device, dd_uvr_model_size, nb_uvr_segment_size, cb_uvr_save_file],
+                                  outputs=[ad_instrumental, ad_vocals])
+                    btn_openfolder.click(inputs=None,
+                                         outputs=None,
+                                         fn=lambda: self.open_folder(os.path.join(self.args.output_dir, "uvr")))
 
         # Launch the app with optional gradio settings
         args = self.args
