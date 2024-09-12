@@ -62,8 +62,21 @@ class MusicSeparator:
                  device: Optional[str] = None,
                  segment_size: int = 256,
                  save_file: bool = False,
-                 progress: gr.Progress = gr.Progress()):
+                 progress: gr.Progress = gr.Progress()) -> tuple[np.ndarray, np.ndarray]:
+        """
+        Separate the background music from the audio.
 
+        Args:
+            audio (Union[str, np.ndarray]): Audio path or numpy array.
+            model_name (str): Model name.
+            device (str): Device to use for the model.
+            segment_size (int): Segment size for the prediction.
+            save_file (bool): Whether to save the separated audio to output path or not.
+            progress (gr.Progress): Gradio progress indicator.
+
+        Returns:
+            tuple[np.ndarray, np.ndarray]: Instrumental and vocals numpy arrays.
+        """
         if isinstance(audio, str):
             self.audio_info = torchaudio.info(audio)
             sample_rate = self.audio_info.sample_rate
@@ -106,9 +119,11 @@ class MusicSeparator:
 
     @staticmethod
     def get_device():
+        """Get device for the model"""
         return "cuda" if torch.cuda.is_available() else "cpu"
 
     def offload(self):
+        """Offload the model and free up the memory"""
         if self.model is not None:
             del self.model
             self.model = None
