@@ -26,6 +26,7 @@ class App:
             whisper_model_dir=self.args.whisper_model_dir,
             faster_whisper_model_dir=self.args.faster_whisper_model_dir,
             insanely_fast_whisper_model_dir=self.args.insanely_fast_whisper_model_dir,
+            uvr_model_dir=self.args.uvr_model_dir,
             output_dir=self.args.output_dir,
         )
         self.nllb_inf = NLLBInference(

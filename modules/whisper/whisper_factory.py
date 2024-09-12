@@ -2,7 +2,7 @@ from typing import Optional
 import os
 
 from modules.utils.paths import (FASTER_WHISPER_MODELS_DIR, DIARIZATION_MODELS_DIR, OUTPUT_DIR,
-                                 INSANELY_FAST_WHISPER_MODELS_DIR, WHISPER_MODELS_DIR)
+                                 INSANELY_FAST_WHISPER_MODELS_DIR, WHISPER_MODELS_DIR, UVR_MODELS_DIR)
 from modules.whisper.faster_whisper_inference import FasterWhisperInference
 from modules.whisper.whisper_Inference import WhisperInference
 from modules.whisper.insanely_fast_whisper_inference import InsanelyFastWhisperInference
@@ -17,6 +17,7 @@ class WhisperFactory:
         faster_whisper_model_dir: str = FASTER_WHISPER_MODELS_DIR,
         insanely_fast_whisper_model_dir: str = INSANELY_FAST_WHISPER_MODELS_DIR,
         diarization_model_dir: str = DIARIZATION_MODELS_DIR,
+        uvr_model_dir: str = UVR_MODELS_DIR,
         output_dir: str = OUTPUT_DIR,
     ) -> "WhisperBase":
         """
@@ -37,6 +38,8 @@ class WhisperFactory:
             Directory path for the Insanely Fast Whisper model.
         diarization_model_dir : str
             Directory path for the diarization model.
+        uvr_model_dir : str
+            Directory path for the UVR model.
         output_dir : str
             Directory path where output files will be saved.
 
@@ -61,23 +64,27 @@ class WhisperFactory:
             return FasterWhisperInference(
                 model_dir=faster_whisper_model_dir,
                 output_dir=output_dir,
-                diarization_model_dir=diarization_model_dir
+                diarization_model_dir=diarization_model_dir,
+                uvr_model_dir=uvr_model_dir
             )
         elif whisper_type in whisper_typos:
             return WhisperInference(
                 model_dir=whisper_model_dir,
                 output_dir=output_dir,
-                diarization_model_dir=diarization_model_dir
+                diarization_model_dir=diarization_model_dir,
+                uvr_model_dir=uvr_model_dir
             )
         elif whisper_type in insanely_fast_whisper_typos:
             return InsanelyFastWhisperInference(
                 model_dir=insanely_fast_whisper_model_dir,
                 output_dir=output_dir,
-                diarization_model_dir=diarization_model_dir
+                diarization_model_dir=diarization_model_dir,
+                uvr_model_dir=uvr_model_dir
             )
         else:
             return FasterWhisperInference(
                 model_dir=faster_whisper_model_dir,
                 output_dir=output_dir,
-                diarization_model_dir=diarization_model_dir
+                diarization_model_dir=diarization_model_dir,
+                uvr_model_dir=uvr_model_dir
             )
