@@ -8,7 +8,6 @@ from modules.utils.paths import (FASTER_WHISPER_MODELS_DIR, DIARIZATION_MODELS_D
                                  UVR_MODELS_DIR)
 from modules.utils.files_manager import load_yaml
 from modules.whisper.whisper_factory import WhisperFactory
-from modules.uvr.music_separator import MusicSeparator
 from modules.whisper.faster_whisper_inference import FasterWhisperInference
 from modules.whisper.insanely_fast_whisper_inference import InsanelyFastWhisperInference
 from modules.translation.nllb_inference import NLLBInference
