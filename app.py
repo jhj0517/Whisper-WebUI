@@ -343,6 +343,7 @@ class App:
                     btn_openfolder.click(fn=lambda: self.open_folder(os.path.join(self.args.output_dir, "translations")),
                                          inputs=None,
                                          outputs=None)
+
                 with gr.TabItem("BGM Separation"):
                     files_audio = gr.Files(type="filepath", label="Upload Audio Files to separate background music")
                     dd_uvr_device = gr.Dropdown(label="Device", value=self.whisper_inf.music_separator.device,
@@ -351,21 +352,30 @@ class App:
                                                     choices=self.whisper_inf.music_separator.available_models)
                     nb_uvr_segment_size = gr.Number(label="Segment Size", value=uvr_params["segment_size"], precision=0)
                     cb_uvr_save_file = gr.Checkbox(label="Save separated files to output",
-                                                   value=uvr_params["save_file"])
+                                                   value=True, visible=False)
                     btn_run = gr.Button("SEPARATE BACKGROUND MUSIC", variant="primary")
-                    with gr.Row():
-                        with gr.Column(scale=8):
-                            ad_instrumental = gr.Audio(label="Instrumental")
-                            ad_vocals = gr.Audio(label="Vocals")
-                        with gr.Column(scale=1):
-                            btn_openfolder = gr.Button('📂', scale=1)
+                    with gr.Column():
+                        with gr.Row():
+                            ad_instrumental = gr.Audio(label="Instrumental", scale=8)
+                            btn_open_instrumental_folder = gr.Button('📂', scale=1)
+                        with gr.Row():
+                            ad_vocals = gr.Audio(label="Vocals", scale=8)
+                            btn_open_vocals_folder = gr.Button('📂', scale=1)
 
-                    btn_run.click(fn=self.whisper_inf.music_separator.separate,
-                                  inputs=[files_audio, dd_uvr_device, dd_uvr_model_size, nb_uvr_segment_size, cb_uvr_save_file],
+                    btn_run.click(fn=self.whisper_inf.music_separator.separate_files,
+                                  inputs=[files_audio, dd_uvr_model_size, dd_uvr_device, nb_uvr_segment_size,
+                                          cb_uvr_save_file],
                                   outputs=[ad_instrumental, ad_vocals])
-                    btn_openfolder.click(inputs=None,
-                                         outputs=None,
-                                         fn=lambda: self.open_folder(os.path.join(self.args.output_dir, "uvr")))
+                    btn_open_instrumental_folder.click(inputs=None,
+                                                       outputs=None,
+                                                       fn=lambda: self.open_folder(os.path.join(
+                                                           self.args.output_dir, "UVR", "instrumental"
+                                                       )))
+                    btn_open_vocals_folder.click(inputs=None,
+                                                 outputs=None,
+                                                 fn=lambda: self.open_folder(os.path.join(
+                                                    self.args.output_dir, "UVR", "vocals"
+                                                 )))
 
         # Launch the app with optional gradio settings
         args = self.args
@@ -386,7 +396,8 @@ class App:
         if os.path.exists(folder_path):
             os.system(f"start {folder_path}")
         else:
-            print(f"The folder {folder_path} does not exist.")
+            os.makedirs(folder_path, exist_ok=True)
+            print(f"The directory path {folder_path} has newly created.")
 
     @staticmethod
     def on_change_models(model_size: str):
