@@ -4,7 +4,8 @@ import gradio as gr
 import yaml
 
 from modules.utils.paths import (FASTER_WHISPER_MODELS_DIR, DIARIZATION_MODELS_DIR, OUTPUT_DIR, WHISPER_MODELS_DIR,
-                                 INSANELY_FAST_WHISPER_MODELS_DIR, NLLB_MODELS_DIR, DEFAULT_PARAMETERS_CONFIG_PATH)
+                                 INSANELY_FAST_WHISPER_MODELS_DIR, NLLB_MODELS_DIR, DEFAULT_PARAMETERS_CONFIG_PATH,
+                                 UVR_MODELS_DIR)
 from modules.utils.files_manager import load_yaml
 from modules.whisper.whisper_factory import WhisperFactory
 from modules.whisper.faster_whisper_inference import FasterWhisperInference
@@ -25,10 +26,9 @@ class App:
             whisper_model_dir=self.args.whisper_model_dir,
             faster_whisper_model_dir=self.args.faster_whisper_model_dir,
             insanely_fast_whisper_model_dir=self.args.insanely_fast_whisper_model_dir,
+            uvr_model_dir=self.args.uvr_model_dir,
             output_dir=self.args.output_dir,
         )
-        print(f"Use \"{self.args.whisper_type}\" implementation")
-        print(f"Device \"{self.whisper_inf.device}\" is detected")
         self.nllb_inf = NLLBInference(
             model_dir=self.args.nllb_model_dir,
             output_dir=os.path.join(self.args.output_dir, "translations")
@@ -37,11 +37,14 @@ class App:
             output_dir=os.path.join(self.args.output_dir, "translations")
         )
         self.default_params = load_yaml(DEFAULT_PARAMETERS_CONFIG_PATH)
+        print(f"Use \"{self.args.whisper_type}\" implementation")
+        print(f"Device \"{self.whisper_inf.device}\" is detected")
 
     def create_whisper_parameters(self):
         whisper_params = self.default_params["whisper"]
         vad_params = self.default_params["vad"]
         diarization_params = self.default_params["diarization"]
+        uvr_params = self.default_params["bgm_separation"]
 
         with gr.Row():
             dd_model = gr.Dropdown(choices=self.whisper_inf.available_models, value=whisper_params["model_size"],
@@ -127,6 +130,16 @@ class App:
                                               precision=0)
                 nb_batch_size = gr.Number(label="Batch Size", value=whisper_params["batch_size"], precision=0)
 
+        with gr.Accordion("BGM Separation", open=False):
+            cb_bgm_separation = gr.Checkbox(label="Enable BGM separation", value=uvr_params["is_separate_bgm"],
+                                            interactive=True)
+            dd_uvr_device = gr.Dropdown(label="Device", value=self.whisper_inf.music_separator.device,
+                                        choices=self.whisper_inf.music_separator.available_devices)
+            dd_uvr_model_size = gr.Dropdown(label="Model", value=uvr_params["model_size"],
+                                            choices=self.whisper_inf.music_separator.available_models)
+            nb_uvr_segment_size = gr.Number(label="Segment Size", value=uvr_params["segment_size"], precision=0)
+            cb_uvr_save_file = gr.Checkbox(label="Save separated files to output", value=uvr_params["save_file"])
+
         with gr.Accordion("VAD", open=False):
             cb_vad_filter = gr.Checkbox(label="Enable Silero VAD Filter", value=vad_params["vad_filter"],
                                         interactive=True)
@@ -173,7 +186,9 @@ class App:
                 hallucination_silence_threshold=nb_hallucination_silence_threshold, hotwords=tb_hotwords,
                 language_detection_threshold=nb_language_detection_threshold,
                 language_detection_segments=nb_language_detection_segments,
-                prompt_reset_on_temperature=sld_prompt_reset_on_temperature
+                prompt_reset_on_temperature=sld_prompt_reset_on_temperature, is_bgm_separate=cb_bgm_separation,
+                uvr_device=dd_uvr_device, uvr_model_size=dd_uvr_model_size, uvr_segment_size=nb_uvr_segment_size,
+                uvr_save_file=cb_uvr_save_file
             ),
             dd_file_format,
             cb_timestamp
@@ -383,6 +398,8 @@ parser.add_argument('--diarization_model_dir', type=str, default=DIARIZATION_MOD
                     help='Directory path of the diarization model')
 parser.add_argument('--nllb_model_dir', type=str, default=NLLB_MODELS_DIR,
                     help='Directory path of the Facebook NLLB model')
+parser.add_argument('--uvr_model_dir', type=str, default=UVR_MODELS_DIR,
+                    help='Directory path of the UVR model')
 parser.add_argument('--output_dir', type=str, default=OUTPUT_DIR, help='Directory path of the outputs')
 _args = parser.parse_args()
 

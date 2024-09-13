@@ -2,6 +2,7 @@ import os
 import torch
 import whisper
 import gradio as gr
+import torchaudio
 from abc import ABC, abstractmethod
 from typing import BinaryIO, Union, Tuple, List
 import numpy as np
@@ -9,7 +10,9 @@ from datetime import datetime
 from faster_whisper.vad import VadOptions
 from dataclasses import astuple
 
-from modules.utils.paths import (WHISPER_MODELS_DIR, DIARIZATION_MODELS_DIR, OUTPUT_DIR, DEFAULT_PARAMETERS_CONFIG_PATH)
+from modules.uvr.music_separator import MusicSeparator
+from modules.utils.paths import (WHISPER_MODELS_DIR, DIARIZATION_MODELS_DIR, OUTPUT_DIR, DEFAULT_PARAMETERS_CONFIG_PATH,
+                                 UVR_MODELS_DIR)
 from modules.utils.subtitle_manager import get_srt, get_vtt, get_txt, write_file, safe_filename
 from modules.utils.youtube_manager import get_ytdata, get_ytaudio
 from modules.utils.files_manager import get_media_files, format_gradio_files, load_yaml, save_yaml
@@ -22,6 +25,7 @@ class WhisperBase(ABC):
     def __init__(self,
                  model_dir: str = WHISPER_MODELS_DIR,
                  diarization_model_dir: str = DIARIZATION_MODELS_DIR,
+                 uvr_model_dir: str = UVR_MODELS_DIR,
                  output_dir: str = OUTPUT_DIR,
                  ):
         self.model_dir = model_dir
@@ -32,6 +36,10 @@ class WhisperBase(ABC):
             model_dir=diarization_model_dir
         )
         self.vad = SileroVAD()
+        self.music_separator = MusicSeparator(
+            model_dir=uvr_model_dir,
+            output_dir=os.path.join(output_dir, "UVR")
+        )
 
         self.model = None
         self.current_model_size = None
@@ -102,7 +110,26 @@ class WhisperBase(ABC):
             language_code_dict = {value: key for key, value in whisper.tokenizer.LANGUAGES.items()}
             params.lang = language_code_dict[params.lang]
 
-        speech_chunks = None
+        if params.is_bgm_separate:
+            music, audio = self.music_separator.separate(
+                audio=audio,
+                model_name=params.uvr_model_size,
+                device=params.uvr_device,
+                segment_size=params.uvr_segment_size,
+                save_file=params.uvr_save_file,
+                progress=progress
+            )
+
+            if audio.ndim >= 2:
+                audio = audio.mean(axis=1)
+                if self.music_separator.audio_info is None:
+                    origin_sample_rate = 16000
+                else:
+                    origin_sample_rate = self.music_separator.audio_info.sample_rate
+                audio = self.resample_audio(audio=audio, original_sample_rate=origin_sample_rate)
+
+            self.music_separator.offload()
+
         if params.vad_filter:
             # Explicit value set for float('inf') from gr.Number()
             if params.max_speech_duration_s >= 9999:
@@ -437,12 +464,14 @@ class WhisperBase(ABC):
 
     @staticmethod
     def release_cuda_memory():
+        """Release memory"""
         if torch.cuda.is_available():
             torch.cuda.empty_cache()
             torch.cuda.reset_max_memory_allocated()
 
     @staticmethod
     def remove_input_files(file_paths: List[str]):
+        """Remove gradio cached files"""
         if not file_paths:
             return
 
@@ -455,9 +484,25 @@ class WhisperBase(ABC):
         whisper_params: WhisperValues,
         add_timestamp: bool
     ):
+        """cache parameters to the yaml file"""
         cached_params = load_yaml(DEFAULT_PARAMETERS_CONFIG_PATH)
         cached_whisper_param = whisper_params.to_yaml()
         cached_yaml = {**cached_params, **cached_whisper_param}
         cached_yaml["whisper"]["add_timestamp"] = add_timestamp
 
         save_yaml(cached_yaml, DEFAULT_PARAMETERS_CONFIG_PATH)
+
+    @staticmethod
+    def resample_audio(audio: Union[str, np.ndarray],
+                       new_sample_rate: int = 16000,
+                       original_sample_rate: Optional[int] = None,) -> np.ndarray:
+        """Resamples audio to 16k sample rate, standard on Whisper model"""
+        if isinstance(audio, str):
+            audio, original_sample_rate = torchaudio.load(audio)
+        else:
+            if original_sample_rate is None:
+                raise ValueError("original_sample_rate must be provided when audio is numpy array.")
+            audio = torch.from_numpy(audio)
+        resampler = torchaudio.transforms.Resample(orig_freq=original_sample_rate, new_freq=new_sample_rate)
+        resampled_audio = resampler(audio).numpy()
+        return resampled_audio

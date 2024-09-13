@@ -44,6 +44,12 @@ diarization:
   is_diarize: false
   hf_token: ""
 
+bgm_separation:
+  is_separate_bgm: false
+  model_size: "UVR-MDX-NET-Inst_HQ_4"
+  segment_size: 256
+  save_file: true
+
 translation:
   deepl:
     api_key: ""

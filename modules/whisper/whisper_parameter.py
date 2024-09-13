@@ -47,6 +47,11 @@ class WhisperParameters:
     hotwords: gr.Textbox
     language_detection_threshold: gr.Number
     language_detection_segments: gr.Number
+    is_bgm_separate: gr.Checkbox
+    uvr_model_size: gr.Dropdown
+    uvr_device: gr.Dropdown
+    uvr_segment_size: gr.Number
+    uvr_save_file: gr.Checkbox
     """
     A data class for Gradio components of the Whisper Parameters. Use "before" Gradio pre-processing.
     This data class is used to mitigate the key-value problem between Gradio components and function parameters.
@@ -148,61 +153,76 @@ class WhisperParameters:
     diarization_device: gr.Dropdown
         This parameter is related with whisperx. Device to run diarization model
         
-    length_penalty: 
+    length_penalty: gr.Number
         This parameter is related to faster-whisper. Exponential length penalty constant.
     
-    repetition_penalty: 
+    repetition_penalty: gr.Number
         This parameter is related to faster-whisper. Penalty applied to the score of previously generated tokens
         (set > 1 to penalize).
 
-    no_repeat_ngram_size:
+    no_repeat_ngram_size: gr.Number
         This parameter is related to faster-whisper. Prevent repetitions of n-grams with this size (set 0 to disable).
 
-    prefix:
+    prefix: gr.Textbox
         This parameter is related to faster-whisper. Optional text to provide as a prefix for the first window.
 
-    suppress_blank:
+    suppress_blank: gr.Checkbox
         This parameter is related to faster-whisper. Suppress blank outputs at the beginning of the sampling.
 
-    suppress_tokens:
+    suppress_tokens: gr.Textbox
         This parameter is related to faster-whisper. List of token IDs to suppress. -1 will suppress a default set
         of symbols as defined in the model config.json file.
 
-    max_initial_timestamp:
+    max_initial_timestamp: gr.Number
         This parameter is related to faster-whisper. The initial timestamp cannot be later than this.
 
-    word_timestamps:
+    word_timestamps: gr.Checkbox
         This parameter is related to faster-whisper. Extract word-level timestamps using the cross-attention pattern
         and dynamic time warping, and include the timestamps for each word in each segment.
 
-    prepend_punctuations:
+    prepend_punctuations: gr.Textbox
         This parameter is related to faster-whisper. If word_timestamps is True, merge these punctuation symbols
         with the next word.
 
-    append_punctuations:
+    append_punctuations: gr.Textbox
         This parameter is related to faster-whisper. If word_timestamps is True, merge these punctuation symbols
         with the previous word.
 
-    max_new_tokens:
+    max_new_tokens: gr.Number
         This parameter is related to faster-whisper. Maximum number of new tokens to generate per-chunk. If not set,
         the maximum will be set by the default max_length.
 
-    chunk_length:
+    chunk_length: gr.Number
         This parameter is related to faster-whisper. The length of audio segments. If it is not None, it will overwrite the
         default chunk_length of the FeatureExtractor.
 
-    hallucination_silence_threshold:
+    hallucination_silence_threshold: gr.Number
         This parameter is related to faster-whisper. When word_timestamps is True, skip silent periods longer than this threshold
         (in seconds) when a possible hallucination is detected.
 
-    hotwords:
+    hotwords: gr.Textbox
         This parameter is related to faster-whisper. Hotwords/hint phrases to provide the model with. Has no effect if prefix is not None.
 
-    language_detection_threshold:
+    language_detection_threshold: gr.Number
         This parameter is related to faster-whisper. If the maximum probability of the language tokens is higher than this value, the language is detected.
 
-    language_detection_segments:
+    language_detection_segments: gr.Number
         This parameter is related to faster-whisper. Number of segments to consider for the language detection.
+        
+    is_separate_bgm: gr.Checkbox
+        This parameter is related to UVR. Boolean value that determines whether to separate bgm or not.
+        
+    uvr_model_size: gr.Dropdown
+        This parameter is related to UVR. UVR model size.
+    
+    uvr_device: gr.Dropdown
+        This parameter is related to UVR. Device to run UVR model.
+        
+    uvr_segment_size: gr.Number
+        This parameter is related to UVR. Segment size for UVR model.
+        
+    uvr_save_file: gr.Checkbox
+        This parameter is related to UVR. Boolean value that determines whether to save the file or not.
     """
 
     def as_list(self) -> list:
@@ -273,6 +293,11 @@ class WhisperValues:
     hotwords: Optional[str]
     language_detection_threshold: Optional[float]
     language_detection_segments: int
+    is_bgm_separate: bool
+    uvr_model_size: str
+    uvr_device: str
+    uvr_segment_size: int
+    uvr_save_file: bool
     """
     A data class to use Whisper parameters.
     """
@@ -323,6 +348,12 @@ class WhisperValues:
             "diarization": {
                 "is_diarize": self.is_diarize,
                 "hf_token": self.hf_token
-            }
+            },
+            "bgm_separation": {
+                "is_separate_bgm": self.is_bgm_separate,
+                "model_size": self.uvr_model_size,
+                "segment_size": self.uvr_segment_size,
+                "save_file": self.uvr_save_file,
+            },
         }
         return data
