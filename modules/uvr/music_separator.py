@@ -9,6 +9,8 @@ import gradio as gr
 from datetime import datetime
 
 from uvr.models import MDX, Demucs, VrNetwork, MDXC
+from modules.utils.files_manager import is_video
+from modules.diarize.audio_loader import load_audio
 
 
 class MusicSeparator:
@@ -77,14 +79,18 @@ class MusicSeparator:
             tuple[np.ndarray, np.ndarray]: Instrumental and vocals numpy arrays.
         """
         if isinstance(audio, str):
-            self.audio_info = torchaudio.info(audio)
-            sample_rate = self.audio_info.sample_rate
-            output_filename, ext = os.path.splitext(audio)
             output_filename, ext = os.path.basename(audio), ".wav"
+
+            if is_video(audio):
+                audio = load_audio(audio)
+                sample_rate = 16000
+            else:
+                self.audio_info = torchaudio.info(audio)
+                sample_rate = self.audio_info.sample_rate
         else:
-            sample_rate = 16000
             timestamp = datetime.now().strftime("%m%d%H%M%S")
             output_filename, ext = f"UVR-{timestamp}", ".wav"
+            sample_rate = 16000
 
         model_config = {
             "segment": segment_size,
@@ -94,7 +100,7 @@ class MusicSeparator:
         if (self.model is None or
                 self.current_model_size != model_name or
                 self.model_config != model_config or
-                self.audio_info.sample_rate != sample_rate or
+                self.model.sample_rate != sample_rate or
                 self.device != device):
             progress(0, desc="Initializing UVR Model..")
             self.update_model(
