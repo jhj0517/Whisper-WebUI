@@ -11,7 +11,7 @@ import whisper
 import gradio as gr
 from argparse import Namespace
 
-from modules.utils.paths import (FASTER_WHISPER_MODELS_DIR, DIARIZATION_MODELS_DIR, OUTPUT_DIR)
+from modules.utils.paths import (FASTER_WHISPER_MODELS_DIR, DIARIZATION_MODELS_DIR, UVR_MODELS_DIR, OUTPUT_DIR)
 from modules.whisper.whisper_parameter import *
 from modules.whisper.whisper_base import WhisperBase
 
@@ -20,11 +20,13 @@ class FasterWhisperInference(WhisperBase):
     def __init__(self,
                  model_dir: str = FASTER_WHISPER_MODELS_DIR,
                  diarization_model_dir: str = DIARIZATION_MODELS_DIR,
+                 uvr_model_dir: str = UVR_MODELS_DIR,
                  output_dir: str = OUTPUT_DIR,
                  ):
         super().__init__(
             model_dir=model_dir,
             diarization_model_dir=diarization_model_dir,
+            uvr_model_dir=uvr_model_dir,
             output_dir=output_dir
         )
         self.model_dir = model_dir

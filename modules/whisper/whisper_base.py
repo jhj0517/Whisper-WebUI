@@ -251,6 +251,7 @@ class WhisperBase(ABC):
     def transcribe_mic(self,
                        mic_audio: str,
                        file_format: str,
+                       add_timestamp: bool,
                        progress=gr.Progress(),
                        *whisper_params,
                        ) -> list:
@@ -263,6 +264,8 @@ class WhisperBase(ABC):
             Audio file path from gr.Microphone()
         file_format: str
             Subtitle File format to write from gr.Dropdown(). Supported format: [SRT, WebVTT, txt]
+        add_timestamp: bool
+            Boolean value from gr.Checkbox() that determines whether to add a timestamp at the end of the filename.
         progress: gr.Progress
             Indicator to show progress directly in gradio.
         *whisper_params: tuple
@@ -280,6 +283,7 @@ class WhisperBase(ABC):
             transcribed_segments, time_for_task = self.run(
                 mic_audio,
                 progress,
+                add_timestamp,
                 *whisper_params,
             )
             progress(1, desc="Completed!")
@@ -287,7 +291,7 @@ class WhisperBase(ABC):
             subtitle, result_file_path = self.generate_and_write_file(
                 file_name="Mic",
                 transcribed_segments=transcribed_segments,
-                add_timestamp=True,
+                add_timestamp=add_timestamp,
                 file_format=file_format,
                 output_dir=self.output_dir
             )

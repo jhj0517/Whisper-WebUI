@@ -26,6 +26,7 @@ class App:
             whisper_model_dir=self.args.whisper_model_dir,
             faster_whisper_model_dir=self.args.faster_whisper_model_dir,
             insanely_fast_whisper_model_dir=self.args.insanely_fast_whisper_model_dir,
+            uvr_model_dir=self.args.uvr_model_dir,
             output_dir=self.args.output_dir,
         )
         self.nllb_inf = NLLBInference(
@@ -269,7 +270,7 @@ class App:
                         files_subtitles = gr.Files(label="Downloadable output file", scale=3)
                         btn_openfolder = gr.Button('📂', scale=1)
 
-                    params = [mic_input, dd_file_format]
+                    params = [mic_input, dd_file_format, cb_timestamp]
 
                     btn_run.click(fn=self.whisper_inf.transcribe_mic,
                                   inputs=params + whisper_params.as_list(),

@@ -1,4 +1,3 @@
-# Credit to Team UVR : https://github.com/Anjok07/ultimatevocalremovergui
 from typing import Optional, Union
 import numpy as np
 import torchaudio
