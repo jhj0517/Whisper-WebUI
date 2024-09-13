@@ -25,6 +25,7 @@ If you wish to try this on Colab, you can do it in [here](https://colab.research
   - Translate subtitle files using Facebook NLLB models
   - Translate subtitle files using DeepL API
 - Pre-processing audio input with [Silero VAD](https://github.com/snakers4/silero-vad).
+- Pre-processing audio input to separate BGM with [UVR](https://github.com/Anjok07/ultimatevocalremovergui), [UVR-api](https://github.com/NextAudioGen/ultimatevocalremover_api). 
 - Post-processing with speaker diarization using the [pyannote](https://huggingface.co/pyannote/speaker-diarization-3.1) model.
    - To download the pyannote model, you need to have a Huggingface token and manually accept their terms in the pages below.
       1. https://huggingface.co/pyannote/speaker-diarization-3.1
@@ -109,8 +110,6 @@ This is Whisper's original VRAM usage table for models.
 - [x] Integrate with faster-whisper
 - [x] Integrate with insanely-fast-whisper
 - [x] Integrate with whisperX ( Only speaker diarization part )
-- [ ] Add background music separation pre-processing with [MVSEP-MDX23](https://github.com/ZFTurbo/MVSEP-MDX23-music-separation-model)  
+- [x] Add background music separation pre-processing with [UVR](https://github.com/Anjok07/ultimatevocalremovergui)  
 - [ ] Add fast api script
 - [ ] Support real-time transcription for microphone
-
-
