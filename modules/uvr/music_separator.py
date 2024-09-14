@@ -174,5 +174,5 @@ class MusicSeparator:
             "segment_size": segment_size
         }
         cached_uvr_params = {**cached_uvr_params, **uvr_params_to_cache}
-        cached_params = {**cached_params, **cached_uvr_params}
+        cached_params["bgm_separation"] = cached_uvr_params
         save_yaml(cached_params, DEFAULT_PARAMETERS_CONFIG_PATH)
