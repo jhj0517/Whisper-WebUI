@@ -131,7 +131,7 @@ class App:
                 nb_batch_size = gr.Number(label="Batch Size", value=whisper_params["batch_size"], precision=0)
 
         with gr.Accordion("BGM Separation", open=False):
-            cb_bgm_separation = gr.Checkbox(label="Enable BGM separation", value=uvr_params["is_separate_bgm"],
+            cb_bgm_separation = gr.Checkbox(label="Enable BGM Separation Filter", value=uvr_params["is_separate_bgm"],
                                             interactive=True)
             dd_uvr_device = gr.Dropdown(label="Device", value=self.whisper_inf.music_separator.device,
                                         choices=self.whisper_inf.music_separator.available_devices)
