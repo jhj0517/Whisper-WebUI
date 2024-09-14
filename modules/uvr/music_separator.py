@@ -83,6 +83,7 @@ class MusicSeparator:
         """
         if isinstance(audio, str):
             output_filename, ext = os.path.basename(audio), ".wav"
+            output_filename, orig_ext = os.path.splitext(output_filename)
 
             if is_video(audio):
                 audio = load_audio(audio)
