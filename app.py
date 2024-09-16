@@ -12,6 +12,7 @@ from modules.whisper.faster_whisper_inference import FasterWhisperInference
 from modules.whisper.insanely_fast_whisper_inference import InsanelyFastWhisperInference
 from modules.translation.nllb_inference import NLLBInference
 from modules.ui.htmls import *
+from modules.utils.cli_manager import str2bool
 from modules.utils.youtube_manager import get_ytmetas
 from modules.translation.deepl_api import DeepLAPI
 from modules.whisper.whisper_parameter import *
@@ -412,16 +413,16 @@ class App:
 parser = argparse.ArgumentParser()
 parser.add_argument('--whisper_type', type=str, default="faster-whisper",
                     help='A type of the whisper implementation between: ["whisper", "faster-whisper", "insanely-fast-whisper"]')
-parser.add_argument('--share', type=bool, default=False, nargs='?', const=True, help='Gradio share value')
+parser.add_argument('--share', type=str2bool, default=False, nargs='?', const=True, help='Gradio share value')
 parser.add_argument('--server_name', type=str, default=None, help='Gradio server host')
 parser.add_argument('--server_port', type=int, default=None, help='Gradio server port')
 parser.add_argument('--root_path', type=str, default=None, help='Gradio root path')
 parser.add_argument('--username', type=str, default=None, help='Gradio authentication username')
 parser.add_argument('--password', type=str, default=None, help='Gradio authentication password')
 parser.add_argument('--theme', type=str, default=None, help='Gradio Blocks theme')
-parser.add_argument('--colab', type=bool, default=False, nargs='?', const=True, help='Is colab user or not')
-parser.add_argument('--api_open', type=bool, default=False, nargs='?', const=True, help='Enable api or not in Gradio')
-parser.add_argument('--inbrowser', type=bool, default=True, nargs='?', const=True, help='Whether to automatically start Gradio app or not')
+parser.add_argument('--colab', type=str2bool, default=False, nargs='?', const=True, help='Is colab user or not')
+parser.add_argument('--api_open', type=str2bool, default=False, nargs='?', const=True, help='Enable api or not in Gradio')
+parser.add_argument('--inbrowser', type=str2bool, default=True, nargs='?', const=True, help='Whether to automatically start Gradio app or not')
 parser.add_argument('--whisper_model_dir', type=str, default=WHISPER_MODELS_DIR,
                     help='Directory path of the whisper model')
 parser.add_argument('--faster_whisper_model_dir', type=str, default=FASTER_WHISPER_MODELS_DIR,
