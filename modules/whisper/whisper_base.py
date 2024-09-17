@@ -467,7 +467,7 @@ class WhisperBase(ABC):
 
     @staticmethod
     def is_sparse_api_supported():
-        if torch.backends.mps.is_available():
+        if not torch.backends.mps.is_available():
             return False
 
         try:
