@@ -458,9 +458,29 @@ class WhisperBase(ABC):
         if torch.cuda.is_available():
             return "cuda"
         elif torch.backends.mps.is_available():
+            if not WhisperBase.is_sparse_api_supported():
+                # Device `SparseMPS` is not supported for now. See : https://github.com/pytorch/pytorch/issues/87886
+                return "cpu"
             return "mps"
         else:
             return "cpu"
+
+    @staticmethod
+    def is_sparse_api_supported():
+        if not torch.backends.mps.is_available():
+            return False
+
+        try:
+            device = torch.device("mps")
+            sparse_tensor = torch.sparse_coo_tensor(
+                indices=torch.tensor([[0, 1], [2, 3]]),
+                values=torch.tensor([1, 2]),
+                size=(4, 4),
+                device=device
+            )
+            return True
+        except RuntimeError:
+            return False
 
     @staticmethod
     def release_cuda_memory():
