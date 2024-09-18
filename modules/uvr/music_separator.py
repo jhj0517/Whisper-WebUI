@@ -22,6 +22,10 @@ class MusicSeparator:
         self.available_devices = ["cpu", "cuda"]
         self.model_dir = model_dir
         self.output_dir = output_dir
+        instrumental_output_dir = os.path.join(self.output_dir, "instrumental")
+        vocals_output_dir = os.path.join(self.output_dir, "vocals")
+        os.makedirs(instrumental_output_dir, exist_ok=True)
+        os.makedirs(vocals_output_dir, exist_ok=True)
         self.audio_info = None
         self.available_models = ["UVR-MDX-NET-Inst_HQ_4", "UVR-MDX-NET-Inst_3"]
         self.default_model = self.available_models[0]
