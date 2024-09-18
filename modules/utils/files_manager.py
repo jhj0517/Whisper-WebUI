@@ -29,7 +29,8 @@ def save_yaml(data: dict, path: str = DEFAULT_PARAMETERS_CONFIG_PATH):
 
 
 def get_media_files(folder_path, include_sub_directory=False):
-    video_extensions = ['*.mp4', '*.mkv', '*.flv', '*.avi', '*.mov', '*.wmv']
+    video_extensions = ['*.mp4', '*.mkv', '*.flv', '*.avi', '*.mov', '*.wmv', '*.webm', '*.m4v', '*.mpeg', '*.mpg',
+                        '*.3gp', '*.f4v', '*.ogv', '*.vob', '*.mts', '*.m2ts', '*.divx', '*.mxf', '*.rm', '*.rmvb']
     audio_extensions = ['*.mp3', '*.wav', '*.aac', '*.flac', '*.ogg', '*.m4a']
     media_extensions = video_extensions + audio_extensions
 
