@@ -111,7 +111,7 @@ class WhisperBase(ABC):
             params.lang = language_code_dict[params.lang]
 
         if params.is_bgm_separate:
-            music, audio = self.music_separator.separate(
+            music, audio, _ = self.music_separator.separate(
                 audio=audio,
                 model_name=params.uvr_model_size,
                 device=params.uvr_device,
