@@ -26,7 +26,6 @@ class WhisperParameters:
     max_speech_duration_s: gr.Number
     min_silence_duration_ms: gr.Number
     speech_pad_ms: gr.Number
-    chunk_length_s: gr.Number
     batch_size: gr.Number
     is_diarize: gr.Checkbox
     hf_token: gr.Textbox
@@ -136,10 +135,6 @@ class WhisperParameters:
     speech_pad_ms: gr.Number
         This parameter is related with Silero VAD. Final speech chunks are padded by speech_pad_ms each side    
         
-    chunk_length_s: gr.Number
-        This parameter is related with insanely-fast-whisper pipe.
-        Maximum length of each chunk
-        
     batch_size: gr.Number
         This parameter is related with insanely-fast-whisper pipe. Batch size to pass to the pipe
         
@@ -193,8 +188,8 @@ class WhisperParameters:
         the maximum will be set by the default max_length.
 
     chunk_length: gr.Number
-        This parameter is related to faster-whisper. The length of audio segments. If it is not None, it will overwrite the
-        default chunk_length of the FeatureExtractor.
+        This parameter is related to faster-whisper and insanely-fast-whisper. The length of audio segments in seconds.
+         If it is not None, it will overwrite the default chunk_length of the FeatureExtractor.
 
     hallucination_silence_threshold: gr.Number
         This parameter is related to faster-whisper. When word_timestamps is True, skip silent periods longer than this threshold
@@ -252,52 +247,51 @@ class WhisperParameters:
 
 @dataclass
 class WhisperValues:
-    model_size: str
-    lang: str
-    is_translate: bool
-    beam_size: int
-    log_prob_threshold: float
-    no_speech_threshold: float
-    compute_type: str
-    best_of: int
-    patience: float
-    condition_on_previous_text: bool
-    prompt_reset_on_temperature: float
-    initial_prompt: Optional[str]
-    temperature: float
-    compression_ratio_threshold: float
-    vad_filter: bool
-    threshold: float
-    min_speech_duration_ms: int
-    max_speech_duration_s: float
-    min_silence_duration_ms: int
-    speech_pad_ms: int
-    chunk_length_s: int
-    batch_size: int
-    is_diarize: bool
-    hf_token: str
-    diarization_device: str
-    length_penalty: float
-    repetition_penalty: float
-    no_repeat_ngram_size: int
-    prefix: Optional[str]
-    suppress_blank: bool
-    suppress_tokens: Optional[str]
-    max_initial_timestamp: float
-    word_timestamps: bool
-    prepend_punctuations: Optional[str]
-    append_punctuations: Optional[str]
-    max_new_tokens: Optional[int]
-    chunk_length: Optional[int]
-    hallucination_silence_threshold: Optional[float]
-    hotwords: Optional[str]
-    language_detection_threshold: Optional[float]
-    language_detection_segments: int
-    is_bgm_separate: bool
-    uvr_model_size: str
-    uvr_device: str
-    uvr_segment_size: int
-    uvr_save_file: bool
+    model_size: str = "large-v2"
+    lang: Optional[str] = None
+    is_translate: bool = False
+    beam_size: int = 5
+    log_prob_threshold: float = -1.0
+    no_speech_threshold: float = 0.6
+    compute_type: str = "float16"
+    best_of: int = 5
+    patience: float = 1.0
+    condition_on_previous_text: bool = True
+    prompt_reset_on_temperature: float = 0.5
+    initial_prompt: Optional[str] = None
+    temperature: float = 0.0
+    compression_ratio_threshold: float = 2.4
+    vad_filter: bool = False
+    threshold: float = 0.5
+    min_speech_duration_ms: int = 250
+    max_speech_duration_s: float = float("inf")
+    min_silence_duration_ms: int = 2000
+    speech_pad_ms: int = 400
+    batch_size: int = 24
+    is_diarize: bool = False
+    hf_token: str = ""
+    diarization_device: str = "cuda"
+    length_penalty: float = 1.0
+    repetition_penalty: float = 1.0
+    no_repeat_ngram_size: int = 0.0
+    prefix: Optional[str] = None
+    suppress_blank: bool = True
+    suppress_tokens: Optional[str] = "[-1]"
+    max_initial_timestamp: float = 0.0
+    word_timestamps: bool = False
+    prepend_punctuations: Optional[str] = "\"'“¿([{-"
+    append_punctuations: Optional[str] = "\"'.。,，!！?？:：”)]}、"
+    max_new_tokens: Optional[int] = None
+    chunk_length: Optional[int] = 30
+    hallucination_silence_threshold: Optional[float] = None
+    hotwords: Optional[str] = None
+    language_detection_threshold: Optional[float] = None
+    language_detection_segments: int = 1
+    is_bgm_separate: bool = False
+    uvr_model_size: str = "UVR-MDX-NET-Inst_HQ_4"
+    uvr_device: str = "cuda"
+    uvr_segment_size: int = 256
+    uvr_save_file: bool = False
     """
     A data class to use Whisper parameters.
     """
@@ -318,7 +312,6 @@ class WhisperValues:
                 "initial_prompt": None if not self.initial_prompt else self.initial_prompt,
                 "temperature": self.temperature,
                 "compression_ratio_threshold": self.compression_ratio_threshold,
-                "chunk_length_s": None if self.chunk_length_s is None else self.chunk_length_s,
                 "batch_size": self.batch_size,
                 "length_penalty": self.length_penalty,
                 "repetition_penalty": self.repetition_penalty,
