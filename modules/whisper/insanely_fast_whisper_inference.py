@@ -78,7 +78,7 @@ class InsanelyFastWhisperInference(WhisperBase):
             segments = self.model(
                 inputs=audio,
                 return_timestamps=True,
-                chunk_length_s=params.chunk_length_s,
+                chunk_length_s=params.chunk_length,
                 batch_size=params.batch_size,
                 generate_kwargs={
                     "language": params.lang,

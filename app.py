@@ -88,6 +88,9 @@ class App:
             nb_compression_ratio_threshold = gr.Number(label="Compression Ratio Threshold", value=whisper_params["compression_ratio_threshold"],
                                                        interactive=True,
                                                        info="If the gzip compression ratio is above this value, treat as failed.")
+            nb_chunk_length = gr.Number(label="Chunk Length (s)", value=lambda: whisper_params["chunk_length"],
+                                        precision=0,
+                                        info="The length of audio segments. If it is not None, it will overwrite the default chunk_length of the FeatureExtractor.")
             with gr.Group(visible=isinstance(self.whisper_inf, FasterWhisperInference)):
                 nb_length_penalty = gr.Number(label="Length Penalty", value=whisper_params["length_penalty"],
                                               info="Exponential length penalty constant.")
@@ -113,9 +116,6 @@ class App:
                 nb_max_new_tokens = gr.Number(label="Max New Tokens", value=lambda: whisper_params["max_new_tokens"],
                                               precision=0,
                                               info="Maximum number of new tokens to generate per-chunk. If not set, the maximum will be set by the default max_length.")
-                nb_chunk_length = gr.Number(label="Chunk Length", value=lambda: whisper_params["chunk_length"],
-                                            precision=0,
-                                            info="The length of audio segments. If it is not None, it will overwrite the default chunk_length of the FeatureExtractor.")
                 nb_hallucination_silence_threshold = gr.Number(label="Hallucination Silence Threshold (sec)",
                                                                value=lambda: whisper_params["hallucination_silence_threshold"],
                                                                info="When 'Word Timestamps' is True, skip silent periods longer than this threshold (in seconds) when a possible hallucination is detected.")
@@ -127,8 +127,6 @@ class App:
                                                            precision=0,
                                                            info="Number of segments to consider for the language detection.")
             with gr.Group(visible=isinstance(self.whisper_inf, InsanelyFastWhisperInference)):
-                nb_chunk_length_s = gr.Number(label="Chunk Lengths (sec)", value=whisper_params["chunk_length_s"],
-                                              precision=0)
                 nb_batch_size = gr.Number(label="Batch Size", value=whisper_params["batch_size"], precision=0)
 
         with gr.Accordion("BGM Separation", open=False):
@@ -177,13 +175,13 @@ class App:
                 temperature=sd_temperature, compression_ratio_threshold=nb_compression_ratio_threshold,
                 vad_filter=cb_vad_filter, threshold=sd_threshold, min_speech_duration_ms=nb_min_speech_duration_ms,
                 max_speech_duration_s=nb_max_speech_duration_s, min_silence_duration_ms=nb_min_silence_duration_ms,
-                speech_pad_ms=nb_speech_pad_ms, chunk_length_s=nb_chunk_length_s, batch_size=nb_batch_size,
+                speech_pad_ms=nb_speech_pad_ms, chunk_length=nb_chunk_length, batch_size=nb_batch_size,
                 is_diarize=cb_diarize, hf_token=tb_hf_token, diarization_device=dd_diarization_device,
                 length_penalty=nb_length_penalty, repetition_penalty=nb_repetition_penalty,
                 no_repeat_ngram_size=nb_no_repeat_ngram_size, prefix=tb_prefix, suppress_blank=cb_suppress_blank,
                 suppress_tokens=tb_suppress_tokens, max_initial_timestamp=nb_max_initial_timestamp,
                 word_timestamps=cb_word_timestamps, prepend_punctuations=tb_prepend_punctuations,
-                append_punctuations=tb_append_punctuations, max_new_tokens=nb_max_new_tokens, chunk_length=nb_chunk_length,
+                append_punctuations=tb_append_punctuations, max_new_tokens=nb_max_new_tokens,
                 hallucination_silence_threshold=nb_hallucination_silence_threshold, hotwords=tb_hotwords,
                 language_detection_threshold=nb_language_detection_threshold,
                 language_detection_segments=nb_language_detection_segments,
