@@ -88,6 +88,9 @@ class App:
             nb_compression_ratio_threshold = gr.Number(label="Compression Ratio Threshold", value=whisper_params["compression_ratio_threshold"],
                                                        interactive=True,
                                                        info="If the gzip compression ratio is above this value, treat as failed.")
+            nb_chunk_length = gr.Number(label="Chunk Length (s)", value=lambda: whisper_params["chunk_length"],
+                                        precision=0,
+                                        info="The length of audio segments. If it is not None, it will overwrite the default chunk_length of the FeatureExtractor.")
             with gr.Group(visible=isinstance(self.whisper_inf, FasterWhisperInference)):
                 nb_length_penalty = gr.Number(label="Length Penalty", value=whisper_params["length_penalty"],
                                               info="Exponential length penalty constant.")
@@ -113,9 +116,6 @@ class App:
                 nb_max_new_tokens = gr.Number(label="Max New Tokens", value=lambda: whisper_params["max_new_tokens"],
                                               precision=0,
                                               info="Maximum number of new tokens to generate per-chunk. If not set, the maximum will be set by the default max_length.")
-                nb_chunk_length = gr.Number(label="Chunk Length (s)", value=lambda: whisper_params["chunk_length"],
-                                            precision=0,
-                                            info="The length of audio segments. If it is not None, it will overwrite the default chunk_length of the FeatureExtractor.")
                 nb_hallucination_silence_threshold = gr.Number(label="Hallucination Silence Threshold (sec)",
                                                                value=lambda: whisper_params["hallucination_silence_threshold"],
                                                                info="When 'Word Timestamps' is True, skip silent periods longer than this threshold (in seconds) when a possible hallucination is detected.")
