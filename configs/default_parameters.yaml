@@ -36,8 +36,8 @@ vad:
   threshold: 0.5
   min_speech_duration_ms: 250
   max_speech_duration_s: 9999
-  min_silence_duration_ms: 2000
-  speech_pad_ms: 400
+  min_silence_duration_ms: 1000
+  speech_pad_ms: 2000
 
 diarization:
   is_diarize: false
