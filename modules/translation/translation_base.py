@@ -37,7 +37,7 @@ class TranslationBase(ABC):
                      model_size: str,
                      src_lang: str,
                      tgt_lang: str,
-                     progress: gr.Progress
+                     progress: gr.Progress = gr.Progress()
                      ):
         pass
 
