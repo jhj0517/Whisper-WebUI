@@ -128,7 +128,8 @@ class WhisperBase(ABC):
                     origin_sample_rate = self.music_separator.audio_info.sample_rate
                 audio = self.resample_audio(audio=audio, original_sample_rate=origin_sample_rate)
 
-            self.music_separator.offload()
+            if params.uvr_enable_offload:
+                self.music_separator.offload()
 
         if params.vad_filter:
             # Explicit value set for float('inf') from gr.Number()
