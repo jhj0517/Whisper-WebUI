@@ -53,7 +53,7 @@ class WhisperBase(ABC):
     @abstractmethod
     def transcribe(self,
                    audio: Union[str, BinaryIO, np.ndarray],
-                   progress: gr.Progress,
+                   progress: gr.Progress = gr.Progress(),
                    *whisper_params,
                    ):
         """Inference whisper model to transcribe"""
@@ -63,7 +63,7 @@ class WhisperBase(ABC):
     def update_model(self,
                      model_size: str,
                      compute_type: str,
-                     progress: gr.Progress
+                     progress: gr.Progress = gr.Progress()
                      ):
         """Initialize whisper model"""
         pass
@@ -171,10 +171,10 @@ class WhisperBase(ABC):
         return result, elapsed_time
 
     def transcribe_file(self,
-                        files: list,
-                        input_folder_path: str,
-                        file_format: str,
-                        add_timestamp: bool,
+                        files: Optional[List] = None,
+                        input_folder_path: Optional[str] = None,
+                        file_format: str = "SRT",
+                        add_timestamp: bool = True,
                         progress=gr.Progress(),
                         *whisper_params,
                         ) -> list:
@@ -250,8 +250,8 @@ class WhisperBase(ABC):
 
     def transcribe_mic(self,
                        mic_audio: str,
-                       file_format: str,
-                       add_timestamp: bool,
+                       file_format: str = "SRT",
+                       add_timestamp: bool = True,
                        progress=gr.Progress(),
                        *whisper_params,
                        ) -> list:
@@ -306,8 +306,8 @@ class WhisperBase(ABC):
 
     def transcribe_youtube(self,
                            youtube_link: str,
-                           file_format: str,
-                           add_timestamp: bool,
+                           file_format: str = "SRT",
+                           add_timestamp: bool = True,
                            progress=gr.Progress(),
                            *whisper_params,
                            ) -> list:
@@ -411,11 +411,12 @@ class WhisperBase(ABC):
         else:
             output_path = os.path.join(output_dir, f"{file_name}")
 
-        if file_format == "SRT":
+        file_format = file_format.strip().lower()
+        if file_format == "srt":
             content = get_srt(transcribed_segments)
             output_path += '.srt'
 
-        elif file_format == "WebVTT":
+        elif file_format == "webvtt":
             content = get_vtt(transcribed_segments)
             output_path += '.vtt'
 
