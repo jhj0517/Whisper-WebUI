@@ -39,7 +39,7 @@ class InsanelyFastWhisperInference(WhisperBase):
 
     def transcribe(self,
                    audio: Union[str, np.ndarray, torch.Tensor],
-                   progress: gr.Progress,
+                   progress: gr.Progress = gr.Progress(),
                    *whisper_params,
                    ) -> Tuple[List[dict], float]:
         """
@@ -98,7 +98,7 @@ class InsanelyFastWhisperInference(WhisperBase):
     def update_model(self,
                      model_size: str,
                      compute_type: str,
-                     progress: gr.Progress,
+                     progress: gr.Progress = gr.Progress(),
                      ):
         """
         Update current model setting
