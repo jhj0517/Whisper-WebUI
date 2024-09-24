@@ -138,6 +138,8 @@ class App:
                                             choices=self.whisper_inf.music_separator.available_models)
             nb_uvr_segment_size = gr.Number(label="Segment Size", value=uvr_params["segment_size"], precision=0)
             cb_uvr_save_file = gr.Checkbox(label="Save separated files to output", value=uvr_params["save_file"])
+            cb_uvr_enable_offload = gr.Checkbox(label="Offload UVR model after separation",
+                                                value=uvr_params["enable_offload"])
 
         with gr.Accordion("VAD", open=False):
             cb_vad_filter = gr.Checkbox(label="Enable Silero VAD Filter", value=vad_params["vad_filter"],
@@ -187,7 +189,7 @@ class App:
                 language_detection_segments=nb_language_detection_segments,
                 prompt_reset_on_temperature=sld_prompt_reset_on_temperature, is_bgm_separate=cb_bgm_separation,
                 uvr_device=dd_uvr_device, uvr_model_size=dd_uvr_model_size, uvr_segment_size=nb_uvr_segment_size,
-                uvr_save_file=cb_uvr_save_file
+                uvr_save_file=cb_uvr_save_file, uvr_enable_offload=cb_uvr_enable_offload
             ),
             dd_file_format,
             cb_timestamp
