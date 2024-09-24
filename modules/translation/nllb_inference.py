@@ -35,7 +35,7 @@ class NLLBInference(TranslationBase):
                      model_size: str,
                      src_lang: str,
                      tgt_lang: str,
-                     progress: gr.Progress
+                     progress: gr.Progress = gr.Progress()
                      ):
         if model_size != self.current_model_size or self.model is None:
             print("\nInitializing NLLB Model..\n")
