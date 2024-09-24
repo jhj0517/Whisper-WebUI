@@ -273,7 +273,7 @@ class WhisperValues:
     diarization_device: str = "cuda"
     length_penalty: float = 1.0
     repetition_penalty: float = 1.0
-    no_repeat_ngram_size: int = 0.0
+    no_repeat_ngram_size: int = 0
     prefix: Optional[str] = None
     suppress_blank: bool = True
     suppress_tokens: Optional[str] = "[-1]"
