@@ -51,6 +51,7 @@ class WhisperParameters:
     uvr_device: gr.Dropdown
     uvr_segment_size: gr.Number
     uvr_save_file: gr.Checkbox
+    uvr_enable_offload: gr.Checkbox
     """
     A data class for Gradio components of the Whisper Parameters. Use "before" Gradio pre-processing.
     This data class is used to mitigate the key-value problem between Gradio components and function parameters.
@@ -218,6 +219,10 @@ class WhisperParameters:
         
     uvr_save_file: gr.Checkbox
         This parameter is related to UVR. Boolean value that determines whether to save the file or not.
+        
+    uvr_enable_offload: gr.Checkbox
+        This parameter is related to UVR. Boolean value that determines whether to offload the UVR model or not
+        after each transcription.
     """
 
     def as_list(self) -> list:
@@ -292,6 +297,7 @@ class WhisperValues:
     uvr_device: str = "cuda"
     uvr_segment_size: int = 256
     uvr_save_file: bool = False
+    uvr_enable_offload: bool = True
     """
     A data class to use Whisper parameters.
     """
@@ -347,6 +353,7 @@ class WhisperValues:
                 "model_size": self.uvr_model_size,
                 "segment_size": self.uvr_segment_size,
                 "save_file": self.uvr_save_file,
+                "enable_offload": self.uvr_enable_offload
             },
         }
         return data
