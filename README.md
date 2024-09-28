@@ -55,25 +55,27 @@ And you can also run the project with command line arguments if you like to, see
 
 - ## Running with Docker 
 
-1. Git clone the repository
+1. Install and launch [Docker-Desktop](https://www.docker.com/products/docker-desktop/).
+
+2. Git clone the repository
 
 ```sh
 git clone https://github.com/jhj0517/Whisper-WebUI.git
 ```
 
-2. Build the image ( Image is about 7GB~ )
+3. Build the image ( Image is about 7GB~ )
 
 ```sh
 docker compose build 
 ```
 
-3. Run the container 
+4. Run the container 
 
 ```sh
 docker compose up
 ```
 
-4. Connect to the WebUI with your browser at `http://localhost:7860`
+5. Connect to the WebUI with your browser at `http://localhost:7860`
 
 If needed, update the [`docker-compose.yaml`](https://github.com/jhj0517/Whisper-WebUI/blob/master/docker-compose.yaml) to match your environment.
 
