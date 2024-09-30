@@ -246,8 +246,6 @@ class WhisperBase(ABC):
             print(f"Error transcribing file: {e}")
         finally:
             self.release_cuda_memory()
-            if not files:
-                self.remove_input_files([file.name for file in files])
 
     def transcribe_mic(self,
                        mic_audio: str,
@@ -303,7 +301,6 @@ class WhisperBase(ABC):
             print(f"Error transcribing file: {e}")
         finally:
             self.release_cuda_memory()
-            self.remove_input_files([mic_audio])
 
     def transcribe_youtube(self,
                            youtube_link: str,
@@ -364,17 +361,7 @@ class WhisperBase(ABC):
         except Exception as e:
             print(f"Error transcribing file: {e}")
         finally:
-            try:
-                if 'yt' not in locals():
-                    yt = get_ytdata(youtube_link)
-                    file_path = get_ytaudio(yt)
-                else:
-                    file_path = get_ytaudio(yt)
-
-                self.release_cuda_memory()
-                self.remove_input_files([file_path])
-            except Exception as cleanup_error:
-                pass
+            self.release_cuda_memory()
 
     @staticmethod
     def generate_and_write_file(file_name: str,
