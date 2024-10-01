@@ -126,6 +126,9 @@ class DeepLAPI:
         String to return to gr.Textbox()
         Files to return to gr.Files()
         """
+        if fileobjs and isinstance(fileobjs[0], gr.utils.NamedString):
+            fileobjs = [fileobj.name for fileobj in fileobjs]
+
         self.cache_parameters(
             api_key=auth_key,
             is_pro=is_pro,
@@ -136,8 +139,8 @@ class DeepLAPI:
 
         files_info = {}
         for fileobj in fileobjs:
-            file_path = fileobj.name
-            file_name, file_ext = os.path.splitext(os.path.basename(fileobj.name))
+            file_path = fileobj
+            file_name, file_ext = os.path.splitext(os.path.basename(fileobj))
 
             if file_ext == ".srt":
                 parsed_dicts = parse_srt(file_path=file_path)
