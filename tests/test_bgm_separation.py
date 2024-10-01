@@ -26,6 +26,7 @@ def test_bgm_separation_pipeline(
     test_transcribe(whisper_type, vad_filter, bgm_separation, diarization)
 
 
+@pytest.mark.skip(reason="Too heavy to run in actions with all of other tests")
 @pytest.mark.parametrize(
     "whisper_type,vad_filter,bgm_separation,diarization",
     [
