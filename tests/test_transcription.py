@@ -31,7 +31,11 @@ def test_transcribe(
     whisper_inferencer = WhisperFactory.create_whisper_inference(
         whisper_type=whisper_type,
     )
-    print("Device : ", whisper_inferencer.device)
+    print(
+        f"""Whisper Device : {whisper_inferencer.device}"""
+        f"""BGM Separation Device: {whisper_inferencer.music_separator.device}"""
+        f"""Diarization Device: {whisper_inferencer.diarizer.device}"""
+    )
 
     hparams = WhisperValues(
         model_size=TEST_WHISPER_MODEL,
