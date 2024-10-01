@@ -1,8 +1,14 @@
-name: Shell Script Test
+name: CI Shell Script
 
 on:
+  workflow_dispatch:
+
   push:
-    branches: ["feature/shell-script"]
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
     
 env:
   PYTHON_VERSION: '3.9' 
