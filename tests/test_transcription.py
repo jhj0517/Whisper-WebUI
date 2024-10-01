@@ -9,11 +9,14 @@ import gradio as gr
 import os
 
 
-@pytest.mark.parametrize("whisper_type", "vad_filter", "bgm_separation", [
-    ("whisper", False, False),
-    ("faster-whisper", False, False),
-    ("insanely_fast_whisper", False, False)
-])
+@pytest.mark.parametrize(
+    "whisper_type,vad_filter,bgm_separation",
+    [
+        ("whisper", False, False),
+        ("faster-whisper", False, False),
+        ("insanely_fast_whisper", False, False)
+    ]
+)
 def test_transcribe(
     whisper_type: str,
     vad_filter: bool,
@@ -70,6 +73,9 @@ def test_transcribe(
 
 
 def download_file(url, save_dir):
+    if os.path.exists(TEST_FILE_PATH):
+        return
+
     if not os.path.exists(save_dir):
         os.makedirs(save_dir)
 
