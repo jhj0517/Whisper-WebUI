@@ -98,8 +98,8 @@ class DeepLAPI:
                         fileobjs: list,
                         source_lang: str,
                         target_lang: str,
-                        is_pro: bool,
-                        add_timestamp: bool,
+                        is_pro: bool = False,
+                        add_timestamp: bool = True,
                         progress=gr.Progress()) -> list:
         """
         Translate subtitle files using DeepL API
@@ -145,31 +145,22 @@ class DeepLAPI:
             if file_ext == ".srt":
                 parsed_dicts = parse_srt(file_path=file_path)
 
-                batch_size = self.max_text_batch_size
-                for batch_start in range(0, len(parsed_dicts), batch_size):
-                    batch_end = min(batch_start + batch_size, len(parsed_dicts))
-                    sentences_to_translate = [dic["sentence"] for dic in parsed_dicts[batch_start:batch_end]]
-                    translated_texts = self.request_deepl_translate(auth_key, sentences_to_translate, source_lang,
-                                                                    target_lang, is_pro)
-                    for i, translated_text in enumerate(translated_texts):
-                        parsed_dicts[batch_start + i]["sentence"] = translated_text["text"]
-                    progress(batch_end / len(parsed_dicts), desc="Translating..")
-
-                subtitle = get_serialized_srt(parsed_dicts)
-
             elif file_ext == ".vtt":
                 parsed_dicts = parse_vtt(file_path=file_path)
 
-                batch_size = self.max_text_batch_size
-                for batch_start in range(0, len(parsed_dicts), batch_size):
-                    batch_end = min(batch_start + batch_size, len(parsed_dicts))
-                    sentences_to_translate = [dic["sentence"] for dic in parsed_dicts[batch_start:batch_end]]
-                    translated_texts = self.request_deepl_translate(auth_key, sentences_to_translate, source_lang,
-                                                                    target_lang, is_pro)
-                    for i, translated_text in enumerate(translated_texts):
-                        parsed_dicts[batch_start + i]["sentence"] = translated_text["text"]
-                    progress(batch_end / len(parsed_dicts), desc="Translating..")
+            batch_size = self.max_text_batch_size
+            for batch_start in range(0, len(parsed_dicts), batch_size):
+                batch_end = min(batch_start + batch_size, len(parsed_dicts))
+                sentences_to_translate = [dic["sentence"] for dic in parsed_dicts[batch_start:batch_end]]
+                translated_texts = self.request_deepl_translate(auth_key, sentences_to_translate, source_lang,
+                                                                target_lang, is_pro)
+                for i, translated_text in enumerate(translated_texts):
+                    parsed_dicts[batch_start + i]["sentence"] = translated_text["text"]
+                progress(batch_end / len(parsed_dicts), desc="Translating..")
 
+            if file_ext == ".srt":
+                subtitle = get_serialized_srt(parsed_dicts)
+            elif file_ext == ".vtt":
                 subtitle = get_serialized_vtt(parsed_dicts)
 
             if add_timestamp:
@@ -196,8 +187,14 @@ class DeepLAPI:
                                 text: list,
                                 source_lang: str,
                                 target_lang: str,
-                                is_pro: bool):
+                                is_pro: bool = False):
         """Request API response to DeepL server"""
+        if source_lang not in list(DEEPL_AVAILABLE_SOURCE_LANGS.keys()):
+            raise ValueError(f"Source language {source_lang} is not supported."
+                             f"Use one of {list(DEEPL_AVAILABLE_SOURCE_LANGS.keys())}")
+        if target_lang not in list(DEEPL_AVAILABLE_TARGET_LANGS.keys()):
+            raise ValueError(f"Target language {target_lang} is not supported."
+                             f"Use one of {list(DEEPL_AVAILABLE_TARGET_LANGS.keys())}")
 
         url = 'https://api.deepl.com/v2/translate' if is_pro else 'https://api-free.deepl.com/v2/translate'
         headers = {
