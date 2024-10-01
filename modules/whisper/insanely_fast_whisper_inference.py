@@ -75,18 +75,24 @@ class InsanelyFastWhisperInference(WhisperBase):
         ) as progress:
             progress.add_task("[yellow]Transcribing...", total=None)
 
+            kwargs = {
+                "no_speech_threshold": params.no_speech_threshold,
+                "temperature": params.temperature,
+                "compression_ratio_threshold": params.compression_ratio_threshold
+            }
+
+            if self.current_model_size.endswith(".en"):
+                pass
+            else:
+                kwargs["language"] = params.lang
+                kwargs["task"] = "translate" if params.is_translate else "transcribe"
+
             segments = self.model(
                 inputs=audio,
                 return_timestamps=True,
                 chunk_length_s=params.chunk_length,
                 batch_size=params.batch_size,
-                generate_kwargs={
-                    "language": params.lang,
-                    "task": "translate" if params.is_translate and self.current_model_size in self.translatable_models else "transcribe",
-                    "no_speech_threshold": params.no_speech_threshold,
-                    "temperature": params.temperature,
-                    "compression_ratio_threshold": params.compression_ratio_threshold
-                }
+                generate_kwargs=kwargs
             )
 
         segments_result = self.format_result(
