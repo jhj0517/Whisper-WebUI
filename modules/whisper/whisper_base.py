@@ -361,6 +361,9 @@ class WhisperBase(ABC):
             )
             result_str = f"Done in {self.format_time(time_for_task)}! Subtitle file is in the outputs folder.\n\n{subtitle}"
 
+            if os.path.exists(audio):
+                os.remove(audio)
+
             return [result_str, result_file_path]
 
         except Exception as e:
