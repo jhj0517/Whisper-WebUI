@@ -9,8 +9,16 @@ import gradio as gr
 import os
 
 
-@pytest.mark.parametrize("whisper_type", ["whisper", "faster-whisper", "insanely_fast_whisper"])
-def test_transcribe(whisper_type: str):
+@pytest.mark.parametrize("whisper_type", "vad_filter", "bgm_separation", [
+    ("whisper", False, False),
+    ("faster-whisper", False, False),
+    ("insanely_fast_whisper", False, False)
+])
+def test_transcribe(
+    whisper_type: str,
+    vad_filter: bool,
+    bgm_separation: bool,
+):
     audio_path_dir = os.path.join(WEBUI_DIR, "tests")
     audio_path = os.path.join(audio_path_dir, "jfk.wav")
     if not os.path.exists(audio_path):
@@ -23,6 +31,9 @@ def test_transcribe(whisper_type: str):
 
     hparams = WhisperValues(
         model_size=TEST_WHISPER_MODEL,
+        vad_filter=vad_filter,
+        is_bgm_separate=bgm_separation,
+        uvr_enable_offload=True
     ).as_list()
 
     subtitle_str, file_path = whisper_inferencer.transcribe_file(
