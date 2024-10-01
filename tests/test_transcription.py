@@ -41,6 +41,7 @@ def test_transcribe(
         model_size=TEST_WHISPER_MODEL,
         vad_filter=vad_filter,
         is_bgm_separate=bgm_separation,
+        compute_type=whisper_inferencer.current_compute_type,
         uvr_enable_offload=True,
         is_diarize=diarization,
     ).as_list()
