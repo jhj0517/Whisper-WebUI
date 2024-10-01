@@ -34,11 +34,5 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt pytest
 
-      - name: List pip packages
-        run: pip list
-
-      - name: Debug UVR installation
-        run: python -c "import uvr"
-
       - name: Run test
         run: python -m pytest tests
