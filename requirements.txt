@@ -12,6 +12,7 @@ transformers==4.42.3
 gradio==4.43.0
 pytubefix
 ruamel.yaml==0.18.6
+networkx
 pyannote.audio==3.3.1; sys_platform == 'win32'
 pyannote.audio==3.3.0; sys_platform != 'win32'
 git+https://github.com/jhj0517/ultimatevocalremover_api.git
