@@ -15,7 +15,7 @@ def test_nllb_inference(
     file_path: str
 ):
     nllb_inferencer = NLLBInference()
-    print("Device : ", nllb_inferencer.device)
+    print(f"NLLB Device : {nllb_inferencer.device}")
 
     result_str, file_paths = nllb_inferencer.translate_file(
         fileobjs=[file_path],
