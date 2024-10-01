@@ -104,7 +104,9 @@ class WhisperBase(ABC):
             add_timestamp=add_timestamp
         )
 
-        if params.lang == "Automatic Detection":
+        if params.lang is None:
+            pass
+        elif params.lang == "Automatic Detection":
             params.lang = None
         else:
             language_code_dict = {value: key for key, value in whisper.tokenizer.LANGUAGES.items()}
@@ -208,6 +210,9 @@ class WhisperBase(ABC):
         try:
             if input_folder_path:
                 files = get_media_files(input_folder_path)
+            if isinstance(files, str):
+                files = [files]
+            if files and not isinstance(files[0], gr.utils.NamedString):
                 files = format_gradio_files(files)
 
             files_info = {}
