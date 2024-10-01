@@ -46,8 +46,8 @@ class TranslationBase(ABC):
                        model_size: str,
                        src_lang: str,
                        tgt_lang: str,
-                       max_length: int,
-                       add_timestamp: bool,
+                       max_length: int = 200,
+                       add_timestamp: bool = True,
                        progress=gr.Progress()) -> list:
         """
         Translate subtitle file from source language to target language
@@ -77,6 +77,9 @@ class TranslationBase(ABC):
         Files to return to gr.Files()
         """
         try:
+            if fileobjs and isinstance(fileobjs[0], gr.utils.NamedString):
+                fileobjs = [file.name for file in fileobjs]
+
             self.cache_parameters(model_size=model_size,
                                   src_lang=src_lang,
                                   tgt_lang=tgt_lang,
@@ -90,10 +93,9 @@ class TranslationBase(ABC):
 
             files_info = {}
             for fileobj in fileobjs:
-                file_path = fileobj.name
-                file_name, file_ext = os.path.splitext(os.path.basename(fileobj.name))
+                file_name, file_ext = os.path.splitext(os.path.basename(fileobj))
                 if file_ext == ".srt":
-                    parsed_dicts = parse_srt(file_path=file_path)
+                    parsed_dicts = parse_srt(file_path=fileobj)
                     total_progress = len(parsed_dicts)
                     for index, dic in enumerate(parsed_dicts):
                         progress(index / total_progress, desc="Translating..")
@@ -102,7 +104,7 @@ class TranslationBase(ABC):
                     subtitle = get_serialized_srt(parsed_dicts)
 
                 elif file_ext == ".vtt":
-                    parsed_dicts = parse_vtt(file_path=file_path)
+                    parsed_dicts = parse_vtt(file_path=fileobj)
                     total_progress = len(parsed_dicts)
                     for index, dic in enumerate(parsed_dicts):
                         progress(index / total_progress, desc="Translating..")
