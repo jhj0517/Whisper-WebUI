@@ -212,19 +212,19 @@ class WhisperBase(ABC):
                 files = get_media_files(input_folder_path)
             if isinstance(files, str):
                 files = [files]
-            if files and not isinstance(files[0], gr.utils.NamedString):
-                files = format_gradio_files(files)
+            if files and isinstance(files[0], gr.utils.NamedString):
+                files = [file.name for file in files]
 
             files_info = {}
             for file in files:
                 transcribed_segments, time_for_task = self.run(
-                    file.name,
+                    file,
                     progress,
                     add_timestamp,
                     *whisper_params,
                 )
 
-                file_name, file_ext = os.path.splitext(os.path.basename(file.name))
+                file_name, file_ext = os.path.splitext(os.path.basename(file))
                 subtitle, file_path = self.generate_and_write_file(
                     file_name=file_name,
                     transcribed_segments=transcribed_segments,
