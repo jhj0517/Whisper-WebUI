@@ -10,17 +10,18 @@ import os
 
 
 @pytest.mark.parametrize(
-    "whisper_type,vad_filter,bgm_separation",
+    "whisper_type,vad_filter,bgm_separation,diarization",
     [
-        ("whisper", False, False),
-        ("faster-whisper", False, False),
-        ("insanely_fast_whisper", False, False)
+        ("whisper", False, False, False),
+        ("faster-whisper", False, False, False),
+        ("insanely_fast_whisper", False, False, False)
     ]
 )
 def test_transcribe(
     whisper_type: str,
     vad_filter: bool,
     bgm_separation: bool,
+    diarization: bool,
 ):
     audio_path_dir = os.path.join(WEBUI_DIR, "tests")
     audio_path = os.path.join(audio_path_dir, "jfk.wav")
@@ -36,7 +37,8 @@ def test_transcribe(
         model_size=TEST_WHISPER_MODEL,
         vad_filter=vad_filter,
         is_bgm_separate=bgm_separation,
-        uvr_enable_offload=True
+        uvr_enable_offload=True,
+        is_diarize=diarization,
     ).as_list()
 
     subtitle_str, file_path = whisper_inferencer.transcribe_file(
