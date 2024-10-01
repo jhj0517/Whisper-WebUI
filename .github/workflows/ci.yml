@@ -19,20 +19,26 @@ jobs:
         python: ["3.10"]
 
     steps:
+      - name: Clean up space for action
+        run: rm -rf /opt/hostedtoolcache
+
       - uses: actions/checkout@v4
       - name: Setup Python
         uses: actions/setup-python@v5
         with:
           python-version: ${{ matrix.python }}
 
-      - name: Clean up space for action
-        run: rm -rf /opt/hostedtoolcache
-
       - name: Install git and ffmpeg
         run: sudo apt-get update && sudo apt-get install -y git ffmpeg
 
       - name: Install dependencies
         run: pip install -r requirements.txt pytest
+
+      - name: List pip packages
+        run: pip list
+
+      - name: Debug UVR installation
+        run: python -c "import uvr"
 
       - name: Run test
         run: python -m pytest tests
