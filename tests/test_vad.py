@@ -21,5 +21,6 @@ def test_vad_pipeline(
     whisper_type: str,
     vad_filter: bool,
     bgm_separation: bool,
+    diarization: bool,
 ):
-    test_transcribe(whisper_type, vad_filter, bgm_separation)
+    test_transcribe(whisper_type, vad_filter, bgm_separation, diarization)
