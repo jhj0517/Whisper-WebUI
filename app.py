@@ -69,6 +69,7 @@ class App:
                                                info="If the no speech probability is higher than this value AND the average log probability over sampled tokens is below 'Log Prob Threshold', consider the segment as silent.")
             dd_compute_type = gr.Dropdown(label="Compute Type", choices=self.whisper_inf.available_compute_types,
                                           value=self.whisper_inf.current_compute_type, interactive=True,
+                                          allow_custom_value=True,
                                           info="Select the type of computation to perform.")
             nb_best_of = gr.Number(label="Best Of", value=whisper_params["best_of"], interactive=True,
                                    info="Number of candidates when sampling with non-zero temperature.")
