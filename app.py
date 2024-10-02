@@ -59,6 +59,7 @@ class App:
         with gr.Row():
             cb_timestamp = gr.Checkbox(value=whisper_params["add_timestamp"], label="Add a timestamp to the end of the filename",
                                        interactive=True)
+
         with gr.Accordion("Advanced Parameters", open=False):
             nb_beam_size = gr.Number(label="Beam Size", value=whisper_params["beam_size"], precision=0, interactive=True,
                                      info="Beam size to use for decoding.")
@@ -129,30 +130,35 @@ class App:
             with gr.Group(visible=isinstance(self.whisper_inf, InsanelyFastWhisperInference)):
                 nb_batch_size = gr.Number(label="Batch Size", value=whisper_params["batch_size"], precision=0)
 
-        with gr.Accordion("BGM Separation", open=False):
-            cb_bgm_separation = gr.Checkbox(label="Enable BGM Separation Filter", value=uvr_params["is_separate_bgm"],
-                                            interactive=True)
+        with gr.Accordion("Background Music Remover Filter", open=False):
+            cb_bgm_separation = gr.Checkbox(label="Enable Background Music Remover Filter", value=uvr_params["is_separate_bgm"],
+                                            interactive=True,
+                                            info="Enabling this will remove background music by submodel before"
+                                                 " transcribing ")
             dd_uvr_device = gr.Dropdown(label="Device", value=self.whisper_inf.music_separator.device,
                                         choices=self.whisper_inf.music_separator.available_devices)
             dd_uvr_model_size = gr.Dropdown(label="Model", value=uvr_params["model_size"],
                                             choices=self.whisper_inf.music_separator.available_models)
             nb_uvr_segment_size = gr.Number(label="Segment Size", value=uvr_params["segment_size"], precision=0)
             cb_uvr_save_file = gr.Checkbox(label="Save separated files to output", value=uvr_params["save_file"])
-            cb_uvr_enable_offload = gr.Checkbox(label="Offload UVR model after separation",
+            cb_uvr_enable_offload = gr.Checkbox(label="Offload sub model after removing background music",
                                                 value=uvr_params["enable_offload"])
 
-        with gr.Accordion("VAD", open=False):
+        with gr.Accordion("Voice Detection Filter", open=False):
             cb_vad_filter = gr.Checkbox(label="Enable Silero VAD Filter", value=vad_params["vad_filter"],
-                                        interactive=True)
-            sd_threshold = gr.Slider(minimum=0.0, maximum=1.0, step=0.01, label="Speech Threshold", value=vad_params["threshold"],
+                                        interactive=True,
+                                        info="Enable this to transcribe only detected voice parts by submodel.")
+            sd_threshold = gr.Slider(minimum=0.0, maximum=1.0, step=0.01, label="Speech Threshold",
+                                     value=vad_params["threshold"],
                                      info="Lower it to be more sensitive to small sounds.")
-            nb_min_speech_duration_ms = gr.Number(label="Minimum Speech Duration (ms)", precision=0, value=vad_params["min_speech_duration_ms"],
+            nb_min_speech_duration_ms = gr.Number(label="Minimum Speech Duration (ms)", precision=0,
+                                                  value=vad_params["min_speech_duration_ms"],
                                                   info="Final speech chunks shorter than this time are thrown out")
-            nb_max_speech_duration_s = gr.Number(label="Maximum Speech Duration (s)", value=vad_params["max_speech_duration_s"],
-                                                 info="Maximum duration of speech chunks in \"seconds\". Chunks longer"
-                                                        " than this time will be split at the timestamp of the last silence that"
-                                                        " lasts more than 100ms (if any), to prevent aggressive cutting.")
-            nb_min_silence_duration_ms = gr.Number(label="Minimum Silence Duration (ms)", precision=0, value=vad_params["min_silence_duration_ms"],
+            nb_max_speech_duration_s = gr.Number(label="Maximum Speech Duration (s)",
+                                                 value=vad_params["max_speech_duration_s"],
+                                                 info="Maximum duration of speech chunks in \"seconds\".")
+            nb_min_silence_duration_ms = gr.Number(label="Minimum Silence Duration (ms)", precision=0,
+                                                   value=vad_params["min_silence_duration_ms"],
                                                    info="In the end of each speech chunk wait for this time"
                                                         " before separating it")
             nb_speech_pad_ms = gr.Number(label="Speech Padding (ms)", precision=0, value=vad_params["speech_pad_ms"],
@@ -161,7 +167,10 @@ class App:
         with gr.Accordion("Diarization", open=False):
             cb_diarize = gr.Checkbox(label="Enable Diarization", value=diarization_params["is_diarize"])
             tb_hf_token = gr.Text(label="HuggingFace Token", value=diarization_params["hf_token"],
-                                  info="This is only needed the first time you download the model. If you already have models, you don't need to enter. To download the model, you must manually go to \"https://huggingface.co/pyannote/speaker-diarization-3.1\" and agree to their requirement.")
+                                  info="This is only needed the first time you download the model. If you already have"
+                                       " models, you don't need to enter. To download the model, you must manually go "
+                                       "to \"https://huggingface.co/pyannote/speaker-diarization-3.1\" and agree to"
+                                       " their requirement.")
             dd_diarization_device = gr.Dropdown(label="Device",
                                                 choices=self.whisper_inf.diarizer.get_available_device(),
                                                 value=self.whisper_inf.diarizer.get_device())
