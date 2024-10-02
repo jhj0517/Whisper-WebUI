@@ -6,9 +6,14 @@ from test_transcription import download_file, test_transcribe
 
 import gradio as gr
 import pytest
+import torch
 import os
 
 
+@pytest.mark.skipif(
+    not is_cuda_available(),
+    reason="Skipping because the test only works on GPU"
+)
 @pytest.mark.parametrize(
     "whisper_type,vad_filter,bgm_separation,diarization",
     [
@@ -26,7 +31,10 @@ def test_bgm_separation_pipeline(
     test_transcribe(whisper_type, vad_filter, bgm_separation, diarization)
 
 
-@pytest.mark.skip(reason="Too heavy to run in actions with all of other tests")
+@pytest.mark.skipif(
+    not is_cuda_available(),
+    reason="Skipping because the test only works on GPU"
+)
 @pytest.mark.parametrize(
     "whisper_type,vad_filter,bgm_separation,diarization",
     [
