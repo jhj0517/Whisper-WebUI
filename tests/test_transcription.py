@@ -32,8 +32,8 @@ def test_transcribe(
         whisper_type=whisper_type,
     )
     print(
-        f"""Whisper Device : {whisper_inferencer.device}"""
-        f"""BGM Separation Device: {whisper_inferencer.music_separator.device}"""
+        f"""Whisper Device : {whisper_inferencer.device}\n"""
+        f"""BGM Separation Device: {whisper_inferencer.music_separator.device}\n"""
         f"""Diarization Device: {whisper_inferencer.diarizer.device}"""
     )
 
