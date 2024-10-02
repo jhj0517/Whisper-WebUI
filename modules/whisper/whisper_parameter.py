@@ -357,3 +357,13 @@ class WhisperValues:
             },
         }
         return data
+
+    def as_list(self) -> list:
+        """
+        Converts the data class attributes into a list
+
+        Returns
+        ----------
+        A list of Whisper parameters
+        """
+        return [getattr(self, f.name) for f in fields(self)]
