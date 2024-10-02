@@ -13,14 +13,15 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on:
+      group: cuda-gpu-runner-group
     strategy:
       matrix:
         python: ["3.10"]
 
     steps:
-      - name: Clean up space for action
-        run: rm -rf /opt/hostedtoolcache
+#      - name: Clean up space for action
+#        run: rm -rf /opt/hostedtoolcache
 
       - uses: actions/checkout@v4
       - name: Setup Python
