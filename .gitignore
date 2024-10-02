@@ -2,6 +2,8 @@
 *.png
 *.mp4
 *.mp3
+.idea/
+.pytest_cache/
 venv/
 modules/ui/__pycache__/
 outputs/
