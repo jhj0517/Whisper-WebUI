@@ -159,7 +159,7 @@ class FasterWhisperInference(WhisperBase):
         ----------
         Name list of models
         """
-        model_paths = {model:model for model in whisper.available_models()}
+        model_paths = {model:model for model in faster_whisper.available_models()}
         faster_whisper_prefix = "models--Systran--faster-whisper-"
 
         existing_models = os.listdir(self.model_dir)
