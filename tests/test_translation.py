@@ -38,6 +38,10 @@ def test_deepl_api(
     deepl_api = DeepLAPI()
 
     api_key = os.getenv("DEEPL_API_KEY")
+    if api_key:
+        print(f"API Key is available: {api_key[:5]}~, length: {len(api_key)}")
+    else:
+        print("API Key is not available")
 
     result_str, file_paths = deepl_api.translate_deepl(
         auth_key=api_key,
