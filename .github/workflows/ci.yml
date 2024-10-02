@@ -18,6 +18,9 @@ jobs:
       matrix:
         python: ["3.10"]
 
+    env:
+      DEEPL_API_KEY: ${{ secrets.DEEPL_API_KEY }}
+
     steps:
       - name: Clean up space for action
         run: rm -rf /opt/hostedtoolcache
