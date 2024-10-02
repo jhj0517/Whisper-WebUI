@@ -9,6 +9,10 @@ import pytest
 import os
 
 
+@pytest.mark.skipif(
+    not is_cuda_available(),
+    reason="Skipping because the test only works on GPU"
+)
 @pytest.mark.parametrize(
     "whisper_type,vad_filter,bgm_separation,diarization",
     [
