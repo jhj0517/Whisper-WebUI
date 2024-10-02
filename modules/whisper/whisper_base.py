@@ -135,7 +135,7 @@ class WhisperBase(ABC):
 
         if params.vad_filter:
             # Explicit value set for float('inf') from gr.Number()
-            if params.max_speech_duration_s >= 9999:
+            if params.max_speech_duration_s is None or params.max_speech_duration_s >= 9999:
                 params.max_speech_duration_s = float('inf')
 
             vad_options = VadOptions(
