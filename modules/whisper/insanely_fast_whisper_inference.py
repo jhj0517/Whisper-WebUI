@@ -78,7 +78,8 @@ class InsanelyFastWhisperInference(WhisperBase):
             kwargs = {
                 "no_speech_threshold": params.no_speech_threshold,
                 "temperature": params.temperature,
-                "compression_ratio_threshold": params.compression_ratio_threshold
+                "compression_ratio_threshold": params.compression_ratio_threshold,
+                "logprob_threshold": params.log_prob_threshold,
             }
 
             if self.current_model_size.endswith(".en"):
