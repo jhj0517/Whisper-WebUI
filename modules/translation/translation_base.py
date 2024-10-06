@@ -1,5 +1,11 @@
 import os
 import torch
+try:
+    import intel_extension_for_pytorch as ipex
+    if torch.xpu.is_available():
+        xpu_available = True
+except:
+    pass
 import gradio as gr
 from abc import ABC, abstractmethod
 from typing import List
@@ -124,7 +130,7 @@ class TranslationBase(ABC):
         except Exception as e:
             print(f"Error: {str(e)}")
         finally:
-            self.release_cuda_memory()
+            self.release_gpu_memory()
 
     @staticmethod
     def get_device():
@@ -132,14 +138,19 @@ class TranslationBase(ABC):
             return "cuda"
         elif torch.backends.mps.is_available():
             return "mps"
+        elif torch.xpu.is_available():
+            return "xpu"
         else:
             return "cpu"
 
     @staticmethod
-    def release_cuda_memory():
+    def release_gpu_memory():
         if torch.cuda.is_available():
             torch.cuda.empty_cache()
             torch.cuda.reset_max_memory_allocated()
+        elif torch.xpu.is_available():
+            torch.xpu.empty_cache()
+            torch.xpu.reset_peak_memory_stats()
 
     @staticmethod
     def remove_input_files(file_paths: List[str]):

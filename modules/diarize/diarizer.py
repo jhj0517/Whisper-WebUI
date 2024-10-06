@@ -1,6 +1,12 @@
 import os
 import torch
-from typing import List, Union, BinaryIO
+try:
+    import intel_extension_for_pytorch as ipex
+    if torch.xpu.is_available():
+        xpu_available = True
+except:
+    pass
+from typing import List, Union, BinaryIO, Optional
 import numpy as np
 import time
 import logging
@@ -24,7 +30,7 @@ class Diarizer:
             audio: Union[str, BinaryIO, np.ndarray],
             transcribed_result: List[dict],
             use_auth_token: str,
-            device: str
+            device: Optional[str] = None
             ):
         """
         Diarize transcribed result as a post-processing
@@ -38,7 +44,7 @@ class Diarizer:
         use_auth_token: str
             Huggingface token with READ permission. This is only needed the first time you download the model.
             You must manually go to the website https://huggingface.co/pyannote/speaker-diarization-3.1 and agree to their TOS to download the model.
-        device: str
+        device: Optional[str]
             Device for diarization.
 
         Returns
@@ -50,8 +56,10 @@ class Diarizer:
         """
         start_time = time.time()
 
-        if (device != self.device
-                or self.pipe is None):
+        if device is None:
+            device = self.device
+
+        if device != self.device or self.pipe is None:
             self.update_pipe(
                 device=device,
                 use_auth_token=use_auth_token
@@ -89,6 +97,7 @@ class Diarizer:
         device: str
             Device for diarization.
         """
+        self.device = device
 
         os.makedirs(self.model_dir, exist_ok=True)
 
@@ -116,6 +125,8 @@ class Diarizer:
             return "cuda"
         elif torch.backends.mps.is_available():
             return "mps"
+        elif torch.xpu.is_available():
+            return "xpu"
         else:
             return "cpu"
 
@@ -126,4 +137,6 @@ class Diarizer:
             devices.append("cuda")
         elif torch.backends.mps.is_available():
             devices.append("mps")
+        elif torch.xpu.is_available():
+            devices.append("xpu")
         return devices

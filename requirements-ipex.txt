@@ -1,0 +1,11 @@
+#torch @ https://github.com/Nuullll/intel-extension-for-pytorch/releases/download/v2.1.10%2Bxpu/torch-2.1.0a0+cxx11.abi-cp310-cp310-win_amd64.whl
+#torchvision @ https://github.com/Nuullll/intel-extension-for-pytorch/releases/download/v2.1.10%2Bxpu/torchvision-0.16.0a0+cxx11.abi-cp310-cp310-win_amd64.whl
+#torchaudio @ https://github.com/Nuullll/intel-extension-for-pytorch/releases/download/v2.1.10%2Bxpu/torchaudio-2.1.0a0+cxx11.abi-cp310-cp310-win_amd64.whl
+#intel_extension_for_pytorch @ https://github.com/Nuullll/intel-extension-for-pytorch/releases/download/v2.1.10%2Bxpu/intel_extension_for_pytorch-2.1.10+xpu-cp310-cp310-win_amd64.whl
+
+git+https://github.com/jhj0517/jhj0517-whisper.git
+faster-whisper==1.0.3
+transformers==4.42.3
+gradio==4.29.0
+pytubefix
+pyannote.audio==3.1.1

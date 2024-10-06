@@ -1,5 +1,11 @@
 import os
 import torch
+try:
+    import intel_extension_for_pytorch as ipex
+    if torch.xpu.is_available():
+        xpu_available = True
+except:
+    pass
 import whisper
 import gradio as gr
 from abc import ABC, abstractmethod
@@ -130,7 +136,6 @@ class WhisperBase(ABC):
                 audio=audio,
                 use_auth_token=params.hf_token,
                 transcribed_result=result,
-                device=self.device
             )
             elapsed_time += elapsed_time_diarization
         return result, elapsed_time
@@ -208,7 +213,7 @@ class WhisperBase(ABC):
         except Exception as e:
             print(f"Error transcribing file: {e}")
         finally:
-            self.release_cuda_memory()
+            self.release_gpu_memory()
             if not files:
                 self.remove_input_files([file.name for file in files])
 
@@ -261,7 +266,7 @@ class WhisperBase(ABC):
         except Exception as e:
             print(f"Error transcribing file: {e}")
         finally:
-            self.release_cuda_memory()
+            self.release_gpu_memory()
             self.remove_input_files([mic_audio])
 
     def transcribe_youtube(self,
@@ -329,7 +334,7 @@ class WhisperBase(ABC):
                 else:
                     file_path = get_ytaudio(yt)
 
-                self.release_cuda_memory()
+                self.release_gpu_memory()
                 self.remove_input_files([file_path])
             except Exception as cleanup_error:
                 pass
@@ -418,14 +423,19 @@ class WhisperBase(ABC):
             return "cuda"
         elif torch.backends.mps.is_available():
             return "mps"
+        elif torch.xpu.is_available():
+            return "xpu"
         else:
             return "cpu"
 
     @staticmethod
-    def release_cuda_memory():
+    def release_gpu_memory():
         if torch.cuda.is_available():
             torch.cuda.empty_cache()
             torch.cuda.reset_max_memory_allocated()
+        elif torch.xpu.is_available():
+            torch.xpu.empty_cache()
+            torch.xpu.reset_peak_memory_stats()
 
     @staticmethod
     def remove_input_files(file_paths: List[str]):
