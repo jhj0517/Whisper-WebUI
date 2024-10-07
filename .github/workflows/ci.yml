@@ -6,9 +6,11 @@ on:
   push:
     branches:
       - master
+      - intel-gpu
   pull_request:
     branches:
       - master
+      - intel-gpu
 
 jobs:
   build:
