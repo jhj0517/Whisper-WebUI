@@ -1,5 +1,11 @@
 import os
 import torch
+try:
+    import intel_extension_for_pytorch as ipex
+    if torch.xpu.is_available():
+        xpu_available = True
+except:
+    pass
 from typing import List, Union, BinaryIO, Optional
 import numpy as np
 import time
@@ -120,6 +126,8 @@ class Diarizer:
             return "cuda"
         elif torch.backends.mps.is_available():
             return "mps"
+        elif torch.xpu.is_available():
+            return "xpu"
         else:
             return "cpu"
 
@@ -130,4 +138,6 @@ class Diarizer:
             devices.append("cuda")
         elif torch.backends.mps.is_available():
             devices.append("mps")
+        elif torch.xpu.is_available():
+            devices.append("xpu")
         return devices

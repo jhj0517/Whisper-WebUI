@@ -1,5 +1,11 @@
 import os
 import torch
+try:
+    import intel_extension_for_pytorch as ipex
+    if torch.xpu.is_available():
+        xpu_available = True
+except:
+    pass
 import whisper
 import gradio as gr
 import torchaudio
@@ -250,7 +256,7 @@ class WhisperBase(ABC):
         except Exception as e:
             print(f"Error transcribing file: {e}")
         finally:
-            self.release_cuda_memory()
+            self.release_gpu_memory()
 
     def transcribe_mic(self,
                        mic_audio: str,
@@ -305,7 +311,7 @@ class WhisperBase(ABC):
         except Exception as e:
             print(f"Error transcribing file: {e}")
         finally:
-            self.release_cuda_memory()
+            self.release_gpu_memory()
 
     def transcribe_youtube(self,
                            youtube_link: str,
@@ -369,7 +375,7 @@ class WhisperBase(ABC):
         except Exception as e:
             print(f"Error transcribing file: {e}")
         finally:
-            self.release_cuda_memory()
+            self.release_gpu_memory()
 
     @staticmethod
     def generate_and_write_file(file_name: str,
@@ -459,6 +465,8 @@ class WhisperBase(ABC):
                 # Device `SparseMPS` is not supported for now. See : https://github.com/pytorch/pytorch/issues/87886
                 return "cpu"
             return "mps"
+        elif torch.xpu.is_available():
+            return "xpu"
         else:
             return "cpu"
 
@@ -480,11 +488,14 @@ class WhisperBase(ABC):
             return False
 
     @staticmethod
-    def release_cuda_memory():
+    def release_gpu_memory():
         """Release memory"""
         if torch.cuda.is_available():
             torch.cuda.empty_cache()
             torch.cuda.reset_max_memory_allocated()
+        elif torch.xpu.is_available():
+            torch.xpu.empty_cache()
+            torch.xpu.reset_peak_memory_stats()
 
     @staticmethod
     def remove_input_files(file_paths: List[str]):
