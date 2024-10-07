@@ -3,7 +3,7 @@ name: Feature request
 about: Any feature you want
 title: ''
 labels: enhancement
-assignees: ''
+assignees: jhj0517
 
 ---
 

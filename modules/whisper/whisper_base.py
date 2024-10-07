@@ -8,6 +8,7 @@ except:
     pass
 import whisper
 import gradio as gr
+import torchaudio
 from abc import ABC, abstractmethod
 from typing import BinaryIO, Union, Tuple, List
 import numpy as np
@@ -15,9 +16,12 @@ from datetime import datetime
 from faster_whisper.vad import VadOptions
 from dataclasses import astuple
 
+from modules.uvr.music_separator import MusicSeparator
+from modules.utils.paths import (WHISPER_MODELS_DIR, DIARIZATION_MODELS_DIR, OUTPUT_DIR, DEFAULT_PARAMETERS_CONFIG_PATH,
+                                 UVR_MODELS_DIR)
 from modules.utils.subtitle_manager import get_srt, get_vtt, get_txt, write_file, safe_filename
 from modules.utils.youtube_manager import get_ytdata, get_ytaudio
-from modules.utils.files_manager import get_media_files, format_gradio_files
+from modules.utils.files_manager import get_media_files, format_gradio_files, load_yaml, save_yaml
 from modules.whisper.whisper_parameter import *
 from modules.diarize.diarizer import Diarizer
 from modules.vad.silero_vad import SileroVAD
@@ -25,9 +29,10 @@ from modules.vad.silero_vad import SileroVAD
 
 class WhisperBase(ABC):
     def __init__(self,
-                 model_dir: str = os.path.join("models", "Whisper"),
-                 diarization_model_dir: str = os.path.join("models", "Diarization"),
-                 output_dir: str = os.path.join("outputs"),
+                 model_dir: str = WHISPER_MODELS_DIR,
+                 diarization_model_dir: str = DIARIZATION_MODELS_DIR,
+                 uvr_model_dir: str = UVR_MODELS_DIR,
+                 output_dir: str = OUTPUT_DIR,
                  ):
         self.model_dir = model_dir
         self.output_dir = output_dir
@@ -37,6 +42,10 @@ class WhisperBase(ABC):
             model_dir=diarization_model_dir
         )
         self.vad = SileroVAD()
+        self.music_separator = MusicSeparator(
+            model_dir=uvr_model_dir,
+            output_dir=os.path.join(output_dir, "UVR")
+        )
 
         self.model = None
         self.current_model_size = None
@@ -50,7 +59,7 @@ class WhisperBase(ABC):
     @abstractmethod
     def transcribe(self,
                    audio: Union[str, BinaryIO, np.ndarray],
-                   progress: gr.Progress,
+                   progress: gr.Progress = gr.Progress(),
                    *whisper_params,
                    ):
         """Inference whisper model to transcribe"""
@@ -60,14 +69,15 @@ class WhisperBase(ABC):
     def update_model(self,
                      model_size: str,
                      compute_type: str,
-                     progress: gr.Progress
+                     progress: gr.Progress = gr.Progress()
                      ):
         """Initialize whisper model"""
         pass
 
     def run(self,
             audio: Union[str, BinaryIO, np.ndarray],
-            progress: gr.Progress,
+            progress: gr.Progress = gr.Progress(),
+            add_timestamp: bool = True,
             *whisper_params,
             ) -> Tuple[List[dict], float]:
         """
@@ -81,6 +91,8 @@ class WhisperBase(ABC):
             Audio input. This can be file path or binary type.
         progress: gr.Progress
             Indicator to show progress directly in gradio.
+        add_timestamp: bool
+            Whether to add a timestamp at the end of the filename.
         *whisper_params: tuple
             Parameters related with whisper. This will be dealt with "WhisperParameters" data class
 
@@ -93,16 +105,43 @@ class WhisperBase(ABC):
         """
         params = WhisperParameters.as_value(*whisper_params)
 
-        if params.lang == "Automatic Detection":
+        self.cache_parameters(
+            whisper_params=params,
+            add_timestamp=add_timestamp
+        )
+
+        if params.lang is None:
+            pass
+        elif params.lang == "Automatic Detection":
             params.lang = None
         else:
             language_code_dict = {value: key for key, value in whisper.tokenizer.LANGUAGES.items()}
             params.lang = language_code_dict[params.lang]
 
-        speech_chunks = None
+        if params.is_bgm_separate:
+            music, audio, _ = self.music_separator.separate(
+                audio=audio,
+                model_name=params.uvr_model_size,
+                device=params.uvr_device,
+                segment_size=params.uvr_segment_size,
+                save_file=params.uvr_save_file,
+                progress=progress
+            )
+
+            if audio.ndim >= 2:
+                audio = audio.mean(axis=1)
+                if self.music_separator.audio_info is None:
+                    origin_sample_rate = 16000
+                else:
+                    origin_sample_rate = self.music_separator.audio_info.sample_rate
+                audio = self.resample_audio(audio=audio, original_sample_rate=origin_sample_rate)
+
+            if params.uvr_enable_offload:
+                self.music_separator.offload()
+
         if params.vad_filter:
             # Explicit value set for float('inf') from gr.Number()
-            if params.max_speech_duration_s >= 9999:
+            if params.max_speech_duration_s is None or params.max_speech_duration_s >= 9999:
                 params.max_speech_duration_s = float('inf')
 
             vad_options = VadOptions(
@@ -141,10 +180,10 @@ class WhisperBase(ABC):
         return result, elapsed_time
 
     def transcribe_file(self,
-                        files: list,
-                        input_folder_path: str,
-                        file_format: str,
-                        add_timestamp: bool,
+                        files: Optional[List] = None,
+                        input_folder_path: Optional[str] = None,
+                        file_format: str = "SRT",
+                        add_timestamp: bool = True,
                         progress=gr.Progress(),
                         *whisper_params,
                         ) -> list:
@@ -177,17 +216,21 @@ class WhisperBase(ABC):
         try:
             if input_folder_path:
                 files = get_media_files(input_folder_path)
-                files = format_gradio_files(files)
+            if isinstance(files, str):
+                files = [files]
+            if files and isinstance(files[0], gr.utils.NamedString):
+                files = [file.name for file in files]
 
             files_info = {}
             for file in files:
                 transcribed_segments, time_for_task = self.run(
-                    file.name,
+                    file,
                     progress,
+                    add_timestamp,
                     *whisper_params,
                 )
 
-                file_name, file_ext = os.path.splitext(os.path.basename(file.name))
+                file_name, file_ext = os.path.splitext(os.path.basename(file))
                 subtitle, file_path = self.generate_and_write_file(
                     file_name=file_name,
                     transcribed_segments=transcribed_segments,
@@ -214,12 +257,11 @@ class WhisperBase(ABC):
             print(f"Error transcribing file: {e}")
         finally:
             self.release_gpu_memory()
-            if not files:
-                self.remove_input_files([file.name for file in files])
 
     def transcribe_mic(self,
                        mic_audio: str,
-                       file_format: str,
+                       file_format: str = "SRT",
+                       add_timestamp: bool = True,
                        progress=gr.Progress(),
                        *whisper_params,
                        ) -> list:
@@ -232,6 +274,8 @@ class WhisperBase(ABC):
             Audio file path from gr.Microphone()
         file_format: str
             Subtitle File format to write from gr.Dropdown(). Supported format: [SRT, WebVTT, txt]
+        add_timestamp: bool
+            Boolean value from gr.Checkbox() that determines whether to add a timestamp at the end of the filename.
         progress: gr.Progress
             Indicator to show progress directly in gradio.
         *whisper_params: tuple
@@ -249,6 +293,7 @@ class WhisperBase(ABC):
             transcribed_segments, time_for_task = self.run(
                 mic_audio,
                 progress,
+                add_timestamp,
                 *whisper_params,
             )
             progress(1, desc="Completed!")
@@ -256,7 +301,7 @@ class WhisperBase(ABC):
             subtitle, result_file_path = self.generate_and_write_file(
                 file_name="Mic",
                 transcribed_segments=transcribed_segments,
-                add_timestamp=True,
+                add_timestamp=add_timestamp,
                 file_format=file_format,
                 output_dir=self.output_dir
             )
@@ -267,12 +312,11 @@ class WhisperBase(ABC):
             print(f"Error transcribing file: {e}")
         finally:
             self.release_gpu_memory()
-            self.remove_input_files([mic_audio])
 
     def transcribe_youtube(self,
                            youtube_link: str,
-                           file_format: str,
-                           add_timestamp: bool,
+                           file_format: str = "SRT",
+                           add_timestamp: bool = True,
                            progress=gr.Progress(),
                            *whisper_params,
                            ) -> list:
@@ -307,6 +351,7 @@ class WhisperBase(ABC):
             transcribed_segments, time_for_task = self.run(
                 audio,
                 progress,
+                add_timestamp,
                 *whisper_params,
             )
 
@@ -322,22 +367,15 @@ class WhisperBase(ABC):
             )
             result_str = f"Done in {self.format_time(time_for_task)}! Subtitle file is in the outputs folder.\n\n{subtitle}"
 
+            if os.path.exists(audio):
+                os.remove(audio)
+
             return [result_str, result_file_path]
 
         except Exception as e:
             print(f"Error transcribing file: {e}")
         finally:
-            try:
-                if 'yt' not in locals():
-                    yt = get_ytdata(youtube_link)
-                    file_path = get_ytaudio(yt)
-                else:
-                    file_path = get_ytaudio(yt)
-
-                self.release_gpu_memory()
-                self.remove_input_files([file_path])
-            except Exception as cleanup_error:
-                pass
+            self.release_gpu_memory()
 
     @staticmethod
     def generate_and_write_file(file_name: str,
@@ -375,11 +413,12 @@ class WhisperBase(ABC):
         else:
             output_path = os.path.join(output_dir, f"{file_name}")
 
-        if file_format == "SRT":
+        file_format = file_format.strip().lower()
+        if file_format == "srt":
             content = get_srt(transcribed_segments)
             output_path += '.srt'
 
-        elif file_format == "WebVTT":
+        elif file_format == "webvtt":
             content = get_vtt(transcribed_segments)
             output_path += '.vtt'
 
@@ -422,6 +461,9 @@ class WhisperBase(ABC):
         if torch.cuda.is_available():
             return "cuda"
         elif torch.backends.mps.is_available():
+            if not WhisperBase.is_sparse_api_supported():
+                # Device `SparseMPS` is not supported for now. See : https://github.com/pytorch/pytorch/issues/87886
+                return "cpu"
             return "mps"
         elif torch.xpu.is_available():
             return "xpu"
@@ -429,7 +471,25 @@ class WhisperBase(ABC):
             return "cpu"
 
     @staticmethod
+    def is_sparse_api_supported():
+        if not torch.backends.mps.is_available():
+            return False
+
+        try:
+            device = torch.device("mps")
+            sparse_tensor = torch.sparse_coo_tensor(
+                indices=torch.tensor([[0, 1], [2, 3]]),
+                values=torch.tensor([1, 2]),
+                size=(4, 4),
+                device=device
+            )
+            return True
+        except RuntimeError:
+            return False
+
+    @staticmethod
     def release_gpu_memory():
+        """Release memory"""
         if torch.cuda.is_available():
             torch.cuda.empty_cache()
             torch.cuda.reset_max_memory_allocated()
@@ -439,9 +499,38 @@ class WhisperBase(ABC):
 
     @staticmethod
     def remove_input_files(file_paths: List[str]):
+        """Remove gradio cached files"""
         if not file_paths:
             return
 
         for file_path in file_paths:
             if file_path and os.path.exists(file_path):
                 os.remove(file_path)
+
+    @staticmethod
+    def cache_parameters(
+        whisper_params: WhisperValues,
+        add_timestamp: bool
+    ):
+        """cache parameters to the yaml file"""
+        cached_params = load_yaml(DEFAULT_PARAMETERS_CONFIG_PATH)
+        cached_whisper_param = whisper_params.to_yaml()
+        cached_yaml = {**cached_params, **cached_whisper_param}
+        cached_yaml["whisper"]["add_timestamp"] = add_timestamp
+
+        save_yaml(cached_yaml, DEFAULT_PARAMETERS_CONFIG_PATH)
+
+    @staticmethod
+    def resample_audio(audio: Union[str, np.ndarray],
+                       new_sample_rate: int = 16000,
+                       original_sample_rate: Optional[int] = None,) -> np.ndarray:
+        """Resamples audio to 16k sample rate, standard on Whisper model"""
+        if isinstance(audio, str):
+            audio, original_sample_rate = torchaudio.load(audio)
+        else:
+            if original_sample_rate is None:
+                raise ValueError("original_sample_rate must be provided when audio is numpy array.")
+            audio = torch.from_numpy(audio)
+        resampler = torchaudio.transforms.Resample(orig_freq=original_sample_rate, new_freq=new_sample_rate)
+        resampled_audio = resampler(audio).numpy()
+        return resampled_audio

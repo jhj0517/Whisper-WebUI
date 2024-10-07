@@ -25,6 +25,7 @@ If you wish to try this on Colab, you can do it in [here](https://colab.research
   - Translate subtitle files using Facebook NLLB models
   - Translate subtitle files using DeepL API
 - Pre-processing audio input with [Silero VAD](https://github.com/snakers4/silero-vad).
+- Pre-processing audio input to separate BGM with [UVR](https://github.com/Anjok07/ultimatevocalremovergui), [UVR-api](https://github.com/NextAudioGen/ultimatevocalremover_api). 
 - Post-processing with speaker diarization using the [pyannote](https://huggingface.co/pyannote/speaker-diarization-3.1) model.
    - To download the pyannote model, you need to have a Huggingface token and manually accept their terms in the pages below.
       1. https://huggingface.co/pyannote/speaker-diarization-3.1
@@ -54,25 +55,27 @@ And you can also run the project with command line arguments if you like to, see
 
 - ## Running with Docker 
 
-1. Git clone the repository
+1. Install and launch [Docker-Desktop](https://www.docker.com/products/docker-desktop/).
+
+2. Git clone the repository
 
 ```sh
 git clone https://github.com/jhj0517/Whisper-WebUI.git
 ```
 
-2. Build the image ( Image is about 7GB~ )
+3. Build the image ( Image is about 7GB~ )
 
 ```sh
 docker compose build 
 ```
 
-3. Run the container 
+4. Run the container 
 
 ```sh
 docker compose up
 ```
 
-4. Connect to the WebUI with your browser at `http://localhost:7860`
+5. Connect to the WebUI with your browser at `http://localhost:7860`
 
 If needed, update the [`docker-compose.yaml`](https://github.com/jhj0517/Whisper-WebUI/blob/master/docker-compose.yaml) to match your environment.
 
@@ -109,8 +112,6 @@ This is Whisper's original VRAM usage table for models.
 - [x] Integrate with faster-whisper
 - [x] Integrate with insanely-fast-whisper
 - [x] Integrate with whisperX ( Only speaker diarization part )
-- [ ] Add background music separation pre-processing with [MVSEP-MDX23](https://github.com/ZFTurbo/MVSEP-MDX23-music-separation-model)  
+- [x] Add background music separation pre-processing with [UVR](https://github.com/Anjok07/ultimatevocalremovergui)  
 - [ ] Add fast api script
 - [ ] Support real-time transcription for microphone
-
-

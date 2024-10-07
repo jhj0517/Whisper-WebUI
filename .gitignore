@@ -2,9 +2,12 @@
 *.png
 *.mp4
 *.mp3
+.idea/
+.pytest_cache/
 venv/
-ui/__pycache__/
+modules/ui/__pycache__/
 outputs/
 modules/__pycache__/
 models/
 modules/yt_tmp.wav
+configs/default_parameters.yaml

@@ -7,25 +7,28 @@ import torch
 import os
 from argparse import Namespace
 
+from modules.utils.paths import (WHISPER_MODELS_DIR, DIARIZATION_MODELS_DIR, OUTPUT_DIR, UVR_MODELS_DIR)
 from modules.whisper.whisper_base import WhisperBase
 from modules.whisper.whisper_parameter import *
 
 
 class WhisperInference(WhisperBase):
     def __init__(self,
-                 model_dir: str = os.path.join("models", "Whisper"),
-                 diarization_model_dir: str = os.path.join("models", "Diarization"),
-                 output_dir: str = os.path.join("outputs"),
+                 model_dir: str = WHISPER_MODELS_DIR,
+                 diarization_model_dir: str = DIARIZATION_MODELS_DIR,
+                 uvr_model_dir: str = UVR_MODELS_DIR,
+                 output_dir: str = OUTPUT_DIR,
                  ):
         super().__init__(
             model_dir=model_dir,
             output_dir=output_dir,
-            diarization_model_dir=diarization_model_dir
+            diarization_model_dir=diarization_model_dir,
+            uvr_model_dir=uvr_model_dir
         )
 
     def transcribe(self,
                    audio: Union[str, np.ndarray, torch.Tensor],
-                   progress: gr.Progress,
+                   progress: gr.Progress = gr.Progress(),
                    *whisper_params,
                    ) -> Tuple[List[dict], float]:
         """
@@ -76,7 +79,7 @@ class WhisperInference(WhisperBase):
     def update_model(self,
                      model_size: str,
                      compute_type: str,
-                     progress: gr.Progress,
+                     progress: gr.Progress = gr.Progress(),
                      ):
         """
         Update current model setting

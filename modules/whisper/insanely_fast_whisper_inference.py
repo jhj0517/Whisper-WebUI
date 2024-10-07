@@ -11,20 +11,23 @@ import whisper
 from rich.progress import Progress, TimeElapsedColumn, BarColumn, TextColumn
 from argparse import Namespace
 
+from modules.utils.paths import (INSANELY_FAST_WHISPER_MODELS_DIR, DIARIZATION_MODELS_DIR, UVR_MODELS_DIR, OUTPUT_DIR)
 from modules.whisper.whisper_parameter import *
 from modules.whisper.whisper_base import WhisperBase
 
 
 class InsanelyFastWhisperInference(WhisperBase):
     def __init__(self,
-                 model_dir: str = os.path.join("models", "Whisper", "insanely-fast-whisper"),
-                 diarization_model_dir: str = os.path.join("models", "Diarization"),
-                 output_dir: str = os.path.join("outputs"),
+                 model_dir: str = INSANELY_FAST_WHISPER_MODELS_DIR,
+                 diarization_model_dir: str = DIARIZATION_MODELS_DIR,
+                 uvr_model_dir: str = UVR_MODELS_DIR,
+                 output_dir: str = OUTPUT_DIR,
                  ):
         super().__init__(
             model_dir=model_dir,
             output_dir=output_dir,
-            diarization_model_dir=diarization_model_dir
+            diarization_model_dir=diarization_model_dir,
+            uvr_model_dir=uvr_model_dir
         )
         self.model_dir = model_dir
         os.makedirs(self.model_dir, exist_ok=True)
@@ -36,7 +39,7 @@ class InsanelyFastWhisperInference(WhisperBase):
 
     def transcribe(self,
                    audio: Union[str, np.ndarray, torch.Tensor],
-                   progress: gr.Progress,
+                   progress: gr.Progress = gr.Progress(),
                    *whisper_params,
                    ) -> Tuple[List[dict], float]:
         """
@@ -72,18 +75,25 @@ class InsanelyFastWhisperInference(WhisperBase):
         ) as progress:
             progress.add_task("[yellow]Transcribing...", total=None)
 
+            kwargs = {
+                "no_speech_threshold": params.no_speech_threshold,
+                "temperature": params.temperature,
+                "compression_ratio_threshold": params.compression_ratio_threshold,
+                "logprob_threshold": params.log_prob_threshold,
+            }
+
+            if self.current_model_size.endswith(".en"):
+                pass
+            else:
+                kwargs["language"] = params.lang
+                kwargs["task"] = "translate" if params.is_translate else "transcribe"
+
             segments = self.model(
                 inputs=audio,
                 return_timestamps=True,
-                chunk_length_s=params.chunk_length_s,
+                chunk_length_s=params.chunk_length,
                 batch_size=params.batch_size,
-                generate_kwargs={
-                    "language": params.lang,
-                    "task": "translate" if params.is_translate and self.current_model_size in self.translatable_models else "transcribe",
-                    "no_speech_threshold": params.no_speech_threshold,
-                    "temperature": params.temperature,
-                    "compression_ratio_threshold": params.compression_ratio_threshold
-                }
+                generate_kwargs=kwargs
             )
 
         segments_result = self.format_result(
@@ -95,7 +105,7 @@ class InsanelyFastWhisperInference(WhisperBase):
     def update_model(self,
                      model_size: str,
                      compute_type: str,
-                     progress: gr.Progress,
+                     progress: gr.Progress = gr.Progress(),
                      ):
         """
         Update current model setting

@@ -1,0 +1,64 @@
+whisper:
+  model_size: "large-v2"
+  lang: "Automatic Detection"
+  is_translate: false
+  beam_size: 5
+  log_prob_threshold: -1
+  no_speech_threshold: 0.6
+  best_of: 5
+  patience: 1
+  condition_on_previous_text: true
+  prompt_reset_on_temperature: 0.5
+  initial_prompt: null
+  temperature: 0
+  compression_ratio_threshold: 2.4
+  chunk_length: 30
+  batch_size: 24
+  length_penalty: 1
+  repetition_penalty: 1
+  no_repeat_ngram_size: 0
+  prefix: null
+  suppress_blank: true
+  suppress_tokens: "[-1]"
+  max_initial_timestamp: 1
+  word_timestamps: false
+  prepend_punctuations: "\"'“¿([{-"
+  append_punctuations: "\"'.。,，!！?？:：”)]}、"
+  max_new_tokens: null
+  hallucination_silence_threshold: null
+  hotwords: null
+  language_detection_threshold: null
+  language_detection_segments: 1
+  add_timestamp: true
+
+vad:
+  vad_filter: false
+  threshold: 0.5
+  min_speech_duration_ms: 250
+  max_speech_duration_s: 9999
+  min_silence_duration_ms: 1000
+  speech_pad_ms: 2000
+
+diarization:
+  is_diarize: false
+  hf_token: ""
+
+bgm_separation:
+  is_separate_bgm: false
+  model_size: "UVR-MDX-NET-Inst_HQ_4"
+  segment_size: 256
+  save_file: false
+  enable_offload: true
+
+translation:
+  deepl:
+    api_key: ""
+    is_pro: false
+    source_lang: "Automatic Detection"
+    target_lang: "English"
+  nllb:
+    model_size: "facebook/nllb-200-1.3B"
+    source_lang: null
+    target_lang: null
+    max_length: 200
+  add_timestamp: true

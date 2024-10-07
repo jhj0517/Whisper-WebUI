@@ -2,13 +2,14 @@ from transformers import AutoTokenizer, AutoModelForSeq2SeqLM, pipeline
 import gradio as gr
 import os
 
+from modules.utils.paths import TRANSLATION_OUTPUT_DIR, NLLB_MODELS_DIR
 from modules.translation.translation_base import TranslationBase
 
 
 class NLLBInference(TranslationBase):
     def __init__(self,
-                 model_dir: str = os.path.join("models", "NLLB"),
-                 output_dir: str = os.path.join("outputs", "translations")
+                 model_dir: str = NLLB_MODELS_DIR,
+                 output_dir: str = TRANSLATION_OUTPUT_DIR
                  ):
         super().__init__(
             model_dir=model_dir,
@@ -34,8 +35,19 @@ class NLLBInference(TranslationBase):
                      model_size: str,
                      src_lang: str,
                      tgt_lang: str,
-                     progress: gr.Progress
+                     progress: gr.Progress = gr.Progress()
                      ):
+        def validate_language(lang: str) -> str:
+            if lang in NLLB_AVAILABLE_LANGS:
+                return NLLB_AVAILABLE_LANGS[lang]
+            elif lang not in NLLB_AVAILABLE_LANGS.values():
+                raise ValueError(
+                    f"Language '{lang}' is not supported. Use one of: {list(NLLB_AVAILABLE_LANGS.keys())}")
+            return lang
+
+        src_lang = validate_language(src_lang)
+        tgt_lang = validate_language(tgt_lang)
+
         if model_size != self.current_model_size or self.model is None:
             print("\nInitializing NLLB Model..\n")
             progress(0, desc="Initializing NLLB Model..")
@@ -47,8 +59,7 @@ class NLLBInference(TranslationBase):
             self.tokenizer = AutoTokenizer.from_pretrained(pretrained_model_name_or_path=model_size,
                                                            cache_dir=os.path.join(self.model_dir, "tokenizers"),
                                                            local_files_only=local_files_only)
-        src_lang = NLLB_AVAILABLE_LANGS[src_lang]
-        tgt_lang = NLLB_AVAILABLE_LANGS[tgt_lang]
+
         self.pipeline = pipeline("translation",
                                  model=self.model,
                                  tokenizer=self.tokenizer,

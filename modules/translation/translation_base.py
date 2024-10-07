@@ -13,12 +13,14 @@ from datetime import datetime
 
 from modules.whisper.whisper_parameter import *
 from modules.utils.subtitle_manager import *
+from modules.utils.files_manager import load_yaml, save_yaml
+from modules.utils.paths import DEFAULT_PARAMETERS_CONFIG_PATH, NLLB_MODELS_DIR, TRANSLATION_OUTPUT_DIR
 
 
 class TranslationBase(ABC):
     def __init__(self,
-                 model_dir: str = os.path.join("models", "NLLB"),
-                 output_dir: str = os.path.join("outputs", "translations")
+                 model_dir: str = NLLB_MODELS_DIR,
+                 output_dir: str = TRANSLATION_OUTPUT_DIR
                  ):
         super().__init__()
         self.model = None
@@ -41,7 +43,7 @@ class TranslationBase(ABC):
                      model_size: str,
                      src_lang: str,
                      tgt_lang: str,
-                     progress: gr.Progress
+                     progress: gr.Progress = gr.Progress()
                      ):
         pass
 
@@ -50,8 +52,8 @@ class TranslationBase(ABC):
                        model_size: str,
                        src_lang: str,
                        tgt_lang: str,
-                       max_length: int,
-                       add_timestamp: bool,
+                       max_length: int = 200,
+                       add_timestamp: bool = True,
                        progress=gr.Progress()) -> list:
         """
         Translate subtitle file from source language to target language
@@ -81,6 +83,15 @@ class TranslationBase(ABC):
         Files to return to gr.Files()
         """
         try:
+            if fileobjs and isinstance(fileobjs[0], gr.utils.NamedString):
+                fileobjs = [file.name for file in fileobjs]
+
+            self.cache_parameters(model_size=model_size,
+                                  src_lang=src_lang,
+                                  tgt_lang=tgt_lang,
+                                  max_length=max_length,
+                                  add_timestamp=add_timestamp)
+
             self.update_model(model_size=model_size,
                               src_lang=src_lang,
                               tgt_lang=tgt_lang,
@@ -88,10 +99,9 @@ class TranslationBase(ABC):
 
             files_info = {}
             for fileobj in fileobjs:
-                file_path = fileobj.name
-                file_name, file_ext = os.path.splitext(os.path.basename(fileobj.name))
+                file_name, file_ext = os.path.splitext(os.path.basename(fileobj))
                 if file_ext == ".srt":
-                    parsed_dicts = parse_srt(file_path=file_path)
+                    parsed_dicts = parse_srt(file_path=fileobj)
                     total_progress = len(parsed_dicts)
                     for index, dic in enumerate(parsed_dicts):
                         progress(index / total_progress, desc="Translating..")
@@ -100,7 +110,7 @@ class TranslationBase(ABC):
                     subtitle = get_serialized_srt(parsed_dicts)
 
                 elif file_ext == ".vtt":
-                    parsed_dicts = parse_vtt(file_path=file_path)
+                    parsed_dicts = parse_vtt(file_path=fileobj)
                     total_progress = len(parsed_dicts)
                     for index, dic in enumerate(parsed_dicts):
                         progress(index / total_progress, desc="Translating..")
@@ -160,3 +170,19 @@ class TranslationBase(ABC):
         for file_path in file_paths:
             if file_path and os.path.exists(file_path):
                 os.remove(file_path)
+
+    @staticmethod
+    def cache_parameters(model_size: str,
+                         src_lang: str,
+                         tgt_lang: str,
+                         max_length: int,
+                         add_timestamp: bool):
+        cached_params = load_yaml(DEFAULT_PARAMETERS_CONFIG_PATH)
+        cached_params["translation"]["nllb"] = {
+            "model_size": model_size,
+            "source_lang": src_lang,
+            "target_lang": tgt_lang,
+            "max_length": max_length,
+        }
+        cached_params["translation"]["add_timestamp"] = add_timestamp
+        save_yaml(cached_params, DEFAULT_PARAMETERS_CONFIG_PATH)

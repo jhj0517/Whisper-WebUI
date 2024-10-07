@@ -1,6 +1,7 @@
 from dataclasses import dataclass, fields
 import gradio as gr
-from typing import Optional
+from typing import Optional, Dict
+import yaml
 
 
 @dataclass
@@ -25,7 +26,6 @@ class WhisperParameters:
     max_speech_duration_s: gr.Number
     min_silence_duration_ms: gr.Number
     speech_pad_ms: gr.Number
-    chunk_length_s: gr.Number
     batch_size: gr.Number
     is_diarize: gr.Checkbox
     hf_token: gr.Textbox
@@ -46,6 +46,12 @@ class WhisperParameters:
     hotwords: gr.Textbox
     language_detection_threshold: gr.Number
     language_detection_segments: gr.Number
+    is_bgm_separate: gr.Checkbox
+    uvr_model_size: gr.Dropdown
+    uvr_device: gr.Dropdown
+    uvr_segment_size: gr.Number
+    uvr_save_file: gr.Checkbox
+    uvr_enable_offload: gr.Checkbox
     """
     A data class for Gradio components of the Whisper Parameters. Use "before" Gradio pre-processing.
     This data class is used to mitigate the key-value problem between Gradio components and function parameters.
@@ -130,10 +136,6 @@ class WhisperParameters:
     speech_pad_ms: gr.Number
         This parameter is related with Silero VAD. Final speech chunks are padded by speech_pad_ms each side    
         
-    chunk_length_s: gr.Number
-        This parameter is related with insanely-fast-whisper pipe.
-        Maximum length of each chunk
-        
     batch_size: gr.Number
         This parameter is related with insanely-fast-whisper pipe. Batch size to pass to the pipe
         
@@ -147,61 +149,80 @@ class WhisperParameters:
     diarization_device: gr.Dropdown
         This parameter is related with whisperx. Device to run diarization model
         
-    length_penalty: 
+    length_penalty: gr.Number
         This parameter is related to faster-whisper. Exponential length penalty constant.
     
-    repetition_penalty: 
+    repetition_penalty: gr.Number
         This parameter is related to faster-whisper. Penalty applied to the score of previously generated tokens
         (set > 1 to penalize).
 
-    no_repeat_ngram_size:
+    no_repeat_ngram_size: gr.Number
         This parameter is related to faster-whisper. Prevent repetitions of n-grams with this size (set 0 to disable).
 
-    prefix:
+    prefix: gr.Textbox
         This parameter is related to faster-whisper. Optional text to provide as a prefix for the first window.
 
-    suppress_blank:
+    suppress_blank: gr.Checkbox
         This parameter is related to faster-whisper. Suppress blank outputs at the beginning of the sampling.
 
-    suppress_tokens:
+    suppress_tokens: gr.Textbox
         This parameter is related to faster-whisper. List of token IDs to suppress. -1 will suppress a default set
         of symbols as defined in the model config.json file.
 
-    max_initial_timestamp:
+    max_initial_timestamp: gr.Number
         This parameter is related to faster-whisper. The initial timestamp cannot be later than this.
 
-    word_timestamps:
+    word_timestamps: gr.Checkbox
         This parameter is related to faster-whisper. Extract word-level timestamps using the cross-attention pattern
         and dynamic time warping, and include the timestamps for each word in each segment.
 
-    prepend_punctuations:
+    prepend_punctuations: gr.Textbox
         This parameter is related to faster-whisper. If word_timestamps is True, merge these punctuation symbols
         with the next word.
 
-    append_punctuations:
+    append_punctuations: gr.Textbox
         This parameter is related to faster-whisper. If word_timestamps is True, merge these punctuation symbols
         with the previous word.
 
-    max_new_tokens:
+    max_new_tokens: gr.Number
         This parameter is related to faster-whisper. Maximum number of new tokens to generate per-chunk. If not set,
         the maximum will be set by the default max_length.
 
-    chunk_length:
-        This parameter is related to faster-whisper. The length of audio segments. If it is not None, it will overwrite the
-        default chunk_length of the FeatureExtractor.
+    chunk_length: gr.Number
+        This parameter is related to faster-whisper and insanely-fast-whisper. The length of audio segments in seconds.
+         If it is not None, it will overwrite the default chunk_length of the FeatureExtractor.
 
-    hallucination_silence_threshold:
+    hallucination_silence_threshold: gr.Number
         This parameter is related to faster-whisper. When word_timestamps is True, skip silent periods longer than this threshold
         (in seconds) when a possible hallucination is detected.
 
-    hotwords:
+    hotwords: gr.Textbox
         This parameter is related to faster-whisper. Hotwords/hint phrases to provide the model with. Has no effect if prefix is not None.
 
-    language_detection_threshold:
+    language_detection_threshold: gr.Number
         This parameter is related to faster-whisper. If the maximum probability of the language tokens is higher than this value, the language is detected.
 
-    language_detection_segments:
+    language_detection_segments: gr.Number
         This parameter is related to faster-whisper. Number of segments to consider for the language detection.
+        
+    is_separate_bgm: gr.Checkbox
+        This parameter is related to UVR. Boolean value that determines whether to separate bgm or not.
+        
+    uvr_model_size: gr.Dropdown
+        This parameter is related to UVR. UVR model size.
+    
+    uvr_device: gr.Dropdown
+        This parameter is related to UVR. Device to run UVR model.
+        
+    uvr_segment_size: gr.Number
+        This parameter is related to UVR. Segment size for UVR model.
+        
+    uvr_save_file: gr.Checkbox
+        This parameter is related to UVR. Boolean value that determines whether to save the file or not.
+        
+    uvr_enable_offload: gr.Checkbox
+        This parameter is related to UVR. Boolean value that determines whether to offload the UVR model or not
+        after each transcription.
     """
 
     def as_list(self) -> list:
@@ -231,47 +252,118 @@ class WhisperParameters:
 
 @dataclass
 class WhisperValues:
-    model_size: str
-    lang: str
-    is_translate: bool
-    beam_size: int
-    log_prob_threshold: float
-    no_speech_threshold: float
-    compute_type: str
-    best_of: int
-    patience: float
-    condition_on_previous_text: bool
-    prompt_reset_on_temperature: float
-    initial_prompt: Optional[str]
-    temperature: float
-    compression_ratio_threshold: float
-    vad_filter: bool
-    threshold: float
-    min_speech_duration_ms: int
-    max_speech_duration_s: float
-    min_silence_duration_ms: int
-    speech_pad_ms: int
-    chunk_length_s: int
-    batch_size: int
-    is_diarize: bool
-    hf_token: str
-    diarization_device: str
-    length_penalty: float
-    repetition_penalty: float
-    no_repeat_ngram_size: int
-    prefix: Optional[str]
-    suppress_blank: bool
-    suppress_tokens: Optional[str]
-    max_initial_timestamp: float
-    word_timestamps: bool
-    prepend_punctuations: Optional[str]
-    append_punctuations: Optional[str]
-    max_new_tokens: Optional[int]
-    chunk_length: Optional[int]
-    hallucination_silence_threshold: Optional[float]
-    hotwords: Optional[str]
-    language_detection_threshold: Optional[float]
-    language_detection_segments: int
+    model_size: str = "large-v2"
+    lang: Optional[str] = None
+    is_translate: bool = False
+    beam_size: int = 5
+    log_prob_threshold: float = -1.0
+    no_speech_threshold: float = 0.6
+    compute_type: str = "float16"
+    best_of: int = 5
+    patience: float = 1.0
+    condition_on_previous_text: bool = True
+    prompt_reset_on_temperature: float = 0.5
+    initial_prompt: Optional[str] = None
+    temperature: float = 0.0
+    compression_ratio_threshold: float = 2.4
+    vad_filter: bool = False
+    threshold: float = 0.5
+    min_speech_duration_ms: int = 250
+    max_speech_duration_s: float = float("inf")
+    min_silence_duration_ms: int = 2000
+    speech_pad_ms: int = 400
+    batch_size: int = 24
+    is_diarize: bool = False
+    hf_token: str = ""
+    diarization_device: str = "cuda"
+    length_penalty: float = 1.0
+    repetition_penalty: float = 1.0
+    no_repeat_ngram_size: int = 0
+    prefix: Optional[str] = None
+    suppress_blank: bool = True
+    suppress_tokens: Optional[str] = "[-1]"
+    max_initial_timestamp: float = 0.0
+    word_timestamps: bool = False
+    prepend_punctuations: Optional[str] = "\"'“¿([{-"
+    append_punctuations: Optional[str] = "\"'.。,，!！?？:：”)]}、"
+    max_new_tokens: Optional[int] = None
+    chunk_length: Optional[int] = 30
+    hallucination_silence_threshold: Optional[float] = None
+    hotwords: Optional[str] = None
+    language_detection_threshold: Optional[float] = None
+    language_detection_segments: int = 1
+    is_bgm_separate: bool = False
+    uvr_model_size: str = "UVR-MDX-NET-Inst_HQ_4"
+    uvr_device: str = "cuda"
+    uvr_segment_size: int = 256
+    uvr_save_file: bool = False
+    uvr_enable_offload: bool = True
     """
     A data class to use Whisper parameters.
     """
+
+    def to_yaml(self) -> Dict:
+        data = {
+            "whisper": {
+                "model_size": self.model_size,
+                "lang": "Automatic Detection" if self.lang is None else self.lang,
+                "is_translate": self.is_translate,
+                "beam_size": self.beam_size,
+                "log_prob_threshold": self.log_prob_threshold,
+                "no_speech_threshold": self.no_speech_threshold,
+                "best_of": self.best_of,
+                "patience": self.patience,
+                "condition_on_previous_text": self.condition_on_previous_text,
+                "prompt_reset_on_temperature": self.prompt_reset_on_temperature,
+                "initial_prompt": None if not self.initial_prompt else self.initial_prompt,
+                "temperature": self.temperature,
+                "compression_ratio_threshold": self.compression_ratio_threshold,
+                "batch_size": self.batch_size,
+                "length_penalty": self.length_penalty,
+                "repetition_penalty": self.repetition_penalty,
+                "no_repeat_ngram_size": self.no_repeat_ngram_size,
+                "prefix": None if not self.prefix else self.prefix,
+                "suppress_blank": self.suppress_blank,
+                "suppress_tokens": self.suppress_tokens,
+                "max_initial_timestamp": self.max_initial_timestamp,
+                "word_timestamps": self.word_timestamps,
+                "prepend_punctuations": self.prepend_punctuations,
+                "append_punctuations": self.append_punctuations,
+                "max_new_tokens": self.max_new_tokens,
+                "chunk_length": self.chunk_length,
+                "hallucination_silence_threshold": self.hallucination_silence_threshold,
+                "hotwords": None if not self.hotwords else self.hotwords,
+                "language_detection_threshold": self.language_detection_threshold,
+                "language_detection_segments": self.language_detection_segments,
+            },
+            "vad": {
+                "vad_filter": self.vad_filter,
+                "threshold": self.threshold,
+                "min_speech_duration_ms": self.min_speech_duration_ms,
+                "max_speech_duration_s": self.max_speech_duration_s,
+                "min_silence_duration_ms": self.min_silence_duration_ms,
+                "speech_pad_ms": self.speech_pad_ms,
+            },
+            "diarization": {
+                "is_diarize": self.is_diarize,
+                "hf_token": self.hf_token
+            },
+            "bgm_separation": {
+                "is_separate_bgm": self.is_bgm_separate,
+                "model_size": self.uvr_model_size,
+                "segment_size": self.uvr_segment_size,
+                "save_file": self.uvr_save_file,
+                "enable_offload": self.uvr_enable_offload
+            },
+        }
+        return data
+
+    def as_list(self) -> list:
+        """
+        Converts the data class attributes into a list
+
+        Returns
+        ----------
+        A list of Whisper parameters
+        """
+        return [getattr(self, f.name) for f in fields(self)]
