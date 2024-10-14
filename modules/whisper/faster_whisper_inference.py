@@ -35,8 +35,6 @@ class FasterWhisperInference(WhisperBase):
         self.model_paths = self.get_model_paths()
         self.device = self.get_device()
         self.available_models = self.model_paths.keys()
-        self.available_compute_types = ctranslate2.get_supported_compute_types(
-            "cuda") if self.device == "cuda" else ctranslate2.get_supported_compute_types("cpu")
 
     def transcribe(self,
                    audio: Union[str, BinaryIO, np.ndarray],

@@ -1,6 +1,7 @@
 import os
 import torch
 import whisper
+import ctranslate2
 import gradio as gr
 import torchaudio
 from abc import ABC, abstractmethod
@@ -47,8 +48,8 @@ class WhisperBase(ABC):
         self.available_langs = sorted(list(whisper.tokenizer.LANGUAGES.values()))
         self.translatable_models = ["large", "large-v1", "large-v2", "large-v3"]
         self.device = self.get_device()
-        self.available_compute_types = ["float16", "float32"]
-        self.current_compute_type = "float16" if self.device == "cuda" else "float32"
+        self.available_compute_types = self.get_available_compute_type()
+        self.current_compute_type = self.get_compute_type()
 
     @abstractmethod
     def transcribe(self,
@@ -370,6 +371,18 @@ class WhisperBase(ABC):
             print(f"Error transcribing file: {e}")
         finally:
             self.release_cuda_memory()
+
+    def get_compute_type(self):
+        if "float16" in self.available_compute_types:
+            return "float16"
+        else:
+            return self.available_compute_types[0]
+
+    def get_available_compute_type(self):
+        if self.device == "cuda":
+            return ctranslate2.get_supported_compute_types("cuda")
+        else:
+            return ctranslate2.get_supported_compute_types("cpu")
 
     @staticmethod
     def generate_and_write_file(file_name: str,
