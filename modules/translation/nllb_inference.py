@@ -29,7 +29,7 @@ class NLLBInference(TranslationBase):
             text,
             max_length=max_length
         )
-        return result[0]['translation_text']
+        return result[0]["translation_text"]
 
     def update_model(self,
                      model_size: str,
