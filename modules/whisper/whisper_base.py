@@ -375,6 +375,8 @@ class WhisperBase(ABC):
     def get_compute_type(self):
         if "float16" in self.available_compute_types:
             return "float16"
+        if "float32" in self.available_compute_types:
+            return "float32"
         else:
             return self.available_compute_types[0]
 
