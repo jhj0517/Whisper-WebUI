@@ -380,9 +380,9 @@ class WhisperBase(ABC):
 
     def get_available_compute_type(self):
         if self.device == "cuda":
-            return ctranslate2.get_supported_compute_types("cuda")
+            return list(ctranslate2.get_supported_compute_types("cuda"))
         else:
-            return ctranslate2.get_supported_compute_types("cpu")
+            return list(ctranslate2.get_supported_compute_types("cpu"))
 
     @staticmethod
     def generate_and_write_file(file_name: str,
