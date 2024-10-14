@@ -41,8 +41,7 @@ class NLLBInference(TranslationBase):
             if lang in NLLB_AVAILABLE_LANGS:
                 return NLLB_AVAILABLE_LANGS[lang]
             elif lang not in NLLB_AVAILABLE_LANGS.values():
-                raise ValueError(
-                    f"Language '{lang}' is not supported. Use one of: {list(NLLB_AVAILABLE_LANGS.keys())}")
+                raise ValueError(f"Language '{lang}' is not supported. Use one of: {list(NLLB_AVAILABLE_LANGS.keys())}")
             return lang
 
         src_lang = validate_language(src_lang)

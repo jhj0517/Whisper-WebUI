@@ -298,8 +298,7 @@ class App:
                             tb_api_key = gr.Textbox(label="Your Auth Key (API KEY)", value=deepl_params["api_key"])
                         with gr.Row():
                             dd_source_lang = gr.Dropdown(label="Source Language", value=deepl_params["source_lang"],
-                                                          choices=list(
-                                                                  self.deepl_api.available_source_langs.keys()))
+                                                         choices=list(self.deepl_api.available_source_langs.keys()))
                             dd_target_lang = gr.Dropdown(label="Target Language", value=deepl_params["target_lang"],
                                                          choices=list(self.deepl_api.available_target_langs.keys()))
                         with gr.Row():
