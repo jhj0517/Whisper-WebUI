@@ -35,7 +35,6 @@ class InsanelyFastWhisperInference(WhisperBase):
         openai_models = whisper.available_models()
         distil_models = ["distil-large-v2", "distil-large-v3", "distil-medium.en", "distil-small.en"]
         self.available_models = openai_models + distil_models
-        self.available_compute_types = ["float16"]
 
     def transcribe(self,
                    audio: Union[str, np.ndarray, torch.Tensor],

@@ -3,10 +3,10 @@ import gradio as gr
 import os
 
 from modules.utils.paths import TRANSLATION_OUTPUT_DIR, NLLB_MODELS_DIR
-from modules.translation.translation_base import TranslationBase
+import modules.translation.translation_base as base
 
 
-class NLLBInference(TranslationBase):
+class NLLBInference(base.TranslationBase):
     def __init__(self,
                  model_dir: str = NLLB_MODELS_DIR,
                  output_dir: str = TRANSLATION_OUTPUT_DIR
@@ -29,7 +29,7 @@ class NLLBInference(TranslationBase):
             text,
             max_length=max_length
         )
-        return result[0]['translation_text']
+        return result[0]["translation_text"]
 
     def update_model(self,
                      model_size: str,
@@ -41,8 +41,7 @@ class NLLBInference(TranslationBase):
             if lang in NLLB_AVAILABLE_LANGS:
                 return NLLB_AVAILABLE_LANGS[lang]
             elif lang not in NLLB_AVAILABLE_LANGS.values():
-                raise ValueError(
-                    f"Language '{lang}' is not supported. Use one of: {list(NLLB_AVAILABLE_LANGS.keys())}")
+                raise ValueError(f"Language '{lang}' is not supported. Use one of: {list(NLLB_AVAILABLE_LANGS.keys())}")
             return lang
 
         src_lang = validate_language(src_lang)
