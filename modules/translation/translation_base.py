@@ -5,6 +5,7 @@ from abc import ABC, abstractmethod
 from typing import List
 from datetime import datetime
 
+import modules.translation.nllb_inference as nllb
 from modules.whisper.whisper_parameter import *
 from modules.utils.subtitle_manager import *
 from modules.utils.files_manager import load_yaml, save_yaml
@@ -166,11 +167,17 @@ class TranslationBase(ABC):
                          tgt_lang: str,
                          max_length: int,
                          add_timestamp: bool):
+        def validate_lang(lang: str):
+            if lang in list(nllb.NLLB_AVAILABLE_LANGS.values()):
+                flipped = {value: key for key, value in nllb.NLLB_AVAILABLE_LANGS.items()}
+                return flipped[lang]
+            return lang
+
         cached_params = load_yaml(DEFAULT_PARAMETERS_CONFIG_PATH)
         cached_params["translation"]["nllb"] = {
             "model_size": model_size,
-            "source_lang": src_lang,
-            "target_lang": tgt_lang,
+            "source_lang": validate_lang(src_lang),
+            "target_lang": validate_lang(tgt_lang),
             "max_length": max_length,
         }
         cached_params["translation"]["add_timestamp"] = add_timestamp
