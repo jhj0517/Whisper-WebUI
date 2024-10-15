@@ -170,7 +170,8 @@ class App:
             tb_hf_token = gr.Text(label="HuggingFace Token", value=diarization_params["hf_token"],
                                   info="This is only needed the first time you download the model. If you already have"
                                        " models, you don't need to enter. To download the model, you must manually go "
-                                       "to \"https://huggingface.co/pyannote/speaker-diarization-3.1\" and agree to"
+                                       "to \"https://huggingface.co/pyannote/speaker-diarization-3.1\" and "
+                                       "\"https://huggingface.co/pyannote/segmentation-3.0\" and agree to"
                                        " their requirement.")
             dd_diarization_device = gr.Dropdown(label="Device",
                                                 choices=self.whisper_inf.diarizer.get_available_device(),
