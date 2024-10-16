@@ -25,7 +25,7 @@ If you wish to try this on Colab, you can do it in [here](https://colab.research
   - Translate subtitle files using Facebook NLLB models
   - Translate subtitle files using DeepL API
 - Pre-processing audio input with [Silero VAD](https://github.com/snakers4/silero-vad).
-- Pre-processing audio input to separate BGM with [UVR](https://github.com/Anjok07/ultimatevocalremovergui), [UVR-api](https://github.com/NextAudioGen/ultimatevocalremover_api). 
+- Pre-processing audio input to separate BGM with [UVR](https://github.com/Anjok07/ultimatevocalremovergui). 
 - Post-processing with speaker diarization using the [pyannote](https://huggingface.co/pyannote/speaker-diarization-3.1) model.
    - To download the pyannote model, you need to have a Huggingface token and manually accept their terms in the pages below.
       1. https://huggingface.co/pyannote/speaker-diarization-3.1
@@ -33,7 +33,7 @@ If you wish to try this on Colab, you can do it in [here](https://colab.research
 
 # Installation and Running
 
-- ## Running with Pinokio
+- ## Option1: Running with Pinokio
 
 The app is able to run with [Pinokio](https://github.com/pinokiocomputer/pinokio).
 
@@ -41,7 +41,7 @@ The app is able to run with [Pinokio](https://github.com/pinokiocomputer/pinokio
 2. Open the software and search for Whisper-WebUI and install it.
 3. Start the Whisper-WebUI and connect to the `http://localhost:7860`.
 
-- ## Running with Docker 
+- ## Option2: Running with Docker 
 
 1. Install and launch [Docker-Desktop](https://www.docker.com/products/docker-desktop/).
 
@@ -67,7 +67,7 @@ docker compose up
 
 If needed, update the [`docker-compose.yaml`](https://github.com/jhj0517/Whisper-WebUI/blob/master/docker-compose.yaml) to match your environment.
 
-- ## Run Locally
+- ## Option3: Run Locally
 
 ### Prerequisite
 To run this WebUI, you need to have `git`, `python` version 3.8 ~ 3.10, `FFmpeg`. <br>
