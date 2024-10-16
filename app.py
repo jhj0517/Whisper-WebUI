@@ -291,8 +291,7 @@ class App:
 
                 with gr.TabItem("T2T Translation"):  # tab 4
                     with gr.Row():
-                        file_subs = gr.Files(type="filepath", label="Upload Subtitle Files to translate here",
-                                             file_types=['.vtt', '.srt'])
+                        file_subs = gr.Files(type="filepath", label="Upload Subtitle Files to translate here")
 
                     with gr.TabItem("DeepL API"):  # sub tab1
                         with gr.Row():
