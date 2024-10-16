@@ -33,7 +33,7 @@ If you wish to try this on Colab, you can do it in [here](https://colab.research
 
 # Installation and Running
 
-- ## Option1: Running with Pinokio
+- ## Running with Pinokio
 
 The app is able to run with [Pinokio](https://github.com/pinokiocomputer/pinokio).
 
@@ -41,7 +41,7 @@ The app is able to run with [Pinokio](https://github.com/pinokiocomputer/pinokio
 2. Open the software and search for Whisper-WebUI and install it.
 3. Start the Whisper-WebUI and connect to the `http://localhost:7860`.
 
-- ## Option2: Running with Docker 
+- ## Running with Docker 
 
 1. Install and launch [Docker-Desktop](https://www.docker.com/products/docker-desktop/).
 
@@ -67,7 +67,7 @@ docker compose up
 
 If needed, update the [`docker-compose.yaml`](https://github.com/jhj0517/Whisper-WebUI/blob/master/docker-compose.yaml) to match your environment.
 
-- ## Option3: Run Locally
+- ## Run Locally
 
 ### Prerequisite
 To run this WebUI, you need to have `git`, `python` version 3.8 ~ 3.10, `FFmpeg`. <br>
