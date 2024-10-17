@@ -89,7 +89,6 @@ https://github.com/jhj0517/Whisper-WebUI.git
 ```
 2. Run `install.bat` or `install.sh` to install dependencies. (This will create a `venv` directory and install dependencies there.)
 3. Start WebUI with `start-webui.bat` or `start-webui.sh`
-4. To update the WebUI, run `update.bat` or `update.sh`
 
 And you can also run the project with command line arguments if you like to, see [wiki](https://github.com/jhj0517/Whisper-WebUI/wiki/Command-Line-Arguments) for a guide to arguments.
 
