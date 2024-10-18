@@ -41,6 +41,31 @@ The app is able to run with [Pinokio](https://github.com/pinokiocomputer/pinokio
 2. Open the software and search for Whisper-WebUI and install it.
 3. Start the Whisper-WebUI and connect to the `http://localhost:7860`.
 
+- ## Run Locally
+
+### Prerequisite
+To run this WebUI, you need to have `git`, `python` version 3.8 ~ 3.10, `FFmpeg`. <br>
+And if you're not using an Nvida GPU, or using a different `CUDA` version than 12.4,  edit the [`requirements.txt`](https://github.com/jhj0517/Whisper-WebUI/blob/master/requirements.txt) to match your environment.
+
+Please follow the links below to install the necessary software:
+- git : [https://git-scm.com/downloads](https://git-scm.com/downloads)
+- python : [https://www.python.org/downloads/](https://www.python.org/downloads/) **( If your python version is too new, torch will not install properly.)**
+- FFmpeg :  [https://ffmpeg.org/download.html](https://ffmpeg.org/download.html)
+- CUDA : [https://developer.nvidia.com/cuda-downloads](https://developer.nvidia.com/cuda-downloads)
+
+After installing FFmpeg, **make sure to add the `FFmpeg/bin` folder to your system PATH!**
+
+### Automatic Installation
+
+1. git clone this repository
+```shell
+https://github.com/jhj0517/Whisper-WebUI.git
+```
+2. Run `install.bat` or `install.sh` to install dependencies. (This will create a `venv` directory and install dependencies there.)
+3. Start WebUI with `start-webui.bat` or `start-webui.sh`
+
+And you can also run the project with command line arguments if you like to, see [wiki](https://github.com/jhj0517/Whisper-WebUI/wiki/Command-Line-Arguments) for a guide to arguments.
+
 - ## Running with Docker 
 
 1. Install and launch [Docker-Desktop](https://www.docker.com/products/docker-desktop/).
@@ -66,31 +91,6 @@ docker compose up
 5. Connect to the WebUI with your browser at `http://localhost:7860`
 
 If needed, update the [`docker-compose.yaml`](https://github.com/jhj0517/Whisper-WebUI/blob/master/docker-compose.yaml) to match your environment.
-
-- ## Run Locally
-
-### Prerequisite
-To run this WebUI, you need to have `git`, `python` version 3.8 ~ 3.10, `FFmpeg`. <br>
-And if you're not using an Nvida GPU, or using a different `CUDA` version than 12.4,  edit the [`requirements.txt`](https://github.com/jhj0517/Whisper-WebUI/blob/master/requirements.txt) to match your environment.
-
-Please follow the links below to install the necessary software:
-- git : [https://git-scm.com/downloads](https://git-scm.com/downloads)
-- python : [https://www.python.org/downloads/](https://www.python.org/downloads/) **( If your python version is too new, torch will not install properly.)**
-- FFmpeg :  [https://ffmpeg.org/download.html](https://ffmpeg.org/download.html)
-- CUDA : [https://developer.nvidia.com/cuda-downloads](https://developer.nvidia.com/cuda-downloads)
-
-After installing FFmpeg, **make sure to add the `FFmpeg/bin` folder to your system PATH!**
-
-### Automatic Installation
-
-1. git clone this repository
-```shell
-https://github.com/jhj0517/Whisper-WebUI.git
-```
-2. Run `install.bat` or `install.sh` to install dependencies. (This will create a `venv` directory and install dependencies there.)
-3. Start WebUI with `start-webui.bat` or `start-webui.sh`
-
-And you can also run the project with command line arguments if you like to, see [wiki](https://github.com/jhj0517/Whisper-WebUI/wiki/Command-Line-Arguments) for a guide to arguments.
 
 # VRAM Usages
 This project is integrated with [faster-whisper](https://github.com/guillaumekln/faster-whisper) by default for better VRAM usage and transcription speed.
