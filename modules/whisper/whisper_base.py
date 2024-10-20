@@ -14,6 +14,7 @@ from dataclasses import astuple
 from modules.uvr.music_separator import MusicSeparator
 from modules.utils.paths import (WHISPER_MODELS_DIR, DIARIZATION_MODELS_DIR, OUTPUT_DIR, DEFAULT_PARAMETERS_CONFIG_PATH,
                                  UVR_MODELS_DIR)
+from modules.utils.constants import AUTOMATIC_DETECTION
 from modules.utils.subtitle_manager import get_srt, get_vtt, get_txt, write_file, safe_filename
 from modules.utils.youtube_manager import get_ytdata, get_ytaudio
 from modules.utils.files_manager import get_media_files, format_gradio_files, load_yaml, save_yaml
@@ -107,7 +108,7 @@ class WhisperBase(ABC):
 
         if params.lang is None:
             pass
-        elif params.lang == "Automatic Detection":
+        elif params.lang == AUTOMATIC_DETECTION:
             params.lang = None
         else:
             language_code_dict = {value: key for key, value in whisper.tokenizer.LANGUAGES.items()}

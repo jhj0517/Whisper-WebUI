@@ -53,7 +53,7 @@ class App:
         with gr.Row():
             dd_model = gr.Dropdown(choices=self.whisper_inf.available_models, value=whisper_params["model_size"],
                                    label="Model")
-            dd_lang = gr.Dropdown(choices=["Automatic Detection"] + self.whisper_inf.available_langs,
+            dd_lang = gr.Dropdown(choices=[AUTOMATIC_DETECTION] + self.whisper_inf.available_langs,
                                   value=whisper_params["lang"], label="Language")
             dd_file_format = gr.Dropdown(choices=["SRT", "WebVTT", "txt"], value="SRT", label="File Format")
         with gr.Row():

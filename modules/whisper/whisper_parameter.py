@@ -3,6 +3,8 @@ import gradio as gr
 from typing import Optional, Dict
 import yaml
 
+from modules.utils.constants import AUTOMATIC_DETECTION
+
 
 @dataclass
 class WhisperParameters:
@@ -306,7 +308,7 @@ class WhisperValues:
         data = {
             "whisper": {
                 "model_size": self.model_size,
-                "lang": "Automatic Detection" if self.lang is None else self.lang,
+                "lang": AUTOMATIC_DETECTION if self.lang is None else self.lang,
                 "is_translate": self.is_translate,
                 "beam_size": self.beam_size,
                 "log_prob_threshold": self.log_prob_threshold,
