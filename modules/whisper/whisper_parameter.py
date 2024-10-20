@@ -308,7 +308,7 @@ class WhisperValues:
         data = {
             "whisper": {
                 "model_size": self.model_size,
-                "lang": AUTOMATIC_DETECTION if self.lang is None else self.lang,
+                "lang": AUTOMATIC_DETECTION.unwrap() if self.lang is None else self.lang,
                 "is_translate": self.is_translate,
                 "beam_size": self.beam_size,
                 "log_prob_threshold": self.log_prob_threshold,
