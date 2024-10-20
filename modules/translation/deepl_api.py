@@ -5,6 +5,7 @@ from datetime import datetime
 import gradio as gr
 
 from modules.utils.paths import TRANSLATION_OUTPUT_DIR, DEFAULT_PARAMETERS_CONFIG_PATH
+from modules.utils.constants import AUTOMATIC_DETECTION
 from modules.utils.subtitle_manager import *
 from modules.utils.files_manager import load_yaml, save_yaml
 
@@ -50,7 +51,7 @@ DEEPL_AVAILABLE_TARGET_LANGS = {
 }
 
 DEEPL_AVAILABLE_SOURCE_LANGS = {
-    'Automatic Detection': None,
+    AUTOMATIC_DETECTION: None,
     'Bulgarian': 'BG',
     'Czech': 'CS',
     'Danish': 'DA',
