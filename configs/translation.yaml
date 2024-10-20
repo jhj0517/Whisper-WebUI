@@ -58,12 +58,12 @@ ko: # Korean
   Automatic Detection: 자동 감지
   File Format: 파일 형식
   Translate to English?: 영어로 번역합니까? (위스퍼 모델 자체 번역 기능)
-  Add a timestamp to the end of the filename: 파일 이름 끝에 타임스태프 더하기
+  Add a timestamp to the end of the filename: 파일 이름 끝에 타임스태프 붙이기
   Advanced Parameters: 고급 변수
   Background Music Remover Filter: 배경 음악 제거 필터
-  Enabling this will remove background music: 받아쓰기 이전에 먼저 배경 음악을 제거할 서브 모델을 활성화 합니다.
+  Enabling this will remove background music: 받아쓰기 이전 배경 음악을 제거하는 서브 모델을 활성화 합니다.
   Enable Background Music Remover Filter: 배경 음악 제거 필터를 활성화 합니다.
-  Save separated files to output: 분리한 파일 따로 출력 폴더에 저장
+  Save separated files to output: 배경음악이 분리된 음성 파일 따로 출력 폴더에 저장
   Offload sub model after removing background music: 배경 음악 제거 후 서브모델을 비활성화 합니다. (VRAM 이 부족할 시 체크하세요.)
   Voice Detection Filter: 목소리 감지 필터
   Enable this to transcribe only detected voice: 서브 모델에 의해 감지된 목소리 부분만 받아쓰기를 진행합니다.
@@ -72,7 +72,7 @@ ko: # Korean
   Enable Diarization: 화자 구분 활성화 
   HuggingFace Token: 허깅페이스 토큰
   This is only needed the first time you download the model: 최초로 모델을 다운받을 때만 토큰이 필요합니다. 이미 다운로드 받으신 상태라면 입력하지 않아도 됩니다. 모델을 다운 받기 위해선 "https://huggingface.co/pyannote/speaker-diarization-3.1" 와 "https://huggingface.co/pyannote/segmentation-3.0" 에서 먼저 사용 지침에 동의하셔야 합니다.
-  Device: 사용 기기
+  Device: 디바이스
   Youtube Link: 유튜브 링크
   Youtube Thumbnail: 유튜브 썸네일
   Youtube Title: 유튜브 제목
