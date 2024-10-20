@@ -62,7 +62,7 @@ ko: # Korean
   Add a timestamp to the end of the filename: 파일 이름 끝에 타임스태프 붙이기
   Advanced Parameters: 고급 변수
   Background Music Remover Filter: 배경 음악 제거 필터
-  Enabling this will remove background music: 받아쓰기 이전 배경 음악 제거용 서브 모델을 먼저 활성화 합니다.
+  Enabling this will remove background music: 받아쓰기 이전에 먼저 배경 음악 제거용 서브 모델을 활성화 합니다.
   Enable Background Music Remover Filter: 배경 음악 제거 필터 활성화
   Save separated files to output: 분리된 배경 음악 & 음성 파일 따로 출력 폴더에 저장
   Offload sub model after removing background music: 배경 음악 제거 후 서브 모델을 비활성화 합니다. (VRAM 이 부족할 시 체크하세요.)
