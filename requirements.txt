@@ -2,11 +2,11 @@
 # If you're using it, update url to your CUDA version (CUDA 12.1 is minimum requirement):
 # For CUDA 12.1, use : https://download.pytorch.org/whl/cu121
 # For CUDA 12.4, use : https://download.pytorch.org/whl/cu124
---extra-index-url https://download.pytorch.org/whl/cu121
+--extra-index-url https://download.pytorch.org/whl/cu124
 
 
-torch==2.3.1
-torchaudio==2.3.1
+torch
+torchaudio
 git+https://github.com/jhj0517/jhj0517-whisper.git
 faster-whisper==1.0.3
 transformers
