@@ -85,7 +85,7 @@ After installing FFmpeg, **make sure to add the `FFmpeg/bin` folder to your syst
 
 1. git clone this repository
 ```shell
-https://github.com/jhj0517/Whisper-WebUI.git
+git clone https://github.com/jhj0517/Whisper-WebUI.git
 ```
 2. Run `install.bat` or `install.sh` to install dependencies. (This will create a `venv` directory and install dependencies there.)
 3. Start WebUI with `start-webui.bat` or `start-webui.sh`
