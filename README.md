@@ -75,7 +75,7 @@ And if you're not using an Nvida GPU, or using a different `CUDA` version than 1
 
 Please follow the links below to install the necessary software:
 - git : [https://git-scm.com/downloads](https://git-scm.com/downloads)
-- python : [https://www.python.org/downloads/](https://www.python.org/downloads/) **`3.10~3.12` is recommended.** 
+- python : [https://www.python.org/downloads/](https://www.python.org/downloads/) **`3.10 ~ 3.12` is recommended.** 
 - FFmpeg :  [https://ffmpeg.org/download.html](https://ffmpeg.org/download.html)
 - CUDA : [https://developer.nvidia.com/cuda-downloads](https://developer.nvidia.com/cuda-downloads)
 
