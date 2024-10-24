@@ -319,3 +319,95 @@ zh: # Chinese
   Instrumental: Instrumental
   Vocals: Vocals
   SEPARATE BACKGROUND MUSIC: SEPARATE BACKGROUND MUSIC
+
+uk: # Ukrainian
+  Language: Мова
+  File: Файл
+  Youtube: Youtube
+  Mic: Мікрофон
+  T2T Translation: T2T Переклад
+  BGM Separation: Розділення фонової музики
+  GENERATE SUBTITLE FILE: СТВОРИТИ ФАЙЛ СУБТИТРІВ
+  Output: Результат
+  Downloadable output file: Завантажуваний файл результату
+  Upload File here: Завантажте файл тут
+  Model: Модель
+  Automatic Detection: Автоматичне визначення
+  File Format: Формат файлу
+  Translate to English?: Перекласти на англійську?
+  Add a timestamp to the end of the filename: Додати мітку часу до кінця імені файлу
+  Advanced Parameters: Розширені параметри
+  Background Music Remover Filter: Фільтр видалення фонової музики
+  Enabling this will remove background music: Увімкнення цього видалить фонову музику за допомогою підмоделі перед транскрипцією
+  Enable Background Music Remover Filter: Увімкнути фільтр видалення фонової музики
+  Save separated files to output: Зберегти розділені файли до вихідної папки
+  Offload sub model after removing background music: Вивантажити підмодель після видалення фонової музики
+  Voice Detection Filter: Фільтр розпізнавання голосу
+  Enable this to transcribe only detected voice: Увімкніть це, щоб транскрибувати лише розпізнані голосові частини за допомогою підмоделі
+  Enable Silero VAD Filter: Увімкнути фільтр Silero VAD
+  Diarization: Діаризація
+  Enable Diarization: Увімкнути діаризацію
+  HuggingFace Token: Токен HuggingFace
+  This is only needed the first time you download the model: Це потрібно лише при першому завантаженні моделі. Якщо у вас вже є моделі, вводити не потрібно. Щоб завантажити модель, потрібно вручну перейти на "https://huggingface.co/pyannote/speaker-diarization-3.1" та "https://huggingface.co/pyannote/segmentation-3.0" і погодитися з їхніми вимогами.
+  Device: Пристрій
+  Youtube Link: Посилання на Youtube
+  Youtube Thumbnail: Ескіз Youtube
+  Youtube Title: Назва Youtube
+  Youtube Description: Опис Youtube
+  Record with Mic: Записати з мікрофона
+  Upload Subtitle Files to translate here: Завантажте файли субтитрів для перекладу тут
+  Your Auth Key (API KEY): Ваш ключ авторизації (API KEY)
+  Source Language: Мова джерела
+  Target Language: Мова перекладу
+  Pro User?: Професійний користувач?
+  TRANSLATE SUBTITLE FILE: ПЕРЕКЛАСТИ ФАЙЛ СУБТИТРІВ
+  Upload Audio Files to separate background music: Завантажте аудіофайли для розділення фонової музики
+  Instrumental: Інструментал
+  Vocals: Вокал
+  SEPARATE BACKGROUND MUSIC: РОЗДІЛИТИ ФОНОВУ МУЗИКУ
+
+ru: # Russian
+  Language: Язык
+  File: Файл
+  Youtube: Youtube
+  Mic: Микрофон
+  T2T Translation: Перевод T2T
+  BGM Separation: Разделение фоновой музыки
+  GENERATE SUBTITLE FILE: СГЕНЕРИРОВАТЬ ФАЙЛ СУБТИТРОВ
+  Output: Результат
+  Downloadable output file: Загружаемый файл результата
+  Upload File here: Загрузите файл здесь
+  Model: Модель
+  Automatic Detection: Автоматическое определение
+  File Format: Формат файла
+  Translate to English?: Перевести на английский?
+  Add a timestamp to the end of the filename: Добавить метку времени в конец имени файла
+  Advanced Parameters: Расширенные параметры
+  Background Music Remover Filter: Фильтр удаления фоновой музыки
+  Enabling this will remove background music: Включение этого удалит фоновую музыку с помощью подмодели перед транскрипцией
+  Enable Background Music Remover Filter: Включить фильтр удаления фоновой музыки
+  Save separated files to output: Сохранить разделенные файлы в выходную папку
+  Offload sub model after removing background music: Выгрузить подмодель после удаления фоновой музыки
+  Voice Detection Filter: Фильтр обнаружения голоса
+  Enable this to transcribe only detected voice: Включите это, чтобы транскрибировать только обнаруженные голосовые части с помощью подмодели
+  Enable Silero VAD Filter: Включить фильтр Silero VAD
+  Diarization: Диаризация
+  Enable Diarization: Включить диаризацию
+  HuggingFace Token: Токен HuggingFace
+  This is only needed the first time you download the model: Это нужно только при первом скачивании модели. Если у вас уже есть модели, вводить не нужно. Чтобы скачать модель, нужно вручную перейти на "https://huggingface.co/pyannote/speaker-diarization-3.1" и "https://huggingface.co/pyannote/segmentation-3.0" и согласиться с их требованиями.
+  Device: Устройство
+  Youtube Link: Ссылка на Youtube
+  Youtube Thumbnail: Миниатюра Youtube
+  Youtube Title: Название Youtube
+  Youtube Description: Описание Youtube
+  Record with Mic: Записать с микрофона
+  Upload Subtitle Files to translate here: Загрузите файлы субтитров для перевода здесь
+  Your Auth Key (API KEY): Ваш Auth Key (API KEY)
+  Source Language: Исходный язык
+  Target Language: Целевой язык
+  Pro User?: Профессиональный пользователь?
+  TRANSLATE SUBTITLE FILE: ПЕРЕВЕСТИ ФАЙЛ СУБТИТРОВ
+  Upload Audio Files to separate background music: Загрузите аудиофайлы для разделения фоновой музыки
+  Instrumental: Инструментал
+  Vocals: Вокал
+  SEPARATE BACKGROUND MUSIC: РАЗДЕЛИТЬ ФОНОВУЮ МУЗЫКУ
