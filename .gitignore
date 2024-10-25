@@ -11,3 +11,4 @@ modules/__pycache__/
 models/
 modules/yt_tmp.wav
 configs/default_parameters.yaml
+__pycache__/
