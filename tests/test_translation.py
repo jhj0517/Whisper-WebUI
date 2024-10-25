@@ -28,6 +28,10 @@ def test_nllb_inference(
     assert isinstance(file_paths[0], str)
 
 
+@pytest.mark.skipif(
+    os.getenv("DEEPL_API_KEY") is None or not os.getenv("DEEPL_API_KEY"),
+    reason="DeepL API key is unavailable"
+)
 @pytest.mark.parametrize("file_path", [
     TEST_SUBTITLE_SRT_PATH,
     TEST_SUBTITLE_VTT_PATH,
