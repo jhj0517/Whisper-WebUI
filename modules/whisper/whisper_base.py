@@ -99,7 +99,7 @@ class WhisperBase(ABC):
         elapsed_time: float
             elapsed time for running
         """
-        params = WhisperParameters.as_value(*whisper_params)
+        params = WhisperGradioComponents.as_value(*whisper_params)
 
         self.cache_parameters(
             whisper_params=params,
