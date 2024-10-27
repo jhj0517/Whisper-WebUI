@@ -1,5 +1,5 @@
 from modules.whisper.whisper_factory import WhisperFactory
-from modules.whisper.whisper_parameter import WhisperValues
+from modules.whisper.data_classes import WhisperValues
 from modules.utils.paths import WEBUI_DIR
 from test_config import *
 

@@ -6,7 +6,7 @@ from typing import List
 from datetime import datetime
 
 import modules.translation.nllb_inference as nllb
-from modules.whisper.whisper_parameter import *
+from modules.whisper.data_classes import *
 from modules.utils.subtitle_manager import *
 from modules.utils.files_manager import load_yaml, save_yaml
 from modules.utils.paths import DEFAULT_PARAMETERS_CONFIG_PATH, NLLB_MODELS_DIR, TRANSLATION_OUTPUT_DIR
