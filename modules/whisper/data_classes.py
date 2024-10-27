@@ -488,24 +488,25 @@ class TranscriptionPipelineParams(BaseModel):
         Related Gradio issue: https://github.com/gradio-app/gradio/issues/2471
         See more about Gradio pre-processing: https://www.gradio.app/docs/components
         """
-        whisper_list = [value for key, value in self.whisper.to_dict().items()]
-        vad_list = [value for key, value in self.vad.to_dict().items()]
-        diarization_list = [value for key, value in self.vad.to_dict().items()]
-        bgm_sep_list = [value for key, value in self.bgm_separation.to_dict().items()]
+        whisper_list = self.whisper.to_list()
+        vad_list = self.vad.to_list()
+        diarization_list = self.diarization.to_list()
+        bgm_sep_list = self.bgm_separation.to_list()
         return whisper_list + vad_list + diarization_list + bgm_sep_list
 
     @staticmethod
     def from_list(pipeline_list: List) -> 'TranscriptionPipelineParams':
         """Convert list to the data class again to use it in a function."""
         data_list = deepcopy(pipeline_list)
-        whisper_list, data_list = data_list[0:len(WhisperParams.__annotations__)]
+
+        whisper_list = data_list[0:len(WhisperParams.__annotations__)]
         data_list = data_list[len(WhisperParams.__annotations__):]
 
         vad_list = data_list[0:len(VadParams.__annotations__)]
         data_list = data_list[len(VadParams.__annotations__):]
 
         diarization_list = data_list[0:len(DiarizationParams.__annotations__)]
-        data_list = data_list[len(DiarizationParams.__annotations__)]
+        data_list = data_list[len(DiarizationParams.__annotations__):]
 
         bgm_sep_list = data_list[0:len(BGMSeparationParams.__annotations__)]
 
