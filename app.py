@@ -17,7 +17,7 @@ from modules.ui.htmls import *
 from modules.utils.cli_manager import str2bool
 from modules.utils.youtube_manager import get_ytmetas
 from modules.translation.deepl_api import DeepLAPI
-from modules.whisper.whisper_parameter import *
+from modules.whisper.data_classes import *
 
 
 class App:

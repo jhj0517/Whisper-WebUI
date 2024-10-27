@@ -12,7 +12,7 @@ import gradio as gr
 from argparse import Namespace
 
 from modules.utils.paths import (FASTER_WHISPER_MODELS_DIR, DIARIZATION_MODELS_DIR, UVR_MODELS_DIR, OUTPUT_DIR)
-from modules.whisper.whisper_parameter import *
+from modules.whisper.data_classes import *
 from modules.whisper.whisper_base import WhisperBase
 
 

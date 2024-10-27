@@ -9,7 +9,7 @@ from argparse import Namespace
 
 from modules.utils.paths import (WHISPER_MODELS_DIR, DIARIZATION_MODELS_DIR, OUTPUT_DIR, UVR_MODELS_DIR)
 from modules.whisper.whisper_base import WhisperBase
-from modules.whisper.whisper_parameter import *
+from modules.whisper.data_classes import *
 
 
 class WhisperInference(WhisperBase):
