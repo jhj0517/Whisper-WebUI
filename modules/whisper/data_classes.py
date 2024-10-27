@@ -87,6 +87,7 @@ class VadParams(BaseParams):
 class DiarizationParams(BaseParams):
     """Speaker diarization parameters"""
     is_diarize: bool = Field(default=False, description="Enable speaker diarization")
+    device: str = Field(default="cuda", description="Device to run Diarization model.")
     hf_token: str = Field(
         default="",
         description="Hugging Face token for downloading diarization models"
@@ -95,8 +96,7 @@ class DiarizationParams(BaseParams):
     @classmethod
     def to_gradio_inputs(cls,
                          defaults: Optional[Dict] = None,
-                         available_devices: Optional[List] = None,
-                         device: Optional[str] = None) -> List[gr.components.base.FormComponent]:
+                         available_devices: Optional[List] = None) -> List[gr.components.base.FormComponent]:
         return [
             gr.Checkbox(
                 label=_("Enable Diarization"),
@@ -111,7 +111,7 @@ class DiarizationParams(BaseParams):
             gr.Dropdown(
                 label=_("Device"),
                 choices=["cpu", "cuda"] if available_devices is None else available_devices,
-                value="cuda" if device is None else device,
+                value=defaults.get("device", cls.device),
                 info=_("Device to run diarization model")
             )
         ]
@@ -124,6 +124,7 @@ class BGMSeparationParams(BaseParams):
         default="UVR-MDX-NET-Inst_HQ_4",
         description="UVR model size"
     )
+    device: str = Field(default="cuda", description="Device to run UVR model.")
     segment_size: int = Field(
         default=256,
         gt=0,
@@ -142,7 +143,6 @@ class BGMSeparationParams(BaseParams):
     def to_gradio_input(cls,
                         defaults: Optional[Dict] = None,
                         available_devices: Optional[List] = None,
-                        device: Optional[str] = None,
                         available_models: Optional[List] = None) -> List[gr.components.base.FormComponent]:
         return [
             gr.Checkbox(
@@ -154,7 +154,7 @@ class BGMSeparationParams(BaseParams):
             gr.Dropdown(
                 label=_("Device"),
                 choices=["cpu", "cuda"] if available_devices is None else available_devices,
-                value="cuda" if device is None else device,
+                value=defaults.get("device", cls.device),
                 info=_("Device to run UVR model")
             ),
             gr.Dropdown(
