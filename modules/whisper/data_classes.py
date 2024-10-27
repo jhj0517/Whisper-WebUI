@@ -274,7 +274,9 @@ class WhisperParams(BaseModel):
     def to_gradio_inputs(cls,
                          defaults: Optional[Dict] = None,
                          only_advanced: Optional[bool] = True,
-                         whisper_type: Optional[WhisperImpl] = None):
+                         whisper_type: Optional[WhisperImpl] = None,
+                         available_compute_types: Optional[List] = None,
+                         compute_type: Optional[str] = None):
         defaults = {} if defaults is None else defaults
         whisper_type = WhisperImpl.FASTER_WHISPER if whisper_type is None else whisper_type
 
@@ -318,8 +320,8 @@ class WhisperParams(BaseModel):
             ),
             gr.Dropdown(
                 label="Compute Type",
-                choices=["float16", "int8", "int16"],
-                value=defaults.get("compute_type", cls.compute_type),
+                choices=["float16", "int8", "int16"] if available_compute_types is None else available_compute_types,
+                value=defaults.get("compute_type", compute_type),
                 info="Computation type for transcription"
             ),
             gr.Number(
@@ -483,12 +485,9 @@ class TranscriptionPipelineParams(BaseModel):
         }
         return data
 
-    # def as_list(self) -> list:
-    #     """
-    #     Converts the data class attributes into a list
-    #
-    #     Returns
-    #     ----------
-    #     A list of Whisper parameters
-    #     """
-    #     return [getattr(self, f.name) for f in fields(self)]
+    def as_list(self) -> List:
+        whisper_list = [value for key, value in self.whisper.to_dict().items()]
+        vad_list = [value for key, value in self.vad.to_dict().items()]
+        diarization_list = [value for key, value in self.vad.to_dict().items()]
+        bgm_sep_list = [value for key, value in self.bgm_separation.to_dict().items()]
+        return whisper_list + vad_list + diarization_list + bgm_sep_list
