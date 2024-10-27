@@ -1,6 +1,6 @@
 from modules.utils.paths import *
 from modules.whisper.whisper_factory import WhisperFactory
-from modules.whisper.data_classes import WhisperValues
+from modules.whisper.data_classes import TranscriptionPipelineParams
 from test_config import *
 from test_transcription import download_file, test_transcribe
 

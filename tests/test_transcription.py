@@ -1,5 +1,5 @@
 from modules.whisper.whisper_factory import WhisperFactory
-from modules.whisper.data_classes import WhisperValues
+from modules.whisper.data_classes import TranscriptionPipelineParams
 from modules.utils.paths import WEBUI_DIR
 from test_config import *
 
@@ -37,7 +37,7 @@ def test_transcribe(
         f"""Diarization Device: {whisper_inferencer.diarizer.device}"""
     )
 
-    hparams = WhisperValues(
+    hparams = TranscriptionPipelineParams(
         model_size=TEST_WHISPER_MODEL,
         vad_filter=vad_filter,
         is_bgm_separate=bgm_separation,
