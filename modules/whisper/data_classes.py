@@ -1,10 +1,12 @@
+import faster_whisper.transcribe
 import gradio as gr
 import torch
-from typing import Optional, Dict, List, Union
+from typing import Optional, Dict, List, Union, NamedTuple
 from pydantic import BaseModel, Field, field_validator, ConfigDict
 from gradio_i18n import Translate, gettext as _
 from enum import Enum
 from copy import deepcopy
+
 import yaml
 
 from modules.utils.constants import *
@@ -17,12 +19,23 @@ class WhisperImpl(Enum):
 
 
 class Segment(BaseModel):
-    text: Optional[str] = Field(default=None,
-                                description="Transcription text of the segment")
-    start: Optional[float] = Field(default=None,
-                                   description="Start time of the segment")
-    end: Optional[float] = Field(default=None,
-                                 description="End time of the segment")
+    id: Optional[str] = Field(default=None, description="Unique identifier for the segment")
+    text: Optional[str] = Field(default=None, description="Transcription text of the segment")
+    start: Optional[float] = Field(default=None, description="Start time of the segment")
+    end: Optional[float] = Field(default=None, description="End time of the segment")
+    tokens: Optional[List[int]] = Field(default=None, description="List of token IDs")
+    temperature: Optional[float] = Field(default=None, description="Temperature used during the decoding process")
+    avg_logprob: Optional[float] = Field(default=None, description="Average log probability of the tokens")
+    compression_ratio: Optional[float] = Field(default=None, description="Compression ratio of the segment")
+    no_speech_prob: Optional[float] = Field(default=None, description="Probability that it's not speech")
+    words: Optional[List['Word']] = Field(default=None, description="List of words contained in the segment")
+
+
+class Word(NamedTuple):
+    start: Optional[float] = None
+    end: Optional[float] = None
+    word: Optional[str] = None
+    probability: Optional[float] = None
 
 
 class BaseParams(BaseModel):
