@@ -514,7 +514,7 @@ class WhisperBase(ABC):
 
     @staticmethod
     def cache_parameters(
-        whisper_params: WhisperValues,
+        whisper_params: TranscriptionPipelineParams,
         add_timestamp: bool
     ):
         """cache parameters to the yaml file"""
