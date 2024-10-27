@@ -196,7 +196,7 @@ class App:
         dd_model.change(fn=self.on_change_models, inputs=[dd_model], outputs=[cb_translate])
 
         return (
-            WhisperParameters(
+            WhisperGradioComponents(
                 model_size=dd_model, lang=dd_lang, is_translate=cb_translate, beam_size=nb_beam_size,
                 log_prob_threshold=nb_log_prob_threshold, no_speech_threshold=nb_no_speech_threshold,
                 compute_type=dd_compute_type, best_of=nb_best_of, patience=nb_patience,
