@@ -1,5 +1,5 @@
 from modules.whisper.whisper_factory import WhisperFactory
-from modules.whisper.data_classes import TranscriptionPipelineParams
+from modules.whisper.data_classes import *
 from modules.utils.paths import WEBUI_DIR
 from test_config import *
 
@@ -38,13 +38,21 @@ def test_transcribe(
     )
 
     hparams = TranscriptionPipelineParams(
-        model_size=TEST_WHISPER_MODEL,
-        vad_filter=vad_filter,
-        is_bgm_separate=bgm_separation,
-        compute_type=whisper_inferencer.current_compute_type,
-        uvr_enable_offload=True,
-        is_diarize=diarization,
-    ).as_list()
+        whisper=WhisperParams(
+            model_size=TEST_WHISPER_MODEL,
+            compute_type=whisper_inferencer.current_compute_type
+        ),
+        vad=VadParams(
+            vad_filter=vad_filter
+        ),
+        bgm_separation=BGMSeparationParams(
+            is_separate_bgm=bgm_separation,
+            enable_offload=True
+        ),
+        diarization=DiarizationParams(
+            is_diarize=diarization
+        ),
+    ).to_list()
 
     subtitle_str, file_path = whisper_inferencer.transcribe_file(
         [audio_path],
