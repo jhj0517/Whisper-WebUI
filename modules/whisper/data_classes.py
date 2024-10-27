@@ -61,7 +61,6 @@ class VadParams(BaseParams):
 
     @classmethod
     def to_gradio_inputs(cls, defaults: Optional[Dict] = None) -> List[gr.components.base.FormComponent]:
-        defaults = defaults or {}
         return [
             gr.Checkbox(label=_("Enable Silero VAD Filter"), value=defaults.get("vad_filter", cls.vad_filter),
                         interactive=True,
@@ -98,7 +97,6 @@ class DiarizationParams(BaseParams):
                          defaults: Optional[Dict] = None,
                          available_devices: Optional[List] = None,
                          device: Optional[str] = None) -> List[gr.components.base.FormComponent]:
-        defaults = defaults or {}
         return [
             gr.Checkbox(
                 label=_("Enable Diarization"),
@@ -146,7 +144,6 @@ class BGMSeparationParams(BaseParams):
                         available_devices: Optional[List] = None,
                         device: Optional[str] = None,
                         available_models: Optional[List] = None) -> List[gr.components.base.FormComponent]:
-        defaults = defaults or {}
         return [
             gr.Checkbox(
                 label=_("Enable Background Music Remover Filter"),
@@ -278,7 +275,6 @@ class WhisperParams(BaseParams):
                          whisper_type: Optional[WhisperImpl] = None,
                          available_compute_types: Optional[List] = None,
                          compute_type: Optional[str] = None):
-        defaults = {} if defaults is None else defaults
         whisper_type = WhisperImpl.FASTER_WHISPER if whisper_type is None else whisper_type
 
         inputs = []
