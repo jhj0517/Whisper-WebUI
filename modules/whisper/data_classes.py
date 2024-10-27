@@ -4,6 +4,7 @@ from typing import Optional, Dict, List
 from pydantic import BaseModel, Field, field_validator
 from gradio_i18n import Translate, gettext as _
 from enum import Enum
+from copy import deepcopy
 import yaml
 
 from modules.utils.constants import AUTOMATIC_DETECTION
@@ -15,7 +16,20 @@ class WhisperImpl(Enum):
     INSANELY_FAST_WHISPER = "insanely_fast_whisper"
 
 
-class VadParams(BaseModel):
+class BaseParams(BaseModel):
+    def to_dict(self) -> Dict:
+        return self.model_dump()
+
+    def to_list(self) -> List:
+        return list(self.model_dump().values())
+
+    @classmethod
+    def from_list(cls, data_list: List) -> 'BaseParams':
+        field_names = list(cls.model_fields.keys())
+        return cls(**dict(zip(field_names, data_list)))
+
+
+class VadParams(BaseParams):
     """Voice Activity Detection parameters"""
     vad_filter: bool = Field(default=False, description="Enable voice activity detection to filter out non-speech parts")
     threshold: float = Field(
@@ -45,9 +59,6 @@ class VadParams(BaseModel):
         description="Padding added to each side of speech chunks"
     )
 
-    def to_dict(self) -> Dict:
-        return self.model_dump()
-
     @classmethod
     def to_gradio_inputs(cls, defaults: Optional[Dict] = None) -> List[gr.components.base.FormComponent]:
         defaults = defaults or {}
@@ -74,17 +85,13 @@ class VadParams(BaseModel):
         ]
 
 
-
-class DiarizationParams(BaseModel):
+class DiarizationParams(BaseParams):
     """Speaker diarization parameters"""
     is_diarize: bool = Field(default=False, description="Enable speaker diarization")
     hf_token: str = Field(
         default="",
         description="Hugging Face token for downloading diarization models"
     )
-
-    def to_dict(self) -> Dict:
-        return self.model_dump()
 
     @classmethod
     def to_gradio_inputs(cls,
@@ -112,7 +119,7 @@ class DiarizationParams(BaseModel):
         ]
 
 
-class BGMSeparationParams(BaseModel):
+class BGMSeparationParams(BaseParams):
     """Background music separation parameters"""
     is_separate_bgm: bool = Field(default=False, description="Enable background music separation")
     model_size: str = Field(
@@ -132,9 +139,6 @@ class BGMSeparationParams(BaseModel):
         default=True,
         description="Offload UVR model after transcription"
     )
-
-    def to_dict(self) -> Dict:
-        return self.model_dump()
 
     @classmethod
     def to_gradio_input(cls,
@@ -181,7 +185,7 @@ class BGMSeparationParams(BaseModel):
         ]
 
 
-class WhisperParams(BaseModel):
+class WhisperParams(BaseParams):
     """Whisper parameters"""
     model_size: str = Field(default="large-v2", description="Whisper model size")
     lang: Optional[str] = Field(default=None, description="Source language of the file to transcribe")
@@ -261,9 +265,6 @@ class WhisperParams(BaseModel):
         gt=0,
         description="Number of segments for language detection"
     )
-
-    def to_dict(self):
-        return self.model_dump()
 
     @field_validator('lang')
     def validate_lang(cls, v):
@@ -485,9 +486,36 @@ class TranscriptionPipelineParams(BaseModel):
         }
         return data
 
-    def as_list(self) -> List:
+    def to_list(self) -> List:
+        """
+        Convert data class to the list because I have to pass the parameters as a list in the gradio.
+        Related Gradio issue: https://github.com/gradio-app/gradio/issues/2471
+        See more about Gradio pre-processing: https://www.gradio.app/docs/components
+        """
         whisper_list = [value for key, value in self.whisper.to_dict().items()]
         vad_list = [value for key, value in self.vad.to_dict().items()]
         diarization_list = [value for key, value in self.vad.to_dict().items()]
         bgm_sep_list = [value for key, value in self.bgm_separation.to_dict().items()]
         return whisper_list + vad_list + diarization_list + bgm_sep_list
+
+    @staticmethod
+    def from_list(pipeline_list: List) -> 'TranscriptionPipelineParams':
+        """Convert list to the data class again to use it in a function."""
+        data_list = deepcopy(pipeline_list)
+        whisper_list, data_list = data_list[0:len(WhisperParams.__annotations__)]
+        data_list = data_list[len(WhisperParams.__annotations__):]
+
+        vad_list = data_list[0:len(VadParams.__annotations__)]
+        data_list = data_list[len(VadParams.__annotations__):]
+
+        diarization_list = data_list[0:len(DiarizationParams.__annotations__)]
+        data_list = data_list[len(DiarizationParams.__annotations__)]
+
+        bgm_sep_list = data_list[0:len(BGMSeparationParams.__annotations__)]
+
+        return TranscriptionPipelineParams(
+            whisper=WhisperParams.from_list(whisper_list),
+            vad=VadParams.from_list(vad_list),
+            diarization=DiarizationParams.from_list(diarization_list),
+            bgm_separation=BGMSeparationParams.from_list(bgm_sep_list)
+        )
