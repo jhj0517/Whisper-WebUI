@@ -128,3 +128,6 @@ This is Whisper's original VRAM usage table for models.
 - [x] Add background music separation pre-processing with [UVR](https://github.com/Anjok07/ultimatevocalremovergui)  
 - [ ] Add fast api script
 - [ ] Support real-time transcription for microphone
+
+### Translation 🌐
+Any PRs translating Japanese, Spanish, French, German, or Chinese into [translation.yaml](https://github.com/jhj0517/Whisper-WebUI/blob/master/configs/translation.yaml) would be greatly appreciated!
