@@ -1,6 +1,6 @@
 from modules.utils.paths import *
 from modules.whisper.whisper_factory import WhisperFactory
-from modules.whisper.data_classes import TranscriptionPipelineParams
+from modules.whisper.data_classes import *
 from test_config import *
 from test_transcription import download_file, test_transcribe
 
@@ -16,9 +16,9 @@ import os
 @pytest.mark.parametrize(
     "whisper_type,vad_filter,bgm_separation,diarization",
     [
-        ("whisper", False, False, True),
-        ("faster-whisper", False, False, True),
-        ("insanely_fast_whisper", False, False, True)
+        (WhisperImpl.WHISPER.value, False, False, True),
+        (WhisperImpl.FASTER_WHISPER.value, False, False, True),
+        (WhisperImpl.INSANELY_FAST_WHISPER.value, False, False, True)
     ]
 )
 def test_diarization_pipeline(
