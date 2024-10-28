@@ -44,7 +44,7 @@ class App:
         print(f"Use \"{self.args.whisper_type}\" implementation\n"
               f"Device \"{self.whisper_inf.device}\" is detected")
 
-    def create_whisper_parameters(self):
+    def create_pipeline_inputs(self):
         whisper_params = self.default_params["whisper"]
         vad_params = self.default_params["vad"]
         diarization_params = self.default_params["diarization"]
@@ -108,7 +108,7 @@ class App:
                                                          visible=self.args.colab,
                                                          value="")
 
-                        whisper_params, dd_file_format, cb_timestamp = self.create_whisper_parameters()
+                        pipeline_params, dd_file_format, cb_timestamp = self.create_pipeline_inputs()
 
                         with gr.Row():
                             btn_run = gr.Button(_("GENERATE SUBTITLE FILE"), variant="primary")
@@ -119,7 +119,7 @@ class App:
 
                         params = [input_file, tb_input_folder, dd_file_format, cb_timestamp]
                         btn_run.click(fn=self.whisper_inf.transcribe_file,
-                                      inputs=params + whisper_params,
+                                      inputs=params + pipeline_params,
                                       outputs=[tb_indicator, files_subtitles])
                         btn_openfolder.click(fn=lambda: self.open_folder("outputs"), inputs=None, outputs=None)
 
@@ -133,7 +133,7 @@ class App:
                                 tb_title = gr.Label(label=_("Youtube Title"))
                                 tb_description = gr.Textbox(label=_("Youtube Description"), max_lines=15)
 
-                        whisper_params, dd_file_format, cb_timestamp = self.create_whisper_parameters()
+                        pipeline_params, dd_file_format, cb_timestamp = self.create_pipeline_inputs()
 
                         with gr.Row():
                             btn_run = gr.Button(_("GENERATE SUBTITLE FILE"), variant="primary")
@@ -145,7 +145,7 @@ class App:
                         params = [tb_youtubelink, dd_file_format, cb_timestamp]
 
                         btn_run.click(fn=self.whisper_inf.transcribe_youtube,
-                                      inputs=params + whisper_params,
+                                      inputs=params + pipeline_params,
                                       outputs=[tb_indicator, files_subtitles])
                         tb_youtubelink.change(get_ytmetas, inputs=[tb_youtubelink],
                                               outputs=[img_thumbnail, tb_title, tb_description])
@@ -155,7 +155,7 @@ class App:
                         with gr.Row():
                             mic_input = gr.Microphone(label=_("Record with Mic"), type="filepath", interactive=True)
 
-                        whisper_params, dd_file_format, cb_timestamp = self.create_whisper_parameters()
+                        pipeline_params, dd_file_format, cb_timestamp = self.create_pipeline_inputs()
 
                         with gr.Row():
                             btn_run = gr.Button(_("GENERATE SUBTITLE FILE"), variant="primary")
@@ -167,7 +167,7 @@ class App:
                         params = [mic_input, dd_file_format, cb_timestamp]
 
                         btn_run.click(fn=self.whisper_inf.transcribe_mic,
-                                      inputs=params + whisper_params,
+                                      inputs=params + pipeline_params,
                                       outputs=[tb_indicator, files_subtitles])
                         btn_openfolder.click(fn=lambda: self.open_folder("outputs"), inputs=None, outputs=None)
 
