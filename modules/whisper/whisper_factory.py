@@ -52,21 +52,23 @@ class WhisperFactory:
         # Temporal fix of the bug : https://github.com/jhj0517/Whisper-WebUI/issues/144
         os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 
-        if whisper_type == WhisperImpl.FASTER_WHISPER:
+        whisper_type = whisper_type.strip().lower()
+
+        if whisper_type == WhisperImpl.FASTER_WHISPER.value:
             return FasterWhisperInference(
                 model_dir=faster_whisper_model_dir,
                 output_dir=output_dir,
                 diarization_model_dir=diarization_model_dir,
                 uvr_model_dir=uvr_model_dir
             )
-        elif whisper_type == WhisperImpl.WHISPER:
+        elif whisper_type == WhisperImpl.WHISPER.value:
             return WhisperInference(
                 model_dir=whisper_model_dir,
                 output_dir=output_dir,
                 diarization_model_dir=diarization_model_dir,
                 uvr_model_dir=uvr_model_dir
             )
-        elif whisper_type == WhisperImpl.INSANELY_FAST_WHISPER:
+        elif whisper_type == WhisperImpl.INSANELY_FAST_WHISPER.value:
             return InsanelyFastWhisperInference(
                 model_dir=insanely_fast_whisper_model_dir,
                 output_dir=output_dir,
