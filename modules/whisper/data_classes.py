@@ -284,6 +284,8 @@ class WhisperParams(BaseParams):
                          defaults: Optional[Dict] = None,
                          only_advanced: Optional[bool] = True,
                          whisper_type: Optional[WhisperImpl] = None,
+                         available_models: Optional[List] = None,
+                         available_langs: Optional[List] = None,
                          available_compute_types: Optional[List] = None,
                          compute_type: Optional[str] = None):
         whisper_type = WhisperImpl.FASTER_WHISPER if whisper_type is None else whisper_type
@@ -292,20 +294,18 @@ class WhisperParams(BaseParams):
         if not only_advanced:
             inputs += [
                 gr.Dropdown(
-                    label="Model Size",
-                    choices=["small", "medium", "large-v2"],
+                    label=_("Model"),
+                    choices=available_models,
                     value=defaults.get("model_size", cls.__fields__["model_size"].default),
-                    info="Whisper model size"
                 ),
-                gr.Textbox(
-                    label="Language",
+                gr.Dropdown(
+                    label=_("Language"),
+                    choices=available_langs,
                     value=defaults.get("lang", cls.__fields__["lang"].default),
-                    info="Source language of the file to transcribe"
                 ),
                 gr.Checkbox(
-                    label="Translate to English",
+                    label=_("Translate to English?"),
                     value=defaults.get("is_translate", cls.__fields__["is_translate"].default),
-                    info="Translate speech to English end-to-end"
                 ),
             ]
 
