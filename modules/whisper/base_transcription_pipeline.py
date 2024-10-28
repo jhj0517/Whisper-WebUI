@@ -554,6 +554,9 @@ class BaseTranscriptionPipeline(ABC):
         if cached_yaml["whisper"].get("lang", None) is None:
             cached_yaml["whisper"]["lang"] = AUTOMATIC_DETECTION.unwrap()
 
+        if cached_yaml["vad"].get("max_speech_duration_s", float('inf')) == float('inf'):
+            cached_yaml["vad"]["max_speech_duration_s"] = 9999
+
         if cached_yaml is not None and cached_yaml:
             save_yaml(cached_yaml, DEFAULT_PARAMETERS_CONFIG_PATH)
 
