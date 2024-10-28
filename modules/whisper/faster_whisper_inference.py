@@ -67,16 +67,6 @@ class FasterWhisperInference(WhisperBase):
         if params.model_size != self.current_model_size or self.model is None or self.current_compute_type != params.compute_type:
             self.update_model(params.model_size, params.compute_type, progress)
 
-        # None parameters with Textboxes: https://github.com/gradio-app/gradio/issues/8723
-        if not params.initial_prompt:
-            params.initial_prompt = None
-        if not params.prefix:
-            params.prefix = None
-        if not params.hotwords:
-            params.hotwords = None
-
-        params.suppress_tokens = self.format_suppress_tokens_str(params.suppress_tokens)
-
         segments, info = self.model.transcribe(
             audio=audio,
             language=params.lang,

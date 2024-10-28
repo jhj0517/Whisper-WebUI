@@ -1,5 +1,6 @@
 import os
 import torch
+import ast
 import whisper
 import ctranslate2
 import gradio as gr
@@ -14,7 +15,7 @@ from dataclasses import astuple
 from modules.uvr.music_separator import MusicSeparator
 from modules.utils.paths import (WHISPER_MODELS_DIR, DIARIZATION_MODELS_DIR, OUTPUT_DIR, DEFAULT_PARAMETERS_CONFIG_PATH,
                                  UVR_MODELS_DIR)
-from modules.utils.constants import AUTOMATIC_DETECTION
+from modules.utils.constants import AUTOMATIC_DETECTION, GRADIO_NONE_VALUES
 from modules.utils.subtitle_manager import get_srt, get_vtt, get_txt, write_file, safe_filename
 from modules.utils.youtube_manager import get_ytdata, get_ytaudio
 from modules.utils.files_manager import get_media_files, format_gradio_files, load_yaml, save_yaml
@@ -101,15 +102,8 @@ class WhisperBase(ABC):
             elapsed time for running
         """
         params = TranscriptionPipelineParams.from_list(list(pipeline_params))
+        params = self.handle_gradio_values(params)
         bgm_params, vad_params, whisper_params, diarization_params = params.bgm_separation, params.vad, params.whisper, params.diarization
-
-        if whisper_params.lang is None:
-            pass
-        elif whisper_params.lang == AUTOMATIC_DETECTION:
-            whisper_params.lang = None
-        else:
-            language_code_dict = {value: key for key, value in whisper.tokenizer.LANGUAGES.items()}
-            whisper_params.lang = language_code_dict[params.lang]
 
         if bgm_params.is_separate_bgm:
             music, audio, _ = self.music_separator.separate(
@@ -516,24 +510,56 @@ class WhisperBase(ABC):
                 os.remove(file_path)
 
     @staticmethod
+    def handle_gradio_values(params: TranscriptionPipelineParams):
+        """
+        Handle gradio specific values that can't be displayed as None in the UI.
+        Related issue : https://github.com/gradio-app/gradio/issues/8723
+        """
+        if params.whisper.lang is None:
+            pass
+        elif params.whisper.lang == AUTOMATIC_DETECTION:
+            params.whisper.lang = None
+        else:
+            language_code_dict = {value: key for key, value in whisper.tokenizer.LANGUAGES.items()}
+            params.whisper.lang = language_code_dict[params.lang]
+
+        if not params.whisper.initial_prompt:
+            params.whisper.initial_prompt = None
+        if not params.whisper.prefix:
+            params.whisper.prefix = None
+        if not params.whisper.hotwords:
+            params.whisper.hotwords = None
+        if params.whisper.max_new_tokens == 0:
+            params.whisper.max_new_tokens = None
+        if params.whisper.hallucination_silence_threshold == 0:
+            params.whisper.hallucination_silence_threshold = None
+        if params.whisper.language_detection_threshold == 0:
+            params.whisper.language_detection_threshold = None
+        if params.whisper.max_speech_duration_s >= 9999:
+            params.whisper.max_speech_duration_s = float('inf')
+        return params
+
+    @staticmethod
     def cache_parameters(
         params: TranscriptionPipelineParams,
         add_timestamp: bool
     ):
-        """cache parameters to the yaml file"""
-
+        """Cache parameters to the yaml file"""
         cached_params = load_yaml(DEFAULT_PARAMETERS_CONFIG_PATH)
         param_to_cache = params.to_dict()
-
-        print(param_to_cache)
 
         cached_yaml = {**cached_params, **param_to_cache}
         cached_yaml["whisper"]["add_timestamp"] = add_timestamp
 
-        if cached_yaml["whisper"].get("lang", None) is None:
-            cached_yaml["whisper"]["lang"] = AUTOMATIC_DETECTION
+        supress_token = cached_yaml["whisper"].get("suppress_tokens", None)
+        if supress_token and isinstance(supress_token, list):
+            cached_yaml["whisper"]["suppress_tokens"] = str(supress_token)
 
-        save_yaml(cached_yaml, DEFAULT_PARAMETERS_CONFIG_PATH)
+        if cached_yaml["whisper"].get("lang", None) is None:
+            cached_yaml["whisper"]["lang"] = AUTOMATIC_DETECTION.unwrap()
+
+        if cached_yaml is not None and cached_yaml:
+            save_yaml(cached_yaml, DEFAULT_PARAMETERS_CONFIG_PATH)
 
     @staticmethod
     def resample_audio(audio: Union[str, np.ndarray],
