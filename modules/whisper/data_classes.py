@@ -123,7 +123,6 @@ class DiarizationParams(BaseParams):
                 label=_("Device"),
                 choices=["cpu", "cuda"] if available_devices is None else available_devices,
                 value=defaults.get("device", cls.__fields__["device"].default),
-                info=_("Device to run diarization model")
             )
         ]
 
@@ -166,14 +165,12 @@ class BGMSeparationParams(BaseParams):
                 label=_("Device"),
                 choices=["cpu", "cuda"] if available_devices is None else available_devices,
                 value=defaults.get("device", cls.__fields__["device"].default),
-                info=_("Device to run UVR model")
             ),
             gr.Dropdown(
                 label=_("Model"),
                 choices=["UVR-MDX-NET-Inst_HQ_4",
                          "UVR-MDX-NET-Inst_3"] if available_models is None else available_models,
                 value=defaults.get("model_size", cls.__fields__["model_size"].default),
-                info=_("UVR model size")
             ),
             gr.Number(
                 label="Segment Size",
@@ -184,12 +181,10 @@ class BGMSeparationParams(BaseParams):
             gr.Checkbox(
                 label=_("Save separated files to output"),
                 value=defaults.get("save_file", cls.__fields__["save_file"].default),
-                info=_("Whether to save separated audio files")
             ),
             gr.Checkbox(
                 label=_("Offload sub model after removing background music"),
                 value=defaults.get("enable_offload", cls.__fields__["enable_offload"].default),
-                info=_("Offload UVR model after transcription")
             )
         ]
 
