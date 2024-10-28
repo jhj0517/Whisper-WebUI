@@ -80,6 +80,7 @@ class WhisperBase(ABC):
         Run transcription with conditional pre-processing and post-processing.
         The VAD will be performed to remove noise from the audio input in pre-processing, if enabled.
         The diarization will be performed in post-processing, if enabled.
+        Due to the integration with gradio, the parameters have to be specified with a `*` wildcard.
 
         Parameters
         ----------
