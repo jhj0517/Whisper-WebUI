@@ -117,16 +117,16 @@ class DiarizationParams(BaseParams):
                 label=_("Enable Diarization"),
                 value=defaults.get("is_diarize", cls.__fields__["is_diarize"].default),
             ),
+            gr.Dropdown(
+                label=_("Device"),
+                choices=["cpu", "cuda"] if available_devices is None else available_devices,
+                value=defaults.get("device", device),
+            ),
             gr.Textbox(
                 label=_("HuggingFace Token"),
                 value=defaults.get("hf_token", cls.__fields__["hf_token"].default),
                 info=_("This is only needed the first time you download the model")
             ),
-            gr.Dropdown(
-                label=_("Device"),
-                choices=["cpu", "cuda"] if available_devices is None else available_devices,
-                value=defaults.get("device", device),
-            )
         ]
 
 
@@ -166,15 +166,15 @@ class BGMSeparationParams(BaseParams):
                 info=_("Enabling this will remove background music")
             ),
             gr.Dropdown(
-                label=_("Device"),
-                choices=["cpu", "cuda"] if available_devices is None else available_devices,
-                value=defaults.get("device", device),
-            ),
-            gr.Dropdown(
                 label=_("Model"),
                 choices=["UVR-MDX-NET-Inst_HQ_4",
                          "UVR-MDX-NET-Inst_3"] if available_models is None else available_models,
                 value=defaults.get("model_size", cls.__fields__["model_size"].default),
+            ),
+            gr.Dropdown(
+                label=_("Device"),
+                choices=["cpu", "cuda"] if available_devices is None else available_devices,
+                value=defaults.get("device", device),
             ),
             gr.Number(
                 label="Segment Size",
