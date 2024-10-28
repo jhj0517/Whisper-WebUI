@@ -66,16 +66,24 @@ class App:
                                        interactive=True)
 
         with gr.Accordion(_("Advanced Parameters"), open=False):
-            whisper_inputs = WhisperParams.to_gradio_inputs(defaults=whisper_params, only_advanced=True)
+            whisper_inputs = WhisperParams.to_gradio_inputs(defaults=whisper_params, only_advanced=True,
+                                                            whisper_type=self.args.whisper_type,
+                                                            available_compute_types=self.whisper_inf.available_compute_types,
+                                                            compute_type=self.whisper_inf.current_compute_type)
 
         with gr.Accordion(_("Background Music Remover Filter"), open=False):
-            uvr_inputs = BGMSeparationParams.to_gradio_input(defaults=uvr_params)
+            uvr_inputs = BGMSeparationParams.to_gradio_input(defaults=uvr_params,
+                                                             available_models=self.whisper_inf.music_separator.available_models,
+                                                             available_devices=self.whisper_inf.music_separator.available_devices,
+                                                             device=self.whisper_inf.music_separator.device)
 
         with gr.Accordion(_("Voice Detection Filter"), open=False):
             vad_inputs = VadParams.to_gradio_inputs(defaults=vad_params)
 
         with gr.Accordion(_("Diarization"), open=False):
-            diarization_inputs = DiarizationParams.to_gradio_inputs(defaults=diarization_params)
+            diarization_inputs = DiarizationParams.to_gradio_inputs(defaults=diarization_params,
+                                                                    available_devices=self.whisper_inf.diarizer.available_device,
+                                                                    device=self.whisper_inf.diarizer.device)
 
         dd_model.change(fn=self.on_change_models, inputs=[dd_model], outputs=[cb_translate])
 
@@ -312,8 +320,8 @@ class App:
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--whisper_type', type=str, default="faster-whisper",
-                    choices=["whisper", "faster-whisper", "insanely-fast-whisper"],
+parser.add_argument('--whisper_type', type=str, default=WhisperImpl.FASTER_WHISPER,
+                    choices=[item.value for item in WhisperImpl],
                     help='A type of the whisper implementation (Github repo name)')
 parser.add_argument('--share', type=str2bool, default=False, nargs='?', const=True, help='Gradio share value')
 parser.add_argument('--server_name', type=str, default=None, help='Gradio server host')
