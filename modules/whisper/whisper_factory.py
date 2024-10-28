@@ -59,14 +59,14 @@ class WhisperFactory:
                 diarization_model_dir=diarization_model_dir,
                 uvr_model_dir=uvr_model_dir
             )
-        elif whisper_type in WhisperImpl.WHISPER:
+        elif whisper_type == WhisperImpl.WHISPER:
             return WhisperInference(
                 model_dir=whisper_model_dir,
                 output_dir=output_dir,
                 diarization_model_dir=diarization_model_dir,
                 uvr_model_dir=uvr_model_dir
             )
-        elif whisper_type in WhisperImpl.INSANELY_FAST_WHISPER:
+        elif whisper_type == WhisperImpl.INSANELY_FAST_WHISPER:
             return InsanelyFastWhisperInference(
                 model_dir=insanely_fast_whisper_model_dir,
                 output_dir=output_dir,
