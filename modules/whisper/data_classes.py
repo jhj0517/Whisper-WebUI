@@ -7,7 +7,7 @@ from enum import Enum
 from copy import deepcopy
 import yaml
 
-from modules.utils.constants import AUTOMATIC_DETECTION
+from modules.utils.constants import *
 
 
 class WhisperImpl(Enum):
@@ -82,7 +82,7 @@ class VadParams(BaseParams):
             ),
             gr.Number(
                 label="Maximum Speech Duration (s)",
-                value=defaults.get("max_speech_duration_s", cls.__fields__["max_speech_duration_s"].default),
+                value=defaults.get("max_speech_duration_s", GRADIO_NONE_NUMBER_MAX),
                 info="Maximum duration of speech chunks in \"seconds\"."
             ),
             gr.Number(
@@ -373,7 +373,7 @@ class WhisperParams(BaseParams):
             ),
             gr.Textbox(
                 label="Initial Prompt",
-                value=defaults.get("initial_prompt", cls.__fields__["initial_prompt"].default),
+                value=defaults.get("initial_prompt", GRADIO_NONE_STR),
                 info="Initial prompt for first window"
             ),
             gr.Slider(
@@ -411,7 +411,7 @@ class WhisperParams(BaseParams):
             ),
             gr.Textbox(
                 label="Prefix",
-                value=defaults.get("prefix", cls.__fields__["prefix"].default),
+                value=defaults.get("prefix", GRADIO_NONE_STR),
                 info="Prefix text for first window"
             ),
             gr.Checkbox(
@@ -446,7 +446,7 @@ class WhisperParams(BaseParams):
             ),
             gr.Number(
                 label="Max New Tokens",
-                value=defaults.get("max_new_tokens", cls.__fields__["max_new_tokens"].default),
+                value=defaults.get("max_new_tokens", GRADIO_NONE_NUMBER_MIN),
                 precision=0,
                 info="Maximum number of new tokens per chunk"
             ),
@@ -459,7 +459,7 @@ class WhisperParams(BaseParams):
             gr.Number(
                 label="Hallucination Silence Threshold (sec)",
                 value=defaults.get("hallucination_silence_threshold",
-                                   cls.__fields__["hallucination_silence_threshold"].default),
+                                   GRADIO_NONE_NUMBER_MIN),
                 info="Threshold for skipping silent periods in hallucination detection"
             ),
             gr.Textbox(
@@ -470,7 +470,7 @@ class WhisperParams(BaseParams):
             gr.Number(
                 label="Language Detection Threshold",
                 value=defaults.get("language_detection_threshold",
-                                   cls.__fields__["language_detection_threshold"].default),
+                                   GRADIO_NONE_NUMBER_MIN),
                 info="Threshold for language detection probability"
             ),
             gr.Number(
