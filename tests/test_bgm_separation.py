@@ -1,6 +1,6 @@
 from modules.utils.paths import *
 from modules.whisper.whisper_factory import WhisperFactory
-from modules.whisper.data_classes import TranscriptionPipelineParams
+from modules.whisper.data_classes import *
 from test_config import *
 from test_transcription import download_file, test_transcribe
 
@@ -17,9 +17,9 @@ import os
 @pytest.mark.parametrize(
     "whisper_type,vad_filter,bgm_separation,diarization",
     [
-        ("whisper", False, True, False),
-        ("faster-whisper", False, True, False),
-        ("insanely_fast_whisper", False, True, False)
+        (WhisperImpl.WHISPER.value, False, True, False),
+        (WhisperImpl.FASTER_WHISPER.value, False, True, False),
+        (WhisperImpl.INSANELY_FAST_WHISPER.value, False, True, False)
     ]
 )
 def test_bgm_separation_pipeline(
@@ -38,9 +38,9 @@ def test_bgm_separation_pipeline(
 @pytest.mark.parametrize(
     "whisper_type,vad_filter,bgm_separation,diarization",
     [
-        ("whisper", True, True, False),
-        ("faster-whisper", True, True, False),
-        ("insanely_fast_whisper", True, True, False)
+        (WhisperImpl.WHISPER.value, True, True, False),
+        (WhisperImpl.FASTER_WHISPER.value, True, True, False),
+        (WhisperImpl.INSANELY_FAST_WHISPER.value, True, True, False)
     ]
 )
 def test_bgm_separation_with_vad_pipeline(

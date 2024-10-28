@@ -12,9 +12,9 @@ import os
 @pytest.mark.parametrize(
     "whisper_type,vad_filter,bgm_separation,diarization",
     [
-        ("whisper", False, False, False),
-        ("faster-whisper", False, False, False),
-        ("insanely_fast_whisper", False, False, False)
+        (WhisperImpl.WHISPER.value, False, False, False),
+        (WhisperImpl.FASTER_WHISPER.value, False, False, False),
+        (WhisperImpl.INSANELY_FAST_WHISPER.value, False, False, False)
     ]
 )
 def test_transcribe(
