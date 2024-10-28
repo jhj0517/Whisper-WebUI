@@ -15,7 +15,7 @@ from dataclasses import astuple
 from modules.uvr.music_separator import MusicSeparator
 from modules.utils.paths import (WHISPER_MODELS_DIR, DIARIZATION_MODELS_DIR, OUTPUT_DIR, DEFAULT_PARAMETERS_CONFIG_PATH,
                                  UVR_MODELS_DIR)
-from modules.utils.constants import AUTOMATIC_DETECTION, GRADIO_NONE_VALUES
+from modules.utils.constants import AUTOMATIC_DETECTION
 from modules.utils.subtitle_manager import get_srt, get_vtt, get_txt, write_file, safe_filename
 from modules.utils.youtube_manager import get_ytdata, get_ytaudio
 from modules.utils.files_manager import get_media_files, format_gradio_files, load_yaml, save_yaml
@@ -127,10 +127,6 @@ class WhisperBase(ABC):
                 self.music_separator.offload()
 
         if vad_params.vad_filter:
-            # Explicit value set for float('inf') from gr.Number()
-            if vad_params.max_speech_duration_s is None or vad_params.max_speech_duration_s >= 9999:
-                vad_params.max_speech_duration_s = float('inf')
-
             vad_options = VadOptions(
                 threshold=vad_params.threshold,
                 min_speech_duration_ms=vad_params.min_speech_duration_ms,
@@ -535,8 +531,8 @@ class WhisperBase(ABC):
             params.whisper.hallucination_silence_threshold = None
         if params.whisper.language_detection_threshold == 0:
             params.whisper.language_detection_threshold = None
-        if params.whisper.max_speech_duration_s >= 9999:
-            params.whisper.max_speech_duration_s = float('inf')
+        if params.vad.max_speech_duration_s >= 9999:
+            params.vad.max_speech_duration_s = float('inf')
         return params
 
     @staticmethod
