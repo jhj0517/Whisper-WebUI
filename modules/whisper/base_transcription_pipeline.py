@@ -15,7 +15,7 @@ from dataclasses import astuple
 from modules.uvr.music_separator import MusicSeparator
 from modules.utils.paths import (WHISPER_MODELS_DIR, DIARIZATION_MODELS_DIR, OUTPUT_DIR, DEFAULT_PARAMETERS_CONFIG_PATH,
                                  UVR_MODELS_DIR)
-from modules.utils.constants import AUTOMATIC_DETECTION
+from modules.utils.constants import *
 from modules.utils.subtitle_manager import get_srt, get_vtt, get_txt, write_file, safe_filename
 from modules.utils.youtube_manager import get_ytdata, get_ytaudio
 from modules.utils.files_manager import get_media_files, format_gradio_files, load_yaml, save_yaml
@@ -519,19 +519,19 @@ class BaseTranscriptionPipeline(ABC):
             language_code_dict = {value: key for key, value in whisper.tokenizer.LANGUAGES.items()}
             params.whisper.lang = language_code_dict[params.lang]
 
-        if not params.whisper.initial_prompt:
+        if params.whisper.initial_prompt == GRADIO_NONE_STR:
             params.whisper.initial_prompt = None
-        if not params.whisper.prefix:
+        if params.whisper.prefix == GRADIO_NONE_STR:
             params.whisper.prefix = None
-        if not params.whisper.hotwords:
+        if params.whisper.hotwords == GRADIO_NONE_STR:
             params.whisper.hotwords = None
-        if params.whisper.max_new_tokens == 0:
+        if params.whisper.max_new_tokens == GRADIO_NONE_NUMBER_MIN:
             params.whisper.max_new_tokens = None
-        if params.whisper.hallucination_silence_threshold == 0:
+        if params.whisper.hallucination_silence_threshold == GRADIO_NONE_NUMBER_MIN:
             params.whisper.hallucination_silence_threshold = None
-        if params.whisper.language_detection_threshold == 0:
+        if params.whisper.language_detection_threshold == GRADIO_NONE_NUMBER_MIN:
             params.whisper.language_detection_threshold = None
-        if params.vad.max_speech_duration_s >= 9999:
+        if params.vad.max_speech_duration_s == GRADIO_NONE_NUMBER_MAX:
             params.vad.max_speech_duration_s = float('inf')
         return params
 
@@ -555,7 +555,7 @@ class BaseTranscriptionPipeline(ABC):
             cached_yaml["whisper"]["lang"] = AUTOMATIC_DETECTION.unwrap()
 
         if cached_yaml["vad"].get("max_speech_duration_s", float('inf')) == float('inf'):
-            cached_yaml["vad"]["max_speech_duration_s"] = 9999
+            cached_yaml["vad"]["max_speech_duration_s"] = GRADIO_NONE_NUMBER_MAX
 
         if cached_yaml is not None and cached_yaml:
             save_yaml(cached_yaml, DEFAULT_PARAMETERS_CONFIG_PATH)
