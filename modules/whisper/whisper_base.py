@@ -103,11 +103,6 @@ class WhisperBase(ABC):
         params = TranscriptionPipelineParams.from_list(list(pipeline_params))
         bgm_params, vad_params, whisper_params, diarization_params = params.bgm_separation, params.vad, params.whisper, params.diarization
 
-        self.cache_parameters(
-            params=params,
-            add_timestamp=add_timestamp
-        )
-
         if whisper_params.lang is None:
             pass
         elif whisper_params.lang == AUTOMATIC_DETECTION:
@@ -176,6 +171,11 @@ class WhisperBase(ABC):
                 device=diarization_params.device
             )
             elapsed_time += elapsed_time_diarization
+
+        self.cache_parameters(
+            params=params,
+            add_timestamp=add_timestamp
+        )
         return result, elapsed_time
 
     def transcribe_file(self,
@@ -521,11 +521,17 @@ class WhisperBase(ABC):
         add_timestamp: bool
     ):
         """cache parameters to the yaml file"""
+
         cached_params = load_yaml(DEFAULT_PARAMETERS_CONFIG_PATH)
         param_to_cache = params.to_dict()
 
+        print(param_to_cache)
+
         cached_yaml = {**cached_params, **param_to_cache}
         cached_yaml["whisper"]["add_timestamp"] = add_timestamp
+
+        if cached_yaml["whisper"].get("lang", None) is None:
+            cached_yaml["whisper"]["lang"] = AUTOMATIC_DETECTION
 
         save_yaml(cached_yaml, DEFAULT_PARAMETERS_CONFIG_PATH)
 
