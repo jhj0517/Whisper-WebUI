@@ -135,11 +135,16 @@ class BaseTranscriptionPipeline(ABC):
                 speech_pad_ms=vad_params.speech_pad_ms
             )
 
-            audio, speech_chunks = self.vad.run(
+            vad_processed, speech_chunks = self.vad.run(
                 audio=audio,
                 vad_parameters=vad_options,
                 progress=progress
             )
+
+            if vad_processed.size > 0:
+                audio = vad_processed
+            else:
+                vad_params.vad_filter = False
 
         result, elapsed_time = self.transcribe(
             audio,
@@ -150,7 +155,7 @@ class BaseTranscriptionPipeline(ABC):
         if vad_params.vad_filter:
             result = self.vad.restore_speech_timestamps(
                 segments=result,
-                speech_chunks=vad_params.speech_chunks,
+                speech_chunks=speech_chunks,
             )
 
         if diarization_params.is_diarize:
