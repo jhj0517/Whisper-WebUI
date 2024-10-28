@@ -87,10 +87,10 @@ class App:
 
         dd_model.change(fn=self.on_change_models, inputs=[dd_model], outputs=[cb_translate])
 
-        inputs = [dd_model, dd_lang, cb_translate] + whisper_inputs + vad_inputs + diarization_inputs + uvr_inputs
+        pipeline_inputs = [dd_model, dd_lang, cb_translate] + whisper_inputs + vad_inputs + diarization_inputs + uvr_inputs
 
         return (
-            inputs,
+            pipeline_inputs,
             dd_file_format,
             cb_timestamp
         )
