@@ -8,11 +8,11 @@ import os
 from argparse import Namespace
 
 from modules.utils.paths import (WHISPER_MODELS_DIR, DIARIZATION_MODELS_DIR, OUTPUT_DIR, UVR_MODELS_DIR)
-from modules.whisper.whisper_base import WhisperBase
+from modules.whisper.base_transcription_pipeline import BaseTranscriptionPipeline
 from modules.whisper.data_classes import *
 
 
-class WhisperInference(WhisperBase):
+class WhisperInference(BaseTranscriptionPipeline):
     def __init__(self,
                  model_dir: str = WHISPER_MODELS_DIR,
                  diarization_model_dir: str = DIARIZATION_MODELS_DIR,

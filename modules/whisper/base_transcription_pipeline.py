@@ -24,7 +24,7 @@ from modules.diarize.diarizer import Diarizer
 from modules.vad.silero_vad import SileroVAD
 
 
-class WhisperBase(ABC):
+class BaseTranscriptionPipeline(ABC):
     def __init__(self,
                  model_dir: str = WHISPER_MODELS_DIR,
                  diarization_model_dir: str = DIARIZATION_MODELS_DIR,
@@ -464,7 +464,7 @@ class WhisperBase(ABC):
         if torch.cuda.is_available():
             return "cuda"
         elif torch.backends.mps.is_available():
-            if not WhisperBase.is_sparse_api_supported():
+            if not BaseTranscriptionPipeline.is_sparse_api_supported():
                 # Device `SparseMPS` is not supported for now. See : https://github.com/pytorch/pytorch/issues/87886
                 return "cpu"
             return "mps"

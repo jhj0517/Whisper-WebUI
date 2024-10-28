@@ -6,7 +6,7 @@ from modules.utils.paths import (FASTER_WHISPER_MODELS_DIR, DIARIZATION_MODELS_D
 from modules.whisper.faster_whisper_inference import FasterWhisperInference
 from modules.whisper.whisper_Inference import WhisperInference
 from modules.whisper.insanely_fast_whisper_inference import InsanelyFastWhisperInference
-from modules.whisper.whisper_base import WhisperBase
+from modules.whisper.base_transcription_pipeline import BaseTranscriptionPipeline
 from modules.whisper.data_classes import *
 
 
@@ -20,7 +20,7 @@ class WhisperFactory:
         diarization_model_dir: str = DIARIZATION_MODELS_DIR,
         uvr_model_dir: str = UVR_MODELS_DIR,
         output_dir: str = OUTPUT_DIR,
-    ) -> "WhisperBase":
+    ) -> "BaseTranscriptionPipeline":
         """
         Create a whisper inference class based on the provided whisper_type.
 
@@ -46,7 +46,7 @@ class WhisperFactory:
 
         Returns
         -------
-        WhisperBase
+        BaseTranscriptionPipeline
             An instance of the appropriate whisper inference class based on the whisper_type.
         """
         # Temporal fix of the bug : https://github.com/jhj0517/Whisper-WebUI/issues/144
