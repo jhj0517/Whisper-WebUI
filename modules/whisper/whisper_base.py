@@ -102,7 +102,7 @@ class WhisperBase(ABC):
             elapsed time for running
         """
         params = TranscriptionPipelineParams.from_list(list(pipeline_params))
-        params = self.handle_gradio_values(params)
+        params = self.validate_gradio_values(params)
         bgm_params, vad_params, whisper_params, diarization_params = params.bgm_separation, params.vad, params.whisper, params.diarization
 
         if bgm_params.is_separate_bgm:
@@ -506,9 +506,9 @@ class WhisperBase(ABC):
                 os.remove(file_path)
 
     @staticmethod
-    def handle_gradio_values(params: TranscriptionPipelineParams):
+    def validate_gradio_values(params: TranscriptionPipelineParams):
         """
-        Handle gradio specific values that can't be displayed as None in the UI.
+        Validate gradio specific values that can't be displayed as None in the UI.
         Related issue : https://github.com/gradio-app/gradio/issues/8723
         """
         if params.whisper.lang is None:
