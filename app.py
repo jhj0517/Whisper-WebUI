@@ -7,11 +7,8 @@ import yaml
 from modules.utils.paths import (FASTER_WHISPER_MODELS_DIR, DIARIZATION_MODELS_DIR, OUTPUT_DIR, WHISPER_MODELS_DIR,
                                  INSANELY_FAST_WHISPER_MODELS_DIR, NLLB_MODELS_DIR, DEFAULT_PARAMETERS_CONFIG_PATH,
                                  UVR_MODELS_DIR, I18N_YAML_PATH)
-from modules.utils.constants import AUTOMATIC_DETECTION
 from modules.utils.files_manager import load_yaml
 from modules.whisper.whisper_factory import WhisperFactory
-from modules.whisper.faster_whisper_inference import FasterWhisperInference
-from modules.whisper.insanely_fast_whisper_inference import InsanelyFastWhisperInference
 from modules.translation.nllb_inference import NLLBInference
 from modules.ui.htmls import *
 from modules.utils.cli_manager import str2bool
@@ -290,7 +287,6 @@ class App:
 
         # Launch the app with optional gradio settings
         args = self.args
-
         self.app.queue(
             api_open=args.api_open
         ).launch(
