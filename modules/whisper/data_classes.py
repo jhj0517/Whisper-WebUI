@@ -108,7 +108,8 @@ class DiarizationParams(BaseParams):
     @classmethod
     def to_gradio_inputs(cls,
                          defaults: Optional[Dict] = None,
-                         available_devices: Optional[List] = None) -> List[gr.components.base.FormComponent]:
+                         available_devices: Optional[List] = None,
+                         device: Optional[str] = None) -> List[gr.components.base.FormComponent]:
         return [
             gr.Checkbox(
                 label=_("Enable Diarization"),
@@ -122,7 +123,7 @@ class DiarizationParams(BaseParams):
             gr.Dropdown(
                 label=_("Device"),
                 choices=["cpu", "cuda"] if available_devices is None else available_devices,
-                value=defaults.get("device", cls.__fields__["device"].default),
+                value=defaults.get("device", device),
             )
         ]
 
@@ -153,6 +154,7 @@ class BGMSeparationParams(BaseParams):
     def to_gradio_input(cls,
                         defaults: Optional[Dict] = None,
                         available_devices: Optional[List] = None,
+                        device: Optional[str] = None,
                         available_models: Optional[List] = None) -> List[gr.components.base.FormComponent]:
         return [
             gr.Checkbox(
@@ -164,7 +166,7 @@ class BGMSeparationParams(BaseParams):
             gr.Dropdown(
                 label=_("Device"),
                 choices=["cpu", "cuda"] if available_devices is None else available_devices,
-                value=defaults.get("device", cls.__fields__["device"].default),
+                value=defaults.get("device", device),
             ),
             gr.Dropdown(
                 label=_("Model"),
