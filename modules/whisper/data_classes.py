@@ -113,7 +113,6 @@ class DiarizationParams(BaseParams):
             gr.Checkbox(
                 label=_("Enable Diarization"),
                 value=defaults.get("is_diarize", cls.__fields__["is_diarize"].default),
-                info=_("Enable speaker diarization")
             ),
             gr.Textbox(
                 label=_("HuggingFace Token"),
