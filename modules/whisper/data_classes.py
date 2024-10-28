@@ -1,7 +1,7 @@
 import gradio as gr
 import torch
 from typing import Optional, Dict, List
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, Field, field_validator, ConfigDict
 from gradio_i18n import Translate, gettext as _
 from enum import Enum
 from copy import deepcopy
@@ -17,6 +17,8 @@ class WhisperImpl(Enum):
 
 
 class BaseParams(BaseModel):
+    model_config = ConfigDict(protected_namespaces=())
+
     def to_dict(self) -> Dict:
         return self.model_dump()
 
@@ -231,7 +233,6 @@ class WhisperParams(BaseParams):
         gt=0,
         description="Threshold for gzip compression ratio"
     )
-    batch_size: int = Field(default=24, gt=0, description="Batch size for processing")
     length_penalty: float = Field(default=1.0, gt=0, description="Exponential length penalty")
     repetition_penalty: float = Field(default=1.0, gt=0, description="Penalty for repeated tokens")
     no_repeat_ngram_size: int = Field(default=0, ge=0, description="Size of n-grams to prevent repetition")
@@ -271,6 +272,7 @@ class WhisperParams(BaseParams):
         gt=0,
         description="Number of segments for language detection"
     )
+    batch_size: int = Field(default=24, gt=0, description="Batch size for processing")
 
     @field_validator('lang')
     def validate_lang(cls, v):
@@ -375,108 +377,116 @@ class WhisperParams(BaseParams):
                 info="Threshold for gzip compression ratio"
             )
         ]
+
+        faster_whisper_inputs = [
+            gr.Number(
+                label="Length Penalty",
+                value=defaults.get("length_penalty", cls.__fields__["length_penalty"].default),
+                info="Exponential length penalty",
+            ),
+            gr.Number(
+                label="Repetition Penalty",
+                value=defaults.get("repetition_penalty", cls.__fields__["repetition_penalty"].default),
+                info="Penalty for repeated tokens"
+            ),
+            gr.Number(
+                label="No Repeat N-gram Size",
+                value=defaults.get("no_repeat_ngram_size", cls.__fields__["no_repeat_ngram_size"].default),
+                precision=0,
+                info="Size of n-grams to prevent repetition"
+            ),
+            gr.Textbox(
+                label="Prefix",
+                value=defaults.get("prefix", cls.__fields__["prefix"].default),
+                info="Prefix text for first window"
+            ),
+            gr.Checkbox(
+                label="Suppress Blank",
+                value=defaults.get("suppress_blank", cls.__fields__["suppress_blank"].default),
+                info="Suppress blank outputs at start of sampling"
+            ),
+            gr.Textbox(
+                label="Suppress Tokens",
+                value=defaults.get("suppress_tokens", cls.__fields__["suppress_tokens"].default),
+                info="Token IDs to suppress"
+            ),
+            gr.Number(
+                label="Max Initial Timestamp",
+                value=defaults.get("max_initial_timestamp", cls.__fields__["max_initial_timestamp"].default),
+                info="Maximum initial timestamp"
+            ),
+            gr.Checkbox(
+                label="Word Timestamps",
+                value=defaults.get("word_timestamps", cls.__fields__["word_timestamps"].default),
+                info="Extract word-level timestamps"
+            ),
+            gr.Textbox(
+                label="Prepend Punctuations",
+                value=defaults.get("prepend_punctuations", cls.__fields__["prepend_punctuations"].default),
+                info="Punctuations to merge with next word"
+            ),
+            gr.Textbox(
+                label="Append Punctuations",
+                value=defaults.get("append_punctuations", cls.__fields__["append_punctuations"].default),
+                info="Punctuations to merge with previous word"
+            ),
+            gr.Number(
+                label="Max New Tokens",
+                value=defaults.get("max_new_tokens", cls.__fields__["max_new_tokens"].default),
+                precision=0,
+                info="Maximum number of new tokens per chunk"
+            ),
+            gr.Number(
+                label="Chunk Length (s)",
+                value=defaults.get("chunk_length", cls.__fields__["chunk_length"].default),
+                precision=0,
+                info="Length of audio segments in seconds"
+            ),
+            gr.Number(
+                label="Hallucination Silence Threshold (sec)",
+                value=defaults.get("hallucination_silence_threshold",
+                                   cls.__fields__["hallucination_silence_threshold"].default),
+                info="Threshold for skipping silent periods in hallucination detection"
+            ),
+            gr.Textbox(
+                label="Hotwords",
+                value=defaults.get("hotwords", cls.__fields__["hotwords"].default),
+                info="Hotwords/hint phrases for the model"
+            ),
+            gr.Number(
+                label="Language Detection Threshold",
+                value=defaults.get("language_detection_threshold",
+                                   cls.__fields__["language_detection_threshold"].default),
+                info="Threshold for language detection probability"
+            ),
+            gr.Number(
+                label="Language Detection Segments",
+                value=defaults.get("language_detection_segments",
+                                   cls.__fields__["language_detection_segments"].default),
+                precision=0,
+                info="Number of segments for language detection"
+            )
+        ]
+
+        insanely_fast_whisper_inputs = [
+            gr.Number(
+                label="Batch Size",
+                value=defaults.get("batch_size", cls.__fields__["batch_size"].default),
+                precision=0,
+                info="Batch size for processing"
+            )
+        ]
+
         if whisper_type == WhisperImpl.FASTER_WHISPER:
-            inputs += [
-                gr.Number(
-                    label="Length Penalty",
-                    value=defaults.get("length_penalty", cls.__fields__["length_penalty"].default),
-                    info="Exponential length penalty",
-                    visible=whisper_type == "faster_whisper"
-                ),
-                gr.Number(
-                    label="Repetition Penalty",
-                    value=defaults.get("repetition_penalty", cls.__fields__["repetition_penalty"].default),
-                    info="Penalty for repeated tokens"
-                ),
-                gr.Number(
-                    label="No Repeat N-gram Size",
-                    value=defaults.get("no_repeat_ngram_size", cls.__fields__["no_repeat_ngram_size"].default),
-                    precision=0,
-                    info="Size of n-grams to prevent repetition"
-                ),
-                gr.Textbox(
-                    label="Prefix",
-                    value=defaults.get("prefix", cls.__fields__["prefix"].default),
-                    info="Prefix text for first window"
-                ),
-                gr.Checkbox(
-                    label="Suppress Blank",
-                    value=defaults.get("suppress_blank", cls.__fields__["suppress_blank"].default),
-                    info="Suppress blank outputs at start of sampling"
-                ),
-                gr.Textbox(
-                    label="Suppress Tokens",
-                    value=defaults.get("suppress_tokens", cls.__fields__["suppress_tokens"].default),
-                    info="Token IDs to suppress"
-                ),
-                gr.Number(
-                    label="Max Initial Timestamp",
-                    value=defaults.get("max_initial_timestamp", cls.__fields__["max_initial_timestamp"].default),
-                    info="Maximum initial timestamp"
-                ),
-                gr.Checkbox(
-                    label="Word Timestamps",
-                    value=defaults.get("word_timestamps", cls.__fields__["word_timestamps"].default),
-                    info="Extract word-level timestamps"
-                ),
-                gr.Textbox(
-                    label="Prepend Punctuations",
-                    value=defaults.get("prepend_punctuations", cls.__fields__["prepend_punctuations"].default),
-                    info="Punctuations to merge with next word"
-                ),
-                gr.Textbox(
-                    label="Append Punctuations",
-                    value=defaults.get("append_punctuations", cls.__fields__["append_punctuations"].default),
-                    info="Punctuations to merge with previous word"
-                ),
-                gr.Number(
-                    label="Max New Tokens",
-                    value=defaults.get("max_new_tokens", cls.__fields__["max_new_tokens"].default),
-                    precision=0,
-                    info="Maximum number of new tokens per chunk"
-                ),
-                gr.Number(
-                    label="Chunk Length (s)",
-                    value=defaults.get("chunk_length", cls.__fields__["chunk_length"].default),
-                    precision=0,
-                    info="Length of audio segments in seconds"
-                ),
-                gr.Number(
-                    label="Hallucination Silence Threshold (sec)",
-                    value=defaults.get("hallucination_silence_threshold",
-                                       cls.__fields__["hallucination_silence_threshold"].default),
-                    info="Threshold for skipping silent periods in hallucination detection"
-                ),
-                gr.Textbox(
-                    label="Hotwords",
-                    value=defaults.get("hotwords", cls.__fields__["hotwords"].default),
-                    info="Hotwords/hint phrases for the model"
-                ),
-                gr.Number(
-                    label="Language Detection Threshold",
-                    value=defaults.get("language_detection_threshold",
-                                       cls.__fields__["language_detection_threshold"].default),
-                    info="Threshold for language detection probability"
-                ),
-                gr.Number(
-                    label="Language Detection Segments",
-                    value=defaults.get("language_detection_segments",
-                                       cls.__fields__["language_detection_segments"].default),
-                    precision=0,
-                    info="Number of segments for language detection"
-                )
-            ]
+            for input_component in faster_whisper_inputs:
+                input_component.visible = True
 
         if whisper_type == WhisperImpl.INSANELY_FAST_WHISPER:
-            inputs += [
-                gr.Number(
-                    label="Batch Size",
-                    value=defaults.get("batch_size", cls.__fields__["batch_size"].default),
-                    precision=0,
-                    info="Batch size for processing",
-                    visible=whisper_type == "insanely_fast_whisper"
-                )
-            ]
+            for input_component in insanely_fast_whisper_inputs:
+                input_component.visible = True
+
+        inputs += faster_whisper_inputs + insanely_fast_whisper_inputs
+
         return inputs
 
 
