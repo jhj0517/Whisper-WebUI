@@ -11,7 +11,7 @@ git+https://github.com/jhj0517/jhj0517-whisper.git
 faster-whisper==1.0.3
 transformers
 gradio
-git+https://github.com/jhj0517/gradio-i18n.git@fix/encoding-error
+gradio-i18n
 pytubefix
 ruamel.yaml==0.18.6
 pyannote.audio==3.3.1
