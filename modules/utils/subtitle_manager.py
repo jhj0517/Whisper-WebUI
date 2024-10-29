@@ -42,7 +42,7 @@ def get_vtt(segments):
     if segments and isinstance(segments[0], Segment):
         segments = [seg.dict() for seg in segments]
 
-    output = "WebVTT\n\n"
+    output = "WEBVTT\n\n"
     for i, segment in enumerate(segments):
         output += f"{timeformat_vtt(segment['start'])} --> {timeformat_vtt(segment['end'])}\n"
         if segment['text'].startswith(' '):
@@ -87,7 +87,7 @@ def parse_srt(file_path):
 
 
 def parse_vtt(file_path):
-    """Reads WebVTT file and returns as dict"""
+    """Reads WEBVTT file and returns as dict"""
     with open(file_path, 'r', encoding='utf-8') as file:
         webvtt_data = file.read()
 
@@ -95,7 +95,7 @@ def parse_vtt(file_path):
     blocks = webvtt_data.split('\n\n')
 
     for block in blocks:
-        if block.strip() != '' and not block.strip().startswith("WebVTT"):
+        if block.strip() != '' and not block.strip().startswith("WEBVTT"):
             lines = block.strip().split('\n')
             timestamp = lines[0]
             sentence = ' '.join(lines[1:])
@@ -118,7 +118,7 @@ def get_serialized_srt(dicts):
 
 
 def get_serialized_vtt(dicts):
-    output = "WebVTT\n\n"
+    output = "WEBVTT\n\n"
     for dic in dicts:
         output += f'{dic["timestamp"]}\n'
         output += f'{dic["sentence"]}\n\n'
