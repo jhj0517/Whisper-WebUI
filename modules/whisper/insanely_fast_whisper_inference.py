@@ -40,7 +40,7 @@ class InsanelyFastWhisperInference(BaseTranscriptionPipeline):
                    audio: Union[str, np.ndarray, torch.Tensor],
                    progress: gr.Progress = gr.Progress(),
                    *whisper_params,
-                   ) -> Tuple[List[dict], float]:
+                   ) -> Tuple[List[Segment], float]:
         """
         transcribe method for faster-whisper.
 
@@ -55,8 +55,8 @@ class InsanelyFastWhisperInference(BaseTranscriptionPipeline):
 
         Returns
         ----------
-        segments_result: List[dict]
-            list of dicts that includes start, end timestamps and transcribed text
+        segments_result: List[Segment]
+            list of Segment that includes start, end timestamps and transcribed text
         elapsed_time: float
             elapsed time for transcription
         """
@@ -95,9 +95,17 @@ class InsanelyFastWhisperInference(BaseTranscriptionPipeline):
                 generate_kwargs=kwargs
             )
 
-        segments_result = self.format_result(
-            transcribed_result=segments,
-        )
+        segments_result = []
+        for item in segments["chunks"]:
+            start, end = item["timestamp"][0], item["timestamp"][1]
+            if end is None:
+                end = start
+            segments_result.append(Segment(
+                text=item["text"],
+                start=start,
+                end=end
+            ))
+
         elapsed_time = time.time() - start_time
         return segments_result, elapsed_time
 

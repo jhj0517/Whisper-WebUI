@@ -1,5 +1,7 @@
 import re
 
+from modules.whisper.data_classes import Segment
+
 
 def timeformat_srt(time):
     hours = time // 3600
@@ -23,6 +25,9 @@ def write_file(subtitle, output_file):
 
 
 def get_srt(segments):
+    if segments and isinstance(segments[0], Segment):
+        segments = [seg.dict() for seg in segments]
+
     output = ""
     for i, segment in enumerate(segments):
         output += f"{i + 1}\n"
@@ -34,6 +39,9 @@ def get_srt(segments):
 
 
 def get_vtt(segments):
+    if segments and isinstance(segments[0], Segment):
+        segments = [seg.dict() for seg in segments]
+
     output = "WEBVTT\n\n"
     for i, segment in enumerate(segments):
         output += f"{timeformat_vtt(segment['start'])} --> {timeformat_vtt(segment['end'])}\n"
@@ -44,6 +52,9 @@ def get_vtt(segments):
 
 
 def get_txt(segments):
+    if segments and isinstance(segments[0], Segment):
+        segments = [seg.dict() for seg in segments]
+
     output = ""
     for i, segment in enumerate(segments):
         if segment['text'].startswith(' '):
