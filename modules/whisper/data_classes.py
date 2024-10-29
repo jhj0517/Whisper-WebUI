@@ -297,12 +297,12 @@ class WhisperParams(BaseParams):
     def to_gradio_inputs(cls,
                          defaults: Optional[Dict] = None,
                          only_advanced: Optional[bool] = True,
-                         whisper_type: Optional[WhisperImpl] = None,
+                         whisper_type: Optional[str] = None,
                          available_models: Optional[List] = None,
                          available_langs: Optional[List] = None,
                          available_compute_types: Optional[List] = None,
                          compute_type: Optional[str] = None):
-        whisper_type = WhisperImpl.FASTER_WHISPER if whisper_type is None else whisper_type
+        whisper_type = WhisperImpl.FASTER_WHISPER.value if whisper_type is None else whisper_type.strip().lower()
 
         inputs = []
         if not only_advanced:
@@ -491,13 +491,13 @@ class WhisperParams(BaseParams):
             )
         ]
 
-        if whisper_type == WhisperImpl.FASTER_WHISPER:
+        if whisper_type != WhisperImpl.FASTER_WHISPER.value:
             for input_component in faster_whisper_inputs:
-                input_component.visible = True
+                input_component.visible = False
 
-        if whisper_type == WhisperImpl.INSANELY_FAST_WHISPER:
+        if whisper_type != WhisperImpl.INSANELY_FAST_WHISPER.value:
             for input_component in insanely_fast_whisper_inputs:
-                input_component.visible = True
+                input_component.visible = False
 
         inputs += faster_whisper_inputs + insanely_fast_whisper_inputs
 
