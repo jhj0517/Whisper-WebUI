@@ -16,6 +16,15 @@ class WhisperImpl(Enum):
     INSANELY_FAST_WHISPER = "insanely_fast_whisper"
 
 
+class Segment(BaseModel):
+    text: Optional[str] = Field(default=None,
+                                description="Transcription text of the segment")
+    start: Optional[float] = Field(default=None,
+                                   description="Start time of the segment")
+    end: Optional[float] = Field(default=None,
+                                 description="End time of the segment")
+
+
 class BaseParams(BaseModel):
     model_config = ConfigDict(protected_namespaces=())
 
