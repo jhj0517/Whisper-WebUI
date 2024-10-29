@@ -36,7 +36,6 @@ def get_srt(segments):
 def get_vtt(segments):
     output = "WebVTT\n\n"
     for i, segment in enumerate(segments):
-        output += f"{i + 1}\n"
         output += f"{timeformat_vtt(segment['start'])} --> {timeformat_vtt(segment['end'])}\n"
         if segment['text'].startswith(' '):
             segment['text'] = segment['text'][1:]
@@ -87,12 +86,10 @@ def parse_vtt(file_path):
     for block in blocks:
         if block.strip() != '' and not block.strip().startswith("WebVTT"):
             lines = block.strip().split('\n')
-            index = lines[0]
             timestamp = lines[1]
             sentence = ' '.join(lines[2:])
 
             data.append({
-                "index": index,
                 "timestamp": timestamp,
                 "sentence": sentence
             })
