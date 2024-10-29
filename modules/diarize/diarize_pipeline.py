@@ -44,6 +44,7 @@ class DiarizationPipeline:
 def assign_word_speakers(diarize_df, transcript_result, fill_nearest=False):
     transcript_segments = transcript_result["segments"]
     for seg in transcript_segments:
+        seg = seg.dict()
         # assign speaker to segment (if any)
         diarize_df['intersection'] = np.minimum(diarize_df['end'], seg['end']) - np.maximum(diarize_df['start'],
                                                                                             seg['start'])

@@ -40,7 +40,7 @@ class FasterWhisperInference(BaseTranscriptionPipeline):
                    audio: Union[str, BinaryIO, np.ndarray],
                    progress: gr.Progress = gr.Progress(),
                    *whisper_params,
-                   ) -> Tuple[List[dict], float]:
+                   ) -> Tuple[List[Segment], float]:
         """
         transcribe method for faster-whisper.
 
@@ -55,8 +55,8 @@ class FasterWhisperInference(BaseTranscriptionPipeline):
 
         Returns
         ----------
-        segments_result: List[dict]
-            list of dicts that includes start, end timestamps and transcribed text
+        segments_result: List[Segment]
+            list of Segment that includes start, end timestamps and transcribed text
         elapsed_time: float
             elapsed time for transcription
         """
@@ -102,11 +102,11 @@ class FasterWhisperInference(BaseTranscriptionPipeline):
         segments_result = []
         for segment in segments:
             progress(segment.start / info.duration, desc="Transcribing..")
-            segments_result.append({
-                "start": segment.start,
-                "end": segment.end,
-                "text": segment.text
-            })
+            segments_result.append(Segment(
+                start=segment.start,
+                end=segment.end,
+                text=segment.text
+            ))
 
         elapsed_time = time.time() - start_time
         return segments_result, elapsed_time
