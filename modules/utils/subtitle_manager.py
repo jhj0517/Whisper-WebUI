@@ -345,7 +345,7 @@ def generate_file(
 
     if add_timestamp:
         timestamp = datetime.now().strftime("%m%d%H%M%S")
-        output_file_name += timestamp
+        output_file_name += f"-{timestamp}"
 
     file_path = os.path.join(output_dir, f"{output_file_name}.{output_format}")
     file_writer = get_writer(output_format=output_format, output_dir=output_dir)
