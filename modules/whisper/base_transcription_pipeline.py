@@ -1,6 +1,4 @@
 import os
-import torch
-import ast
 import whisper
 import ctranslate2
 import gradio as gr
@@ -10,7 +8,6 @@ from typing import BinaryIO, Union, Tuple, List
 import numpy as np
 from datetime import datetime
 from faster_whisper.vad import VadOptions
-from dataclasses import astuple
 
 from modules.uvr.music_separator import MusicSeparator
 from modules.utils.paths import (WHISPER_MODELS_DIR, DIARIZATION_MODELS_DIR, OUTPUT_DIR, DEFAULT_PARAMETERS_CONFIG_PATH,
