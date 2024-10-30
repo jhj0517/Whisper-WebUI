@@ -178,7 +178,7 @@ class BaseTranscriptionPipeline(ABC):
                         file_format: str = "SRT",
                         add_timestamp: bool = True,
                         progress=gr.Progress(),
-                        *params,
+                        *pipeline_params,
                         ) -> list:
         """
         Write subtitle file from Files
@@ -196,7 +196,7 @@ class BaseTranscriptionPipeline(ABC):
             Boolean value from gr.Checkbox() that determines whether to add a timestamp at the end of the subtitle filename.
         progress: gr.Progress
             Indicator to show progress directly in gradio.
-        *params: tuple
+        *pipeline_params: tuple
             Parameters for the transcription pipeline. This will be dealt with "TranscriptionPipelineParams" data class
 
         Returns
@@ -207,6 +207,11 @@ class BaseTranscriptionPipeline(ABC):
             Output file path to return to gr.Files()
         """
         try:
+            params = TranscriptionPipelineParams.from_list(list(pipeline_params))
+            writer_options = {
+                "highlight_words": True if params.whisper.word_timestamps else False
+            }
+
             if input_folder_path:
                 files = get_media_files(input_folder_path)
             if isinstance(files, str):
@@ -220,7 +225,7 @@ class BaseTranscriptionPipeline(ABC):
                     file,
                     progress,
                     add_timestamp,
-                    *params,
+                    *pipeline_params,
                 )
 
                 file_name, file_ext = os.path.splitext(os.path.basename(file))
@@ -229,7 +234,8 @@ class BaseTranscriptionPipeline(ABC):
                     output_file_name=file_name,
                     output_format=file_format,
                     result=transcribed_segments,
-                    add_timestamp=add_timestamp
+                    add_timestamp=add_timestamp,
+                    **writer_options
                 )
                 files_info[file_name] = {"subtitle": read_file(file_path), "time_for_task": time_for_task, "path": file_path}
 
@@ -256,7 +262,7 @@ class BaseTranscriptionPipeline(ABC):
                        file_format: str = "SRT",
                        add_timestamp: bool = True,
                        progress=gr.Progress(),
-                       *whisper_params,
+                       *pipeline_params,
                        ) -> list:
         """
         Write subtitle file from microphone
@@ -271,7 +277,7 @@ class BaseTranscriptionPipeline(ABC):
             Boolean value from gr.Checkbox() that determines whether to add a timestamp at the end of the filename.
         progress: gr.Progress
             Indicator to show progress directly in gradio.
-        *whisper_params: tuple
+        *pipeline_params: tuple
             Parameters related with whisper. This will be dealt with "WhisperParameters" data class
 
         Returns
@@ -282,12 +288,17 @@ class BaseTranscriptionPipeline(ABC):
             Output file path to return to gr.Files()
         """
         try:
+            params = TranscriptionPipelineParams.from_list(list(pipeline_params))
+            writer_options = {
+                "highlight_words": True if params.whisper.word_timestamps else False
+            }
+
             progress(0, desc="Loading Audio..")
             transcribed_segments, time_for_task = self.run(
                 mic_audio,
                 progress,
                 add_timestamp,
-                *whisper_params,
+                *pipeline_params,
             )
             progress(1, desc="Completed!")
 
@@ -297,7 +308,8 @@ class BaseTranscriptionPipeline(ABC):
                 output_file_name=file_name,
                 output_format=file_format,
                 result=transcribed_segments,
-                add_timestamp=add_timestamp
+                add_timestamp=add_timestamp,
+                **writer_options
             )
 
             result_str = f"Done in {self.format_time(time_for_task)}! Subtitle file is in the outputs folder.\n\n{subtitle}"
@@ -312,7 +324,7 @@ class BaseTranscriptionPipeline(ABC):
                            file_format: str = "SRT",
                            add_timestamp: bool = True,
                            progress=gr.Progress(),
-                           *whisper_params,
+                           *pipeline_params,
                            ) -> list:
         """
         Write subtitle file from Youtube
@@ -327,7 +339,7 @@ class BaseTranscriptionPipeline(ABC):
             Boolean value from gr.Checkbox() that determines whether to add a timestamp at the end of the filename.
         progress: gr.Progress
             Indicator to show progress directly in gradio.
-        *whisper_params: tuple
+        *pipeline_params: tuple
             Parameters related with whisper. This will be dealt with "WhisperParameters" data class
 
         Returns
@@ -338,6 +350,11 @@ class BaseTranscriptionPipeline(ABC):
             Output file path to return to gr.Files()
         """
         try:
+            params = TranscriptionPipelineParams.from_list(list(pipeline_params))
+            writer_options = {
+                "highlight_words": True if params.whisper.word_timestamps else False
+            }
+
             progress(0, desc="Loading Audio from Youtube..")
             yt = get_ytdata(youtube_link)
             audio = get_ytaudio(yt)
@@ -346,7 +363,7 @@ class BaseTranscriptionPipeline(ABC):
                 audio,
                 progress,
                 add_timestamp,
-                *whisper_params,
+                *pipeline_params,
             )
 
             progress(1, desc="Completed!")
@@ -357,7 +374,8 @@ class BaseTranscriptionPipeline(ABC):
                 output_file_name=file_name,
                 output_format=file_format,
                 result=transcribed_segments,
-                add_timestamp=add_timestamp
+                add_timestamp=add_timestamp,
+                **writer_options
             )
 
             result_str = f"Done in {self.format_time(time_for_task)}! Subtitle file is in the outputs folder.\n\n{subtitle}"
