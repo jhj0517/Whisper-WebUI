@@ -6,6 +6,7 @@ import re
 import sys
 import zlib
 from typing import Callable, List, Optional, TextIO, Union, Dict
+from datetime import datetime
 
 from modules.whisper.data_classes import Segment
 
@@ -52,10 +53,15 @@ class ResultWriter:
         self.output_dir = output_dir
 
     def __call__(
-        self, result: Union[dict, List[Segment]], output_file_name: str, options: Optional[dict] = None, **kwargs
+        self, result: Union[dict, List[Segment]], output_file_name: str, add_timestamp: bool = True,
+            options: Optional[dict] = None, **kwargs
     ):
         if isinstance(result, List) and result and isinstance(result[0], Segment):
-            result = [seg.dict() for seg in result]
+            result = {"segments": [seg.dict() for seg in result]}
+
+        if add_timestamp:
+            timestamp = datetime.now().strftime("%m%d%H%M%S")
+            output_file_name += timestamp
 
         output_path = os.path.join(
             self.output_dir, output_file_name + "." + self.extension
