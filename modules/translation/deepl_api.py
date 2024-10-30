@@ -147,7 +147,7 @@ class DeepLAPI:
             batch_size = self.max_text_batch_size
             for batch_start in range(0, len(segments), batch_size):
                 progress(batch_start / len(segments), desc="Translating..")
-                sentences_to_translate = segments[batch_start:batch_start+batch_size]
+                sentences_to_translate = segments[batch_start:batch_start+batch_size].text
                 translated_texts = self.request_deepl_translate(auth_key, sentences_to_translate, source_lang,
                                                                 target_lang, is_pro)
                 for i, translated_text in enumerate(translated_texts):
