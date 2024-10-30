@@ -73,7 +73,7 @@ class BaseTranscriptionPipeline(ABC):
             progress: gr.Progress = gr.Progress(),
             add_timestamp: bool = True,
             *pipeline_params,
-            ) -> Tuple[List[dict], float]:
+            ) -> Tuple[List[Segment], float]:
         """
         Run transcription with conditional pre-processing and post-processing.
         The VAD will be performed to remove noise from the audio input in pre-processing, if enabled.
@@ -93,8 +93,8 @@ class BaseTranscriptionPipeline(ABC):
 
         Returns
         ----------
-        segments_result: List[dict]
-            list of dicts that includes start, end timestamps and transcribed text
+        segments_result: List[Segment]
+            list of Segment that includes start, end timestamps and transcribed text
         elapsed_time: float
             elapsed time for running
         """
