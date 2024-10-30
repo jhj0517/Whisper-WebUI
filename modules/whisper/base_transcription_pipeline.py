@@ -89,7 +89,9 @@ class BaseTranscriptionPipeline(ABC):
         add_timestamp: bool
             Whether to add a timestamp at the end of the filename.
         *pipeline_params: tuple
-            Parameters for the transcription pipeline. This will be dealt with "TranscriptionPipelineParams" data class
+            Parameters for the transcription pipeline. This will be dealt with "TranscriptionPipelineParams" data class.
+            This must be provided as a List with * wildcard because of the integration with gradio.
+            See more info at : https://github.com/gradio-app/gradio/issues/2471
 
         Returns
         ----------
