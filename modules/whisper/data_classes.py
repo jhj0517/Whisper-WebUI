@@ -30,6 +30,22 @@ class Segment(BaseModel):
     no_speech_prob: Optional[float] = Field(default=None, description="Probability that it's not speech")
     words: Optional[List['Word']] = Field(default=None, description="List of words contained in the segment")
 
+    @classmethod
+    def from_faster_whisper(cls,
+                            seg: faster_whisper.transcribe.Segment):
+        return cls(
+            id=seg.id,
+            text=seg.text,
+            start=seg.start,
+            end=seg.end,
+            tokens=seg.tokens,
+            temperature=seg.temperature,
+            avg_logprob=seg.avg_logprob,
+            compression_ratio=seg.compression_ratio,
+            no_speech_prob=seg.no_speech_prob,
+            words=seg.words
+        )
+
 
 class Word(NamedTuple):
     start: Optional[float] = None
