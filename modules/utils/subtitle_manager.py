@@ -339,7 +339,8 @@ def get_writer(
 
 
 def generate_file(
-    output_format: str, output_dir: str, result: Union[dict, List[Segment]], output_file_name: str, add_timestamp: bool = True,
+    output_format: str, output_dir: str, result: Union[dict, List[Segment]], output_file_name: str,
+    add_timestamp: bool = True, **kwargs
 ) -> Tuple[str, str]:
     output_format = output_format.strip().lower().replace(".", "")
 
@@ -349,7 +350,7 @@ def generate_file(
 
     file_path = os.path.join(output_dir, f"{output_file_name}.{output_format}")
     file_writer = get_writer(output_format=output_format, output_dir=output_dir)
-    file_writer(result=result, output_file_name=output_file_name)
+    file_writer(result=result, output_file_name=output_file_name, **kwargs)
     content = read_file(file_path)
     return content, file_path
 
