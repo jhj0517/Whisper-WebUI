@@ -29,11 +29,23 @@ class Segment(BaseModel):
     avg_logprob: Optional[float] = Field(default=None, description="Average log probability of the tokens")
     compression_ratio: Optional[float] = Field(default=None, description="Compression ratio of the segment")
     no_speech_prob: Optional[float] = Field(default=None, description="Probability that it's not speech")
-    words: Optional[List['Word']] = Field(default=[], description="List of words contained in the segment")
+    words: Optional[List['Word']] = Field(default=None, description="List of words contained in the segment")
 
     @classmethod
     def from_faster_whisper(cls,
                             seg: faster_whisper.transcribe.Segment):
+        if seg.words is not None:
+            words = [
+                Word(
+                    start=w.start,
+                    end=w.end,
+                    word=w.word,
+                    probability=w.probability
+                ) for w in seg.words
+            ]
+        else:
+            words = None
+
         return cls(
             id=seg.id,
             seek=seg.seek,
@@ -45,15 +57,15 @@ class Segment(BaseModel):
             avg_logprob=seg.avg_logprob,
             compression_ratio=seg.compression_ratio,
             no_speech_prob=seg.no_speech_prob,
-            words=[] if seg.words is None else seg.words
+            words=words
         )
 
 
-class Word(NamedTuple):
-    start: Optional[float] = None
-    end: Optional[float] = None
-    word: Optional[str] = None
-    probability: Optional[float] = None
+class Word(BaseModel):
+    start: Optional[float] = Field(default=None, description="Start time of the word")
+    end: Optional[float] = Field(default=None, description="Start time of the word")
+    word: Optional[str] = Field(default=None, description="Word text")
+    probability: Optional[float] = Field(default=None, description="Probability of the word")
 
 
 class BaseParams(BaseModel):
