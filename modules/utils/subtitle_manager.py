@@ -70,7 +70,7 @@ class ResultWriter:
             options: Optional[dict] = None, **kwargs
     ):
         if isinstance(result, List) and result and isinstance(result[0], Segment):
-            result = {"segments": [seg.dict() for seg in result]}
+            result = {"segments": [seg.model_dump() for seg in result]}
 
         output_path = os.path.join(
             self.output_dir, output_file_name + "." + self.extension
