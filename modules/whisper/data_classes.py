@@ -28,7 +28,7 @@ class Segment(BaseModel):
     avg_logprob: Optional[float] = Field(default=None, description="Average log probability of the tokens")
     compression_ratio: Optional[float] = Field(default=None, description="Compression ratio of the segment")
     no_speech_prob: Optional[float] = Field(default=None, description="Probability that it's not speech")
-    words: Optional[List['Word']] = Field(default=None, description="List of words contained in the segment")
+    words: Optional[List['Word']] = Field(default=[], description="List of words contained in the segment")
 
     @classmethod
     def from_faster_whisper(cls,
