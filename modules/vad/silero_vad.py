@@ -5,7 +5,8 @@ import numpy as np
 from typing import BinaryIO, Union, List, Optional, Tuple
 import warnings
 import faster_whisper
-from faster_whisper.transcribe import SpeechTimestampsMap, Segment
+from modules.whisper.data_classes import *
+from faster_whisper.transcribe import SpeechTimestampsMap
 import gradio as gr
 
 
@@ -247,18 +248,18 @@ class SileroVAD:
 
     def restore_speech_timestamps(
         self,
-        segments: List[dict],
+        segments: List[Segment],
         speech_chunks: List[dict],
         sampling_rate: Optional[int] = None,
-    ) -> List[dict]:
+    ) -> List[Segment]:
         if sampling_rate is None:
             sampling_rate = self.sampling_rate
 
         ts_map = SpeechTimestampsMap(speech_chunks, sampling_rate)
 
         for segment in segments:
-            segment["start"] = ts_map.get_original_time(segment["start"])
-            segment["end"] = ts_map.get_original_time(segment["end"])
+            segment.start = ts_map.get_original_time(segment.start)
+            segment.start = ts_map.get_original_time(segment.start)
 
         return segments
 

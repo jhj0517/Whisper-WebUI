@@ -12,11 +12,11 @@ from rich.progress import Progress, TimeElapsedColumn, BarColumn, TextColumn
 from argparse import Namespace
 
 from modules.utils.paths import (INSANELY_FAST_WHISPER_MODELS_DIR, DIARIZATION_MODELS_DIR, UVR_MODELS_DIR, OUTPUT_DIR)
-from modules.whisper.whisper_parameter import *
-from modules.whisper.whisper_base import WhisperBase
+from modules.whisper.data_classes import *
+from modules.whisper.base_transcription_pipeline import BaseTranscriptionPipeline
 
 
-class InsanelyFastWhisperInference(WhisperBase):
+class InsanelyFastWhisperInference(BaseTranscriptionPipeline):
     def __init__(self,
                  model_dir: str = INSANELY_FAST_WHISPER_MODELS_DIR,
                  diarization_model_dir: str = DIARIZATION_MODELS_DIR,
@@ -40,7 +40,7 @@ class InsanelyFastWhisperInference(WhisperBase):
                    audio: Union[str, np.ndarray, torch.Tensor],
                    progress: gr.Progress = gr.Progress(),
                    *whisper_params,
-                   ) -> Tuple[List[dict], float]:
+                   ) -> Tuple[List[Segment], float]:
         """
         transcribe method for faster-whisper.
 
@@ -55,13 +55,13 @@ class InsanelyFastWhisperInference(WhisperBase):
 
         Returns
         ----------
-        segments_result: List[dict]
-            list of dicts that includes start, end timestamps and transcribed text
+        segments_result: List[Segment]
+            list of Segment that includes start, end timestamps and transcribed text
         elapsed_time: float
             elapsed time for transcription
         """
         start_time = time.time()
-        params = WhisperParameters.as_value(*whisper_params)
+        params = WhisperParams.from_list(list(whisper_params))
 
         if params.model_size != self.current_model_size or self.model is None or self.current_compute_type != params.compute_type:
             self.update_model(params.model_size, params.compute_type, progress)
@@ -95,9 +95,17 @@ class InsanelyFastWhisperInference(WhisperBase):
                 generate_kwargs=kwargs
             )
 
-        segments_result = self.format_result(
-            transcribed_result=segments,
-        )
+        segments_result = []
+        for item in segments["chunks"]:
+            start, end = item["timestamp"][0], item["timestamp"][1]
+            if end is None:
+                end = start
+            segments_result.append(Segment(
+                text=item["text"],
+                start=start,
+                end=end
+            ))
+
         elapsed_time = time.time() - start_time
         return segments_result, elapsed_time
 

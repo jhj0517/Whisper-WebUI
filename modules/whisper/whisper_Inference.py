@@ -8,11 +8,11 @@ import os
 from argparse import Namespace
 
 from modules.utils.paths import (WHISPER_MODELS_DIR, DIARIZATION_MODELS_DIR, OUTPUT_DIR, UVR_MODELS_DIR)
-from modules.whisper.whisper_base import WhisperBase
-from modules.whisper.whisper_parameter import *
+from modules.whisper.base_transcription_pipeline import BaseTranscriptionPipeline
+from modules.whisper.data_classes import *
 
 
-class WhisperInference(WhisperBase):
+class WhisperInference(BaseTranscriptionPipeline):
     def __init__(self,
                  model_dir: str = WHISPER_MODELS_DIR,
                  diarization_model_dir: str = DIARIZATION_MODELS_DIR,
@@ -30,7 +30,7 @@ class WhisperInference(WhisperBase):
                    audio: Union[str, np.ndarray, torch.Tensor],
                    progress: gr.Progress = gr.Progress(),
                    *whisper_params,
-                   ) -> Tuple[List[dict], float]:
+                   ) -> Tuple[List[Segment], float]:
         """
         transcribe method for faster-whisper.
 
@@ -45,13 +45,13 @@ class WhisperInference(WhisperBase):
 
         Returns
         ----------
-        segments_result: List[dict]
-            list of dicts that includes start, end timestamps and transcribed text
+        segments_result: List[Segment]
+            list of Segment that includes start, end timestamps and transcribed text
         elapsed_time: float
             elapsed time for transcription
         """
         start_time = time.time()
-        params = WhisperParameters.as_value(*whisper_params)
+        params = WhisperParams.from_list(list(whisper_params))
 
         if params.model_size != self.current_model_size or self.model is None or self.current_compute_type != params.compute_type:
             self.update_model(params.model_size, params.compute_type, progress)
@@ -59,21 +59,28 @@ class WhisperInference(WhisperBase):
         def progress_callback(progress_value):
             progress(progress_value, desc="Transcribing..")
 
-        segments_result = self.model.transcribe(audio=audio,
-                                                language=params.lang,
-                                                verbose=False,
-                                                beam_size=params.beam_size,
-                                                logprob_threshold=params.log_prob_threshold,
-                                                no_speech_threshold=params.no_speech_threshold,
-                                                task="translate" if params.is_translate and self.current_model_size in self.translatable_models else "transcribe",
-                                                fp16=True if params.compute_type == "float16" else False,
-                                                best_of=params.best_of,
-                                                patience=params.patience,
-                                                temperature=params.temperature,
-                                                compression_ratio_threshold=params.compression_ratio_threshold,
-                                                progress_callback=progress_callback,)["segments"]
-        elapsed_time = time.time() - start_time
+        result = self.model.transcribe(audio=audio,
+                                       language=params.lang,
+                                       verbose=False,
+                                       beam_size=params.beam_size,
+                                       logprob_threshold=params.log_prob_threshold,
+                                       no_speech_threshold=params.no_speech_threshold,
+                                       task="translate" if params.is_translate and self.current_model_size in self.translatable_models else "transcribe",
+                                       fp16=True if params.compute_type == "float16" else False,
+                                       best_of=params.best_of,
+                                       patience=params.patience,
+                                       temperature=params.temperature,
+                                       compression_ratio_threshold=params.compression_ratio_threshold,
+                                       progress_callback=progress_callback,)["segments"]
+        segments_result = []
+        for segment in result:
+            segments_result.append(Segment(
+                start=segment["start"],
+                end=segment["end"],
+                text=segment["text"]
+            ))
 
+        elapsed_time = time.time() - start_time
         return segments_result, elapsed_time
 
     def update_model(self,

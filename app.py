@@ -7,17 +7,14 @@ import yaml
 from modules.utils.paths import (FASTER_WHISPER_MODELS_DIR, DIARIZATION_MODELS_DIR, OUTPUT_DIR, WHISPER_MODELS_DIR,
                                  INSANELY_FAST_WHISPER_MODELS_DIR, NLLB_MODELS_DIR, DEFAULT_PARAMETERS_CONFIG_PATH,
                                  UVR_MODELS_DIR, I18N_YAML_PATH)
-from modules.utils.constants import AUTOMATIC_DETECTION
 from modules.utils.files_manager import load_yaml
 from modules.whisper.whisper_factory import WhisperFactory
-from modules.whisper.faster_whisper_inference import FasterWhisperInference
-from modules.whisper.insanely_fast_whisper_inference import InsanelyFastWhisperInference
 from modules.translation.nllb_inference import NLLBInference
 from modules.ui.htmls import *
 from modules.utils.cli_manager import str2bool
 from modules.utils.youtube_manager import get_ytmetas
 from modules.translation.deepl_api import DeepLAPI
-from modules.whisper.whisper_parameter import *
+from modules.whisper.data_classes import *
 
 
 class App:
@@ -44,7 +41,7 @@ class App:
         print(f"Use \"{self.args.whisper_type}\" implementation\n"
               f"Device \"{self.whisper_inf.device}\" is detected")
 
-    def create_whisper_parameters(self):
+    def create_pipeline_inputs(self):
         whisper_params = self.default_params["whisper"]
         vad_params = self.default_params["vad"]
         diarization_params = self.default_params["diarization"]
@@ -66,158 +63,31 @@ class App:
                                        interactive=True)
 
         with gr.Accordion(_("Advanced Parameters"), open=False):
-            nb_beam_size = gr.Number(label="Beam Size", value=whisper_params["beam_size"], precision=0,
-                                     interactive=True,
-                                     info="Beam size to use for decoding.")
-            nb_log_prob_threshold = gr.Number(label="Log Probability Threshold",
-                                              value=whisper_params["log_prob_threshold"], interactive=True,
-                                              info="If the average log probability over sampled tokens is below this value, treat as failed.")
-            nb_no_speech_threshold = gr.Number(label="No Speech Threshold", value=whisper_params["no_speech_threshold"],
-                                               interactive=True,
-                                               info="If the no speech probability is higher than this value AND the average log probability over sampled tokens is below 'Log Prob Threshold', consider the segment as silent.")
-            dd_compute_type = gr.Dropdown(label="Compute Type", choices=self.whisper_inf.available_compute_types,
-                                          value=self.whisper_inf.current_compute_type, interactive=True,
-                                          allow_custom_value=True,
-                                          info="Select the type of computation to perform.")
-            nb_best_of = gr.Number(label="Best Of", value=whisper_params["best_of"], interactive=True,
-                                   info="Number of candidates when sampling with non-zero temperature.")
-            nb_patience = gr.Number(label="Patience", value=whisper_params["patience"], interactive=True,
-                                    info="Beam search patience factor.")
-            cb_condition_on_previous_text = gr.Checkbox(label="Condition On Previous Text",
-                                                        value=whisper_params["condition_on_previous_text"],
-                                                        interactive=True,
-                                                        info="Condition on previous text during decoding.")
-            sld_prompt_reset_on_temperature = gr.Slider(label="Prompt Reset On Temperature",
-                                                        value=whisper_params["prompt_reset_on_temperature"],
-                                                        minimum=0, maximum=1, step=0.01, interactive=True,
-                                                        info="Resets prompt if temperature is above this value."
-                                                             " Arg has effect only if 'Condition On Previous Text' is True.")
-            tb_initial_prompt = gr.Textbox(label="Initial Prompt", value=None, interactive=True,
-                                           info="Initial prompt to use for decoding.")
-            sd_temperature = gr.Slider(label="Temperature", value=whisper_params["temperature"], minimum=0.0,
-                                       step=0.01, maximum=1.0, interactive=True,
-                                       info="Temperature for sampling. It can be a tuple of temperatures, which will be successively used upon failures according to either `Compression Ratio Threshold` or `Log Prob Threshold`.")
-            nb_compression_ratio_threshold = gr.Number(label="Compression Ratio Threshold",
-                                                       value=whisper_params["compression_ratio_threshold"],
-                                                       interactive=True,
-                                                       info="If the gzip compression ratio is above this value, treat as failed.")
-            nb_chunk_length = gr.Number(label="Chunk Length (s)", value=lambda: whisper_params["chunk_length"],
-                                        precision=0,
-                                        info="The length of audio segments. If it is not None, it will overwrite the default chunk_length of the FeatureExtractor.")
-            with gr.Group(visible=isinstance(self.whisper_inf, FasterWhisperInference)):
-                nb_length_penalty = gr.Number(label="Length Penalty", value=whisper_params["length_penalty"],
-                                              info="Exponential length penalty constant.")
-                nb_repetition_penalty = gr.Number(label="Repetition Penalty",
-                                                  value=whisper_params["repetition_penalty"],
-                                                  info="Penalty applied to the score of previously generated tokens (set > 1 to penalize).")
-                nb_no_repeat_ngram_size = gr.Number(label="No Repeat N-gram Size",
-                                                    value=whisper_params["no_repeat_ngram_size"],
-                                                    precision=0,
-                                                    info="Prevent repetitions of n-grams with this size (set 0 to disable).")
-                tb_prefix = gr.Textbox(label="Prefix", value=lambda: whisper_params["prefix"],
-                                       info="Optional text to provide as a prefix for the first window.")
-                cb_suppress_blank = gr.Checkbox(label="Suppress Blank", value=whisper_params["suppress_blank"],
-                                                info="Suppress blank outputs at the beginning of the sampling.")
-                tb_suppress_tokens = gr.Textbox(label="Suppress Tokens", value=whisper_params["suppress_tokens"],
-                                                info="List of token IDs to suppress. -1 will suppress a default set of symbols as defined in the model config.json file.")
-                nb_max_initial_timestamp = gr.Number(label="Max Initial Timestamp",
-                                                     value=whisper_params["max_initial_timestamp"],
-                                                     info="The initial timestamp cannot be later than this.")
-                cb_word_timestamps = gr.Checkbox(label="Word Timestamps", value=whisper_params["word_timestamps"],
-                                                 info="Extract word-level timestamps using the cross-attention pattern and dynamic time warping, and include the timestamps for each word in each segment.")
-                tb_prepend_punctuations = gr.Textbox(label="Prepend Punctuations",
-                                                     value=whisper_params["prepend_punctuations"],
-                                                     info="If 'Word Timestamps' is True, merge these punctuation symbols with the next word.")
-                tb_append_punctuations = gr.Textbox(label="Append Punctuations",
-                                                    value=whisper_params["append_punctuations"],
-                                                    info="If 'Word Timestamps' is True, merge these punctuation symbols with the previous word.")
-                nb_max_new_tokens = gr.Number(label="Max New Tokens", value=lambda: whisper_params["max_new_tokens"],
-                                              precision=0,
-                                              info="Maximum number of new tokens to generate per-chunk. If not set, the maximum will be set by the default max_length.")
-                nb_hallucination_silence_threshold = gr.Number(label="Hallucination Silence Threshold (sec)",
-                                                               value=lambda: whisper_params[
-                                                                   "hallucination_silence_threshold"],
-                                                               info="When 'Word Timestamps' is True, skip silent periods longer than this threshold (in seconds) when a possible hallucination is detected.")
-                tb_hotwords = gr.Textbox(label="Hotwords", value=lambda: whisper_params["hotwords"],
-                                         info="Hotwords/hint phrases to provide the model with. Has no effect if prefix is not None.")
-                nb_language_detection_threshold = gr.Number(label="Language Detection Threshold",
-                                                            value=lambda: whisper_params[
-                                                                "language_detection_threshold"],
-                                                            info="If the maximum probability of the language tokens is higher than this value, the language is detected.")
-                nb_language_detection_segments = gr.Number(label="Language Detection Segments",
-                                                           value=lambda: whisper_params["language_detection_segments"],
-                                                           precision=0,
-                                                           info="Number of segments to consider for the language detection.")
-            with gr.Group(visible=isinstance(self.whisper_inf, InsanelyFastWhisperInference)):
-                nb_batch_size = gr.Number(label="Batch Size", value=whisper_params["batch_size"], precision=0)
+            whisper_inputs = WhisperParams.to_gradio_inputs(defaults=whisper_params, only_advanced=True,
+                                                            whisper_type=self.args.whisper_type,
+                                                            available_compute_types=self.whisper_inf.available_compute_types,
+                                                            compute_type=self.whisper_inf.current_compute_type)
 
         with gr.Accordion(_("Background Music Remover Filter"), open=False):
-            cb_bgm_separation = gr.Checkbox(label=_("Enable Background Music Remover Filter"),
-                                            value=uvr_params["is_separate_bgm"],
-                                            interactive=True,
-                                            info=_("Enabling this will remove background music"))
-            dd_uvr_device = gr.Dropdown(label=_("Device"), value=self.whisper_inf.music_separator.device,
-                                        choices=self.whisper_inf.music_separator.available_devices)
-            dd_uvr_model_size = gr.Dropdown(label=_("Model"), value=uvr_params["model_size"],
-                                            choices=self.whisper_inf.music_separator.available_models)
-            nb_uvr_segment_size = gr.Number(label="Segment Size", value=uvr_params["segment_size"], precision=0)
-            cb_uvr_save_file = gr.Checkbox(label=_("Save separated files to output"), value=uvr_params["save_file"])
-            cb_uvr_enable_offload = gr.Checkbox(label=_("Offload sub model after removing background music"),
-                                                value=uvr_params["enable_offload"])
+            uvr_inputs = BGMSeparationParams.to_gradio_input(defaults=uvr_params,
+                                                             available_models=self.whisper_inf.music_separator.available_models,
+                                                             available_devices=self.whisper_inf.music_separator.available_devices,
+                                                             device=self.whisper_inf.music_separator.device)
 
         with gr.Accordion(_("Voice Detection Filter"), open=False):
-            cb_vad_filter = gr.Checkbox(label=_("Enable Silero VAD Filter"), value=vad_params["vad_filter"],
-                                        interactive=True,
-                                        info=_("Enable this to transcribe only detected voice"))
-            sd_threshold = gr.Slider(minimum=0.0, maximum=1.0, step=0.01, label="Speech Threshold",
-                                     value=vad_params["threshold"],
-                                     info="Lower it to be more sensitive to small sounds.")
-            nb_min_speech_duration_ms = gr.Number(label="Minimum Speech Duration (ms)", precision=0,
-                                                  value=vad_params["min_speech_duration_ms"],
-                                                  info="Final speech chunks shorter than this time are thrown out")
-            nb_max_speech_duration_s = gr.Number(label="Maximum Speech Duration (s)",
-                                                 value=vad_params["max_speech_duration_s"],
-                                                 info="Maximum duration of speech chunks in \"seconds\".")
-            nb_min_silence_duration_ms = gr.Number(label="Minimum Silence Duration (ms)", precision=0,
-                                                   value=vad_params["min_silence_duration_ms"],
-                                                   info="In the end of each speech chunk wait for this time"
-                                                        " before separating it")
-            nb_speech_pad_ms = gr.Number(label="Speech Padding (ms)", precision=0, value=vad_params["speech_pad_ms"],
-                                         info="Final speech chunks are padded by this time each side")
+            vad_inputs = VadParams.to_gradio_inputs(defaults=vad_params)
 
         with gr.Accordion(_("Diarization"), open=False):
-            cb_diarize = gr.Checkbox(label=_("Enable Diarization"), value=diarization_params["is_diarize"])
-            tb_hf_token = gr.Text(label=_("HuggingFace Token"), value=diarization_params["hf_token"],
-                                  info=_("This is only needed the first time you download the model"))
-            dd_diarization_device = gr.Dropdown(label=_("Device"),
-                                                choices=self.whisper_inf.diarizer.get_available_device(),
-                                                value=self.whisper_inf.diarizer.get_device())
+            diarization_inputs = DiarizationParams.to_gradio_inputs(defaults=diarization_params,
+                                                                    available_devices=self.whisper_inf.diarizer.available_device,
+                                                                    device=self.whisper_inf.diarizer.device)
 
         dd_model.change(fn=self.on_change_models, inputs=[dd_model], outputs=[cb_translate])
 
+        pipeline_inputs = [dd_model, dd_lang, cb_translate] + whisper_inputs + vad_inputs + diarization_inputs + uvr_inputs
+
         return (
-            WhisperParameters(
-                model_size=dd_model, lang=dd_lang, is_translate=cb_translate, beam_size=nb_beam_size,
-                log_prob_threshold=nb_log_prob_threshold, no_speech_threshold=nb_no_speech_threshold,
-                compute_type=dd_compute_type, best_of=nb_best_of, patience=nb_patience,
-                condition_on_previous_text=cb_condition_on_previous_text, initial_prompt=tb_initial_prompt,
-                temperature=sd_temperature, compression_ratio_threshold=nb_compression_ratio_threshold,
-                vad_filter=cb_vad_filter, threshold=sd_threshold, min_speech_duration_ms=nb_min_speech_duration_ms,
-                max_speech_duration_s=nb_max_speech_duration_s, min_silence_duration_ms=nb_min_silence_duration_ms,
-                speech_pad_ms=nb_speech_pad_ms, chunk_length=nb_chunk_length, batch_size=nb_batch_size,
-                is_diarize=cb_diarize, hf_token=tb_hf_token, diarization_device=dd_diarization_device,
-                length_penalty=nb_length_penalty, repetition_penalty=nb_repetition_penalty,
-                no_repeat_ngram_size=nb_no_repeat_ngram_size, prefix=tb_prefix, suppress_blank=cb_suppress_blank,
-                suppress_tokens=tb_suppress_tokens, max_initial_timestamp=nb_max_initial_timestamp,
-                word_timestamps=cb_word_timestamps, prepend_punctuations=tb_prepend_punctuations,
-                append_punctuations=tb_append_punctuations, max_new_tokens=nb_max_new_tokens,
-                hallucination_silence_threshold=nb_hallucination_silence_threshold, hotwords=tb_hotwords,
-                language_detection_threshold=nb_language_detection_threshold,
-                language_detection_segments=nb_language_detection_segments,
-                prompt_reset_on_temperature=sld_prompt_reset_on_temperature, is_bgm_separate=cb_bgm_separation,
-                uvr_device=dd_uvr_device, uvr_model_size=dd_uvr_model_size, uvr_segment_size=nb_uvr_segment_size,
-                uvr_save_file=cb_uvr_save_file, uvr_enable_offload=cb_uvr_enable_offload
-            ),
+            pipeline_inputs,
             dd_file_format,
             cb_timestamp
         )
@@ -243,7 +113,7 @@ class App:
                                                          visible=self.args.colab,
                                                          value="")
 
-                        whisper_params, dd_file_format, cb_timestamp = self.create_whisper_parameters()
+                        pipeline_params, dd_file_format, cb_timestamp = self.create_pipeline_inputs()
 
                         with gr.Row():
                             btn_run = gr.Button(_("GENERATE SUBTITLE FILE"), variant="primary")
@@ -254,7 +124,7 @@ class App:
 
                         params = [input_file, tb_input_folder, dd_file_format, cb_timestamp]
                         btn_run.click(fn=self.whisper_inf.transcribe_file,
-                                      inputs=params + whisper_params.as_list(),
+                                      inputs=params + pipeline_params,
                                       outputs=[tb_indicator, files_subtitles])
                         btn_openfolder.click(fn=lambda: self.open_folder("outputs"), inputs=None, outputs=None)
 
@@ -268,7 +138,7 @@ class App:
                                 tb_title = gr.Label(label=_("Youtube Title"))
                                 tb_description = gr.Textbox(label=_("Youtube Description"), max_lines=15)
 
-                        whisper_params, dd_file_format, cb_timestamp = self.create_whisper_parameters()
+                        pipeline_params, dd_file_format, cb_timestamp = self.create_pipeline_inputs()
 
                         with gr.Row():
                             btn_run = gr.Button(_("GENERATE SUBTITLE FILE"), variant="primary")
@@ -280,7 +150,7 @@ class App:
                         params = [tb_youtubelink, dd_file_format, cb_timestamp]
 
                         btn_run.click(fn=self.whisper_inf.transcribe_youtube,
-                                      inputs=params + whisper_params.as_list(),
+                                      inputs=params + pipeline_params,
                                       outputs=[tb_indicator, files_subtitles])
                         tb_youtubelink.change(get_ytmetas, inputs=[tb_youtubelink],
                                               outputs=[img_thumbnail, tb_title, tb_description])
@@ -290,7 +160,7 @@ class App:
                         with gr.Row():
                             mic_input = gr.Microphone(label=_("Record with Mic"), type="filepath", interactive=True)
 
-                        whisper_params, dd_file_format, cb_timestamp = self.create_whisper_parameters()
+                        pipeline_params, dd_file_format, cb_timestamp = self.create_pipeline_inputs()
 
                         with gr.Row():
                             btn_run = gr.Button(_("GENERATE SUBTITLE FILE"), variant="primary")
@@ -302,7 +172,7 @@ class App:
                         params = [mic_input, dd_file_format, cb_timestamp]
 
                         btn_run.click(fn=self.whisper_inf.transcribe_mic,
-                                      inputs=params + whisper_params.as_list(),
+                                      inputs=params + pipeline_params,
                                       outputs=[tb_indicator, files_subtitles])
                         btn_openfolder.click(fn=lambda: self.open_folder("outputs"), inputs=None, outputs=None)
 
@@ -417,7 +287,6 @@ class App:
 
         # Launch the app with optional gradio settings
         args = self.args
-
         self.app.queue(
             api_open=args.api_open
         ).launch(
@@ -447,8 +316,8 @@ class App:
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--whisper_type', type=str, default="faster-whisper",
-                    choices=["whisper", "faster-whisper", "insanely-fast-whisper"],
+parser.add_argument('--whisper_type', type=str, default=WhisperImpl.FASTER_WHISPER.value,
+                    choices=[item.value for item in WhisperImpl],
                     help='A type of the whisper implementation (Github repo name)')
 parser.add_argument('--share', type=str2bool, default=False, nargs='?', const=True, help='Gradio share value')
 parser.add_argument('--server_name', type=str, default=None, help='Gradio server host')

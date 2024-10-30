@@ -1,6 +1,6 @@
 import os
 import torch
-from typing import List, Union, BinaryIO, Optional
+from typing import List, Union, BinaryIO, Optional, Tuple
 import numpy as np
 import time
 import logging
@@ -8,6 +8,7 @@ import logging
 from modules.utils.paths import DIARIZATION_MODELS_DIR
 from modules.diarize.diarize_pipeline import DiarizationPipeline, assign_word_speakers
 from modules.diarize.audio_loader import load_audio
+from modules.whisper.data_classes import *
 
 
 class Diarizer:
@@ -23,10 +24,10 @@ class Diarizer:
 
     def run(self,
             audio: Union[str, BinaryIO, np.ndarray],
-            transcribed_result: List[dict],
+            transcribed_result: List[Segment],
             use_auth_token: str,
             device: Optional[str] = None
-            ):
+            ) -> Tuple[List[Segment], float]:
         """
         Diarize transcribed result as a post-processing
 
@@ -34,7 +35,7 @@ class Diarizer:
         ----------
         audio: Union[str, BinaryIO, np.ndarray]
             Audio input. This can be file path or binary type.
-        transcribed_result: List[dict]
+        transcribed_result: List[Segment]
             transcribed result through whisper.
         use_auth_token: str
             Huggingface token with READ permission. This is only needed the first time you download the model.
@@ -44,8 +45,8 @@ class Diarizer:
 
         Returns
         ----------
-        segments_result: List[dict]
-            list of dicts that includes start, end timestamps and transcribed text
+        segments_result: List[Segment]
+            list of Segment that includes start, end timestamps and transcribed text
         elapsed_time: float
             elapsed time for running
         """
@@ -68,14 +69,21 @@ class Diarizer:
             {"segments": transcribed_result}
         )
 
+        segments_result = []
         for segment in diarized_result["segments"]:
+            segment = segment.dict()
             speaker = "None"
             if "speaker" in segment:
                 speaker = segment["speaker"]
-            segment["text"] = speaker + "|" + segment["text"].strip()
+            diarized_text = speaker + "|" + segment["text"].strip()
+            segments_result.append(Segment(
+                start=segment["start"],
+                end=segment["end"],
+                text=diarized_text
+            ))
 
         elapsed_time = time.time() - start_time
-        return diarized_result["segments"], elapsed_time
+        return segments_result, elapsed_time
 
     def update_pipe(self,
                     use_auth_token: str,

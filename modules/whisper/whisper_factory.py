@@ -6,7 +6,8 @@ from modules.utils.paths import (FASTER_WHISPER_MODELS_DIR, DIARIZATION_MODELS_D
 from modules.whisper.faster_whisper_inference import FasterWhisperInference
 from modules.whisper.whisper_Inference import WhisperInference
 from modules.whisper.insanely_fast_whisper_inference import InsanelyFastWhisperInference
-from modules.whisper.whisper_base import WhisperBase
+from modules.whisper.base_transcription_pipeline import BaseTranscriptionPipeline
+from modules.whisper.data_classes import *
 
 
 class WhisperFactory:
@@ -19,7 +20,7 @@ class WhisperFactory:
         diarization_model_dir: str = DIARIZATION_MODELS_DIR,
         uvr_model_dir: str = UVR_MODELS_DIR,
         output_dir: str = OUTPUT_DIR,
-    ) -> "WhisperBase":
+    ) -> "BaseTranscriptionPipeline":
         """
         Create a whisper inference class based on the provided whisper_type.
 
@@ -45,36 +46,29 @@ class WhisperFactory:
 
         Returns
         -------
-        WhisperBase
+        BaseTranscriptionPipeline
             An instance of the appropriate whisper inference class based on the whisper_type.
         """
         # Temporal fix of the bug : https://github.com/jhj0517/Whisper-WebUI/issues/144
         os.environ['KMP_DUPLICATE_LIB_OK'] = 'True'
 
-        whisper_type = whisper_type.lower().strip()
+        whisper_type = whisper_type.strip().lower()
 
-        faster_whisper_typos = ["faster_whisper", "faster-whisper", "fasterwhisper"]
-        whisper_typos = ["whisper"]
-        insanely_fast_whisper_typos = [
-            "insanely_fast_whisper", "insanely-fast-whisper", "insanelyfastwhisper",
-            "insanely_faster_whisper", "insanely-faster-whisper", "insanelyfasterwhisper"
-        ]
-
-        if whisper_type in faster_whisper_typos:
+        if whisper_type == WhisperImpl.FASTER_WHISPER.value:
             return FasterWhisperInference(
                 model_dir=faster_whisper_model_dir,
                 output_dir=output_dir,
                 diarization_model_dir=diarization_model_dir,
                 uvr_model_dir=uvr_model_dir
             )
-        elif whisper_type in whisper_typos:
+        elif whisper_type == WhisperImpl.WHISPER.value:
             return WhisperInference(
                 model_dir=whisper_model_dir,
                 output_dir=output_dir,
                 diarization_model_dir=diarization_model_dir,
                 uvr_model_dir=uvr_model_dir
             )
-        elif whisper_type in insanely_fast_whisper_typos:
+        elif whisper_type == WhisperImpl.INSANELY_FAST_WHISPER.value:
             return InsanelyFastWhisperInference(
                 model_dir=insanely_fast_whisper_model_dir,
                 output_dir=output_dir,

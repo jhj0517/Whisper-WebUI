@@ -1,5 +1,6 @@
 import os
 import torch
+import ast
 import whisper
 import ctranslate2
 import gradio as gr
@@ -14,16 +15,16 @@ from dataclasses import astuple
 from modules.uvr.music_separator import MusicSeparator
 from modules.utils.paths import (WHISPER_MODELS_DIR, DIARIZATION_MODELS_DIR, OUTPUT_DIR, DEFAULT_PARAMETERS_CONFIG_PATH,
                                  UVR_MODELS_DIR)
-from modules.utils.constants import AUTOMATIC_DETECTION
+from modules.utils.constants import *
 from modules.utils.subtitle_manager import get_srt, get_vtt, get_txt, write_file, safe_filename
 from modules.utils.youtube_manager import get_ytdata, get_ytaudio
 from modules.utils.files_manager import get_media_files, format_gradio_files, load_yaml, save_yaml
-from modules.whisper.whisper_parameter import *
+from modules.whisper.data_classes import *
 from modules.diarize.diarizer import Diarizer
 from modules.vad.silero_vad import SileroVAD
 
 
-class WhisperBase(ABC):
+class BaseTranscriptionPipeline(ABC):
     def __init__(self,
                  model_dir: str = WHISPER_MODELS_DIR,
                  diarization_model_dir: str = DIARIZATION_MODELS_DIR,
@@ -74,12 +75,13 @@ class WhisperBase(ABC):
             audio: Union[str, BinaryIO, np.ndarray],
             progress: gr.Progress = gr.Progress(),
             add_timestamp: bool = True,
-            *whisper_params,
+            *pipeline_params,
             ) -> Tuple[List[dict], float]:
         """
         Run transcription with conditional pre-processing and post-processing.
         The VAD will be performed to remove noise from the audio input in pre-processing, if enabled.
         The diarization will be performed in post-processing, if enabled.
+        Due to the integration with gradio, the parameters have to be specified with a `*` wildcard.
 
         Parameters
         ----------
@@ -89,8 +91,8 @@ class WhisperBase(ABC):
             Indicator to show progress directly in gradio.
         add_timestamp: bool
             Whether to add a timestamp at the end of the filename.
-        *whisper_params: tuple
-            Parameters related with whisper. This will be dealt with "WhisperParameters" data class
+        *pipeline_params: tuple
+            Parameters for the transcription pipeline. This will be dealt with "TranscriptionPipelineParams" data class
 
         Returns
         ----------
@@ -99,28 +101,17 @@ class WhisperBase(ABC):
         elapsed_time: float
             elapsed time for running
         """
-        params = WhisperParameters.as_value(*whisper_params)
+        params = TranscriptionPipelineParams.from_list(list(pipeline_params))
+        params = self.validate_gradio_values(params)
+        bgm_params, vad_params, whisper_params, diarization_params = params.bgm_separation, params.vad, params.whisper, params.diarization
 
-        self.cache_parameters(
-            whisper_params=params,
-            add_timestamp=add_timestamp
-        )
-
-        if params.lang is None:
-            pass
-        elif params.lang == AUTOMATIC_DETECTION:
-            params.lang = None
-        else:
-            language_code_dict = {value: key for key, value in whisper.tokenizer.LANGUAGES.items()}
-            params.lang = language_code_dict[params.lang]
-
-        if params.is_bgm_separate:
+        if bgm_params.is_separate_bgm:
             music, audio, _ = self.music_separator.separate(
                 audio=audio,
-                model_name=params.uvr_model_size,
-                device=params.uvr_device,
-                segment_size=params.uvr_segment_size,
-                save_file=params.uvr_save_file,
+                model_name=bgm_params.model_size,
+                device=bgm_params.device,
+                segment_size=bgm_params.segment_size,
+                save_file=bgm_params.save_file,
                 progress=progress
             )
 
@@ -132,47 +123,54 @@ class WhisperBase(ABC):
                     origin_sample_rate = self.music_separator.audio_info.sample_rate
                 audio = self.resample_audio(audio=audio, original_sample_rate=origin_sample_rate)
 
-            if params.uvr_enable_offload:
+            if bgm_params.enable_offload:
                 self.music_separator.offload()
 
-        if params.vad_filter:
-            # Explicit value set for float('inf') from gr.Number()
-            if params.max_speech_duration_s is None or params.max_speech_duration_s >= 9999:
-                params.max_speech_duration_s = float('inf')
-
+        if vad_params.vad_filter:
             vad_options = VadOptions(
-                threshold=params.threshold,
-                min_speech_duration_ms=params.min_speech_duration_ms,
-                max_speech_duration_s=params.max_speech_duration_s,
-                min_silence_duration_ms=params.min_silence_duration_ms,
-                speech_pad_ms=params.speech_pad_ms
+                threshold=vad_params.threshold,
+                min_speech_duration_ms=vad_params.min_speech_duration_ms,
+                max_speech_duration_s=vad_params.max_speech_duration_s,
+                min_silence_duration_ms=vad_params.min_silence_duration_ms,
+                speech_pad_ms=vad_params.speech_pad_ms
             )
 
-            audio, speech_chunks = self.vad.run(
+            vad_processed, speech_chunks = self.vad.run(
                 audio=audio,
                 vad_parameters=vad_options,
                 progress=progress
             )
 
+            if vad_processed.size > 0:
+                audio = vad_processed
+            else:
+                vad_params.vad_filter = False
+
         result, elapsed_time = self.transcribe(
             audio,
             progress,
-            *astuple(params)
+            *whisper_params.to_list()
         )
 
-        if params.vad_filter:
+        if vad_params.vad_filter:
             result = self.vad.restore_speech_timestamps(
                 segments=result,
                 speech_chunks=speech_chunks,
             )
 
-        if params.is_diarize:
+        if diarization_params.is_diarize:
             result, elapsed_time_diarization = self.diarizer.run(
                 audio=audio,
-                use_auth_token=params.hf_token,
+                use_auth_token=diarization_params.hf_token,
                 transcribed_result=result,
+                device=diarization_params.device
             )
             elapsed_time += elapsed_time_diarization
+
+        self.cache_parameters(
+            params=params,
+            add_timestamp=add_timestamp
+        )
         return result, elapsed_time
 
     def transcribe_file(self,
@@ -181,7 +179,7 @@ class WhisperBase(ABC):
                         file_format: str = "SRT",
                         add_timestamp: bool = True,
                         progress=gr.Progress(),
-                        *whisper_params,
+                        *params,
                         ) -> list:
         """
         Write subtitle file from Files
@@ -199,8 +197,8 @@ class WhisperBase(ABC):
             Boolean value from gr.Checkbox() that determines whether to add a timestamp at the end of the subtitle filename.
         progress: gr.Progress
             Indicator to show progress directly in gradio.
-        *whisper_params: tuple
-            Parameters related with whisper. This will be dealt with "WhisperParameters" data class
+        *params: tuple
+            Parameters for the transcription pipeline. This will be dealt with "TranscriptionPipelineParams" data class
 
         Returns
         ----------
@@ -223,7 +221,7 @@ class WhisperBase(ABC):
                     file,
                     progress,
                     add_timestamp,
-                    *whisper_params,
+                    *params,
                 )
 
                 file_name, file_ext = os.path.splitext(os.path.basename(file))
@@ -471,7 +469,7 @@ class WhisperBase(ABC):
         if torch.cuda.is_available():
             return "cuda"
         elif torch.backends.mps.is_available():
-            if not WhisperBase.is_sparse_api_supported():
+            if not BaseTranscriptionPipeline.is_sparse_api_supported():
                 # Device `SparseMPS` is not supported for now. See : https://github.com/pytorch/pytorch/issues/87886
                 return "cpu"
             return "mps"
@@ -513,17 +511,59 @@ class WhisperBase(ABC):
                 os.remove(file_path)
 
     @staticmethod
+    def validate_gradio_values(params: TranscriptionPipelineParams):
+        """
+        Validate gradio specific values that can't be displayed as None in the UI.
+        Related issue : https://github.com/gradio-app/gradio/issues/8723
+        """
+        if params.whisper.lang is None:
+            pass
+        elif params.whisper.lang == AUTOMATIC_DETECTION:
+            params.whisper.lang = None
+        else:
+            language_code_dict = {value: key for key, value in whisper.tokenizer.LANGUAGES.items()}
+            params.whisper.lang = language_code_dict[params.lang]
+
+        if params.whisper.initial_prompt == GRADIO_NONE_STR:
+            params.whisper.initial_prompt = None
+        if params.whisper.prefix == GRADIO_NONE_STR:
+            params.whisper.prefix = None
+        if params.whisper.hotwords == GRADIO_NONE_STR:
+            params.whisper.hotwords = None
+        if params.whisper.max_new_tokens == GRADIO_NONE_NUMBER_MIN:
+            params.whisper.max_new_tokens = None
+        if params.whisper.hallucination_silence_threshold == GRADIO_NONE_NUMBER_MIN:
+            params.whisper.hallucination_silence_threshold = None
+        if params.whisper.language_detection_threshold == GRADIO_NONE_NUMBER_MIN:
+            params.whisper.language_detection_threshold = None
+        if params.vad.max_speech_duration_s == GRADIO_NONE_NUMBER_MAX:
+            params.vad.max_speech_duration_s = float('inf')
+        return params
+
+    @staticmethod
     def cache_parameters(
-        whisper_params: WhisperValues,
+        params: TranscriptionPipelineParams,
         add_timestamp: bool
     ):
-        """cache parameters to the yaml file"""
+        """Cache parameters to the yaml file"""
         cached_params = load_yaml(DEFAULT_PARAMETERS_CONFIG_PATH)
-        cached_whisper_param = whisper_params.to_yaml()
-        cached_yaml = {**cached_params, **cached_whisper_param}
+        param_to_cache = params.to_dict()
+
+        cached_yaml = {**cached_params, **param_to_cache}
         cached_yaml["whisper"]["add_timestamp"] = add_timestamp
 
-        save_yaml(cached_yaml, DEFAULT_PARAMETERS_CONFIG_PATH)
+        supress_token = cached_yaml["whisper"].get("suppress_tokens", None)
+        if supress_token and isinstance(supress_token, list):
+            cached_yaml["whisper"]["suppress_tokens"] = str(supress_token)
+
+        if cached_yaml["whisper"].get("lang", None) is None:
+            cached_yaml["whisper"]["lang"] = AUTOMATIC_DETECTION.unwrap()
+
+        if cached_yaml["vad"].get("max_speech_duration_s", float('inf')) == float('inf'):
+            cached_yaml["vad"]["max_speech_duration_s"] = GRADIO_NONE_NUMBER_MAX
+
+        if cached_yaml is not None and cached_yaml:
+            save_yaml(cached_yaml, DEFAULT_PARAMETERS_CONFIG_PATH)
 
     @staticmethod
     def resample_audio(audio: Union[str, np.ndarray],

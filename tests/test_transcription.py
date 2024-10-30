@@ -1,5 +1,5 @@
 from modules.whisper.whisper_factory import WhisperFactory
-from modules.whisper.whisper_parameter import WhisperValues
+from modules.whisper.data_classes import *
 from modules.utils.paths import WEBUI_DIR
 from test_config import *
 
@@ -12,9 +12,9 @@ import os
 @pytest.mark.parametrize(
     "whisper_type,vad_filter,bgm_separation,diarization",
     [
-        ("whisper", False, False, False),
-        ("faster-whisper", False, False, False),
-        ("insanely_fast_whisper", False, False, False)
+        (WhisperImpl.WHISPER.value, False, False, False),
+        (WhisperImpl.FASTER_WHISPER.value, False, False, False),
+        (WhisperImpl.INSANELY_FAST_WHISPER.value, False, False, False)
     ]
 )
 def test_transcribe(
@@ -37,14 +37,22 @@ def test_transcribe(
         f"""Diarization Device: {whisper_inferencer.diarizer.device}"""
     )
 
-    hparams = WhisperValues(
-        model_size=TEST_WHISPER_MODEL,
-        vad_filter=vad_filter,
-        is_bgm_separate=bgm_separation,
-        compute_type=whisper_inferencer.current_compute_type,
-        uvr_enable_offload=True,
-        is_diarize=diarization,
-    ).as_list()
+    hparams = TranscriptionPipelineParams(
+        whisper=WhisperParams(
+            model_size=TEST_WHISPER_MODEL,
+            compute_type=whisper_inferencer.current_compute_type
+        ),
+        vad=VadParams(
+            vad_filter=vad_filter
+        ),
+        bgm_separation=BGMSeparationParams(
+            is_separate_bgm=bgm_separation,
+            enable_offload=True
+        ),
+        diarization=DiarizationParams(
+            is_diarize=diarization
+        ),
+    ).to_list()
 
     subtitle_str, file_path = whisper_inferencer.transcribe_file(
         [audio_path],
