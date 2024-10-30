@@ -280,6 +280,42 @@ class WriteSRT(SubtitlesWriter):
         return segments
 
 
+class WriteLRC(SubtitlesWriter):
+    extension: str = "lrc"
+    always_include_hours: bool = False
+    decimal_marker: str = "."
+
+    def write_result(
+        self, result: dict, file: TextIO, options: Optional[dict] = None, **kwargs
+    ):
+        for i, (start, end, text) in enumerate(
+            self.iterate_result(result, options, **kwargs), start=1
+        ):
+            print(f"[{start}]{text}[{end}]\n", file=file, flush=True)
+
+    def to_segments(self, file_path: str) -> List[Segment]:
+        segments = []
+
+        blocks = read_file(file_path).split('\n')
+
+        for block in blocks:
+            if block.strip() != '':
+                lines = block.strip()
+                pattern = r'(\[.*?\])'
+                parts = re.split(pattern, lines)
+                start_str, sentence, end_str = [part.strip() for part in parts if part]
+                start_str, end_str = start_str.replace("[", "").replace("]", ""), end_str.replace("[", "").replace("]", "")
+                start, end = time_str_to_seconds(start_str, self.decimal_marker), time_str_to_seconds(end_str, self.decimal_marker)
+
+                segments.append(Segment(
+                    start=start,
+                    end=end,
+                    text=sentence
+                ))
+
+        return segments
+
+
 class WriteTSV(ResultWriter):
     """
     Write a transcript to a file in TSV (tab-separated values) format containing lines like:
