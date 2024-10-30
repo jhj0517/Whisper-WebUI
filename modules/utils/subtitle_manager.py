@@ -33,6 +33,18 @@ def format_timestamp(
     )
 
 
+def time_str_to_seconds(time_str: str, decimal_marker: str = ",") -> float:
+    hours, minutes, rest = time_str.split(":")
+    seconds, fractional = rest.split(decimal_marker)
+
+    hours = int(hours)
+    minutes = int(minutes)
+    seconds = int(seconds)
+    fractional_seconds = float("0." + fractional)
+
+    return hours * 3600 + minutes * 60 + seconds + fractional_seconds
+
+
 def get_start(segments: List[dict]) -> Optional[float]:
     return next(
         (w["start"] for s in segments for w in s["words"]),
@@ -54,15 +66,11 @@ class ResultWriter:
         self.output_dir = output_dir
 
     def __call__(
-        self, result: Union[dict, List[Segment]], output_file_name: str, add_timestamp: bool = True,
+        self, result: Union[dict, List[Segment]], output_file_name: str,
             options: Optional[dict] = None, **kwargs
     ):
         if isinstance(result, List) and result and isinstance(result[0], Segment):
             result = {"segments": [seg.dict() for seg in result]}
-
-        if add_timestamp:
-            timestamp = datetime.now().strftime("%m%d%H%M%S")
-            output_file_name += f"-{timestamp}"
 
         output_path = os.path.join(
             self.output_dir, output_file_name + "." + self.extension
@@ -216,6 +224,26 @@ class WriteVTT(SubtitlesWriter):
         for start, end, text in self.iterate_result(result, options, **kwargs):
             print(f"{start} --> {end}\n{text}\n", file=file, flush=True)
 
+    def to_segments(self, file_path: str) -> List[Segment]:
+        segments = []
+
+        blocks = read_file(file_path).split('\n\n')
+
+        for block in blocks:
+            if block.strip() != '' and not block.strip().startswith("WEBVTT"):
+                lines = block.strip().split('\n')
+                time_line = lines[0].split(" --> ")
+                start, end = time_str_to_seconds(time_line[0], self.decimal_marker), time_str_to_seconds(time_line[1], self.decimal_marker)
+                sentence = ' '.join(lines[1:])
+
+                segments.append(Segment(
+                    start=start,
+                    end=end,
+                    text=sentence
+                ))
+
+        return segments
+
 
 class WriteSRT(SubtitlesWriter):
     extension: str = "srt"
@@ -229,6 +257,27 @@ class WriteSRT(SubtitlesWriter):
             self.iterate_result(result, options, **kwargs), start=1
         ):
             print(f"{i}\n{start} --> {end}\n{text}\n", file=file, flush=True)
+
+    def to_segments(self, file_path: str) -> List[Segment]:
+        segments = []
+
+        blocks = read_file(file_path).split('\n\n')
+
+        for block in blocks:
+            if block.strip() != '':
+                lines = block.strip().split('\n')
+                index = lines[0]
+                time_line = lines[1].split(" --> ")
+                start, end = time_str_to_seconds(time_line[0], self.decimal_marker), time_str_to_seconds(time_line[1], self.decimal_marker)
+                sentence = ' '.join(lines[2:])
+
+                segments.append(Segment(
+                    start=start,
+                    end=end,
+                    text=sentence
+                ))
+
+        return segments
 
 
 class WriteTSV(ResultWriter):
@@ -265,7 +314,7 @@ class WriteJSON(ResultWriter):
 def get_writer(
     output_format: str, output_dir: str
 ) -> Callable[[dict, TextIO, dict], None]:
-    output_format = output_format.strip().lower()
+    output_format = output_format.strip().lower().replace(".", "")
 
     writers = {
         "txt": WriteTXT,
@@ -292,73 +341,17 @@ def get_writer(
 def generate_file(
     output_format: str, output_dir: str, result: Union[dict, List[Segment]], output_file_name: str, add_timestamp: bool = True,
 ) -> Tuple[str, str]:
+    output_format = output_format.strip().lower().replace(".", "")
+
+    if add_timestamp:
+        timestamp = datetime.now().strftime("%m%d%H%M%S")
+        output_file_name += timestamp
+
     file_path = os.path.join(output_dir, f"{output_file_name}.{output_format}")
     file_writer = get_writer(output_format=output_format, output_dir=output_dir)
-    file_writer(result=result, output_file_name=output_file_name, add_timestamp=add_timestamp)
+    file_writer(result=result, output_file_name=output_file_name)
     content = read_file(file_path)
     return content, file_path
-
-
-def parse_srt(file_path):
-    """Reads SRT file and returns as dict"""
-    with open(file_path, 'r', encoding='utf-8') as file:
-        srt_data = file.read()
-
-    data = []
-    blocks = srt_data.split('\n\n')
-
-    for block in blocks:
-        if block.strip() != '':
-            lines = block.strip().split('\n')
-            index = lines[0]
-            timestamp = lines[1]
-            sentence = ' '.join(lines[2:])
-
-            data.append({
-                "index": index,
-                "timestamp": timestamp,
-                "sentence": sentence
-            })
-    return data
-
-
-def parse_vtt(file_path):
-    """Reads WEBVTT file and returns as dict"""
-    with open(file_path, 'r', encoding='utf-8') as file:
-        webvtt_data = file.read()
-
-    data = []
-    blocks = webvtt_data.split('\n\n')
-
-    for block in blocks:
-        if block.strip() != '' and not block.strip().startswith("WEBVTT"):
-            lines = block.strip().split('\n')
-            timestamp = lines[0]
-            sentence = ' '.join(lines[1:])
-
-            data.append({
-                "timestamp": timestamp,
-                "sentence": sentence
-            })
-
-    return data
-
-
-def get_serialized_srt(dicts):
-    output = ""
-    for dic in dicts:
-        output += f'{dic["index"]}\n'
-        output += f'{dic["timestamp"]}\n'
-        output += f'{dic["sentence"]}\n\n'
-    return output
-
-
-def get_serialized_vtt(dicts):
-    output = "WEBVTT\n\n"
-    for dic in dicts:
-        output += f'{dic["timestamp"]}\n'
-        output += f'{dic["sentence"]}\n\n'
-    return output
 
 
 def safe_filename(name):
