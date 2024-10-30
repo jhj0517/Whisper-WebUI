@@ -3,6 +3,7 @@ import argparse
 import json
 from io import BytesIO
 import numpy as np
+import httpx
 import faster_whisper
 from faster_whisper.vad import VadOptions
 from fastapi import (
@@ -85,7 +86,8 @@ async def read_audio(
     if file:
         file_content = await file.read()
     elif file_url:
-        file_response = requests.get(file_url)
+        async with httpx.AsyncClient() as client:
+            file_response = await client.get(file_url)
         if file_response.status_code != 200:
             raise HTTPException(status_code=422, detail="Could not download the file")
         file_content = file_response.content
@@ -100,7 +102,6 @@ async def vad(
     min_speech_duration_ms: int = Form(250),
     max_speech_duration_s: Optional[int] = Form(999),
     min_silence_duration_ms: int = Form(2000),
-    window_size_samples: int = Form(1024),
     speech_pad_ms: int = Form(400)
 ):
     global vad_inferencer
@@ -115,7 +116,6 @@ async def vad(
         min_speech_duration_ms=min_speech_duration_ms,
         max_speech_duration_s=max_speech_duration_s,
         min_silence_duration_ms=min_silence_duration_ms,
-        window_size_samples=window_size_samples,
         speech_pad_ms=speech_pad_ms
     )
 
@@ -201,7 +201,6 @@ async def transcription(
     min_speech_duration_ms: int = Form(default=250),
     max_speech_duration_s: Optional[int] = Form(default=999),
     min_silence_duration_ms: int = Form(default=2000),
-    window_size_samples: int = Form(default=1024),
     speech_pad_ms: int = Form(default=400),
 
     is_diarization: bool = Form(default=False),
@@ -223,7 +222,6 @@ async def transcription(
             min_speech_duration_ms=min_speech_duration_ms,
             max_speech_duration_s=max_speech_duration_s,
             min_silence_duration_ms=min_silence_duration_ms,
-            window_size_samples=window_size_samples,
             speech_pad_ms=speech_pad_ms
         )
         audio = vad_inferencer.run(
@@ -306,7 +304,6 @@ if __name__ == "__main__":
     whisper_inferencer = FasterWhisperInference(
         model_dir=args.faster_whisper_model_dir,
         output_dir=os.path.join("outputs"),
-        args=args
     )
 
     if not (args.initial_model in whisper_inferencer.available_models):
