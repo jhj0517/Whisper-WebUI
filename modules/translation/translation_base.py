@@ -124,8 +124,6 @@ class TranslationBase(ABC):
 
         except Exception as e:
             print(f"Error: {str(e)}")
-            import traceback
-            traceback.print_exc()
         finally:
             self.release_cuda_memory()
 
