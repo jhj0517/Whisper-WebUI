@@ -147,12 +147,11 @@ class DeepLAPI:
             batch_size = self.max_text_batch_size
             for batch_start in range(0, len(segments), batch_size):
                 progress(batch_start / len(segments), desc="Translating..")
-                sentences_to_translate = segments[batch_start:batch_start+batch_size].text
+                sentences_to_translate = [seg.text for seg in segments[batch_start:batch_start+batch_size]]
                 translated_texts = self.request_deepl_translate(auth_key, sentences_to_translate, source_lang,
                                                                 target_lang, is_pro)
                 for i, translated_text in enumerate(translated_texts):
                     segments[batch_start + i].text = translated_text["text"]
-            print("DeepL Segments: ", segments)
 
             subtitle, output_path = generate_file(
                 output_dir=self.output_dir,
