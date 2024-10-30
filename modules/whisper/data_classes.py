@@ -19,7 +19,8 @@ class WhisperImpl(Enum):
 
 
 class Segment(BaseModel):
-    id: Optional[str] = Field(default=None, description="Unique identifier for the segment")
+    id: Optional[int] = Field(default=None, description="Incremental id for the segment")
+    seek: Optional[int] = Field(default=None, description="Seek of the segment from chunked audio")
     text: Optional[str] = Field(default=None, description="Transcription text of the segment")
     start: Optional[float] = Field(default=None, description="Start time of the segment")
     end: Optional[float] = Field(default=None, description="End time of the segment")
@@ -35,6 +36,7 @@ class Segment(BaseModel):
                             seg: faster_whisper.transcribe.Segment):
         return cls(
             id=seg.id,
+            seek=seg.seek,
             text=seg.text,
             start=seg.start,
             end=seg.end,
@@ -43,7 +45,7 @@ class Segment(BaseModel):
             avg_logprob=seg.avg_logprob,
             compression_ratio=seg.compression_ratio,
             no_speech_prob=seg.no_speech_prob,
-            words=seg.words
+            words=[] if seg.words is None else seg.words
         )
 
 
