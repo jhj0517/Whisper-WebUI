@@ -13,9 +13,9 @@ from modules.uvr.music_separator import MusicSeparator
 from modules.utils.paths import (WHISPER_MODELS_DIR, DIARIZATION_MODELS_DIR, OUTPUT_DIR, DEFAULT_PARAMETERS_CONFIG_PATH,
                                  UVR_MODELS_DIR)
 from modules.utils.constants import *
-from modules.utils.subtitle_manager import get_srt, get_vtt, get_txt, write_file, safe_filename
+from modules.utils.subtitle_manager import *
 from modules.utils.youtube_manager import get_ytdata, get_ytaudio
-from modules.utils.files_manager import get_media_files, format_gradio_files, load_yaml, save_yaml
+from modules.utils.files_manager import get_media_files, format_gradio_files, load_yaml, save_yaml, read_file
 from modules.whisper.data_classes import *
 from modules.diarize.diarizer import Diarizer
 from modules.vad.silero_vad import SileroVAD
@@ -224,14 +224,14 @@ class BaseTranscriptionPipeline(ABC):
                 )
 
                 file_name, file_ext = os.path.splitext(os.path.basename(file))
-                subtitle, file_path = self.generate_and_write_file(
-                    file_name=file_name,
-                    transcribed_segments=transcribed_segments,
-                    add_timestamp=add_timestamp,
-                    file_format=file_format,
-                    output_dir=self.output_dir
+                subtitle, file_path = generate_file(
+                    output_dir=self.output_dir,
+                    output_file_name=file_name,
+                    output_format=file_format,
+                    result=transcribed_segments,
+                    add_timestamp=add_timestamp
                 )
-                files_info[file_name] = {"subtitle": subtitle, "time_for_task": time_for_task, "path": file_path}
+                files_info[file_name] = {"subtitle": read_file(file_path), "time_for_task": time_for_task, "path": file_path}
 
             total_result = ''
             total_time = 0
@@ -291,16 +291,17 @@ class BaseTranscriptionPipeline(ABC):
             )
             progress(1, desc="Completed!")
 
-            subtitle, result_file_path = self.generate_and_write_file(
-                file_name="Mic",
-                transcribed_segments=transcribed_segments,
-                add_timestamp=add_timestamp,
-                file_format=file_format,
-                output_dir=self.output_dir
+            file_name = "Mic"
+            subtitle, file_path = generate_file(
+                output_dir=self.output_dir,
+                output_file_name=file_name,
+                output_format=file_format,
+                result=transcribed_segments,
+                add_timestamp=add_timestamp
             )
 
             result_str = f"Done in {self.format_time(time_for_task)}! Subtitle file is in the outputs folder.\n\n{subtitle}"
-            return [result_str, result_file_path]
+            return [result_str, file_path]
         except Exception as e:
             print(f"Error transcribing file: {e}")
         finally:
@@ -351,19 +352,20 @@ class BaseTranscriptionPipeline(ABC):
             progress(1, desc="Completed!")
 
             file_name = safe_filename(yt.title)
-            subtitle, result_file_path = self.generate_and_write_file(
-                file_name=file_name,
-                transcribed_segments=transcribed_segments,
-                add_timestamp=add_timestamp,
-                file_format=file_format,
-                output_dir=self.output_dir
+            subtitle, file_path = generate_file(
+                output_dir=self.output_dir,
+                output_file_name=file_name,
+                output_format=file_format,
+                result=transcribed_segments,
+                add_timestamp=add_timestamp
             )
+
             result_str = f"Done in {self.format_time(time_for_task)}! Subtitle file is in the outputs folder.\n\n{subtitle}"
 
             if os.path.exists(audio):
                 os.remove(audio)
 
-            return [result_str, result_file_path]
+            return [result_str, file_path]
 
         except Exception as e:
             print(f"Error transcribing file: {e}")
@@ -383,58 +385,6 @@ class BaseTranscriptionPipeline(ABC):
             return list(ctranslate2.get_supported_compute_types("cuda"))
         else:
             return list(ctranslate2.get_supported_compute_types("cpu"))
-
-    @staticmethod
-    def generate_and_write_file(file_name: str,
-                                transcribed_segments: list,
-                                add_timestamp: bool,
-                                file_format: str,
-                                output_dir: str
-                                ) -> str:
-        """
-        Writes subtitle file
-
-        Parameters
-        ----------
-        file_name: str
-            Output file name
-        transcribed_segments: list
-            Text segments transcribed from audio
-        add_timestamp: bool
-            Determines whether to add a timestamp to the end of the filename.
-        file_format: str
-            File format to write. Supported formats: [SRT, WebVTT, txt]
-        output_dir: str
-            Directory path of the output
-
-        Returns
-        ----------
-        content: str
-            Result of the transcription
-        output_path: str
-            output file path
-        """
-        if add_timestamp:
-            timestamp = datetime.now().strftime("%m%d%H%M%S")
-            output_path = os.path.join(output_dir, f"{file_name}-{timestamp}")
-        else:
-            output_path = os.path.join(output_dir, f"{file_name}")
-
-        file_format = file_format.strip().lower()
-        if file_format == "srt":
-            content = get_srt(transcribed_segments)
-            output_path += '.srt'
-
-        elif file_format == "webvtt":
-            content = get_vtt(transcribed_segments)
-            output_path += '.vtt'
-
-        elif file_format == "txt":
-            content = get_txt(transcribed_segments)
-            output_path += '.txt'
-
-        write_file(content, output_path)
-        return content, output_path
 
     @staticmethod
     def format_time(elapsed_time: float) -> str:

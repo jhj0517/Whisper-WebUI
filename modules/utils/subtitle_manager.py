@@ -5,10 +5,11 @@ import os
 import re
 import sys
 import zlib
-from typing import Callable, List, Optional, TextIO, Union, Dict
+from typing import Callable, List, Optional, TextIO, Union, Dict, Tuple
 from datetime import datetime
 
 from modules.whisper.data_classes import Segment
+from .files_manager import read_file
 
 
 def format_timestamp(
@@ -61,7 +62,7 @@ class ResultWriter:
 
         if add_timestamp:
             timestamp = datetime.now().strftime("%m%d%H%M%S")
-            output_file_name += timestamp
+            output_file_name += f"-{timestamp}"
 
         output_path = os.path.join(
             self.output_dir, output_file_name + "." + self.extension
@@ -264,6 +265,8 @@ class WriteJSON(ResultWriter):
 def get_writer(
     output_format: str, output_dir: str
 ) -> Callable[[dict, TextIO, dict], None]:
+    output_format = output_format.strip().lower()
+
     writers = {
         "txt": WriteTXT,
         "vtt": WriteVTT,
@@ -284,6 +287,16 @@ def get_writer(
         return write_all
 
     return writers[output_format](output_dir)
+
+
+def generate_file(
+    output_format: str, output_dir: str, result: Union[dict, List[Segment]], output_file_name: str, add_timestamp: bool = True,
+) -> Tuple[str, str]:
+    file_path = os.path.join(output_dir, f"{output_file_name}.{output_format}")
+    file_writer = get_writer(output_format=output_format, output_dir=output_dir)
+    file_writer(result=result, output_file_name=output_file_name, add_timestamp=add_timestamp)
+    content = read_file(file_path)
+    return content, file_path
 
 
 def parse_srt(file_path):
