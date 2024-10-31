@@ -1,10 +1,12 @@
+import faster_whisper.transcribe
 import gradio as gr
 import torch
-from typing import Optional, Dict, List, Union
+from typing import Optional, Dict, List, Union, NamedTuple
 from pydantic import BaseModel, Field, field_validator, ConfigDict
 from gradio_i18n import Translate, gettext as _
 from enum import Enum
 from copy import deepcopy
+
 import yaml
 
 from modules.utils.constants import *
@@ -17,12 +19,53 @@ class WhisperImpl(Enum):
 
 
 class Segment(BaseModel):
-    text: Optional[str] = Field(default=None,
-                                description="Transcription text of the segment")
-    start: Optional[float] = Field(default=None,
-                                   description="Start time of the segment")
-    end: Optional[float] = Field(default=None,
-                                 description="End time of the segment")
+    id: Optional[int] = Field(default=None, description="Incremental id for the segment")
+    seek: Optional[int] = Field(default=None, description="Seek of the segment from chunked audio")
+    text: Optional[str] = Field(default=None, description="Transcription text of the segment")
+    start: Optional[float] = Field(default=None, description="Start time of the segment")
+    end: Optional[float] = Field(default=None, description="End time of the segment")
+    tokens: Optional[List[int]] = Field(default=None, description="List of token IDs")
+    temperature: Optional[float] = Field(default=None, description="Temperature used during the decoding process")
+    avg_logprob: Optional[float] = Field(default=None, description="Average log probability of the tokens")
+    compression_ratio: Optional[float] = Field(default=None, description="Compression ratio of the segment")
+    no_speech_prob: Optional[float] = Field(default=None, description="Probability that it's not speech")
+    words: Optional[List['Word']] = Field(default=None, description="List of words contained in the segment")
+
+    @classmethod
+    def from_faster_whisper(cls,
+                            seg: faster_whisper.transcribe.Segment):
+        if seg.words is not None:
+            words = [
+                Word(
+                    start=w.start,
+                    end=w.end,
+                    word=w.word,
+                    probability=w.probability
+                ) for w in seg.words
+            ]
+        else:
+            words = None
+
+        return cls(
+            id=seg.id,
+            seek=seg.seek,
+            text=seg.text,
+            start=seg.start,
+            end=seg.end,
+            tokens=seg.tokens,
+            temperature=seg.temperature,
+            avg_logprob=seg.avg_logprob,
+            compression_ratio=seg.compression_ratio,
+            no_speech_prob=seg.no_speech_prob,
+            words=words
+        )
+
+
+class Word(BaseModel):
+    start: Optional[float] = Field(default=None, description="Start time of the word")
+    end: Optional[float] = Field(default=None, description="Start time of the word")
+    word: Optional[str] = Field(default=None, description="Word text")
+    probability: Optional[float] = Field(default=None, description="Probability of the word")
 
 
 class BaseParams(BaseModel):
@@ -250,9 +293,9 @@ class WhisperParams(BaseParams):
         default=True,
         description="Suppress blank outputs at start of sampling"
     )
-    suppress_tokens: Optional[Union[List, str]] = Field(default=[-1], description="Token IDs to suppress")
+    suppress_tokens: Optional[Union[List[int], str]] = Field(default=[-1], description="Token IDs to suppress")
     max_initial_timestamp: float = Field(
-        default=0.0,
+        default=1.0,
         ge=0.0,
         description="Maximum initial timestamp"
     )

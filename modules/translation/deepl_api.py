@@ -139,37 +139,27 @@ class DeepLAPI:
         )
 
         files_info = {}
-        for fileobj in fileobjs:
-            file_path = fileobj
-            file_name, file_ext = os.path.splitext(os.path.basename(fileobj))
-
-            if file_ext == ".srt":
-                parsed_dicts = parse_srt(file_path=file_path)
-
-            elif file_ext == ".vtt":
-                parsed_dicts = parse_vtt(file_path=file_path)
+        for file_path in fileobjs:
+            file_name, file_ext = os.path.splitext(os.path.basename(file_path))
+            writer = get_writer(file_ext, self.output_dir)
+            segments = writer.to_segments(file_path)
 
             batch_size = self.max_text_batch_size
-            for batch_start in range(0, len(parsed_dicts), batch_size):
-                batch_end = min(batch_start + batch_size, len(parsed_dicts))
-                sentences_to_translate = [dic["sentence"] for dic in parsed_dicts[batch_start:batch_end]]
+            for batch_start in range(0, len(segments), batch_size):
+                progress(batch_start / len(segments), desc="Translating..")
+                sentences_to_translate = [seg.text for seg in segments[batch_start:batch_start+batch_size]]
                 translated_texts = self.request_deepl_translate(auth_key, sentences_to_translate, source_lang,
                                                                 target_lang, is_pro)
                 for i, translated_text in enumerate(translated_texts):
-                    parsed_dicts[batch_start + i]["sentence"] = translated_text["text"]
-                progress(batch_end / len(parsed_dicts), desc="Translating..")
+                    segments[batch_start + i].text = translated_text["text"]
 
-            if file_ext == ".srt":
-                subtitle = get_serialized_srt(parsed_dicts)
-            elif file_ext == ".vtt":
-                subtitle = get_serialized_vtt(parsed_dicts)
-
-            if add_timestamp:
-                timestamp = datetime.now().strftime("%m%d%H%M%S")
-                file_name += f"-{timestamp}"
-
-            output_path = os.path.join(self.output_dir, f"{file_name}{file_ext}")
-            write_file(subtitle, output_path)
+            subtitle, output_path = generate_file(
+                output_dir=self.output_dir,
+                output_file_name=file_name,
+                output_format=file_ext,
+                result=segments,
+                add_timestamp=add_timestamp
+            )
 
             files_info[file_name] = {"subtitle": subtitle, "path": output_path}
 
