@@ -1,4 +1,5 @@
 import os
+import sys
 import whisper
 import ctranslate2
 import gradio as gr
@@ -19,6 +20,7 @@ from modules.utils.files_manager import get_media_files, format_gradio_files, lo
 from modules.whisper.data_classes import *
 from modules.diarize.diarizer import Diarizer
 from modules.vad.silero_vad import SileroVAD
+from modules.utils.language import LANGUAGE_CODES
 
 
 class BaseTranscriptionPipeline(ABC):
@@ -486,13 +488,10 @@ class BaseTranscriptionPipeline(ABC):
         Validate gradio specific values that can't be displayed as None in the UI.
         Related issue : https://github.com/gradio-app/gradio/issues/8723
         """
-        if params.whisper.lang is None:
-            pass
-        elif params.whisper.lang == AUTOMATIC_DETECTION:
+        if params.whisper.lang in LANGUAGE_CODES:
+            params.whisper.lang = LANGUAGE_CODES[params.whisper.lang]
+        elif params.whisper.lang not in LANGUAGE_CODES.values():
             params.whisper.lang = None
-        else:
-            language_code_dict = {value: key for key, value in whisper.tokenizer.LANGUAGES.items()}
-            params.whisper.lang = language_code_dict[params.lang]
 
         if params.whisper.initial_prompt == GRADIO_NONE_STR:
             params.whisper.initial_prompt = None
