@@ -293,9 +293,9 @@ class WhisperParams(BaseParams):
         default=True,
         description="Suppress blank outputs at start of sampling"
     )
-    suppress_tokens: Optional[Union[List, str]] = Field(default=[-1], description="Token IDs to suppress")
+    suppress_tokens: Optional[Union[List[int], str]] = Field(default=[-1], description="Token IDs to suppress")
     max_initial_timestamp: float = Field(
-        default=0.0,
+        default=1.0,
         ge=0.0,
         description="Maximum initial timestamp"
     )
