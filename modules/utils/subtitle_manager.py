@@ -14,7 +14,7 @@ from .files_manager import read_file
 
 def format_timestamp(
     seconds: float, always_include_hours: bool = True, decimal_marker: str = ","
-):
+) -> str:
     assert seconds >= 0, "non-negative timestamp expected"
     milliseconds = round(seconds * 1000.0)
 
@@ -34,10 +34,17 @@ def format_timestamp(
 
 
 def time_str_to_seconds(time_str: str, decimal_marker: str = ",") -> float:
-    hours, minutes, rest = time_str.split(":")
+    times = time_str.split(":")
+
+    if len(times) == 3:
+        hours, minutes, rest = times
+        hours = int(hours)
+    else:
+        hours = 0
+        minutes, rest = times
+
     seconds, fractional = rest.split(decimal_marker)
 
-    hours = int(hours)
     minutes = int(minutes)
     seconds = int(seconds)
     fractional_seconds = float("0." + fractional)
@@ -401,7 +408,7 @@ def generate_file(
     file_path = os.path.join(output_dir, f"{output_file_name}.{output_format}")
     file_writer = get_writer(output_format=output_format, output_dir=output_dir)
 
-    if isinstance(file_writer, WriteLRC) and kwargs["highlight_words"]:
+    if isinstance(file_writer, WriteLRC) and kwargs.get("highlight_words", False):
         kwargs["highlight_words"], kwargs["align_lrc_words"] = False, True
 
     file_writer(result=result, output_file_name=output_file_name, **kwargs)
