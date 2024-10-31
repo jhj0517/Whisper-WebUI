@@ -358,6 +358,7 @@ def get_writer(
         "srt": WriteSRT,
         "tsv": WriteTSV,
         "json": WriteJSON,
+        "lrc": WriteLRC
     }
 
     if output_format == "all":
