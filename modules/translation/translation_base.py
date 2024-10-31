@@ -123,7 +123,8 @@ class TranslationBase(ABC):
             return [gr_str, output_file_paths]
 
         except Exception as e:
-            print(f"Error: {str(e)}")
+            print(f"Error translating file: {e}")
+            raise
         finally:
             self.release_cuda_memory()
 

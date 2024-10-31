@@ -254,6 +254,7 @@ class BaseTranscriptionPipeline(ABC):
 
         except Exception as e:
             print(f"Error transcribing file: {e}")
+            raise
         finally:
             self.release_cuda_memory()
 
@@ -315,7 +316,8 @@ class BaseTranscriptionPipeline(ABC):
             result_str = f"Done in {self.format_time(time_for_task)}! Subtitle file is in the outputs folder.\n\n{subtitle}"
             return [result_str, file_path]
         except Exception as e:
-            print(f"Error transcribing file: {e}")
+            print(f"Error transcribing mic: {e}")
+            raise
         finally:
             self.release_cuda_memory()
 
@@ -386,7 +388,8 @@ class BaseTranscriptionPipeline(ABC):
             return [result_str, file_path]
 
         except Exception as e:
-            print(f"Error transcribing file: {e}")
+            print(f"Error transcribing youtube: {e}")
+            raise
         finally:
             self.release_cuda_memory()
 
