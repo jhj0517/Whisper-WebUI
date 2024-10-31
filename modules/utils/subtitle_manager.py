@@ -107,12 +107,14 @@ class SubtitlesWriter(ResultWriter):
         max_line_width: Optional[int] = None,
         max_line_count: Optional[int] = None,
         highlight_words: bool = False,
+        align_lrc_words: bool = False,
         max_words_per_line: Optional[int] = None,
     ):
         options = options or {}
         max_line_width = max_line_width or options.get("max_line_width")
         max_line_count = max_line_count or options.get("max_line_count")
         highlight_words = highlight_words or options.get("highlight_words", False)
+        align_lrc_words = align_lrc_words or options.get("align_lrc_words", False)
         max_words_per_line = max_words_per_line or options.get("max_words_per_line")
         preserve_segments = max_line_count is None or max_line_width is None
         max_line_width = max_line_width or 1000
@@ -195,6 +197,14 @@ class SubtitlesWriter(ResultWriter):
                             ]
                         )
                         last = end
+
+                if align_lrc_words:
+                    lrc_aligned_words = [f"[{self.format_timestamp(sub['start'])}]{sub['word']}" for sub in subtitle]
+                    l_start, l_end = self.format_timestamp(subtitle[-1]['start']), self.format_timestamp(subtitle[-1]['end'])
+                    lrc_aligned_words[-1] = f"[{l_start}]{subtitle[-1]['word']}[{l_end}]"
+                    lrc_aligned_words = ' '.join(lrc_aligned_words)
+                    yield None, None, lrc_aligned_words
+
                 else:
                     yield subtitle_start, subtitle_end, subtitle_text
         else:
@@ -291,7 +301,10 @@ class WriteLRC(SubtitlesWriter):
         for i, (start, end, text) in enumerate(
             self.iterate_result(result, options, **kwargs), start=1
         ):
-            print(f"[{start}]{text}[{end}]\n", file=file, flush=True)
+            if "align_lrc_words" in kwargs and kwargs["align_lrc_words"]:
+                print(f"{text}\n", file=file, flush=True)
+            else:
+                print(f"[{start}]{text}[{end}]\n", file=file, flush=True)
 
     def to_segments(self, file_path: str) -> List[Segment]:
         segments = []
@@ -387,6 +400,10 @@ def generate_file(
 
     file_path = os.path.join(output_dir, f"{output_file_name}.{output_format}")
     file_writer = get_writer(output_format=output_format, output_dir=output_dir)
+
+    if isinstance(file_writer, WriteLRC) and kwargs["highlight_words"]:
+        kwargs["highlight_words"], kwargs["align_lrc_words"] = False, True
+
     file_writer(result=result, output_file_name=output_file_name, **kwargs)
     content = read_file(file_path)
     return content, file_path
