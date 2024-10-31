@@ -8,7 +8,7 @@ import zlib
 from typing import Callable, List, Optional, TextIO, Union, Dict, Tuple
 from datetime import datetime
 
-from modules.whisper.data_classes import Segment
+from modules.whisper.data_classes import Segment, Word
 from .files_manager import read_file
 
 
@@ -323,15 +323,20 @@ class WriteLRC(SubtitlesWriter):
                 lines = block.strip()
                 pattern = r'(\[.*?\])'
                 parts = re.split(pattern, lines)
-                start_str, sentence, end_str = [part.strip() for part in parts if part]
-                start_str, end_str = start_str.replace("[", "").replace("]", ""), end_str.replace("[", "").replace("]", "")
-                start, end = time_str_to_seconds(start_str, self.decimal_marker), time_str_to_seconds(end_str, self.decimal_marker)
+                parts = [part.strip() for part in parts if part]
 
-                segments.append(Segment(
-                    start=start,
-                    end=end,
-                    text=sentence
-                ))
+                for i, part in enumerate(parts):
+                    sentence_i = i%2
+                    if sentence_i == 1:
+                        start_str, text, end_str = parts[sentence_i-1], parts[sentence_i], parts[sentence_i+1]
+                        start_str, end_str = start_str.replace("[", "").replace("]", ""), end_str.replace("[", "").replace("]", "")
+                        start, end = time_str_to_seconds(start_str, self.decimal_marker), time_str_to_seconds(end_str, self.decimal_marker)
+
+                        segments.append(Segment(
+                            start=start,
+                            end=end,
+                            text=text,
+                        ))
 
         return segments
 
