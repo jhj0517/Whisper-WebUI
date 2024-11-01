@@ -16,6 +16,8 @@ TRANSLATION_OUTPUT_DIR = os.path.join(OUTPUT_DIR, "translations")
 UVR_OUTPUT_DIR = os.path.join(OUTPUT_DIR, "UVR")
 UVR_INSTRUMENTAL_OUTPUT_DIR = os.path.join(UVR_OUTPUT_DIR, "instrumental")
 UVR_VOCALS_OUTPUT_DIR = os.path.join(UVR_OUTPUT_DIR, "vocals")
+BACKEND_DIR_PATH = os.path.join(WEBUI_DIR, "backend")
+SERVER_CONFIG_PATH = os.path.join(BACKEND_DIR_PATH, "config", "config.yaml")
 
 for dir_path in [MODELS_DIR,
                  WHISPER_MODELS_DIR,
