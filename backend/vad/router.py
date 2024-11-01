@@ -37,7 +37,7 @@ async def run_vad(
 @vad_router.post("/vad", tags=["vad"])
 async def vad(
     background_tasks: BackgroundTasks,
-    file: UploadFile = File(..., description="Audio or video file to transcribe."),
+    file: UploadFile = File(..., description="Audio or video file to detect voices."),
     params: VadParams = Depends()
 ) -> QueueResponse:
     if not isinstance(file, np.ndarray):
