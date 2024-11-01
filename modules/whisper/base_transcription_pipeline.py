@@ -528,6 +528,9 @@ class BaseTranscriptionPipeline(ABC):
 
         if cached_yaml["whisper"].get("lang", None) is None:
             cached_yaml["whisper"]["lang"] = AUTOMATIC_DETECTION.unwrap()
+        else:
+            language_dict = whisper.tokenizer.LANGUAGES
+            cached_yaml["whisper"]["lang"] = language_dict[cached_yaml["whisper"]["lang"]]
 
         if cached_yaml["vad"].get("max_speech_duration_s", float('inf')) == float('inf'):
             cached_yaml["vad"]["max_speech_duration_s"] = GRADIO_NONE_NUMBER_MAX
