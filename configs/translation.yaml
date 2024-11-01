@@ -411,3 +411,49 @@ ru: # Russian
   Instrumental: Инструментал
   Vocals: Вокал
   SEPARATE BACKGROUND MUSIC: РАЗДЕЛИТЬ ФОНОВУЮ МУЗЫКУ
+
+tr: # Turkish
+  Language: Dil
+  File: Dosya
+  Youtube: Youtube
+  Mic: Mikrofon
+  T2T Translation: T2T Çeviri
+  BGM Separation: Arka Plan Müziği Ayırma
+  GENERATE SUBTITLE FILE: ALTYAZI DOSYASI OLUŞTUR
+  Output: Çıktı
+  Downloadable output file: İndirilebilir çıktı dosyası
+  Upload File here: Dosya Yükle
+  Model: Model
+  Automatic Detection: Otomatik Algılama
+  File Format: Dosya Formatı
+  Translate to English?: İngilizceye Çevir?
+  Add a timestamp to the end of the filename: Dosya adının sonuna zaman damgası ekle
+  Advanced Parameters: Gelişmiş Parametreler
+  Background Music Remover Filter: Arka Plan Müziği Kaldırma Filtresi
+  Enabling this will remove background music: Bunu etkinleştirmek, arka plan müziğini alt model tarafından transkripsiyondan önce kaldıracaktır
+  Enable Background Music Remover Filter: Arka Plan Müziği Kaldırma Filtresini Etkinleştir
+  Save separated files to output: Ayrılmış dosyaları çıktıya kaydet
+  Offload sub model after removing background music: Arka plan müziği kaldırıldıktan sonra alt modeli devre dışı bırak
+  Voice Detection Filter: Ses Algılama Filtresi
+  Enable this to transcribe only detected voice: Bunu etkinleştirerek yalnızca alt model tarafından algılanan ses kısımlarını transkribe et
+  Enable Silero VAD Filter: Silero VAD Filtresini Etkinleştir
+  Diarization: Konuşmacı Ayrımı
+  Enable Diarization: Konuşmacı Ayrımını Etkinleştir
+  HuggingFace Token: HuggingFace Anahtarı
+  This is only needed the first time you download the model: Bu, modeli ilk kez indirirken gereklidir. Zaten modelleriniz varsa girmenize gerek yok. Modeli indirmek için "https://huggingface.co/pyannote/speaker-diarization-3.1" ve "https://huggingface.co/pyannote/segmentation-3.0" adreslerine gidip gereksinimlerini kabul etmeniz gerekiyor
+  Device: Cihaz
+  Youtube Link: Youtube Bağlantısı
+  Youtube Thumbnail: Youtube Küçük Resmi
+  Youtube Title: Youtube Başlığı
+  Youtube Description: Youtube Açıklaması
+  Record with Mic: Mikrofonla Kaydet
+  Upload Subtitle Files to translate here: Çeviri için altyazı dosyalarını buraya yükle
+  Your Auth Key (API KEY): Yetki Anahtarınız (API ANAHTARI)
+  Source Language: Kaynak Dil
+  Target Language: Hedef Dil
+  Pro User?: Pro Kullanıcı?
+  TRANSLATE SUBTITLE FILE: ALTYAZI DOSYASINI ÇEVİR
+  Upload Audio Files to separate background music: Arka plan müziğini ayırmak için ses dosyalarını yükle
+  Instrumental: Enstrümantal
+  Vocals: Vokal
+  SEPARATE BACKGROUND MUSIC: ARKA PLAN MÜZİĞİNİ AYIR

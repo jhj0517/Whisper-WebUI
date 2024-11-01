@@ -95,32 +95,22 @@ class TranslationBase(ABC):
             files_info = {}
             for fileobj in fileobjs:
                 file_name, file_ext = os.path.splitext(os.path.basename(fileobj))
-                if file_ext == ".srt":
-                    parsed_dicts = parse_srt(file_path=fileobj)
-                    total_progress = len(parsed_dicts)
-                    for index, dic in enumerate(parsed_dicts):
-                        progress(index / total_progress, desc="Translating..")
-                        translated_text = self.translate(dic["sentence"], max_length=max_length)
-                        dic["sentence"] = translated_text
-                    subtitle = get_serialized_srt(parsed_dicts)
+                writer = get_writer(file_ext, self.output_dir)
+                segments = writer.to_segments(fileobj)
+                for i, segment in enumerate(segments):
+                    progress(i / len(segments), desc="Translating..")
+                    translated_text = self.translate(segment.text, max_length=max_length)
+                    segment.text = translated_text
 
-                elif file_ext == ".vtt":
-                    parsed_dicts = parse_vtt(file_path=fileobj)
-                    total_progress = len(parsed_dicts)
-                    for index, dic in enumerate(parsed_dicts):
-                        progress(index / total_progress, desc="Translating..")
-                        translated_text = self.translate(dic["sentence"], max_length=max_length)
-                        dic["sentence"] = translated_text
-                    subtitle = get_serialized_vtt(parsed_dicts)
+                subtitle, file_path = generate_file(
+                    output_dir=self.output_dir,
+                    output_file_name=file_name,
+                    output_format=file_ext,
+                    result=segments,
+                    add_timestamp=add_timestamp
+                )
 
-                if add_timestamp:
-                    timestamp = datetime.now().strftime("%m%d%H%M%S")
-                    file_name += f"-{timestamp}"
-
-                output_path = os.path.join(self.output_dir, f"{file_name}{file_ext}")
-                write_file(subtitle, output_path)
-
-                files_info[file_name] = {"subtitle": subtitle, "path": output_path}
+                files_info[file_name] = {"subtitle": subtitle, "path": file_path}
 
             total_result = ''
             for file_name, info in files_info.items():
@@ -133,7 +123,8 @@ class TranslationBase(ABC):
             return [gr_str, output_file_paths]
 
         except Exception as e:
-            print(f"Error: {str(e)}")
+            print(f"Error translating file: {e}")
+            raise
         finally:
             self.release_cuda_memory()
 

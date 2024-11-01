@@ -259,7 +259,7 @@ class SileroVAD:
 
         for segment in segments:
             segment.start = ts_map.get_original_time(segment.start)
-            segment.start = ts_map.get_original_time(segment.start)
+            segment.end = ts_map.get_original_time(segment.end)
 
         return segments
 

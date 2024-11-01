@@ -67,3 +67,9 @@ def is_video(file_path):
     video_extensions = ['.mp4', '.mkv', '.avi', '.mov', '.flv', '.wmv', '.webm', '.m4v', '.mpeg', '.mpg', '.3gp']
     extension = os.path.splitext(file_path)[1].lower()
     return extension in video_extensions
+
+
+def read_file(file_path):
+    with open(file_path, "r", encoding="utf-8") as f:
+        subtitle_content = f.read()
+    return subtitle_content
