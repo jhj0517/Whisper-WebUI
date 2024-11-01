@@ -492,7 +492,7 @@ class BaseTranscriptionPipeline(ABC):
             params.whisper.lang = None
         else:
             language_code_dict = {value: key for key, value in whisper.tokenizer.LANGUAGES.items()}
-            params.whisper.lang = language_code_dict[params.lang]
+            params.whisper.lang = language_code_dict[params.whisper.lang]
 
         if params.whisper.initial_prompt == GRADIO_NONE_STR:
             params.whisper.initial_prompt = None
