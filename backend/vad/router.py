@@ -1,3 +1,4 @@
+import functools
 import numpy as np
 from faster_whisper.vad import VadOptions
 from fastapi import (
@@ -13,13 +14,20 @@ from ..util.schemas import QueueResponse
 
 
 vad_router = APIRouter()
-vad_inferencer = SileroVAD()
+
+
+@functools.lru_cache
+def init_vad_model() -> SileroVAD:
+    inferencer = SileroVAD()
+    inferencer.update_model()
+    return inferencer
 
 
 async def run_vad(
     audio: np.ndarray,
     params: VadOptions
 ):
+    vad_inferencer = init_vad_model()
     audio, speech_chunks = vad_inferencer.run(
         audio=audio,
         vad_parameters=params
