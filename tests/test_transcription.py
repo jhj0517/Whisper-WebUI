@@ -66,15 +66,16 @@ def test_transcribe(
     assert isinstance(subtitle_str, str) and subtitle_str
     assert isinstance(file_path[0], str) and file_path
 
-    whisper_inferencer.transcribe_youtube(
-        TEST_YOUTUBE_URL,
-        "SRT",
-        False,
-        gr.Progress(),
-        *hparams,
-    )
-    assert isinstance(subtitle_str, str) and subtitle_str
-    assert isinstance(file_path[0], str) and file_path
+    if not is_pytube_detected_bot():
+        whisper_inferencer.transcribe_youtube(
+            TEST_YOUTUBE_URL,
+            "SRT",
+            False,
+            gr.Progress(),
+            *hparams,
+        )
+        assert isinstance(subtitle_str, str) and subtitle_str
+        assert isinstance(file_path[0], str) and file_path
 
     whisper_inferencer.transcribe_mic(
         audio_path,
