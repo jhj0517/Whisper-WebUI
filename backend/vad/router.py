@@ -12,15 +12,14 @@ from modules.whisper.data_classes import VadParams
 from ..util.audio import read_audio
 from ..util.schemas import QueueResponse
 
-
-vad_router = APIRouter()
-
-
 @functools.lru_cache
 def init_vad_model() -> SileroVAD:
     inferencer = SileroVAD()
     inferencer.update_model()
     return inferencer
+
+vad_inferencer = init_vad_model()
+vad_router = APIRouter()
 
 
 async def run_vad(
