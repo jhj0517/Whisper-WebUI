@@ -6,6 +6,7 @@ from fastapi import (
     UploadFile,
 )
 from fastapi import APIRouter, BackgroundTasks, Depends, Response, status
+from typing import List, Dict
 
 from modules.vad.silero_vad import SileroVAD
 from modules.whisper.data_classes import VadParams
@@ -18,15 +19,14 @@ def init_vad_model() -> SileroVAD:
     inferencer.update_model()
     return inferencer
 
-vad_inferencer = init_vad_model()
 vad_router = APIRouter()
+vad_inferencer = init_vad_model()
 
 
 async def run_vad(
     audio: np.ndarray,
     params: VadOptions
-):
-    vad_inferencer = init_vad_model()
+) -> List[Dict]:
     audio, speech_chunks = vad_inferencer.run(
         audio=audio,
         vad_parameters=params
@@ -39,7 +39,7 @@ async def vad(
     background_tasks: BackgroundTasks,
     file: UploadFile = File(..., description="Audio or video file to transcribe."),
     params: VadParams = Depends()
-):
+) -> QueueResponse:
     if not isinstance(file, np.ndarray):
         audio = await read_audio(file=file)
     else:

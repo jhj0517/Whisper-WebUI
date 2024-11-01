@@ -7,8 +7,9 @@ from fastapi import (
 )
 import gradio as gr
 from fastapi import APIRouter, BackgroundTasks, Depends, Response, status
+from typing import List, Dict
 
-from modules.whisper.data_classes import TranscriptionPipelineParams
+from modules.whisper.data_classes import *
 from modules.whisper.faster_whisper_inference import FasterWhisperInference
 from ..util.audio import read_audio
 from ..util.schemas import QueueResponse
@@ -31,7 +32,7 @@ transcription_pipeline = init_pipeline()
 async def run_transcription(
     audio: np.ndarray,
     params: TranscriptionPipelineParams
-):
+) -> List[Segment]:
     segments, elapsed_time = transcription_pipeline.run(
         audio=audio,
         progress=gr.Progress(),
@@ -46,7 +47,7 @@ async def vad(
     background_tasks: BackgroundTasks,
     file: UploadFile = File(..., description="Audio or video file to transcribe."),
     params: TranscriptionPipelineParams = Depends()
-):
+) -> QueueResponse:
     if not isinstance(file, np.ndarray):
         audio = await read_audio(file=file)
     else:
