@@ -43,7 +43,7 @@ async def run_transcription(
 
 
 @transcription_router.post("/transcription", tags=["transcription"])
-async def vad(
+async def transcription(
     background_tasks: BackgroundTasks,
     file: UploadFile = File(..., description="Audio or video file to transcribe."),
     params: TranscriptionPipelineParams = Depends()
