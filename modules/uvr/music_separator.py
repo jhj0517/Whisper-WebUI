@@ -13,6 +13,7 @@ from modules.utils.paths import DEFAULT_PARAMETERS_CONFIG_PATH
 from modules.utils.files_manager import load_yaml, save_yaml, is_video
 from modules.diarize.audio_loader import load_audio
 
+
 class MusicSeparator:
     def __init__(self,
                  model_dir: Optional[str] = None,
