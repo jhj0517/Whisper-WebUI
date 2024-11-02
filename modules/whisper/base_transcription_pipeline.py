@@ -179,7 +179,7 @@ class BaseTranscriptionPipeline(ABC):
                         add_timestamp: bool = True,
                         progress=gr.Progress(),
                         *pipeline_params,
-                        ) -> list:
+                        ) -> Tuple[str, str]:
         """
         Write subtitle file from Files
 
@@ -250,7 +250,7 @@ class BaseTranscriptionPipeline(ABC):
             result_str = f"Done in {self.format_time(total_time)}! Subtitle is in the outputs folder.\n\n{total_result}"
             result_file_path = [info['path'] for info in files_info.values()]
 
-            return [result_str, result_file_path]
+            return result_str, result_file_path
 
         except Exception as e:
             print(f"Error transcribing file: {e}")
@@ -264,7 +264,7 @@ class BaseTranscriptionPipeline(ABC):
                        add_timestamp: bool = True,
                        progress=gr.Progress(),
                        *pipeline_params,
-                       ) -> list:
+                       ) -> Tuple[str, str]:
         """
         Write subtitle file from microphone
 
@@ -314,7 +314,7 @@ class BaseTranscriptionPipeline(ABC):
             )
 
             result_str = f"Done in {self.format_time(time_for_task)}! Subtitle file is in the outputs folder.\n\n{subtitle}"
-            return [result_str, file_path]
+            return result_str, file_path
         except Exception as e:
             print(f"Error transcribing mic: {e}")
             raise
@@ -327,7 +327,7 @@ class BaseTranscriptionPipeline(ABC):
                            add_timestamp: bool = True,
                            progress=gr.Progress(),
                            *pipeline_params,
-                           ) -> list:
+                           ) -> Tuple[str, str]:
         """
         Write subtitle file from Youtube
 
@@ -385,7 +385,7 @@ class BaseTranscriptionPipeline(ABC):
             if os.path.exists(audio):
                 os.remove(audio)
 
-            return [result_str, file_path]
+            return result_str, file_path
 
         except Exception as e:
             print(f"Error transcribing youtube: {e}")
