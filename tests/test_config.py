@@ -1,15 +1,16 @@
 import functools
+import jiwer
+import os
+import torch
 
 from modules.utils.paths import *
 from modules.utils.youtube_manager import *
 
-import os
-import torch
-
 TEST_FILE_DOWNLOAD_URL = "https://github.com/jhj0517/whisper_flutter_new/raw/main/example/assets/jfk.wav"
 TEST_FILE_PATH = os.path.join(WEBUI_DIR, "tests", "jfk.wav")
+TEST_ANSWER = "And so my fellow Americans ask not what your country can do for you ask what you can do for your country"
 TEST_YOUTUBE_URL = "https://www.youtube.com/watch?v=4WEQtgnBu0I&ab_channel=AndriaFitzer"
-TEST_WHISPER_MODEL = "tiny.en"
+TEST_WHISPER_MODEL = "tiny"
 TEST_UVR_MODEL = "UVR-MDX-NET-Inst_HQ_4"
 TEST_NLLB_MODEL = "facebook/nllb-200-distilled-600M"
 TEST_SUBTITLE_SRT_PATH = os.path.join(WEBUI_DIR, "tests", "test_srt.srt")
@@ -34,3 +35,6 @@ def is_pytube_detected_bot(url: str = TEST_YOUTUBE_URL):
         print(f"Pytube has detected as a bot: {e}")
         return True
 
+
+def calculate_wer(answer, prediction):
+    return jiwer.wer(answer, prediction)
