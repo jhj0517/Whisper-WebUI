@@ -405,6 +405,7 @@ def generate_file(
     add_timestamp: bool = True, **kwargs
 ) -> Tuple[str, str]:
     output_format = output_format.strip().lower().replace(".", "")
+    output_format = "vtt" if output_format == "webvtt" else output_format
 
     if add_timestamp:
         timestamp = datetime.now().strftime("%m%d%H%M%S")
