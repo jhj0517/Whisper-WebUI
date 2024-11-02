@@ -179,7 +179,7 @@ class BaseTranscriptionPipeline(ABC):
                         add_timestamp: bool = True,
                         progress=gr.Progress(),
                         *pipeline_params,
-                        ) -> Tuple[str, str]:
+                        ) -> Tuple[str, List]:
         """
         Write subtitle file from Files
 
