@@ -71,7 +71,6 @@ class Diarizer:
 
         segments_result = []
         for segment in diarized_result["segments"]:
-            segment = segment.dict()
             speaker = "None"
             if "speaker" in segment:
                 speaker = segment["speaker"]
