@@ -380,6 +380,7 @@ def get_writer(
     writers = {
         "txt": WriteTXT,
         "vtt": WriteVTT,
+        "webvtt": WriteVTT,
         "srt": WriteSRT,
         "tsv": WriteTSV,
         "json": WriteJSON,
