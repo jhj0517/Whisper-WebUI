@@ -376,11 +376,11 @@ def get_writer(
     output_format: str, output_dir: str
 ) -> Callable[[dict, TextIO, dict], None]:
     output_format = output_format.strip().lower().replace(".", "")
+    output_format = "vtt" if output_format == "webvtt" else output_format
 
     writers = {
         "txt": WriteTXT,
         "vtt": WriteVTT,
-        "webvtt": WriteVTT,
         "srt": WriteSRT,
         "tsv": WriteTSV,
         "json": WriteJSON,
