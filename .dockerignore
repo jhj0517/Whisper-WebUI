@@ -1,10 +1,10 @@
 # from .gitignore
-venv/
-ui/__pycache__/
-outputs/
-modules/__pycache__/
-models/
 modules/yt_tmp.wav
+**/venv/
+**/__pycache__/
+**/outputs/
+**/models/
 
-.git
-.github
+**/.idea
+**/.git
+**/.github
