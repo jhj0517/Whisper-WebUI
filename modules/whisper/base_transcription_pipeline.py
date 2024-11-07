@@ -263,70 +263,6 @@ class BaseTranscriptionPipeline(ABC):
         finally:
             self.release_cuda_memory()
 
-    def transcribe_mic(self,
-                       mic_audio: str,
-                       file_format: str = "SRT",
-                       add_timestamp: bool = True,
-                       progress=gr.Progress(),
-                       *pipeline_params,
-                       ) -> Tuple[str, str]:
-        """
-        Write subtitle file from microphone
-
-        Parameters
-        ----------
-        mic_audio: str
-            Audio file path from gr.Microphone()
-        file_format: str
-            Subtitle File format to write from gr.Dropdown(). Supported format: [SRT, WebVTT, txt]
-        add_timestamp: bool
-            Boolean value from gr.Checkbox() that determines whether to add a timestamp at the end of the filename.
-        progress: gr.Progress
-            Indicator to show progress directly in gradio.
-        *pipeline_params: tuple
-            Parameters related with whisper. This will be dealt with "WhisperParameters" data class
-
-        Returns
-        ----------
-        result_str:
-            Result of transcription to return to gr.Textbox()
-        result_file_path:
-            Output file path to return to gr.Files()
-        """
-        try:
-            params = TranscriptionPipelineParams.from_list(list(pipeline_params))
-            writer_options = {
-                "highlight_words": True if params.whisper.word_timestamps else False
-            }
-
-            progress(0, desc="Loading Audio..")
-            transcribed_segments, time_for_task = self.run(
-                mic_audio,
-                progress,
-                file_format,
-                add_timestamp,
-                *pipeline_params,
-            )
-            progress(1, desc="Completed!")
-
-            file_name = "Mic"
-            subtitle, file_path = generate_file(
-                output_dir=self.output_dir,
-                output_file_name=file_name,
-                output_format=file_format,
-                result=transcribed_segments,
-                add_timestamp=add_timestamp,
-                **writer_options
-            )
-
-            result_str = f"Done in {self.format_time(time_for_task)}! Subtitle file is in the outputs folder.\n\n{subtitle}"
-            return result_str, file_path
-        except Exception as e:
-            print(f"Error transcribing mic: {e}")
-            raise
-        finally:
-            self.release_cuda_memory()
-
     def transcribe_youtube(self,
                            youtube_link: str,
                            file_format: str = "SRT",
@@ -396,6 +332,70 @@ class BaseTranscriptionPipeline(ABC):
 
         except Exception as e:
             print(f"Error transcribing youtube: {e}")
+            raise
+        finally:
+            self.release_cuda_memory()
+
+    def transcribe_mic(self,
+                       mic_audio: str,
+                       file_format: str = "SRT",
+                       add_timestamp: bool = True,
+                       progress=gr.Progress(),
+                       *pipeline_params,
+                       ) -> Tuple[str, str]:
+        """
+        Write subtitle file from microphone
+
+        Parameters
+        ----------
+        mic_audio: str
+            Audio file path from gr.Microphone()
+        file_format: str
+            Subtitle File format to write from gr.Dropdown(). Supported format: [SRT, WebVTT, txt]
+        add_timestamp: bool
+            Boolean value from gr.Checkbox() that determines whether to add a timestamp at the end of the filename.
+        progress: gr.Progress
+            Indicator to show progress directly in gradio.
+        *pipeline_params: tuple
+            Parameters related with whisper. This will be dealt with "WhisperParameters" data class
+
+        Returns
+        ----------
+        result_str:
+            Result of transcription to return to gr.Textbox()
+        result_file_path:
+            Output file path to return to gr.Files()
+        """
+        try:
+            params = TranscriptionPipelineParams.from_list(list(pipeline_params))
+            writer_options = {
+                "highlight_words": True if params.whisper.word_timestamps else False
+            }
+
+            progress(0, desc="Loading Audio..")
+            transcribed_segments, time_for_task = self.run(
+                mic_audio,
+                progress,
+                file_format,
+                add_timestamp,
+                *pipeline_params,
+            )
+            progress(1, desc="Completed!")
+
+            file_name = "Mic"
+            subtitle, file_path = generate_file(
+                output_dir=self.output_dir,
+                output_file_name=file_name,
+                output_format=file_format,
+                result=transcribed_segments,
+                add_timestamp=add_timestamp,
+                **writer_options
+            )
+
+            result_str = f"Done in {self.format_time(time_for_task)}! Subtitle file is in the outputs folder.\n\n{subtitle}"
+            return result_str, file_path
+        except Exception as e:
+            print(f"Error transcribing mic: {e}")
             raise
         finally:
             self.release_cuda_memory()
