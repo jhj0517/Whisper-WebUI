@@ -49,6 +49,7 @@ class BaseTranscriptionPipeline(ABC):
         self.device = self.get_device()
         self.available_compute_types = self.get_available_compute_type()
         self.current_compute_type = self.get_compute_type()
+        self.stream_track = None
 
     @abstractmethod
     def transcribe(self,
@@ -399,6 +400,72 @@ class BaseTranscriptionPipeline(ABC):
             raise
         finally:
             self.release_cuda_memory()
+
+    def transcribe_stream(self,
+                          chunk: Union[Tuple[float, np.ndarray], str],
+                          file_format: str = "SRT",
+                          add_timestamp: bool = True,
+                          progress=gr.Progress(),
+                          *pipeline_params,
+                          ) -> str:
+        """
+        Transcribe from real-time stream.
+
+        Parameters
+        ----------
+        chunk: str
+            One chunk from the Stream
+        file_format: str
+            Subtitle File format to write from gr.Dropdown(). Supported format: [SRT, WebVTT, txt]
+        add_timestamp: bool
+            Boolean value from gr.Checkbox() that determines whether to add a timestamp at the end of the filename.
+        progress: gr.Progress
+            Indicator to show progress directly in gradio.
+        *pipeline_params: tuple
+            Parameters related with whisper. This will be dealt with "WhisperParameters" data class
+
+        Returns
+        ----------
+        result_str:
+            Result of transcription to return to gr.Textbox()
+        result_file_path:
+            Output file path to return to gr.Files()
+        """
+        try:
+            params = TranscriptionPipelineParams.from_list(list(pipeline_params))
+            writer_options = {
+                "highlight_words": True if params.whisper.word_timestamps else False
+            }
+
+            sr, y = chunk
+            if y.ndim > 1:
+                y = y.mean(axis=1)
+            y = y.astype(np.float32)
+            y /= np.max(np.abs(y))
+
+            if self.stream_track is None:
+                self.stream_track = y
+            else:
+                self.stream_track = np.concatenate([self.stream_track, y])
+
+            transcribed_segments, time_for_task = self.run(
+                self.stream_track,
+                progress,
+                file_format,
+                add_timestamp,
+                *pipeline_params,
+            )
+            transcribed_segments = [seg.text for seg in transcribed_segments]
+            if not transcribed_segments:
+                return ''
+
+            return ' '.join(transcribed_segments)
+        except Exception as e:
+            print(f"Error transcribing mic: {e}")
+            raise
+        finally:
+            self.release_cuda_memory()
+            self.stream_track = None
 
     def get_compute_type(self):
         if "float16" in self.available_compute_types:
