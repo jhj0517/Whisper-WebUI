@@ -14,6 +14,7 @@ from ..util.audio import read_audio
 from ..util.schemas import QueueResponse
 from ..util.config_loader import load_server_config
 
+
 @functools.lru_cache
 def init_bgm_separation_inferencer() -> 'MusicSeparator':
     config = load_server_config()["bgm_separation"]
@@ -23,6 +24,7 @@ def init_bgm_separation_inferencer() -> 'MusicSeparator':
         device=config["compute_type"]
     )
     return inferencer
+
 
 bgm_separation_router = APIRouter()
 bgm_separation_inferencer = init_bgm_separation_inferencer()
@@ -44,10 +46,10 @@ async def run_bgm_separation(
 
 
 @bgm_separation_router.post("/bgm", tags=["bgm-separation"])
-async def transcription(
+async def bgm_separation(
     background_tasks: BackgroundTasks,
     file: UploadFile = File(..., description="Audio or video file to separate background music."),
-    params: TranscriptionPipelineParams = Depends()
+    params: BGMSeparationParams = Depends()
 ) -> QueueResponse:
     if not isinstance(file, np.ndarray):
         audio = await read_audio(file=file)
