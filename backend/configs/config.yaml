@@ -1,10 +1,10 @@
 whisper:
-  # Model name within `models\Whisper\faster-whisper`
+  # Default implementation is faster-whisper. This indicates model name within `models\Whisper\faster-whisper`
   model_size: large-v2
   compute_type: float16
 
 bgm_separation:
-  # Model sizes between ["UVR-MDX-NET-Inst_HQ_4", "UVR-MDX-NET-Inst_3"]
+  # UVR model sizes between ["UVR-MDX-NET-Inst_HQ_4", "UVR-MDX-NET-Inst_3"]
   model_size: UVR-MDX-NET-Inst_HQ_4
   # Whether to offload the model after the inference. Should be true if your setup has a VRAM less than <16GB
   enable_offload: true
