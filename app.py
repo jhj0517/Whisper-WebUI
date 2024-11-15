@@ -53,7 +53,7 @@ class App:
             dd_lang = gr.Dropdown(choices=self.whisper_inf.available_langs + [AUTOMATIC_DETECTION],
                                   value=AUTOMATIC_DETECTION if whisper_params["lang"] == AUTOMATIC_DETECTION.unwrap()
                                   else whisper_params["lang"], label=_("Language"))
-            dd_file_format = gr.Dropdown(choices=["SRT", "WebVTT", "txt", "LRC"], value="SRT", label=_("File Format"))
+            dd_file_format = gr.Dropdown(choices=["SRT", "WebVTT", "txt", "LRC"], value=whisper_params["file_format"], label=_("File Format"))
         with gr.Row():
             cb_translate = gr.Checkbox(value=whisper_params["is_translate"], label=_("Translate to English?"),
                                        interactive=True)
@@ -295,7 +295,11 @@ class App:
             server_port=args.server_port,
             auth=(args.username, args.password) if args.username and args.password else None,
             root_path=args.root_path,
-            inbrowser=args.inbrowser
+            inbrowser=args.inbrowser,
+            ssl_verify=args.ssl_verify,
+            ssl_keyfile=args.ssl_keyfile,
+            ssl_keyfile_password=args.ssl_keyfile_password,
+            ssl_certfile=args.ssl_certfile
         )
 
     @staticmethod
@@ -331,6 +335,11 @@ parser.add_argument('--api_open', type=str2bool, default=False, nargs='?', const
                     help='Enable api or not in Gradio')
 parser.add_argument('--inbrowser', type=str2bool, default=True, nargs='?', const=True,
                     help='Whether to automatically start Gradio app or not')
+parser.add_argument('--ssl_verify', type=str2bool, default=True, nargs='?', const=True,
+                    help='Whether to verify SSL or not')
+parser.add_argument('--ssl_keyfile', type=str, default=None, help='SSL Key file location')
+parser.add_argument('--ssl_keyfile_password', type=str, default=None, help='SSL Key file password')
+parser.add_argument('--ssl_certfile', type=str, default=None, help='SSL cert file location')
 parser.add_argument('--whisper_model_dir', type=str, default=WHISPER_MODELS_DIR,
                     help='Directory path of the whisper model')
 parser.add_argument('--faster_whisper_model_dir', type=str, default=FASTER_WHISPER_MODELS_DIR,
