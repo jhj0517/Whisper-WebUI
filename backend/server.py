@@ -23,13 +23,14 @@ from fastapi.responses import StreamingResponse
 import uvicorn
 import requests
 import io
+import threading
+import time
 
 from modules.whisper.faster_whisper_inference import FasterWhisperInference
 from modules.utils.logger import get_backend_logger
 from modules.vad.silero_vad import SileroVAD
 from modules.diarize.diarizer import Diarizer
 from modules.diarize.audio_loader import SAMPLE_RATE
-
 
 backend_app = FastAPI()
 backend_app.add_middleware(
@@ -44,6 +45,11 @@ whisper_inferencer = None
 diarization_inferencer = None
 logger = get_backend_logger()
 
+last_used_vad = time.time()
+last_used_whisper = time.time()
+last_used_diarization = time.time()
+
+INACTIVITY_TIMEOUT = 300
 
 def format_stream_result(generator: Generator[dict[str, Any], Any, None]):
     for seg in generator:
@@ -55,7 +61,6 @@ def format_stream_result(generator: Generator[dict[str, Any], Any, None]):
             "tokens": seg.tokens
         }, ensure_ascii=False) + "\n\n"
     yield "[DONE]\n\n"
-
 
 def format_json_result(
     segments: Union[Generator[dict[str, Any], Any, None], List[dict]]
@@ -75,7 +80,6 @@ def format_json_result(
         "segments": result,
     }
 
-
 async def read_audio(
     file: Optional[UploadFile] = None,
     file_url: Optional[str] = None
@@ -94,6 +98,30 @@ async def read_audio(
     file_bytes = BytesIO(file_content)
     return faster_whisper.audio.decode_audio(file_bytes)
 
+def unload_models():
+    global vad_inferencer, whisper_inferencer, diarization_inferencer
+    global last_used_vad, last_used_whisper, last_used_diarization
+
+    current_time = time.time()
+
+    if vad_inferencer and current_time - last_used_vad > INACTIVITY_TIMEOUT:
+        vad_inferencer = None
+        logger.info("VAD model unloaded")
+
+    if whisper_inferencer and whisper_inferencer.model and current_time - last_used_whisper > INACTIVITY_TIMEOUT:
+        whisper_inferencer.model = None
+        logger.info("Whisper model unloaded")
+
+    if diarization_inferencer and current_time - last_used_diarization > INACTIVITY_TIMEOUT:
+        diarization_inferencer.model = None
+        logger.info("Diarization model unloaded")
+
+def check_model_usage():
+    while True:
+        unload_models()
+        time.sleep(60) 
+
+usage_checker_thread = None
 
 @backend_app.post("/vad")
 async def vad(
@@ -105,11 +133,16 @@ async def vad(
     speech_pad_ms: int = Form(400)
 ):
     global vad_inferencer
+    global last_used_vad
 
     if not isinstance(file, np.ndarray):
         audio = await read_audio(file=file)
     else:
         audio = file
+
+    if vad_inferencer is None:
+        vad_inferencer = SileroVAD()
+        logger.info("VAD model loaded")
 
     vad_options = VadOptions(
         threshold=threshold,
@@ -127,8 +160,8 @@ async def vad(
     audio_output = io.BytesIO()
     write(audio_output, SAMPLE_RATE, preprocessed_audio)
     audio_output.seek(0)
+    last_used_vad = time.time()
     return StreamingResponse(audio_output, media_type="audio/wav")
-
 
 @backend_app.post("/diarization")
 async def diarization(
@@ -138,6 +171,7 @@ async def diarization(
 ):
     global diarization_inferencer
     global whisper_inferencer
+    global last_used_diarization
 
     if not isinstance(file, np.ndarray):
         audio = await read_audio(file=file)
@@ -150,14 +184,20 @@ async def diarization(
         )
         transcript = format_json_result(generator)["segments"]
 
+    if diarization_inferencer is None:
+        diarization_inferencer = Diarizer(
+            model_dir=diarization_inferencer.model_dir
+        )
+        logger.info("Diarization model loaded")
+
     diarized_transcript, elapsed_time = diarization_inferencer.run(
         audio=audio,
         transcribed_result=transcript,
         use_auth_token=use_auth_token,
         device=diarization_inferencer.device
     )
+    last_used_diarization = time.time()
     return diarized_transcript
-
 
 @backend_app.post("/transcription")
 async def transcription(
@@ -209,10 +249,11 @@ async def transcription(
     global whisper_inferencer
     global vad_inferencer
     global diarization_inferencer
+    global last_used_whisper, last_used_vad, last_used_diarization
 
     if model_size != whisper_inferencer.current_model_size or whisper_inferencer.model is None:
         whisper_inferencer.update_model(model_size, whisper_inferencer.current_compute_type)
-        logger.info("Model loaded")
+        logger.info("Whisper model loaded")
 
     audio = await read_audio(file=file, file_url=file_url)
 
@@ -224,10 +265,14 @@ async def transcription(
             min_silence_duration_ms=min_silence_duration_ms,
             speech_pad_ms=speech_pad_ms
         )
+        if vad_inferencer is None:
+            vad_inferencer = SileroVAD()
+            logger.info("VAD model loaded")
         audio = vad_inferencer.run(
             audio=audio,
             vad_parameters=vad_options
         )
+        last_used_vad = time.time()
 
     segments, info = whisper_inferencer.model.transcribe(
         audio=audio,
@@ -262,6 +307,7 @@ async def transcription(
         language_detection_threshold=language_detection_threshold,
         language_detection_segments=language_detection_segments
     )
+    last_used_whisper = time.time()
 
     if response_format == "stream":
         return StreamingResponse(
@@ -271,18 +317,23 @@ async def transcription(
 
     if is_diarization:
         segments = [seg for seg in segments]
+        if diarization_inferencer.model is None:
+            diarization_inferencer.model = Diarizer(
+                model_dir=diarization_inferencer.model_dir
+            )
+            logger.info("Diarization model loaded")
         segments = diarization_inferencer.run(
             audio=audio,
             transcribed_result=segments,
             use_auth_token=use_auth_token,
             device=diarization_inferencer.device
         )
+        last_used_diarization = time.time()
 
     elif response_format == "json":
         return format_json_result(segments)
 
     raise HTTPException(400, "Invalid response_format")
-
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
@@ -298,6 +349,10 @@ if __name__ == "__main__":
                         help='Directory path of the faster-whisper model')
     parser.add_argument('--diarization_model_dir', type=str, default=os.path.join("models", "Diarization"),
                         help='Directory path of the diarization model')
+    parser.add_argument('--enable_model_unloading', action='store_true',
+                        help='Enable automatic model unloading after inactivity')
+    parser.add_argument('--inactivity_timeout', type=int, default=300,
+                        help='Inactivity timeout in seconds after which models are unloaded')
 
     args = parser.parse_args()
 
@@ -311,12 +366,18 @@ if __name__ == "__main__":
     if args.device is not None:
         whisper_inferencer.device = args.device
 
-    whisper_inferencer.update_model(model_size="large-v2", compute_type=whisper_inferencer.current_compute_type)
+    whisper_inferencer.update_model(model_size=args.initial_model, compute_type=whisper_inferencer.current_compute_type)
     vad_inferencer = SileroVAD()
     diarization_inferencer = Diarizer(
         model_dir=args.diarization_model_dir
     )
     if args.diarization_device is not None:
         diarization_inferencer.device = args.diarization_device
+
+    INACTIVITY_TIMEOUT = args.inactivity_timeout
+
+    if args.enable_model_unloading:
+        usage_checker_thread = threading.Thread(target=check_model_usage, daemon=True)
+        usage_checker_thread.start()
 
     uvicorn.run(backend_app, host=args.host, port=args.port)
