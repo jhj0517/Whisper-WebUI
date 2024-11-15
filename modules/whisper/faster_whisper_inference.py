@@ -132,7 +132,7 @@ class FasterWhisperInference(BaseTranscriptionPipeline):
             device=self.device,
             model_size_or_path=self.current_model_size,
             download_root=self.model_dir,
-            compute_type=self.current_compute_type
+            compute_type=self.current_compute_type,
         )
 
     def get_model_paths(self):
