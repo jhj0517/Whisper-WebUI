@@ -45,7 +45,13 @@ async def run_bgm_separation(
     return instrumental, vocal
 
 
-@bgm_separation_router.post("/bgm", tags=["bgm-separation"])
+@bgm_separation_router.post(
+    "/bgm",
+    tags=["bgm-separation"],
+    status_code=status.HTTP_201_CREATED,
+    summary="Separate Background BGM",
+    description="Separate Background Music and Vocal"
+)
 async def bgm_separation(
     background_tasks: BackgroundTasks,
     file: UploadFile = File(..., description="Audio or video file to separate background music."),

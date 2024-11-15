@@ -36,7 +36,13 @@ async def run_vad(
     return speech_chunks
 
 
-@vad_router.post("/vad", tags=["vad"])
+@vad_router.post(
+    "/vad",
+    tags=["vad"],
+    status_code=status.HTTP_201_CREATED,
+    summary="Detect voice parts from the audio",
+    description="Get voice parts time line from the audio"
+)
 async def vad(
     background_tasks: BackgroundTasks,
     file: UploadFile = File(..., description="Audio or video file to detect voices."),
