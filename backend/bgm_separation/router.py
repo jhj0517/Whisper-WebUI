@@ -15,6 +15,9 @@ from ..util.schemas import QueueResponse
 from ..util.config_loader import load_server_config
 
 
+bgm_separation_router = APIRouter()
+
+
 @functools.lru_cache
 def init_bgm_separation_inferencer() -> 'MusicSeparator':
     config = load_server_config()["bgm_separation"]
@@ -26,15 +29,11 @@ def init_bgm_separation_inferencer() -> 'MusicSeparator':
     return inferencer
 
 
-bgm_separation_router = APIRouter()
-bgm_separation_inferencer = init_bgm_separation_inferencer()
-
-
 async def run_bgm_separation(
     audio: np.ndarray,
     params: BGMSeparationParams
 ) -> Tuple[np.ndarray, np.ndarray]:
-    instrumental, vocal, filepaths = bgm_separation_inferencer.separate(
+    instrumental, vocal, filepaths = init_bgm_separation_inferencer().separate(
         audio=audio,
         model_name=params.model_size,
         device=params.device,
