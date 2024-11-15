@@ -13,6 +13,8 @@ from modules.whisper.data_classes import VadParams
 from ..util.audio import read_audio
 from ..util.schemas import QueueResponse
 
+vad_router = APIRouter()
+
 
 @functools.lru_cache
 def init_vad_model() -> SileroVAD:
@@ -21,15 +23,11 @@ def init_vad_model() -> SileroVAD:
     return inferencer
 
 
-vad_router = APIRouter()
-vad_inferencer = init_vad_model()
-
-
 async def run_vad(
     audio: np.ndarray,
     params: VadOptions
 ) -> List[Dict]:
-    audio, speech_chunks = vad_inferencer.run(
+    audio, speech_chunks = init_vad_model().run(
         audio=audio,
         vad_parameters=params
     )
