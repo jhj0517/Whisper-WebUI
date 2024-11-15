@@ -1,5 +1,5 @@
 import functools
-
+import uuid
 import numpy as np
 from fastapi import (
     File,
@@ -15,25 +15,25 @@ from ..util.audio import read_audio
 from ..util.schemas import QueueResponse
 from ..util.config_loader import load_server_config
 
+transcription_router = APIRouter()
+
+
 @functools.lru_cache
 def init_pipeline() -> 'FasterWhisperInference':
     config = load_server_config()["whisper"]
-    transcription_pipeline = FasterWhisperInference()
-    transcription_pipeline.update_model(
+    inferencer = FasterWhisperInference()
+    inferencer.update_model(
         model_size=config["model_size"],
         compute_type=config["compute_type"]
     )
-    return transcription_pipeline
-
-transcription_router = APIRouter()
-transcription_pipeline = init_pipeline()
+    return inferencer
 
 
 async def run_transcription(
     audio: np.ndarray,
     params: TranscriptionPipelineParams
 ) -> List[Segment]:
-    segments, elapsed_time = transcription_pipeline.run(
+    segments, elapsed_time = init_pipeline().run(
         audio=audio,
         progress=gr.Progress(),
         add_timestamp=False,
