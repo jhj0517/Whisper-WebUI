@@ -1,3 +1,4 @@
 python-dotenv
 uvicorn
 SQLAlchemy
+sqlmodel
