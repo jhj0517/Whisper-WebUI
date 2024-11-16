@@ -10,8 +10,8 @@ from typing import List, Dict
 
 from modules.vad.silero_vad import SileroVAD
 from modules.whisper.data_classes import VadParams
-from ..util.audio import read_audio
-from ..util.schemas import QueueResponse
+from ..common.audio import read_audio
+from ..common.models import QueueResponse
 
 vad_router = APIRouter()
 

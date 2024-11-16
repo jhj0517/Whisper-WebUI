@@ -7,7 +7,7 @@ from sqlalchemy.exc import SQLAlchemyError
 from fastapi import HTTPException
 from dotenv import load_dotenv
 
-from ..util.config_loader import read_env
+from ..common.config_loader import read_env
 
 
 @functools.lru_cache

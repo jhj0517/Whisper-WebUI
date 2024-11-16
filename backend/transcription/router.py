@@ -11,9 +11,9 @@ from typing import List, Dict
 
 from modules.whisper.data_classes import *
 from modules.whisper.faster_whisper_inference import FasterWhisperInference
-from ..util.audio import read_audio
-from ..util.schemas import QueueResponse
-from ..util.config_loader import load_server_config
+from ..common.audio import read_audio
+from ..common.models import QueueResponse
+from ..common.config_loader import load_server_config
 
 transcription_router = APIRouter()
 
