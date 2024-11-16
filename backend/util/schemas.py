@@ -7,11 +7,3 @@ class QueueResponse(BaseModel):
     message: str
 
 
-class QueueTask(BaseModel):
-    identifier: str
-    status: str
-    task_type: str
-
-
-class QueueTasksResult(BaseModel):
-    tasks: List[QueueTask]
