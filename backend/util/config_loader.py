@@ -12,12 +12,8 @@ def load_server_config(config_path: str = SERVER_CONFIG_PATH) -> dict:
 
 
 @functools.lru_cache
-def read_env(key: str, dotenv_path: str = SERVER_DOTENV_PATH):
+def read_env(key: str, default: str = None, dotenv_path: str = SERVER_DOTENV_PATH):
     load_dotenv(dotenv_path)
-    value = os.getenv(key)
-
-    if value is None:
-        raise KeyError(f"Key {key} does not exist in dotenv")
-
+    value = os.getenv(key, default)
     return value
 
