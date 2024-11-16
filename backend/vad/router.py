@@ -17,7 +17,7 @@ vad_router = APIRouter()
 
 
 @functools.lru_cache
-def init_vad_model() -> SileroVAD:
+def get_vad_model() -> SileroVAD:
     inferencer = SileroVAD()
     inferencer.update_model()
     return inferencer
@@ -27,7 +27,7 @@ async def run_vad(
     audio: np.ndarray,
     params: VadOptions
 ) -> List[Dict]:
-    audio, speech_chunks = init_vad_model().run(
+    audio, speech_chunks = get_vad_model().run(
         audio=audio,
         vad_parameters=params
     )

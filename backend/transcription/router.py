@@ -19,7 +19,7 @@ transcription_router = APIRouter()
 
 
 @functools.lru_cache
-def init_pipeline() -> 'FasterWhisperInference':
+def get_pipeline() -> 'FasterWhisperInference':
     config = load_server_config()["whisper"]
     inferencer = FasterWhisperInference()
     inferencer.update_model(
@@ -33,7 +33,7 @@ async def run_transcription(
     audio: np.ndarray,
     params: TranscriptionPipelineParams
 ) -> List[Segment]:
-    segments, elapsed_time = init_pipeline().run(
+    segments, elapsed_time = get_pipeline().run(
         audio=audio,
         progress=gr.Progress(),
         add_timestamp=False,

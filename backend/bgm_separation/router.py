@@ -19,7 +19,7 @@ bgm_separation_router = APIRouter()
 
 
 @functools.lru_cache
-def init_bgm_separation_inferencer() -> 'MusicSeparator':
+def get_bgm_separation_inferencer() -> 'MusicSeparator':
     config = load_server_config()["bgm_separation"]
     inferencer = MusicSeparator()
     inferencer.update_model(
@@ -33,7 +33,7 @@ async def run_bgm_separation(
     audio: np.ndarray,
     params: BGMSeparationParams
 ) -> Tuple[np.ndarray, np.ndarray]:
-    instrumental, vocal, filepaths = init_bgm_separation_inferencer().separate(
+    instrumental, vocal, filepaths = get_bgm_separation_inferencer().separate(
         audio=audio,
         model_name=params.model_size,
         device=params.device,
