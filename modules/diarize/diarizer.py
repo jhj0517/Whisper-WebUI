@@ -85,8 +85,8 @@ class Diarizer:
         return segments_result, elapsed_time
 
     def update_pipe(self,
-                    use_auth_token: str,
-                    device: str
+                    use_auth_token: Optional[str] = None,
+                    device: Optional[str] = None,
                     ):
         """
         Set pipeline for diarization
@@ -99,6 +99,8 @@ class Diarizer:
         device: str
             Device for diarization.
         """
+        if device is None:
+            device = self.get_device()
         self.device = device
 
         os.makedirs(self.model_dir, exist_ok=True)
