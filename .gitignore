@@ -2,7 +2,7 @@
 *.png
 *.mp4
 *.mp3
-**/.env
+backend/configs/.env
 .idea/
 .pytest_cache/
 venv/
