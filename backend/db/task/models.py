@@ -1,9 +1,25 @@
 # Ported from https://github.com/pavelzbornik/whisperX-FastAPI/blob/main/app/models.py
 
-from typing import Optional
+from enum import Enum
+from pydantic import BaseModel
+from typing import Optional, List
 from uuid import uuid4
 from datetime import datetime
 from sqlmodel import SQLModel, Field, JSON
+
+
+class TaskStatus(str, Enum):
+    PENDING = "pending"
+    IN_PROGRESS = "in_progress"
+    COMPLETED = "completed"
+    FAILED = "failed"
+    CANCELLED = "cancelled"
+    QUEUED = "queued"
+    PAUSED = "paused"
+    RETRYING = "retrying"
+
+    def __str__(self):
+        return self.value
 
 
 class Task(SQLModel, table=True):
@@ -34,7 +50,7 @@ class Task(SQLModel, table=True):
         default_factory=lambda: str(uuid4()),
         description="Universally unique identifier for each task"
     )
-    status: Optional[str] = Field(
+    status: Optional[TaskStatus] = Field(
         default=None,
         description="Current status of the task"
     )
@@ -85,3 +101,8 @@ class Task(SQLModel, table=True):
         sa_column_kwargs={"onupdate": datetime.utcnow},
         description="Date and time of last update"
     )
+
+
+class TasksResult(BaseModel):
+    tasks: List[Task]
+
