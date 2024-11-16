@@ -1,14 +1,12 @@
 # Ported from https://github.com/pavelzbornik/whisperX-FastAPI/blob/main/app/models.py
 
-from pydantic import BaseModel
-from typing import List
-from datetime import datetime
+from typing import Optional
 from uuid import uuid4
-from sqlalchemy import Column, String, Float, JSON, Integer, DateTime
-from sqlalchemy.orm import declarative_base
+from datetime import datetime
+from sqlmodel import SQLModel, Field, JSON
 
 
-class Task(declarative_base()):
+class Task(SQLModel, table=True):
     """
     Table to store tasks information.
 
@@ -26,41 +24,64 @@ class Task(declarative_base()):
     """
 
     __tablename__ = "tasks"
-    id = Column(
-        Integer,
+
+    id: Optional[int] = Field(
+        default=None,
         primary_key=True,
-        autoincrement=True,
-        comment="Unique identifier for each task (Primary Key)",
+        description="Unique identifier for each task (Primary Key)"
     )
-    uuid = Column(
-        String,
-        default=lambda: str(uuid4()),
-        comment="Universally unique identifier for each task",
+    uuid: str = Field(
+        default_factory=lambda: str(uuid4()),
+        description="Universally unique identifier for each task"
     )
-    status = Column(String, comment="Current status of the task")
-    result = Column(
-        JSON, comment="JSON data representing the result of the task"
+    status: Optional[str] = Field(
+        default=None,
+        description="Current status of the task"
     )
-    file_name = Column(
-        String, comment="Name of the file associated with the task"
+    result: Optional[dict] = Field(
+        default=None,
+        sa_column=JSON,
+        description="JSON data representing the result of the task"
     )
-    url = Column(String, comment="URL of the file associated with the task")
-    audio_duration = Column(Float, comment="Duration of the audio in seconds")
-    language = Column(
-        String, comment="Language of the file associated with the task"
+    file_name: Optional[str] = Field(
+        default=None,
+        description="Name of the file associated with the task"
     )
-    task_type = Column(String, comment="Type/category of the task")
-    task_params = Column(JSON, comment="Parameters of the task")
-    duration = Column(Float, comment="Duration of the task execution")
-    error = Column(
-        String, comment="Error message, if any, associated with the task"
+    url: Optional[str] = Field(
+        default=None,
+        description="URL of the file associated with the task"
     )
-    created_at = Column(
-        DateTime, default=datetime.utcnow, comment="Date and time of creation"
+    audio_duration: Optional[float] = Field(
+        default=None,
+        description="Duration of the audio in seconds"
     )
-    updated_at = Column(
-        DateTime,
-        default=datetime.utcnow,
-        onupdate=datetime.utcnow,
-        comment="Date and time of last update",
+    language: Optional[str] = Field(
+        default=None,
+        description="Language of the file associated with the task"
+    )
+    task_type: Optional[str] = Field(
+        default=None,
+        description="Type/category of the task"
+    )
+    task_params: Optional[dict] = Field(
+        default=None,
+        sa_column=JSON,
+        description="Parameters of the task"
+    )
+    duration: Optional[float] = Field(
+        default=None,
+        description="Duration of the task execution"
+    )
+    error: Optional[str] = Field(
+        default=None,
+        description="Error message, if any, associated with the task"
+    )
+    created_at: datetime = Field(
+        default_factory=datetime.utcnow,
+        description="Date and time of creation"
+    )
+    updated_at: datetime = Field(
+        default_factory=datetime.utcnow,
+        sa_column_kwargs={"onupdate": datetime.utcnow},
+        description="Date and time of last update"
     )
