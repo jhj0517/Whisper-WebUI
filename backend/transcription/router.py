@@ -103,6 +103,6 @@ async def transcription(
         identifier=identifier,
     )
 
-    return QueueResponse(identifier=identifier, message="Transcription task queued")
+    return QueueResponse(identifier=identifier, message="Transcription task has queued")
 
 
