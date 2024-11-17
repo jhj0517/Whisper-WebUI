@@ -75,7 +75,7 @@ class Task(SQLModel, table=True):
         description="JSON data representing the result of the task"
     )
     result_type: Optional[ResultType] = Field(
-        default=None,
+        default=ResultType.JSON,
         description="Result type whether it's a filepath or JSON"
     )
     file_name: Optional[str] = Field(
