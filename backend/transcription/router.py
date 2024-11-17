@@ -8,12 +8,18 @@ from fastapi import (
 import gradio as gr
 from fastapi import APIRouter, BackgroundTasks, Depends, Response, status
 from typing import List, Dict
-
+from sqlalchemy.orm import Session
 from modules.whisper.data_classes import *
 from modules.whisper.faster_whisper_inference import FasterWhisperInference
 from ..common.audio import read_audio
 from ..common.models import QueueResponse
 from ..common.config_loader import load_server_config
+from ..db.task.dao import (
+    add_task_to_db,
+    get_db_session,
+    update_task_status_in_db
+)
+from ..db.task.models import TaskStatus, TaskType
 
 transcription_router = APIRouter(prefix="/transcription", tags=["Transcription"])
 
@@ -31,8 +37,13 @@ def get_pipeline() -> 'FasterWhisperInference':
 
 async def run_transcription(
     audio: np.ndarray,
-    params: TranscriptionPipelineParams
+    params: TranscriptionPipelineParams,
+    identifier: str,
+    session: Session = Depends(get_db_session),
 ) -> List[Segment]:
+    update_task_status_in_db(
+        identifier=identifier
+    )
     segments, elapsed_time = get_pipeline().run(
         audio=audio,
         progress=gr.Progress(),
@@ -52,15 +63,32 @@ async def run_transcription(
 async def transcription(
     background_tasks: BackgroundTasks,
     file: UploadFile = File(..., description="Audio or video file to transcribe."),
-    params: TranscriptionPipelineParams = Depends()
+    params: TranscriptionPipelineParams = Depends(),
+    session: Session = Depends(get_db_session),
 ) -> QueueResponse:
     if not isinstance(file, np.ndarray):
-        audio = await read_audio(file=file)
+        audio, info = await read_audio(file=file)
     else:
-        audio = file
+        audio, info = file, None
 
-    background_tasks.add_task(run_transcription, audio=audio, params=params)
+    identifier = add_task_to_db(
+        status=TaskStatus.QUEUED,
+        file_name=file.filename,
+        audio_duration=info.duration if info else None,
+        language=params.whisper.lang,
+        task_type=TaskType.TRANSCRIPTION,
+        task_params=params.model_dump(),
+        session=session,
+    )
 
-    return QueueResponse(message="Transcription task queued")
+    background_tasks.add_task(
+        run_transcription,
+        audio=audio,
+        params=params,
+        identifier=identifier,
+        session=session
+    )
+
+    return QueueResponse(identifier=identifier, message="Transcription task queued")
 
 
