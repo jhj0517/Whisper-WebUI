@@ -40,10 +40,13 @@ async def run_vad(
         }
     )
 
+    start_time = datetime.utcnow()
     audio, speech_chunks = get_vad_model().run(
         audio=audio,
         vad_parameters=params
     )
+    end_time = datetime.utcnow()
+    elapsed_time = (end_time - start_time).total_seconds()
 
     update_task_status_in_db(
         identifier=identifier,
@@ -52,6 +55,7 @@ async def run_vad(
             "status": TaskStatus.COMPLETED,
             "updated_at": datetime.utcnow(),
             "result": speech_chunks,
+            "duration": elapsed_time
         }
     )
 
