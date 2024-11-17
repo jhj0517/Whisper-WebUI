@@ -39,16 +39,30 @@ async def run_transcription(
     audio: np.ndarray,
     params: TranscriptionPipelineParams,
     identifier: str,
-    session: Session = Depends(get_db_session),
 ) -> List[Segment]:
     update_task_status_in_db(
-        identifier=identifier
+        identifier=identifier,
+        update_data={
+            "id": identifier,
+            "status": TaskStatus.IN_PROGRESS
+        }
     )
+
     segments, elapsed_time = get_pipeline().run(
         audio=audio,
         progress=gr.Progress(),
         add_timestamp=False,
         *params.to_list()
+    )
+    segments = [seg.model_dump() for seg in segments]
+
+    update_task_status_in_db(
+        identifier=identifier,
+        update_data={
+            "id": identifier,
+            "status": TaskStatus.COMPLETED,
+            "result": segments
+        }
     )
     return segments
 
@@ -64,7 +78,6 @@ async def transcription(
     background_tasks: BackgroundTasks,
     file: UploadFile = File(..., description="Audio or video file to transcribe."),
     params: TranscriptionPipelineParams = Depends(),
-    session: Session = Depends(get_db_session),
 ) -> QueueResponse:
     if not isinstance(file, np.ndarray):
         audio, info = await read_audio(file=file)
@@ -78,7 +91,6 @@ async def transcription(
         language=params.whisper.lang,
         task_type=TaskType.TRANSCRIPTION,
         task_params=params.model_dump(),
-        session=session,
     )
 
     background_tasks.add_task(
@@ -86,7 +98,6 @@ async def transcription(
         audio=audio,
         params=params,
         identifier=identifier,
-        session=session
     )
 
     return QueueResponse(identifier=identifier, message="Transcription task queued")
