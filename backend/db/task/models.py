@@ -5,6 +5,7 @@ from pydantic import BaseModel
 from typing import Optional, List
 from uuid import uuid4
 from datetime import datetime
+from sqlalchemy.types import Enum as SQLAlchemyEnum
 from sqlmodel import SQLModel, Field, JSON
 
 
@@ -67,7 +68,8 @@ class Task(SQLModel, table=True):
     )
     status: Optional[TaskStatus] = Field(
         default=None,
-        description="Current status of the task"
+        sa_column=Field(sa_column=SQLAlchemyEnum(TaskStatus)),
+        description="Current status of the task",
     )
     result: Optional[dict] = Field(
         default=None,
@@ -76,6 +78,7 @@ class Task(SQLModel, table=True):
     )
     result_type: Optional[ResultType] = Field(
         default=ResultType.JSON,
+        sa_column=Field(sa_column=SQLAlchemyEnum(ResultType)),
         description="Result type whether it's a filepath or JSON"
     )
     file_name: Optional[str] = Field(
