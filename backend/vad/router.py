@@ -13,7 +13,7 @@ from modules.whisper.data_classes import VadParams
 from ..common.audio import read_audio
 from ..common.models import QueueResponse
 
-vad_router = APIRouter()
+vad_router = APIRouter(prefix="/vad", tags=["Voice Activity Detection"])
 
 
 @functools.lru_cache
@@ -35,11 +35,11 @@ async def run_vad(
 
 
 @vad_router.post(
-    "/vad",
-    tags=["vad"],
+    "/",
     status_code=status.HTTP_201_CREATED,
-    summary="Detect voice parts from the audio",
-    description="Get voice parts time line from the audio"
+    summary="Voice Activity Detection",
+    description="Detect voice parts in the provided audio or video file to generate a timeline of speech segments.",
+    response_model=QueueResponse,
 )
 async def vad(
     background_tasks: BackgroundTasks,
