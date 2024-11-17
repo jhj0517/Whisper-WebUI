@@ -47,6 +47,7 @@ async def run_bgm_separation(
         }
     )
 
+    start_time = datetime.utcnow()
     instrumental, vocal, filepaths = get_bgm_separation_inferencer().separate(
         audio=audio,
         model_name=params.model_size,
@@ -56,6 +57,7 @@ async def run_bgm_separation(
         progress=gr.Progress()
     )
     instrumental_path, vocal_path = filepaths
+    elapsed_time = (datetime.utcnow() - start_time).total_seconds()
 
     update_task_status_in_db(
         identifier=identifier,
@@ -67,7 +69,8 @@ async def run_bgm_separation(
                 vocal_path=vocal_path
             ),
             "result_type": ResultType.FILEPATH,
-            "updated_at": datetime.utcnow()
+            "updated_at": datetime.utcnow(),
+            "duration": elapsed_time
         }
     )
     return instrumental, vocal

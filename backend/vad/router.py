@@ -45,8 +45,7 @@ async def run_vad(
         audio=audio,
         vad_parameters=params
     )
-    end_time = datetime.utcnow()
-    elapsed_time = (end_time - start_time).total_seconds()
+    elapsed_time = (datetime.utcnow() - start_time).total_seconds()
 
     update_task_status_in_db(
         identifier=identifier,
