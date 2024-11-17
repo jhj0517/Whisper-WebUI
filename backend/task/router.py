@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 
 from ..db.db_instance import get_db_session
@@ -9,12 +10,14 @@ from ..db.task.dao import (
 )
 from ..db.task.models import (
     TasksResult,
-    Task
+    Task,
+    TaskType
 )
 from ..common.models import (
     Response,
     Result
 )
+from ..common.compresser import compress_files
 
 task_router = APIRouter(prefix="/task", tags=["Tasks"])
 
@@ -53,6 +56,38 @@ async def get_task(
 
     if task is not None:
         return task
+    else:
+        raise HTTPException(status_code=404, detail="Identifier not found")
+
+
+@task_router.get(
+    "file/{identifier}",
+    response_model=FileResponse,
+    status_code=status.HTTP_200_OK,
+    summary="Retrieve Task by Identifier",
+    description="Retrieve the status of a specific task using its identifier.",
+)
+async def get_file_task(
+    identifier: str,
+    session: Session = Depends(get_db_session),
+) -> FileResponse:
+    """
+    Retrieve the downloadable file response of a specific task by its identifier.
+    Compressed by ZIP basically.
+    """
+    task = get_task_status_from_db(identifier, session)
+
+    if task is not None:
+        if task.task_type == TaskType.BGM_SEPARATION:
+            output_zip_path = f"{identifier}_bgm_separation.zip"
+            output_zip_path = compress_files(
+                [task.result.instrumental_path, task.result.vocal_path],
+                output_zip_path
+            )
+            return FileResponse(path=output_zip_path, filename=output_zip_path)
+        else:
+            raise HTTPException(status_code=404, detail=f"File download is only supported for bgm separation."
+                                                        f" The given type is {task.task_type}")
     else:
         raise HTTPException(status_code=404, detail="Identifier not found")
 
