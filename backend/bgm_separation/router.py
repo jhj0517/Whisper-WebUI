@@ -15,7 +15,7 @@ from ..common.models import QueueResponse
 from ..common.config_loader import load_server_config
 
 
-bgm_separation_router = APIRouter()
+bgm_separation_router = APIRouter(prefix="bgm-separation", tags=["BGM Separation"])
 
 
 @functools.lru_cache
@@ -45,11 +45,11 @@ async def run_bgm_separation(
 
 
 @bgm_separation_router.post(
-    "/bgm",
-    tags=["bgm-separation"],
+    "/",
     status_code=status.HTTP_201_CREATED,
-    summary="Separate Background BGM",
-    description="Separate Background Music and Vocal"
+    summary="Separate Background BGM abd vocal",
+    description="Separate background music and vocal from an uploaded audio or video file.",
+    response_model=QueueResponse,
 )
 async def bgm_separation(
     background_tasks: BackgroundTasks,
