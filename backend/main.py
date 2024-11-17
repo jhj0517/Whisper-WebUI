@@ -19,12 +19,13 @@ import io
 from .transcription.router import transcription_router, get_pipeline
 from .vad.router import get_vad_model, vad_router
 from .bgm_separation.router import get_bgm_separation_inferencer, bgm_separation_router
-from .common.config_loader import read_env
+from .common.config_loader import read_env, load_server_config
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Initialization
+    load_server_config()
     read_env("DB_URL")  # Place .env file into /configs/.env
     transcription_pipeline = get_pipeline()
     vad_inferencer = get_vad_model()
@@ -49,7 +50,7 @@ backend_app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
     allow_credentials=True,
-    allow_methods=["GET", "POST", "PUT", "PATCH", "OPTIONS"],
+    allow_methods=["GET", "POST", "PUT", "PATCH", "OPTIONS"],  # Disable DELETE
     allow_headers=["*"],
 )
 backend_app.include_router(transcription_router)
