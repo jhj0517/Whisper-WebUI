@@ -9,6 +9,7 @@ import gradio as gr
 from fastapi import APIRouter, BackgroundTasks, Depends, Response, status
 from typing import List, Dict
 from sqlalchemy.orm import Session
+from datetime import datetime
 from modules.whisper.data_classes import *
 from modules.whisper.faster_whisper_inference import FasterWhisperInference
 from ..common.audio import read_audio
@@ -44,7 +45,8 @@ async def run_transcription(
         identifier=identifier,
         update_data={
             "id": identifier,
-            "status": TaskStatus.IN_PROGRESS
+            "status": TaskStatus.IN_PROGRESS,
+            "updated_at": datetime.utcnow()
         }
     )
 
@@ -61,7 +63,8 @@ async def run_transcription(
         update_data={
             "id": identifier,
             "status": TaskStatus.COMPLETED,
-            "result": segments
+            "result": segments,
+            "updated_at": datetime.utcnow()
         }
     )
     return segments
