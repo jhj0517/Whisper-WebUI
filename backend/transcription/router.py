@@ -44,10 +44,10 @@ async def run_transcription(
 
 @transcription_router.post(
     "/",
+    response_model=QueueResponse,
     status_code=status.HTTP_201_CREATED,
     summary="Transcribe Audio",
     description="Process the provided audio or video file to generate a transcription.",
-    response_model=QueueResponse,
 )
 async def transcription(
     background_tasks: BackgroundTasks,

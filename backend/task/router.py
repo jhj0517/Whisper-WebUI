@@ -37,10 +37,10 @@ async def get_all_tasks_status(
 
 @task_router.get(
     "/{identifier}",
+    response_model=Task,
     status_code=status.HTTP_200_OK,
     summary="Retrieve Task by Identifier",
     description="Retrieve the status of a specific task using its identifier.",
-    response_model=Task,
 )
 async def get_task(
     identifier: str,
@@ -59,10 +59,10 @@ async def get_task(
 
 @task_router.delete(
     "/{identifier}",
+    response_model=Response,
     status_code=status.HTTP_200_OK,
     summary="Delete Task by Identifier",
     description="Delete a task from the system using its identifier.",
-    response_model=Response,
 )
 async def delete_task(
     identifier: str,
