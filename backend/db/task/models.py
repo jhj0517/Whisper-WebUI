@@ -22,6 +22,15 @@ class TaskStatus(str, Enum):
         return self.value
 
 
+class TaskType(str, Enum):
+    TRANSCRIPTION = "transcription"
+    VAD = "vad"
+    BGM_SEPARATION = "bgm_separation"
+
+    def __str__(self):
+        return self.value
+
+
 class Task(SQLModel, table=True):
     """
     Table to store tasks information.
