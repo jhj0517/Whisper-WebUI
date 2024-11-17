@@ -15,7 +15,7 @@ from ..common.audio import read_audio
 from ..common.models import QueueResponse
 from ..common.config_loader import load_server_config
 
-transcription_router = APIRouter()
+transcription_router = APIRouter(prefix="/transcription", tags=["Transcription"])
 
 
 @functools.lru_cache
@@ -42,7 +42,13 @@ async def run_transcription(
     return segments
 
 
-@transcription_router.post("/transcription", tags=["transcription"])
+@transcription_router.post(
+    "/",
+    status_code=status.HTTP_201_CREATED,
+    summary="Transcribe Audio",
+    description="Process the provided audio or video file to generate a transcription.",
+    response_model=QueueResponse,
+)
 async def transcription(
     background_tasks: BackgroundTasks,
     file: UploadFile = File(..., description="Audio or video file to transcribe."),
