@@ -7,11 +7,14 @@ from fastapi import (
 )
 from fastapi import APIRouter, BackgroundTasks, Depends, Response, status
 from typing import List, Dict
+from datetime import datetime
 
 from modules.vad.silero_vad import SileroVAD
 from modules.whisper.data_classes import VadParams
 from ..common.audio import read_audio
 from ..common.models import QueueResponse
+from ..db.task.dao import add_task_to_db, update_task_status_in_db
+from ..db.task.models import TaskStatus, TaskType
 
 vad_router = APIRouter(prefix="/vad", tags=["Voice Activity Detection"])
 
@@ -25,21 +28,42 @@ def get_vad_model() -> SileroVAD:
 
 async def run_vad(
     audio: np.ndarray,
-    params: VadOptions
+    params: VadOptions,
+    identifier: str,
 ) -> List[Dict]:
+    update_task_status_in_db(
+        identifier=identifier,
+        update_data={
+            "id": identifier,
+            "status": TaskStatus.IN_PROGRESS,
+            "updated_at": datetime.utcnow()
+        }
+    )
+
     audio, speech_chunks = get_vad_model().run(
         audio=audio,
         vad_parameters=params
     )
+
+    update_task_status_in_db(
+        identifier=identifier,
+        update_data={
+            "id": identifier,
+            "status": TaskStatus.COMPLETED,
+            "updated_at": datetime.utcnow(),
+            "result": speech_chunks,
+        }
+    )
+
     return speech_chunks
 
 
 @vad_router.post(
     "/",
+    response_model=QueueResponse,
     status_code=status.HTTP_201_CREATED,
     summary="Voice Activity Detection",
     description="Detect voice parts in the provided audio or video file to generate a timeline of speech segments.",
-    response_model=QueueResponse,
 )
 async def vad(
     background_tasks: BackgroundTasks,
@@ -47,9 +71,9 @@ async def vad(
     params: VadParams = Depends()
 ) -> QueueResponse:
     if not isinstance(file, np.ndarray):
-        audio = await read_audio(file=file)
+        audio, info = await read_audio(file=file)
     else:
-        audio = file
+        audio, info = file, None
 
     vad_options = VadOptions(
         threshold=params.threshold,
@@ -59,8 +83,16 @@ async def vad(
         speech_pad_ms=params.speech_pad_ms
     )
 
-    background_tasks.add_task(run_vad, audio=audio, params=vad_options)
+    identifier = add_task_to_db(
+        status=TaskStatus.QUEUED,
+        file_name=file.filename,
+        audio_duration=info.duration if info else None,
+        task_type=TaskType.VAD,
+        task_params=params.model_dump(),
+    )
 
-    return QueueResponse(message="VAD task queued")
+    background_tasks.add_task(run_vad, audio=audio, params=vad_options, identifier=identifier)
+
+    return QueueResponse(identifier=identifier, message="VAD task has queued")
 
 
