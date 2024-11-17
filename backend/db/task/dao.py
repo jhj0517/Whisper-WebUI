@@ -17,6 +17,9 @@ def add_task_to_db(
     url=None,
     audio_duration=None,
 ):
+    """
+    Add task to the db
+    """
     task = Task(
         status=status,
         language=language,
