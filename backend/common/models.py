@@ -4,9 +4,9 @@ from ..db.task.models import TaskStatus
 
 
 class QueueResponse(BaseModel):
-    identifier: str
-    status: TaskStatus
-    message: str
+    identifier: str = Field(..., description="Unique identifier for the queued task that can be used for tracking")
+    status: TaskStatus = Field(..., description="Current status of the task")
+    message: str = Field(..., description="Message providing additional information about the task")
 
 
 class Response(BaseModel):
