@@ -8,6 +8,11 @@ from datetime import datetime
 from sqlmodel import SQLModel, Field, JSON
 
 
+class ResultType(str, Enum):
+    JSON = "json"
+    FILEPATH = "filepath"
+
+
 class TaskStatus(str, Enum):
     PENDING = "pending"
     IN_PROGRESS = "in_progress"
@@ -40,6 +45,7 @@ class Task(SQLModel, table=True):
     - uuid: Universally unique identifier for each task.
     - status: Current status of the task.
     - result: JSON data representing the result of the task.
+    - result_type: Type of the data whether it is normal JSON data or filepath.
     - file_name: Name of the file associated with the task.
     - task_type: Type/category of the task.
     - duration: Duration of the task execution.
@@ -67,6 +73,10 @@ class Task(SQLModel, table=True):
         default=None,
         sa_column=JSON,
         description="JSON data representing the result of the task"
+    )
+    result_type: Optional[ResultType] = Field(
+        default=None,
+        description="Result type whether it's a filepath or JSON"
     )
     file_name: Optional[str] = Field(
         default=None,
