@@ -2,3 +2,6 @@ python-dotenv
 uvicorn
 SQLAlchemy
 sqlmodel
+
+# Test
+# pytest-asyncio
