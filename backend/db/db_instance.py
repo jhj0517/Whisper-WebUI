@@ -5,6 +5,7 @@ from sqlalchemy.orm import sessionmaker
 from functools import wraps
 from sqlalchemy.exc import SQLAlchemyError
 from fastapi import HTTPException
+from sqlmodel import SQLModel
 from dotenv import load_dotenv
 
 from ..common.config_loader import read_env
@@ -14,6 +15,7 @@ from ..common.config_loader import read_env
 def init_db():
     db_url = read_env("DB_URL", "sqlite:///records.db")
     engine = create_engine(db_url, connect_args={"check_same_thread": False})
+    SQLModel.metadata.create_all(engine)
     return sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
