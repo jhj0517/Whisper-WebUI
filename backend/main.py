@@ -16,6 +16,7 @@ import uvicorn
 import requests
 import io
 
+from .db.db_instance import init_db
 from .transcription.router import transcription_router, get_pipeline
 from .vad.router import get_vad_model, vad_router
 from .bgm_separation.router import get_bgm_separation_inferencer, bgm_separation_router
@@ -27,6 +28,7 @@ async def lifespan(app: FastAPI):
     # Initialization
     load_server_config()
     read_env("DB_URL")  # Place .env file into /configs/.env
+    init_db()
     transcription_pipeline = get_pipeline()
     vad_inferencer = get_vad_model()
     bgm_separation_inferencer = get_bgm_separation_inferencer()
