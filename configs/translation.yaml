@@ -458,3 +458,49 @@ tr: # Turkish
   Instrumental: Enstrümantal
   Vocals: Vokal
   SEPARATE BACKGROUND MUSIC: ARKA PLAN MÜZİĞİNİ AYIR
+
+eu: # Basque
+  Language: Hizkuntza
+  File: Fitxategia
+  Youtube: Youtube
+  Mic: Mik
+  T2T Translation: T2T Itzulketak
+  BGM Separation: BGM Bereizpena
+  GENERATE SUBTITLE FILE: SORTU AZPITITULU-FITXATEGIA
+  Output: Irteera
+  Downloadable output file: Irteera fitxategia deskargagarria
+  Upload File here: Igo fitxategia hemen
+  Model: Eredua
+  Automatic Detection: Detekzio Automatikoa
+  File Format: Fitxategi Formatua
+  Translate to English?: Itzuli ingelesera?
+  Add a timestamp to the end of the filename: Gehitu denbora marka fitxategi amaieran
+  Advanced Parameters: Aukera Aurreratuak
+  Background Music Remover Filter: Atzeko Musika Ezabatzeko Filtroa
+  Enabling this will remove background music: Hau aktibatuz, transkribatu aurretik atzeko musika ezabatuko zaio azpieredu baten bidez
+  Enable Background Music Remover Filter: Aktibatu Atzeko Musika Ezabatzeko Filtroa
+  Save separated files to output: Gorde fitxategi bereiziak irteeran
+  Offload sub model after removing background music: Atzeko musika kendu ondoren azpieredua memoriatik kendu
+  Voice Detection Filter: Ahots Detekzio Filtroa
+  Enable this to transcribe only detected voice: Aktibatu hau azpieredu batekin soilik detektatutako ahots zatiak transkribatzeko.
+  Enable Silero VAD Filter: Aktibatu Silero VAD Filtroa
+  Diarization: Diarizazioa
+  Enable Diarization: Aktibatu Diarizazioa
+  HuggingFace Token: HuggingFace Tokena
+  This is only needed the first time you download the model: Soilik beharrezkoa eredua deskargatzen den lehen aldian. Jadanik eredu hauek deskargatuta, ez duzu berriz ere sartu behar. Eredua deskargatzeko, joan hurrengo esteketara "https://huggingface.co/pyannote/speaker-diarization-3.1" eta "https://huggingface.co/pyannote/segmentation-3.0" eta onartu haien erabilpen-baldintzak.
+  Device: Gailua
+  Youtube Link: Youtube Esteka
+  Youtube Thumbnail: Youtube Irudia
+  Youtube Title: Youtube Izenburua
+  Youtube Description: Youtube Deskribapena
+  Record with Mic: Mik. bidez grabatu
+  Upload Subtitle Files to translate here: Igo hemen azpititulu fitxategia itzulketarako
+  Your Auth Key (API KEY): Zure Auth Giltza (API KEY)
+  Source Language: Jatorrizko Hizkuntza
+  Target Language: Helburuko Hizkuntza
+  Pro User?: Pro Erabiltzailea?
+  TRANSLATE SUBTITLE FILE: ITZULI AZPITITULU FITXATEGIA
+  Upload Audio Files to separate background music: Igo Audio Fitxategiak atzeko musika bereizteko
+  Instrumental: Instrumentala
+  Vocals: Ahotsak
+  SEPARATE BACKGROUND MUSIC: BEREIZI ATZEKO MUSIKA
