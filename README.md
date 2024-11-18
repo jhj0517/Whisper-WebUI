@@ -130,4 +130,4 @@ This is Whisper's original VRAM usage table for models.
 - [ ] Support real-time transcription for microphone
 
 ### Translation 🌐
-Any PRs translating Japanese, Spanish, French, German, Chinese, or any other language into [translation.yaml](https://github.com/jhj0517/Whisper-WebUI/blob/master/configs/translation.yaml) would be greatly appreciated!
+Any PRs that translate the language into [translation.yaml](https://github.com/jhj0517/Whisper-WebUI/blob/master/configs/translation.yaml) would be greatly appreciated!
