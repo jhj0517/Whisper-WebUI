@@ -21,19 +21,22 @@ def init_db():
 
 def get_db_session():
     db_instance = init_db()
-    session = db_instance()
-    try:
-        yield session
-    finally:
-        session.close()
+    return db_instance()
 
 
 def handle_database_errors(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
+        session = None
         try:
+            session = get_db_session()
+            kwargs['session'] = session
+
             return func(*args, **kwargs)
-        except SQLAlchemyError as e:
-            error_message = f"Database error: {str(e)}"
-            raise HTTPException(status_code=500, detail=error_message)
+        except Exception as e:
+            print("Database error has occurred")
+            raise
+        finally:
+            if session:
+                session.close()
     return wrapper
