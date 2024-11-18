@@ -92,19 +92,3 @@ def test_transcribe(
     assert calculate_wer(answer, subtitle[2].strip().replace(",", "").replace(".", "")) < 0.1
 
 
-def download_file(url, save_dir):
-    if os.path.exists(TEST_FILE_PATH):
-        return
-
-    if not os.path.exists(save_dir):
-        os.makedirs(save_dir)
-
-    file_name = url.split("/")[-1]
-    file_path = os.path.join(save_dir, file_name)
-
-    response = requests.get(url)
-
-    with open(file_path, "wb") as file:
-        file.write(response.content)
-
-    print(f"File downloaded to: {file_path}")
