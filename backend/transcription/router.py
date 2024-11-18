@@ -81,12 +81,22 @@ async def run_transcription(
 async def transcription(
     background_tasks: BackgroundTasks,
     file: UploadFile = File(..., description="Audio or video file to transcribe."),
-    params: TranscriptionPipelineParams = Depends(),
+    whisper_params: WhisperParams = Depends(),
+    vad_params: VadParams = Depends(),
+    bgm_separation_params: BGMSeparationParams = Depends(),
+    diarization_params: DiarizationParams = Depends(),
 ) -> QueueResponse:
     if not isinstance(file, np.ndarray):
         audio, info = await read_audio(file=file)
     else:
         audio, info = file, None
+
+    params = TranscriptionPipelineParams(
+        whisper=whisper_params,
+        vad=vad_params,
+        bgm_separation=bgm_separation_params,
+        diarization=diarization_params
+    )
 
     identifier = add_task_to_db(
         status=TaskStatus.QUEUED,
@@ -94,7 +104,7 @@ async def transcription(
         audio_duration=info.duration if info else None,
         language=params.whisper.lang,
         task_type=TaskType.TRANSCRIPTION,
-        task_params=params.model_dump(),
+        task_params=params.to_dict(),
     )
 
     background_tasks.add_task(
