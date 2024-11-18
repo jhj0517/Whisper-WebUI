@@ -28,7 +28,7 @@ def get_bgm_separation_inferencer() -> 'MusicSeparator':
     inferencer = MusicSeparator()
     inferencer.update_model(
         model_name=config["model_size"],
-        device=config["compute_type"]
+        device=config["device"]
     )
     return inferencer
 
