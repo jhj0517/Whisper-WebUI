@@ -85,6 +85,7 @@ async def transcription(
     vad_params: VadParams = Depends(),
     bgm_separation_params: BGMSeparationParams = Depends(),
     diarization_params: DiarizationParams = Depends(),
+    session: Session = Depends(get_db_session)
 ) -> QueueResponse:
     if not isinstance(file, np.ndarray):
         audio, info = await read_audio(file=file)
@@ -105,6 +106,7 @@ async def transcription(
         language=params.whisper.lang,
         task_type=TaskType.TRANSCRIPTION,
         task_params=params.to_dict(),
+        session=session
     )
 
     background_tasks.add_task(
