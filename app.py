@@ -72,7 +72,7 @@ class App:
             uvr_inputs = BGMSeparationParams.to_gradio_input(defaults=uvr_params,
                                                              available_models=self.whisper_inf.music_separator.available_models,
                                                              available_devices=self.whisper_inf.music_separator.available_devices,
-                                                             device=self.whisper_inf.music_separator.device)
+                                                             device=self.whisper_inf.music_separator.diarization_device)
 
         with gr.Accordion(_("Voice Detection Filter"), open=False):
             vad_inputs = VadParams.to_gradio_inputs(defaults=vad_params)
@@ -80,7 +80,7 @@ class App:
         with gr.Accordion(_("Diarization"), open=False):
             diarization_inputs = DiarizationParams.to_gradio_inputs(defaults=diarization_params,
                                                                     available_devices=self.whisper_inf.diarizer.available_device,
-                                                                    device=self.whisper_inf.diarizer.device)
+                                                                    device=self.whisper_inf.diarizer.diarization_device)
 
         dd_model.change(fn=self.on_change_models, inputs=[dd_model], outputs=[cb_translate])
 
@@ -253,7 +253,7 @@ class App:
 
                     with gr.TabItem(_("BGM Separation")):
                         files_audio = gr.Files(type="filepath", label=_("Upload Audio Files to separate background music"))
-                        dd_uvr_device = gr.Dropdown(label=_("Device"), value=self.whisper_inf.music_separator.device,
+                        dd_uvr_device = gr.Dropdown(label=_("Device"), value=self.whisper_inf.music_separator.diarization_device,
                                                     choices=self.whisper_inf.music_separator.available_devices)
                         dd_uvr_model_size = gr.Dropdown(label=_("Model"), value=uvr_params["model_size"],
                                                         choices=self.whisper_inf.music_separator.available_models)

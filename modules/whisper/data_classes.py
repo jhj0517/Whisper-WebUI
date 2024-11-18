@@ -153,7 +153,7 @@ class VadParams(BaseParams):
 class DiarizationParams(BaseParams):
     """Speaker diarization parameters"""
     is_diarize: bool = Field(default=False, description="Enable speaker diarization")
-    device: str = Field(default="cuda", description="Device to run Diarization model.")
+    diarization_device: str = Field(default="cuda", description="Device to run Diarization model.")
     hf_token: str = Field(
         default="",
         description="Hugging Face token for downloading diarization models"

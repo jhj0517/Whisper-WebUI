@@ -165,7 +165,7 @@ class BaseTranscriptionPipeline(ABC):
                 audio=audio,
                 use_auth_token=diarization_params.hf_token,
                 transcribed_result=result,
-                device=diarization_params.device
+                device=diarization_params.diarization_device
             )
             elapsed_time += elapsed_time_diarization
 
