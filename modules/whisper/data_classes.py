@@ -185,11 +185,11 @@ class DiarizationParams(BaseParams):
 class BGMSeparationParams(BaseParams):
     """Background music separation parameters"""
     is_separate_bgm: bool = Field(default=False, description="Enable background music separation")
-    model_size: str = Field(
+    uvr_model_size: str = Field(
         default="UVR-MDX-NET-Inst_HQ_4",
         description="UVR model size"
     )
-    device: str = Field(default="cuda", description="Device to run UVR model.")
+    uvr_device: str = Field(default="cuda", description="Device to run UVR model.")
     segment_size: int = Field(
         default=256,
         gt=0,

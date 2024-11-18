@@ -110,8 +110,8 @@ class BaseTranscriptionPipeline(ABC):
         if bgm_params.is_separate_bgm:
             music, audio, _ = self.music_separator.separate(
                 audio=audio,
-                model_name=bgm_params.model_size,
-                device=bgm_params.device,
+                model_name=bgm_params.uvr_model_size,
+                device=bgm_params.uvr_device,
                 segment_size=bgm_params.segment_size,
                 save_file=bgm_params.save_file,
                 progress=progress

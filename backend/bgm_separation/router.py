@@ -50,8 +50,8 @@ async def run_bgm_separation(
     start_time = datetime.utcnow()
     instrumental, vocal, filepaths = get_bgm_separation_inferencer().separate(
         audio=audio,
-        model_name=params.model_size,
-        device=params.device,
+        model_name=params.uvr_model_size,
+        device=params.uvr_device,
         segment_size=params.segment_size,
         save_file=False,
         progress=gr.Progress()
