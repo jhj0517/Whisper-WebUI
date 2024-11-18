@@ -44,16 +44,17 @@ async def run_transcription(
     update_task_status_in_db(
         identifier=identifier,
         update_data={
-            "id": identifier,
+            "uuid": identifier,
             "status": TaskStatus.IN_PROGRESS,
             "updated_at": datetime.utcnow()
-        }
+        },
     )
 
     segments, elapsed_time = get_pipeline().run(
-        audio=audio,
-        progress=gr.Progress(),
-        add_timestamp=False,
+        audio,
+        gr.Progress(),
+        "SRT",
+        False,
         *params.to_list()
     )
     segments = [seg.model_dump() for seg in segments]
@@ -61,12 +62,12 @@ async def run_transcription(
     update_task_status_in_db(
         identifier=identifier,
         update_data={
-            "id": identifier,
+            "uuid": identifier,
             "status": TaskStatus.COMPLETED,
             "result": segments,
             "updated_at": datetime.utcnow(),
             "duration": elapsed_time
-        }
+        },
     )
     return segments
 
@@ -85,7 +86,6 @@ async def transcription(
     vad_params: VadParams = Depends(),
     bgm_separation_params: BGMSeparationParams = Depends(),
     diarization_params: DiarizationParams = Depends(),
-    session: Session = Depends(get_db_session)
 ) -> QueueResponse:
     if not isinstance(file, np.ndarray):
         audio, info = await read_audio(file=file)
@@ -106,7 +106,6 @@ async def transcription(
         language=params.whisper.lang,
         task_type=TaskType.TRANSCRIPTION,
         task_params=params.to_dict(),
-        session=session
     )
 
     background_tasks.add_task(
