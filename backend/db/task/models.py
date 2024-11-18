@@ -6,7 +6,7 @@ from typing import Optional, List
 from uuid import uuid4
 from datetime import datetime
 from sqlalchemy.types import Enum as SQLAlchemyEnum
-from sqlmodel import SQLModel, Field, JSON
+from sqlmodel import SQLModel, Field, JSON, Column
 
 
 class ResultType(str, Enum):
@@ -72,8 +72,8 @@ class Task(SQLModel, table=True):
         description="Current status of the task",
     )
     result: Optional[dict] = Field(
-        default=None,
-        sa_column=JSON,
+        default_factory=dict,
+        sa_column=Column(JSON),
         description="JSON data representing the result of the task"
     )
     result_type: Optional[ResultType] = Field(
@@ -102,8 +102,8 @@ class Task(SQLModel, table=True):
         description="Type/category of the task"
     )
     task_params: Optional[dict] = Field(
-        default=None,
-        sa_column=JSON,
+        default_factory=dict,
+        sa_column=Column(JSON),
         description="Parameters of the task"
     )
     duration: Optional[float] = Field(
