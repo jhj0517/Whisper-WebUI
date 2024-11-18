@@ -8,7 +8,7 @@ from .models import Task, TasksResult, TaskStatus
 
 @handle_database_errors
 def add_task_to_db(
-    session=Depends(get_db_session),
+    session,
     status=TaskStatus.QUEUED,
     task_type=None,
     language=None,
@@ -38,7 +38,7 @@ def add_task_to_db(
 def update_task_status_in_db(
     identifier: str,
     update_data: Dict[str, Any],
-    session: Session = Depends(get_db_session),
+    session: Session,
 ):
     """
     Update task status and attributes in the database.
@@ -60,7 +60,7 @@ def update_task_status_in_db(
 
 @handle_database_errors
 def get_task_status_from_db(
-    identifier, session: Session = Depends(get_db_session)
+    identifier, session: Session
 ):
     """Retrieve task status from db"""
     task = session.query(Task).filter(Task.uuid == identifier).first()
@@ -71,7 +71,7 @@ def get_task_status_from_db(
 
 
 @handle_database_errors
-def get_all_tasks_status_from_db(session: Session = Depends(get_db_session)):
+def get_all_tasks_status_from_db(session: Session):
     """Get all tasks from db"""
     columns = [Task.uuid, Task.status, Task.task_type]
     query = session.query(*columns)
