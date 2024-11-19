@@ -108,6 +108,6 @@ async def bgm_separation(
         identifier=identifier
     )
 
-    return QueueResponse(message="Transcription task queued")
+    return QueueResponse(identifier=identifier, status=TaskStatus.QUEUED, message="BGM Separation task has queued")
 
 

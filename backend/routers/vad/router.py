@@ -96,6 +96,6 @@ async def vad(
 
     background_tasks.add_task(run_vad, audio=audio, params=vad_options, identifier=identifier)
 
-    return QueueResponse(identifier=identifier, message="VAD task has queued")
+    return QueueResponse(identifier=identifier, status=TaskStatus.QUEUED, message="VAD task has queued")
 
 
