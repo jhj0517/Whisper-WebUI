@@ -49,6 +49,7 @@ jobs:
 
     env:
       DEEPL_API_KEY: ${{ secrets.DEEPL_API_KEY }}
+      TEST_ENV: true
 
     steps:
       - name: Clean up space for action

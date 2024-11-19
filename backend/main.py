@@ -16,7 +16,7 @@ from .common.config_loader import read_env, load_server_config
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Initialization setups
-    load_server_config(test=os.getenv("TEST_ENV", "false").lower() == "true")
+    load_server_config()
     read_env("DB_URL")  # Place .env file into /configs/.env
     init_db()
     transcription_pipeline = get_pipeline()

@@ -7,8 +7,8 @@ import functools
 
 
 @functools.lru_cache
-def load_server_config(config_path: str = SERVER_CONFIG_PATH, test: bool = False) -> dict:
-    if test:
+def load_server_config(config_path: str = SERVER_CONFIG_PATH) -> dict:
+    if os.getenv("TEST_ENV", "false").lower() == "true":
         server_config = load_yaml(config_path)
         server_config["whisper"]["model_size"] = "tiny"
         server_config["whisper"]["compute_type"] = "float32"
