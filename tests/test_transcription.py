@@ -24,10 +24,7 @@ def test_transcribe(
     bgm_separation: bool,
     diarization: bool,
 ):
-    audio_path_dir = os.path.join(WEBUI_DIR, "tests")
-    audio_path = os.path.join(audio_path_dir, "jfk.wav")
-    if not os.path.exists(audio_path):
-        download_file(TEST_FILE_DOWNLOAD_URL, audio_path_dir)
+    audio_path = TEST_FILE_PATH
 
     answer = TEST_ANSWER
     if diarization:
