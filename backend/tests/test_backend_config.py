@@ -44,11 +44,6 @@ def setup_test_file():
 
     download_file(TEST_FILE_DOWNLOAD_URL, TEST_FILE_PATH)
 
-    server_config = load_yaml(SERVER_CONFIG_PATH)
-    server_config["whisper"]["model_size"] = TEST_WHISPER_MODEL
-    server_config["whisper"]["compute_type"] = TEST_COMPUTE_TYPE
-    save_yaml(server_config, SERVER_CONFIG_PATH)
-
 
 @pytest.fixture
 def upload_file_instance(filepath: str = TEST_FILE_PATH) -> UploadFile:
