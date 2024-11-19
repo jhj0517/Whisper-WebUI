@@ -12,15 +12,15 @@ from sqlalchemy.orm import Session
 from datetime import datetime
 from modules.whisper.data_classes import *
 from modules.whisper.faster_whisper_inference import FasterWhisperInference
-from ..common.audio import read_audio
-from ..common.models import QueueResponse
-from ..common.config_loader import load_server_config
-from ..db.task.dao import (
+from backend.common.audio import read_audio
+from backend.common.models import QueueResponse
+from backend.common.config_loader import load_server_config
+from backend.db.task.dao import (
     add_task_to_db,
     get_db_session,
     update_task_status_in_db
 )
-from ..db.task.models import TaskStatus, TaskType
+from backend.db.task.models import TaskStatus, TaskType
 
 transcription_router = APIRouter(prefix="/transcription", tags=["Transcription"])
 

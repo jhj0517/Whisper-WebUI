@@ -1,25 +1,14 @@
 from contextlib import asynccontextmanager
 from fastapi import (
-    File,
-    HTTPException,
-    Query,
-    UploadFile,
-    Form,
     FastAPI,
-    Request,
-    WebSocket,
 )
 from fastapi.responses import RedirectResponse
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import StreamingResponse
-import uvicorn
-import requests
-import io
 
 from .db.db_instance import init_db
-from .transcription.router import transcription_router, get_pipeline
-from .vad.router import get_vad_model, vad_router
-from .bgm_separation.router import get_bgm_separation_inferencer, bgm_separation_router
+from backend.routers.transcription.router import transcription_router, get_pipeline
+from backend.routers.vad.router import get_vad_model, vad_router
+from backend.routers.bgm_separation.router import get_bgm_separation_inferencer, bgm_separation_router
 from .common.config_loader import read_env, load_server_config
 
 

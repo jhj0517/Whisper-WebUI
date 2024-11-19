@@ -2,22 +2,22 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 
-from ..db.db_instance import get_db_session
-from ..db.task.dao import (
+from backend.db.db_instance import get_db_session
+from backend.db.task.dao import (
     get_task_status_from_db,
     get_all_tasks_status_from_db,
     delete_task_from_db,
 )
-from ..db.task.models import (
+from backend.db.task.models import (
     TasksResult,
     Task,
     TaskType
 )
-from ..common.models import (
+from backend.common.models import (
     Response,
     Result
 )
-from ..common.compresser import compress_files
+from backend.common.compresser import compress_files
 
 task_router = APIRouter(prefix="/task", tags=["Tasks"])
 

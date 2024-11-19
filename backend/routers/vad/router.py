@@ -11,10 +11,10 @@ from datetime import datetime
 
 from modules.vad.silero_vad import SileroVAD
 from modules.whisper.data_classes import VadParams
-from ..common.audio import read_audio
-from ..common.models import QueueResponse
-from ..db.task.dao import add_task_to_db, update_task_status_in_db
-from ..db.task.models import TaskStatus, TaskType
+from backend.common.audio import read_audio
+from backend.common.models import QueueResponse
+from backend.db.task.dao import add_task_to_db, update_task_status_in_db
+from backend.db.task.models import TaskStatus, TaskType
 
 vad_router = APIRouter(prefix="/vad", tags=["Voice Activity Detection"])
 

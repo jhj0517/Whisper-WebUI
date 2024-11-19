@@ -11,11 +11,11 @@ from datetime import datetime
 
 from modules.whisper.data_classes import *
 from modules.uvr.music_separator import MusicSeparator
-from ..common.audio import read_audio
-from ..common.models import QueueResponse
-from ..common.config_loader import load_server_config
-from ..db.task.models import TaskStatus, TaskType, ResultType
-from ..db.task.dao import add_task_to_db, update_task_status_in_db
+from backend.common.audio import read_audio
+from backend.common.models import QueueResponse
+from backend.common.config_loader import load_server_config
+from backend.db.task.models import TaskStatus, TaskType, ResultType
+from backend.db.task.dao import add_task_to_db, update_task_status_in_db
 from .models import BGMSeparationResult
 
 
