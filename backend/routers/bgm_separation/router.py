@@ -53,7 +53,7 @@ async def run_bgm_separation(
         model_name=params.uvr_model_size,
         device=params.uvr_device,
         segment_size=params.segment_size,
-        save_file=False,
+        save_file=True,
         progress=gr.Progress()
     )
     instrumental_path, vocal_path = filepaths
