@@ -64,9 +64,9 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y git ffmpeg
 
       - name: Install dependencies
-        run: pip install -r backend\requirements-backend.txt pytest pytest-asyncio jiwer
+        run: pip install -r backend/requirements-backend.txt pytest pytest-asyncio jiwer
 
       - name: Run test
-        run: python -m pytest -rs backend\tests
+        run: python -m pytest -rs backend/tests
 
 
