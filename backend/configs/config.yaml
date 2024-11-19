@@ -1,7 +1,7 @@
 whisper:
   # Default implementation is faster-whisper. This indicates model name within `models\Whisper\faster-whisper`
   model_size: large-v2
-  compute_type: float16
+  compute_type: float16 # 'float32' for CPU, 'float16' for CUDA
 
 bgm_separation:
   # UVR model sizes between ["UVR-MDX-NET-Inst_HQ_4", "UVR-MDX-NET-Inst_3"]
