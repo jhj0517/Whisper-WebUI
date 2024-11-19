@@ -26,8 +26,8 @@ TEST_COMPUTE_TYPE = "float32"
 
 
 @pytest.fixture(autouse=True)
-@functools.lru_cache
 def setup_test_file():
+    @functools.lru_cache
     def download_file(url=TEST_FILE_DOWNLOAD_URL, file_path=TEST_FILE_PATH):
         if os.path.exists(file_path):
             return
