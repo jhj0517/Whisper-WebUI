@@ -2,29 +2,28 @@ import pytest
 from fastapi import UploadFile
 from io import BytesIO
 
-from modules.whisper.data_classes import *
 from backend.db.task.models import TaskStatus
-from test_backend_config import get_client, TEST_UPLOAD_FILE, TEST_PIPELINE_PARAMS
+from backend.tests.test_backend_config import get_client, setup_test_file, upload_file_instance, TEST_PIPELINE_PARAMS
 
 
 @pytest.mark.parametrize(
-    "upload_file,pipeline_params",
+    "pipeline_params",
     [
-        (TEST_UPLOAD_FILE, TEST_PIPELINE_PARAMS)
+        TEST_PIPELINE_PARAMS
     ]
 )
 @pytest.mark.asyncio
 async def test_transcription_endpoint(
-    upload_file: UploadFile,
+    upload_file_instance,
     pipeline_params: dict
 ):
-    file_content = BytesIO(upload_file.file.read())
-    upload_file.file.seek(0)
+    file_content = BytesIO(upload_file_instance.file.read())
+    upload_file_instance.file.seek(0)
 
     client = get_client()
     response = client.post(
         "/transcription",
-        files={"file": (upload_file.filename, file_content, "audio/mpeg")},
+        files={"file": (upload_file_instance.filename, file_content, "audio/mpeg")},
         params=pipeline_params
     )
 
