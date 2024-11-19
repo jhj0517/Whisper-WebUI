@@ -13,7 +13,7 @@ from modules.whisper.data_classes import *
 from modules.utils.paths import *
 from modules.utils.files_manager import load_yaml, save_yaml
 
-TEST_PIPELINE_PARAMS = {**WhisperParams(model_size="tiny").model_dump(exclude_none=True),
+TEST_PIPELINE_PARAMS = {**WhisperParams(model_size="tiny", compute_type="float32").model_dump(exclude_none=True),
                         **VadParams().model_dump(exclude_none=True),
                         **BGMSeparationParams().model_dump(exclude_none=True),
                         **DiarizationParams().model_dump(exclude_none=True)}
