@@ -13,7 +13,7 @@ from ..common.config_loader import read_env
 
 @functools.lru_cache
 def init_db():
-    db_url = read_env("DB_URL", "sqlite:///records.db")
+    db_url = read_env("DB_URL", "sqlite:///backend/records.db")
     engine = create_engine(db_url, connect_args={"check_same_thread": False})
     SQLModel.metadata.create_all(engine)
     return sessionmaker(autocommit=False, autoflush=False, bind=engine)
