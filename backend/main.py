@@ -14,15 +14,17 @@ from .common.config_loader import read_env, load_server_config
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Initialization
+    # Initialization setups
     load_server_config()
     read_env("DB_URL")  # Place .env file into /configs/.env
     init_db()
     transcription_pipeline = get_pipeline()
     vad_inferencer = get_vad_model()
     bgm_separation_inferencer = get_bgm_separation_inferencer()
+
     yield
-    # Right before server shutdown
+
+    # Release VRAM when server shutdown
     transcription_pipeline = None
     vad_inferencer = None
     bgm_separation_inferencer = None
