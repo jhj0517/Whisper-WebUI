@@ -41,7 +41,7 @@ async def run_bgm_separation(
     update_task_status_in_db(
         identifier=identifier,
         update_data={
-            "id": identifier,
+            "uuid": identifier,
             "status": TaskStatus.IN_PROGRESS,
             "updated_at": datetime.utcnow()
         }
@@ -62,7 +62,7 @@ async def run_bgm_separation(
     update_task_status_in_db(
         identifier=identifier,
         update_data={
-            "id": identifier,
+            "uuid": identifier,
             "status": TaskStatus.COMPLETED,
             "result": BGMSeparationResult(
                 instrumental_path=instrumental_path,

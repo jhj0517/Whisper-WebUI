@@ -34,7 +34,7 @@ async def run_vad(
     update_task_status_in_db(
         identifier=identifier,
         update_data={
-            "id": identifier,
+            "uuid": identifier,
             "status": TaskStatus.IN_PROGRESS,
             "updated_at": datetime.utcnow()
         }
@@ -50,7 +50,7 @@ async def run_vad(
     update_task_status_in_db(
         identifier=identifier,
         update_data={
-            "id": identifier,
+            "uuid": identifier,
             "status": TaskStatus.COMPLETED,
             "updated_at": datetime.utcnow(),
             "result": speech_chunks,
