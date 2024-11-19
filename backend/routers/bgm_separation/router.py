@@ -67,7 +67,7 @@ async def run_bgm_separation(
             "result": BGMSeparationResult(
                 instrumental_path=instrumental_path,
                 vocal_path=vocal_path
-            ),
+            ).model_dump(),
             "result_type": ResultType.FILEPATH,
             "updated_at": datetime.utcnow(),
             "duration": elapsed_time
