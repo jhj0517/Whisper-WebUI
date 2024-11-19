@@ -4,6 +4,7 @@ from fastapi import (
 )
 from fastapi.responses import RedirectResponse
 from fastapi.middleware.cors import CORSMiddleware
+import os
 
 from .db.db_instance import init_db
 from backend.routers.transcription.router import transcription_router, get_pipeline
@@ -15,7 +16,7 @@ from .common.config_loader import read_env, load_server_config
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Initialization setups
-    load_server_config()
+    load_server_config(test=os.getenv("TEST_ENV", "false").lower() == "true")
     read_env("DB_URL")  # Place .env file into /configs/.env
     init_db()
     transcription_pipeline = get_pipeline()
