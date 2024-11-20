@@ -36,7 +36,7 @@ async def get_all_tasks_status(
     """
     Retrieve all tasks.
     """
-    return get_all_tasks_status_from_db(session)
+    return get_all_tasks_status_from_db(session=session)
 
 
 @task_router.get(
@@ -75,7 +75,7 @@ async def get_file_task(
     Retrieve the downloadable file response of a specific task by its identifier.
     Compressed by ZIP basically.
     """
-    task = get_task_status_from_db(identifier, session)
+    task = get_task_status_from_db(identifier=identifier, session=session)
 
     if task is not None:
         if task.task_type == TaskType.BGM_SEPARATION:
