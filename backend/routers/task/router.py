@@ -52,7 +52,7 @@ async def get_task(
     """
     Retrieve the status of a specific task by its identifier.
     """
-    task = get_task_status_from_db(identifier, session)
+    task = get_task_status_from_db(identifier=identifier, session=session)
 
     if task is not None:
         return task
@@ -62,7 +62,6 @@ async def get_task(
 
 @task_router.get(
     "file/{identifier}",
-    response_model=FileResponse,
     status_code=status.HTTP_200_OK,
     summary="Retrieve Task by Identifier",
     description="Retrieve the status of a specific task using its identifier.",
