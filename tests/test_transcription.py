@@ -86,6 +86,7 @@ def test_transcribe(
         *hparams,
     )
     subtitle = read_file(file_path).split("\n")
-    assert calculate_wer(answer, subtitle[2].strip().replace(",", "").replace(".", "")) < 0.1
+    wer = calculate_wer(answer, subtitle[2].strip().replace(",", "").replace(".", ""))
+    assert wer < 0.1, f"WER is too high, it's {wer}"
 
 
