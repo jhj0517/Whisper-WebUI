@@ -46,7 +46,8 @@ def setup_test_file():
 
 
 @pytest.fixture
-def upload_file_instance(filepath: str = TEST_FILE_PATH) -> UploadFile:
+@functools.lru_cache
+def get_upload_file_instance(filepath: str = TEST_FILE_PATH) -> UploadFile:
     with open(filepath, "rb") as f:
         file_contents = BytesIO(f.read())
         filename = os.path.basename(filepath)

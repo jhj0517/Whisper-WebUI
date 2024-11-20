@@ -3,7 +3,7 @@ from fastapi import UploadFile
 from io import BytesIO
 
 from backend.db.task.models import TaskStatus
-from backend.tests.test_backend_config import get_client, setup_test_file, upload_file_instance, TEST_PIPELINE_PARAMS
+from backend.tests.test_backend_config import get_client, setup_test_file, get_upload_file_instance, TEST_PIPELINE_PARAMS
 
 
 @pytest.mark.parametrize(
@@ -14,16 +14,16 @@ from backend.tests.test_backend_config import get_client, setup_test_file, uploa
 )
 @pytest.mark.asyncio
 async def test_transcription_endpoint(
-    upload_file_instance,
+    get_upload_file_instance,
     pipeline_params: dict
 ):
-    file_content = BytesIO(upload_file_instance.file.read())
-    upload_file_instance.file.seek(0)
+    file_content = BytesIO(get_upload_file_instance.file.read())
+    get_upload_file_instance.file.seek(0)
 
     client = get_client()
     response = client.post(
         "/transcription",
-        files={"file": (upload_file_instance.filename, file_content, "audio/mpeg")},
+        files={"file": (get_upload_file_instance.filename, file_content, "audio/mpeg")},
         params=pipeline_params
     )
 
