@@ -84,7 +84,12 @@ async def get_file_task(
                 [task.result.instrumental_path, task.result.vocal_path],
                 output_zip_path
             )
-            return FileResponse(path=output_zip_path, filename=output_zip_path)
+            return FileResponse(
+                path=output_zip_path,
+                status_code=200,
+                filename=output_zip_path,
+                media_type="application/zip"
+            )
         else:
             raise HTTPException(status_code=404, detail=f"File download is only supported for bgm separation."
                                                         f" The given type is {task.task_type}")
