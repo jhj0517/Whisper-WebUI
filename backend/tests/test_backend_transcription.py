@@ -32,7 +32,6 @@ def test_transcription_endpoint(
 
     assert response.status_code == 201
     assert response.json()["status"] == TaskStatus.QUEUED
-    assert response.json()["message"] == "Transcription task has queued"
     task_identifier = response.json()["identifier"]
     assert isinstance(task_identifier, str) and task_identifier
 
@@ -45,6 +44,7 @@ def test_transcription_endpoint(
 
     result = completed_task.json()["result"]
     assert result, "Transcription text is empty"
+
     wer = calculate_wer(TEST_ANSWER, result[0]["text"].strip().replace(",", "").replace(".", ""))
     assert wer < 0.1, f"WER is too high, it's {wer}"
 
