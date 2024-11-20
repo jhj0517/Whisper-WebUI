@@ -3,6 +3,7 @@ from fastapi import UploadFile
 from io import BytesIO
 
 from backend.db.task.models import TaskStatus
+from backend.tests.test_task_status import wait_for_task_completion
 from backend.tests.test_backend_config import get_client, setup_test_file, get_upload_file_instance, TEST_PIPELINE_PARAMS
 
 
@@ -12,15 +13,14 @@ from backend.tests.test_backend_config import get_client, setup_test_file, get_u
         TEST_PIPELINE_PARAMS
     ]
 )
-@pytest.mark.asyncio
-async def test_transcription_endpoint(
+def test_transcription_endpoint(
     get_upload_file_instance,
     pipeline_params: dict
 ):
+    client = get_client()
     file_content = BytesIO(get_upload_file_instance.file.read())
     get_upload_file_instance.file.seek(0)
 
-    client = get_client()
     response = client.post(
         "/transcription",
         files={"file": (get_upload_file_instance.filename, file_content, "audio/mpeg")},
@@ -30,3 +30,15 @@ async def test_transcription_endpoint(
     assert response.status_code == 201
     assert response.json()["status"] == TaskStatus.QUEUED
     assert response.json()["message"] == "Transcription task has queued"
+    task_identifier = response.json()["identifier"]
+    assert isinstance(task_identifier, str) and task_identifier
+
+    completed_task = wait_for_task_completion(
+        identifier=task_identifier
+    )
+
+    assert completed_task is not None, f"Task with identifier {task_identifier} did not complete within the " \
+                                       f"expected time."
+
+    result = completed_task.json()["result"]
+
