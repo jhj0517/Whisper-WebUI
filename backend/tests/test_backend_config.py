@@ -7,6 +7,7 @@ import os
 import requests
 import pytest
 import yaml
+import jiwer
 
 from backend.main import backend_app
 from modules.whisper.data_classes import *
@@ -60,4 +61,5 @@ def get_client(app: FastAPI = backend_app):
     return TestClient(app)
 
 
-
+def calculate_wer(answer, prediction):
+    return jiwer.wer(answer, prediction)
