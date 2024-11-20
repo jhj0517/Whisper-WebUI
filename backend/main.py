@@ -10,6 +10,7 @@ from .db.db_instance import init_db
 from backend.routers.transcription.router import transcription_router, get_pipeline
 from backend.routers.vad.router import get_vad_model, vad_router
 from backend.routers.bgm_separation.router import get_bgm_separation_inferencer, bgm_separation_router
+from backend.routers.task.router import task_router
 from .common.config_loader import read_env, load_server_config
 
 
@@ -50,6 +51,7 @@ backend_app.add_middleware(
 backend_app.include_router(transcription_router)
 backend_app.include_router(vad_router)
 backend_app.include_router(bgm_separation_router)
+backend_app.include_router(task_router)
 
 
 @backend_app.get("/", response_class=RedirectResponse, include_in_schema=False)
