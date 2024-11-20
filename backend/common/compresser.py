@@ -42,7 +42,7 @@ def get_file_hash(file_path: str) -> str:
         return f"An error occurred: {str(e)}"
 
 
-def find_file_by_hash(dir_path: str, password: str) -> Optional[str]:
+def find_file_by_hash(dir_path: str, hash_str: str) -> Optional[str]:
     """Get file path from the directory based on its hash"""
     if not os.path.exists(dir_path) and os.path.isdir(dir_path):
         raise ValueError(f"Directory {dir_path} does not exist")
@@ -51,7 +51,7 @@ def find_file_by_hash(dir_path: str, password: str) -> Optional[str]:
 
     for f in files:
         f_hash = get_file_hash(f)
-        if password == f_hash:
+        if hash_str == f_hash:
             return f
     return None
 
