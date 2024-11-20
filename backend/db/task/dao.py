@@ -60,7 +60,7 @@ def update_task_status_in_db(
 
 @handle_database_errors
 def get_task_status_from_db(
-    identifier, session: Session
+    identifier: str, session: Session
 ):
     """Retrieve task status from db"""
     task = session.query(Task).filter(Task.uuid == identifier).first()
