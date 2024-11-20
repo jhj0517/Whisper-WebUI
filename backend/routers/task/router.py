@@ -62,7 +62,7 @@ async def get_task(
 
 
 @task_router.get(
-    "file/{identifier}",
+    "/file/{identifier}",
     status_code=status.HTTP_200_OK,
     summary="Retrieve Task by Identifier",
     description="Retrieve the status of a specific task using its identifier.",
