@@ -2,5 +2,5 @@ from pydantic import BaseModel, Field
 
 
 class BGMSeparationResult(BaseModel):
-    instrumental_path: str = Field(..., description="Instrumental file path")
-    vocal_path: str = Field(..., description="Vocal file path")
+    instrumental_hash: str = Field(..., description="Instrumental file hash")
+    vocal_hash: str = Field(..., description="Vocal file hash")

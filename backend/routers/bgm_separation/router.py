@@ -6,6 +6,7 @@ from fastapi import (
 )
 import gradio as gr
 from fastapi import APIRouter, BackgroundTasks, Depends, Response, status
+from fastapi.responses import FileResponse
 from typing import List, Dict, Tuple
 from datetime import datetime
 
@@ -14,6 +15,7 @@ from modules.uvr.music_separator import MusicSeparator
 from backend.common.audio import read_audio
 from backend.common.models import QueueResponse
 from backend.common.config_loader import load_server_config
+from backend.common.compresser import get_file_hash, find_file_by_hash
 from backend.db.task.models import TaskStatus, TaskType, ResultType
 from backend.db.task.dao import add_task_to_db, update_task_status_in_db
 from .models import BGMSeparationResult
@@ -65,8 +67,8 @@ async def run_bgm_separation(
             "uuid": identifier,
             "status": TaskStatus.COMPLETED,
             "result": BGMSeparationResult(
-                instrumental_path=instrumental_path,
-                vocal_path=vocal_path
+                instrumental_hash=get_file_hash(instrumental_path),
+                vocal_hash=get_file_hash(vocal_path)
             ).model_dump(),
             "result_type": ResultType.FILEPATH,
             "updated_at": datetime.utcnow(),
