@@ -12,6 +12,7 @@ from datetime import datetime
 
 from modules.whisper.data_classes import *
 from modules.uvr.music_separator import MusicSeparator
+from modules.utils.paths import BACKEND_CACHE_DIR
 from backend.common.audio import read_audio
 from backend.common.models import QueueResponse
 from backend.common.config_loader import load_server_config
@@ -27,7 +28,9 @@ bgm_separation_router = APIRouter(prefix="/bgm-separation", tags=["BGM Separatio
 @functools.lru_cache
 def get_bgm_separation_inferencer() -> 'MusicSeparator':
     config = load_server_config()["bgm_separation"]
-    inferencer = MusicSeparator()
+    inferencer = MusicSeparator(
+        output_dir=BACKEND_CACHE_DIR
+    )
     inferencer.update_model(
         model_name=config["model_size"],
         device=config["device"]

@@ -19,7 +19,7 @@ from backend.common.models import (
     Result
 )
 from backend.common.compresser import compress_files, find_file_by_hash
-from modules.utils.paths import UVR_INSTRUMENTAL_OUTPUT_DIR, UVR_VOCALS_OUTPUT_DIR, UVR_OUTPUT_DIR
+from modules.utils.paths import BACKEND_CACHE_DIR
 
 task_router = APIRouter(prefix="/task", tags=["Tasks"])
 
@@ -80,13 +80,13 @@ async def get_file_task(
 
     if task is not None:
         if task.task_type == TaskType.BGM_SEPARATION:
-            output_zip_path = os.path.join(UVR_OUTPUT_DIR, f"{identifier}_bgm_separation.zip")
+            output_zip_path = os.path.join(BACKEND_CACHE_DIR, f"{identifier}_bgm_separation.zip")
             instrumental_path = find_file_by_hash(
-                UVR_INSTRUMENTAL_OUTPUT_DIR,
+                os.path.join(BACKEND_CACHE_DIR, "instrumental"),
                 task.result["instrumental_hash"]
             )
             vocal_path = find_file_by_hash(
-                UVR_VOCALS_OUTPUT_DIR,
+                os.path.join(BACKEND_CACHE_DIR, "vocals"),
                 task.result["vocal_hash"]
             )
 
