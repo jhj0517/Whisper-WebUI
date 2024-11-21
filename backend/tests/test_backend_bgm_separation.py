@@ -1,12 +1,13 @@
 import pytest
 from fastapi import UploadFile
 from io import BytesIO
+import os
 
 from backend.db.task.models import TaskStatus
-from backend.tests.test_task_status import wait_for_task_completion
+from backend.tests.test_task_status import wait_for_task_completion, fetch_file_response
 from backend.tests.test_backend_config import (
     get_client, setup_test_file, get_upload_file_instance, calculate_wer,
-    TEST_BGM_SEPARATION_PARAMS, TEST_ANSWER
+    TEST_BGM_SEPARATION_PARAMS, TEST_ANSWER, TEST_BGM_SEPARATION_OUTPUT_PATH
 )
 
 
@@ -45,3 +46,12 @@ def test_transcription_endpoint(
     result = completed_task.json()["result"]
     assert "instrumental_hash" in result and result["instrumental_hash"]
     assert "vocal_hash" in result and result["vocal_hash"]
+
+    file_response = fetch_file_response(task_identifier)
+    assert file_response.status_code == 200, f"Fetching File Response has failed. Response is: {file_response}"
+
+    with open(TEST_BGM_SEPARATION_OUTPUT_PATH, "wb") as file:
+        file.write(file_response.content)
+
+    assert os.path.exists(TEST_BGM_SEPARATION_OUTPUT_PATH)
+
