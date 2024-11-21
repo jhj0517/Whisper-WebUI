@@ -7,10 +7,12 @@ from modules.utils.paths import BACKEND_CACHE_DIR
 
 def cleanup_old_files(cache_dir: str = BACKEND_CACHE_DIR, ttl: int = 60):
     now = time.time()
-    for filename in os.listdir(cache_dir):
-        filepath = os.path.join(cache_dir, filename)
-        if not os.path.isfile(filepath):
-            continue
-        if now - os.path.getmtime(filepath) > ttl:
-            os.remove(filepath)
-
+    for root, dirs, files in os.walk(cache_dir):
+        for filename in files:
+            filepath = os.path.join(root, filename)
+            if now - os.path.getmtime(filepath) > ttl:
+                try:
+                    os.remove(filepath)
+                except Exception as e:
+                    print(f"Error removing {filepath}")
+                    raise
