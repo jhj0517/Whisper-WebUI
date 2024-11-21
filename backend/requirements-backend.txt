@@ -18,6 +18,7 @@ python-dotenv
 uvicorn
 SQLAlchemy
 sqlmodel
+pydantic==2.9.2
 
 # Test dependencies
 # pytest
