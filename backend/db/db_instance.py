@@ -34,7 +34,7 @@ def handle_database_errors(func):
 
             return func(*args, **kwargs)
         except Exception as e:
-            print("Database error has occurred")
+            print(f"Database error has occurred: {e}")
             raise
         finally:
             if session:
