@@ -127,12 +127,21 @@ class FasterWhisperInference(BaseTranscriptionPipeline):
         """
         progress(0, desc="Initializing Model..")
         self.current_model_size = self.model_paths[model_size]
+
+        local_files_only = False
+        hf_prefix = "models--Systran--faster-whisper-"
+        official_model_path = os.path.join(self.model_dir, hf_prefix+model_size)
+        if ((os.path.isdir(self.current_model_size) and os.path.exists(self.current_model_size)) or
+            (model_size in faster_whisper.available_models() and os.path.exists(official_model_path))):
+            local_files_only = True
+
         self.current_compute_type = compute_type
         self.model = faster_whisper.WhisperModel(
             device=self.device,
             model_size_or_path=self.current_model_size,
             download_root=self.model_dir,
-            compute_type=self.current_compute_type
+            compute_type=self.current_compute_type,
+            local_files_only=local_files_only
         )
 
     def get_model_paths(self):
