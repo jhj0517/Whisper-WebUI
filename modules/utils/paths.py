@@ -19,6 +19,7 @@ UVR_VOCALS_OUTPUT_DIR = os.path.join(UVR_OUTPUT_DIR, "vocals")
 BACKEND_DIR_PATH = os.path.join(WEBUI_DIR, "backend")
 SERVER_CONFIG_PATH = os.path.join(BACKEND_DIR_PATH, "configs", "config.yaml")
 SERVER_DOTENV_PATH = os.path.join(BACKEND_DIR_PATH, "configs", ".env")
+BACKEND_CACHE_DIR = os.path.join(BACKEND_DIR_PATH, "cache")
 
 for dir_path in [MODELS_DIR,
                  WHISPER_MODELS_DIR,
@@ -31,5 +32,6 @@ for dir_path in [MODELS_DIR,
                  OUTPUT_DIR,
                  TRANSLATION_OUTPUT_DIR,
                  UVR_INSTRUMENTAL_OUTPUT_DIR,
-                 UVR_VOCALS_OUTPUT_DIR]:
+                 UVR_VOCALS_OUTPUT_DIR,
+                 BACKEND_CACHE_DIR]:
     os.makedirs(dir_path, exist_ok=True)
