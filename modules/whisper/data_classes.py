@@ -86,7 +86,7 @@ class BaseParams(BaseModel):
 
 # Models need to be wrapped with Field(Query()) to fix fastapi doc issue.
 # More info : https://github.com/fastapi/fastapi/discussions/8634#discussioncomment-5153136
-class VadParams(BaseModel):
+class VadParams(BaseParams):
     """Voice Activity Detection parameters"""
     vad_filter: bool = Field(
         Query(default=False, description="Enable voice activity detection to filter out non-speech parts")
@@ -165,7 +165,7 @@ class VadParams(BaseModel):
         ]
 
 
-class DiarizationParams(BaseModel):
+class DiarizationParams(BaseParams):
     """Speaker diarization parameters"""
     is_diarize: bool = Field(
         Query(default=False, description="Enable speaker diarization")
@@ -203,7 +203,7 @@ class DiarizationParams(BaseModel):
         ]
 
 
-class BGMSeparationParams(BaseModel):
+class BGMSeparationParams(BaseParams):
     """Background music separation parameters"""
     is_separate_bgm: bool = Field(
         Query(default=False, description="Enable background music separation")
@@ -248,7 +248,7 @@ class BGMSeparationParams(BaseModel):
                 label=_("Model"),
                 choices=["UVR-MDX-NET-Inst_HQ_4",
                          "UVR-MDX-NET-Inst_3"] if available_models is None else available_models,
-                value=defaults.get("uvr_model_size", cls.__fields__["model_size"].default),
+                value=defaults.get("uvr_model_size", cls.__fields__["uvr_model_size"].default),
             ),
             gr.Dropdown(
                 label=_("Device"),
@@ -272,7 +272,7 @@ class BGMSeparationParams(BaseModel):
         ]
 
 
-class WhisperParams(BaseModel):
+class WhisperParams(BaseParams):
     """Whisper parameters"""
     model_size: str = Field(
         Query(default="large-v2", description="Whisper model size")
