@@ -248,7 +248,7 @@ class BGMSeparationParams(BaseModel):
                 label=_("Model"),
                 choices=["UVR-MDX-NET-Inst_HQ_4",
                          "UVR-MDX-NET-Inst_3"] if available_models is None else available_models,
-                value=defaults.get("model_size", cls.__fields__["model_size"].default),
+                value=defaults.get("uvr_model_size", cls.__fields__["model_size"].default),
             ),
             gr.Dropdown(
                 label=_("Device"),
