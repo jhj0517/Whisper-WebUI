@@ -2,6 +2,7 @@ import pytest
 from fastapi import UploadFile
 from io import BytesIO
 import os
+import torch
 
 from backend.db.task.models import TaskStatus
 from backend.tests.test_task_status import wait_for_task_completion, fetch_file_response
@@ -11,6 +12,7 @@ from backend.tests.test_backend_config import (
 )
 
 
+@pytest.mark.skipif(not torch.cuda.is_available())
 @pytest.mark.parametrize(
     "bgm_separation_params",
     [
