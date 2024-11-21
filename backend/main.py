@@ -5,6 +5,8 @@ from fastapi import (
 from fastapi.responses import RedirectResponse
 from fastapi.middleware.cors import CORSMiddleware
 import os
+import time
+import threading
 
 from .db.db_instance import init_db
 from backend.routers.transcription.router import transcription_router, get_pipeline
@@ -12,17 +14,36 @@ from backend.routers.vad.router import get_vad_model, vad_router
 from backend.routers.bgm_separation.router import get_bgm_separation_inferencer, bgm_separation_router
 from backend.routers.task.router import task_router
 from .common.config_loader import read_env, load_server_config
+from .common.cache_manager import cleanup_old_files
+from modules.utils.paths import SERVER_CONFIG_PATH, BACKEND_CACHE_DIR
+
+
+def clean_cache_thread(ttl: int, frequency: int) -> threading.Thread:
+    def clean_cache(_ttl: int, _frequency: int):
+        while True:
+            cleanup_old_files(cache_dir=BACKEND_CACHE_DIR, ttl=_ttl)
+            time.sleep(_frequency)
+
+    return threading.Thread(
+        target=clean_cache,
+        args=(ttl, frequency),
+        daemon=True
+    )
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # Initialization setups
-    load_server_config()
+    # Basic setup initialization
+    server_config = load_server_config()
     read_env("DB_URL")  # Place .env file into /configs/.env
     init_db()
+    # Inferencer initialization
     transcription_pipeline = get_pipeline()
     vad_inferencer = get_vad_model()
     bgm_separation_inferencer = get_bgm_separation_inferencer()
+    # Thread initialization
+    cache_thread = clean_cache_thread(server_config["cache"]["ttl"], server_config["cache"]["frequency"])
+    cache_thread.start()
 
     yield
 
@@ -35,8 +56,7 @@ async def lifespan(app: FastAPI):
 backend_app = FastAPI(
     title="Whisper-WebUI Backend",
     description=f"""
-    # Whisper-WebUI Backend
-    Whisper-WebUI server with fastapi. Docs are available via SwaggerUI:    
+    Whisper-WebUI server with fastapi. Docs are available via SwaggerUI.    
     """,
     version="0.0.1",
     lifespan=lifespan
