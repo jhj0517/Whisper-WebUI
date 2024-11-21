@@ -2,6 +2,7 @@ import faster_whisper.transcribe
 import gradio as gr
 import torch
 from typing import Optional, Dict, List, Union, NamedTuple
+from fastapi import Query
 from pydantic import BaseModel, Field, field_validator, ConfigDict
 from gradio_i18n import Translate, gettext as _
 from enum import Enum
@@ -83,6 +84,8 @@ class BaseParams(BaseModel):
         return cls(**dict(zip(field_names, data_list)))
 
 
+# Models need to be wrapped with Field(Query()) to fix fastapi doc issue.
+# More info : https://github.com/fastapi/fastapi/discussions/8634#discussioncomment-5153136
 class VadParams(BaseParams):
     """Voice Activity Detection parameters"""
     vad_filter: bool = Field(default=False, description="Enable voice activity detection to filter out non-speech parts")
