@@ -82,11 +82,11 @@ async def get_file_task(
             output_zip_path = f"{identifier}_bgm_separation.zip"
             instrumental_path = find_file_by_hash(
                 UVR_INSTRUMENTAL_OUTPUT_DIR,
-                task.result.instrumental_hash
+                task.result["instrumental_hash"]
             )
             vocal_path = find_file_by_hash(
                 UVR_VOCALS_OUTPUT_DIR,
-                task.result.vocal_hash
+                task.result["vocal_hash"]
             )
 
             output_zip_path = compress_files(
