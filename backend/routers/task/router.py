@@ -45,14 +45,14 @@ async def get_all_tasks_status(
     response_model=Task,
     status_code=status.HTTP_200_OK,
     summary="Retrieve Task by Identifier",
-    description="Retrieve the status of a specific task using its identifier.",
+    description="Retrieve the specific task by its identifier.",
 )
 async def get_task(
     identifier: str,
     session: Session = Depends(get_db_session),
 ) -> Task:
     """
-    Retrieve the status of a specific task by its identifier.
+    Retrieve the specific task by its identifier.
     """
     task = get_task_status_from_db(identifier=identifier, session=session)
 
@@ -65,8 +65,9 @@ async def get_task(
 @task_router.get(
     "/file/{identifier}",
     status_code=status.HTTP_200_OK,
-    summary="Retrieve Task by Identifier",
-    description="Retrieve the status of a specific task using its identifier.",
+    summary="Retrieve FileResponse Task by Identifier",
+    description="Retrieve the file response task by its identifier. You can use this endpoint if you need to download"
+                " The file as a response",
 )
 async def get_file_task(
     identifier: str,
