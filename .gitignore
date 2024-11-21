@@ -2,10 +2,10 @@
 *.png
 *.mp4
 *.mp3
-backend/configs/.env
-.idea/
-.pytest_cache/
-venv/
+**/.env
+**/.idea/
+**/.pytest_cache/
+**/venv/
 **/__pycache__/
 outputs/
 models/
