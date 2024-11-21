@@ -12,7 +12,7 @@ from backend.tests.test_backend_config import (
 )
 
 
-@pytest.mark.skipif(not torch.cuda.is_available())
+@pytest.mark.skipif(not torch.cuda.is_available(), reason="Skip the test because CUDA is not available")
 @pytest.mark.parametrize(
     "bgm_separation_params",
     [
