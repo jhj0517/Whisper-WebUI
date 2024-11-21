@@ -107,13 +107,14 @@ async def get_file_task(
         raise HTTPException(status_code=404, detail="Identifier not found")
 
 
-@task_router.delete(
-    "/{identifier}",
-    response_model=Response,
-    status_code=status.HTTP_200_OK,
-    summary="Delete Task by Identifier",
-    description="Delete a task from the system using its identifier.",
-)
+# Delete method
+# @task_router.delete(
+#     "/{identifier}",
+#     response_model=Response,
+#     status_code=status.HTTP_200_OK,
+#     summary="Delete Task by Identifier",
+#     description="Delete a task from the system using its identifier.",
+# )
 async def delete_task(
     identifier: str,
     session: Session = Depends(get_db_session),
