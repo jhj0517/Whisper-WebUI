@@ -18,6 +18,17 @@ def fetch_task(identifier: str):
     return None
 
 
+def fetch_file_response(identifier: str):
+    """Get task status"""
+    client = get_client()
+    response = client.get(
+        f"/task/file/{identifier}"
+    )
+    if response.status_code == 200:
+        return response
+    return None
+
+
 def wait_for_task_completion(identifier: str,
                              max_attempts: int = 20,
                              frequency: int = 3) -> httpx.Response:
