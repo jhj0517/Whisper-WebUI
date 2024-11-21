@@ -22,6 +22,7 @@ TEST_VAD_PARAMS = VadParams().model_dump()
 TEST_BGM_SEPARATION_PARAMS = BGMSeparationParams().model_dump()
 TEST_FILE_DOWNLOAD_URL = "https://github.com/jhj0517/whisper_flutter_new/raw/main/example/assets/jfk.wav"
 TEST_FILE_PATH = os.path.join(WEBUI_DIR, "backend", "tests", "jfk.wav")
+TEST_BGM_SEPARATION_OUTPUT_PATH = os.path.join(WEBUI_DIR, "backend", "tests", "separated_audio.zip")
 TEST_ANSWER = "And so my fellow Americans ask not what your country can do for you ask what you can do for your country"
 TEST_WHISPER_MODEL = "tiny"
 TEST_COMPUTE_TYPE = "float32"
