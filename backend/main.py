@@ -53,7 +53,7 @@ async def lifespan(app: FastAPI):
     bgm_separation_inferencer = None
 
 
-backend_app = FastAPI(
+app = FastAPI(
     title="Whisper-WebUI Backend",
     description=f"""
     Whisper-WebUI server with fastapi. Docs are available via SwaggerUI.    
@@ -61,20 +61,20 @@ backend_app = FastAPI(
     version="0.0.1",
     lifespan=lifespan
 )
-backend_app.add_middleware(
+app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["GET", "POST", "PUT", "PATCH", "OPTIONS"],  # Disable DELETE
     allow_headers=["*"],
 )
-backend_app.include_router(transcription_router)
-backend_app.include_router(vad_router)
-backend_app.include_router(bgm_separation_router)
-backend_app.include_router(task_router)
+app.include_router(transcription_router)
+app.include_router(vad_router)
+app.include_router(bgm_separation_router)
+app.include_router(task_router)
 
 
-@backend_app.get("/", response_class=RedirectResponse, include_in_schema=False)
+@app.get("/", response_class=RedirectResponse, include_in_schema=False)
 async def index():
     """
     Redirect to the documentation.

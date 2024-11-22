@@ -9,7 +9,7 @@ import pytest
 import yaml
 import jiwer
 
-from backend.main import backend_app
+from backend.main import app
 from modules.whisper.data_classes import *
 from modules.utils.paths import *
 from modules.utils.files_manager import load_yaml, save_yaml
@@ -59,7 +59,7 @@ def get_upload_file_instance(filepath: str = TEST_FILE_PATH) -> UploadFile:
 
 
 @functools.lru_cache
-def get_client(app: FastAPI = backend_app):
+def get_client(app: FastAPI = app):
     return TestClient(app)
 
 
