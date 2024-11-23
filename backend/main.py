@@ -77,6 +77,6 @@ app.include_router(task_router)
 @app.get("/", response_class=RedirectResponse, include_in_schema=False)
 async def index():
     """
-    Redirect to the documentation.
+    Redirect to the documentation. Defaults to redoc : https://github.com/Redocly/redoc
     """
-    return "/docs"
+    return "/redoc"
