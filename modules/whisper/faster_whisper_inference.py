@@ -119,7 +119,8 @@ class FasterWhisperInference(BaseTranscriptionPipeline):
         Parameters
         ----------
         model_size: str
-            Size of whisper model
+            Size of whisper model. If you enter the huggingface repo id, it will try to download the model
+            automatically from huggingface.
         compute_type: str
             Compute type for transcription.
             see more info : https://opennmt.net/CTranslate2/quantization.html
