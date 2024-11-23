@@ -131,7 +131,7 @@ class FasterWhisperInference(BaseTranscriptionPipeline):
         if model_size not in self.model_paths:
             huggingface_hub.snapshot_download(model_size,
                                               cache_dir=self.model_dir,
-                                              local_dir=os.path.join(self.model_dir, model_size)
+                                              local_dir=os.path.join(self.model_dir, model_size.replace("/", "_"))
                                               )
             self.model_paths = self.get_model_paths()
 
