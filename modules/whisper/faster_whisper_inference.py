@@ -128,14 +128,18 @@ class FasterWhisperInference(BaseTranscriptionPipeline):
         """
         progress(0, desc="Initializing Model..")
 
-        if model_size not in self.model_paths:
-            huggingface_hub.snapshot_download(model_size,
-                                              cache_dir=self.model_dir,
-                                              local_dir=os.path.join(self.model_dir, model_size.replace("/", "_"))
-                                              )
+        model_size_dirname = model_size.replace("/", "--") if "/" in model_size else model_size
+        if model_size not in self.model_paths and model_size_dirname not in self.model_paths:
+            print(f"Model is not detected. Trying to download \"{model_size}\" from huggingface to "
+                  f"\"{os.path.join(self.model_dir, model_size_dirname)} ...")
+            huggingface_hub.snapshot_download(
+                model_size,
+                cache_dir=self.model_dir,
+                local_dir=os.path.join(self.model_dir, model_size_dirname)
+            )
             self.model_paths = self.get_model_paths()
 
-        self.current_model_size = self.model_paths[model_size]
+        self.current_model_size = self.model_paths[model_size_dirname]
 
         local_files_only = False
         hf_prefix = "models--Systran--faster-whisper-"
