@@ -1,5 +1,6 @@
 import os
 import time
+import huggingface_hub
 import numpy as np
 import torch
 from typing import BinaryIO, Union, Tuple, List
@@ -126,6 +127,14 @@ class FasterWhisperInference(BaseTranscriptionPipeline):
             Indicator to show progress directly in gradio.
         """
         progress(0, desc="Initializing Model..")
+
+        if model_size not in self.model_paths:
+            huggingface_hub.snapshot_download(model_size,
+                                              cache_dir=self.model_dir,
+                                              local_dir=os.path.join(self.model_dir, model_size)
+                                              )
+            self.model_paths = self.get_model_paths()
+
         self.current_model_size = self.model_paths[model_size]
 
         local_files_only = False
