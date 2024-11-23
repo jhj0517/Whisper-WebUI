@@ -135,10 +135,10 @@ class FasterWhisperInference(BaseTranscriptionPipeline):
                   f"\"{os.path.join(self.model_dir, model_size_dirname)} ...")
             huggingface_hub.snapshot_download(
                 model_size,
-                cache_dir=self.model_dir,
-                local_dir=os.path.join(self.model_dir, model_size_dirname)
+                local_dir=os.path.join(self.model_dir, model_size_dirname),
             )
             self.model_paths = self.get_model_paths()
+            gr.Info(f"Model is downloaded with the name \"{model_size_dirname}\"")
 
         self.current_model_size = self.model_paths[model_size_dirname]
 
