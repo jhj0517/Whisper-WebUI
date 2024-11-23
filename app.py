@@ -49,7 +49,7 @@ class App:
 
         with gr.Row():
             dd_model = gr.Dropdown(choices=self.whisper_inf.available_models, value=whisper_params["model_size"],
-                                   label=_("Model"))
+                                   label=_("Model"), allow_custom_value=True)
             dd_lang = gr.Dropdown(choices=self.whisper_inf.available_langs + [AUTOMATIC_DETECTION],
                                   value=AUTOMATIC_DETECTION if whisper_params["lang"] == AUTOMATIC_DETECTION.unwrap()
                                   else whisper_params["lang"], label=_("Language"))
