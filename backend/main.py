@@ -56,7 +56,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(
     title="Whisper-WebUI Backend",
     description=f"""
-    Whisper-WebUI server with fastapi. Docs are available via SwaggerUI.    
+    REST API for Whisper-WebUI. Documentation is available via /redoc or root URL with redirection.
     """,
     version="0.0.1",
     lifespan=lifespan
