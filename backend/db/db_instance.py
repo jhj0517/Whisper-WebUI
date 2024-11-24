@@ -8,7 +8,7 @@ from fastapi import HTTPException
 from sqlmodel import SQLModel
 from dotenv import load_dotenv
 
-from ..common.config_loader import read_env
+from backend.common.config_loader import read_env
 
 
 @functools.lru_cache

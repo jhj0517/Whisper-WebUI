@@ -8,13 +8,13 @@ import os
 import time
 import threading
 
-from .db.db_instance import init_db
+from backend.db.db_instance import init_db
 from backend.routers.transcription.router import transcription_router, get_pipeline
 from backend.routers.vad.router import get_vad_model, vad_router
 from backend.routers.bgm_separation.router import get_bgm_separation_inferencer, bgm_separation_router
 from backend.routers.task.router import task_router
-from .common.config_loader import read_env, load_server_config
-from .common.cache_manager import cleanup_old_files
+from backend.common.config_loader import read_env, load_server_config
+from backend.common.cache_manager import cleanup_old_files
 from modules.utils.paths import SERVER_CONFIG_PATH, BACKEND_CACHE_DIR
 
 

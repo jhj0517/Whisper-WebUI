@@ -1,6 +1,6 @@
 from pydantic import BaseModel, Field, validator
 from typing import List, Any, Optional
-from ..db.task.models import TaskStatus
+from backend.db.task.models import TaskStatus
 
 
 class QueueResponse(BaseModel):
