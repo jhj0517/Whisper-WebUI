@@ -1,6 +1,6 @@
 # Whisper-WebUI REST API
 REST API for Whisper-WebUI. 
-Documentation is available via [redoc](https://github.com/Redocly/redoc) or root URL with redirection.
+Documentation is available via [`app/redoc`](https://github.com/Redocly/redoc) or root URL with redirection.
 # Setup and Installation
 
 This assumes that you are in the root directory of Whisper-WebUI
