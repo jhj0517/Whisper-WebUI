@@ -3,7 +3,7 @@ REST API for Whisper-WebUI.
 Documentation is available via [`app/redoc`](https://github.com/Redocly/redoc) or root URL with redirection.
 # Setup and Installation
 
-This assumes that you are in the root directory of Whisper-WebUI
+Installation assumes that you are in the root directory of Whisper-WebUI
 
 1. Create `.env` in `backend/configs/.env`
 ```
@@ -20,7 +20,31 @@ pip install -r backend/requirements-backend.txt
 3. Deploy the server with `uvicorn` or whatever. 
 ```
 uvicorn backend.main:app --host 0.0.0.0 --port 8000
-``` 
+```
+
+### Configuration
+You can set some server configurations in [config.yaml](https://github.com/jhj0517/Whisper-WebUI/blob/feature/add-api/backend/configs/config.yaml).
+<br>For example, initial model size for Whisper or cache cleanup frequency and TTL for it.
+<br>All output files are stored in the `cache` directory, e.g. separated vocal/instrument files for `/bgm-separation`.
+
+### Dockerfile setup
+The Dockerfile should be built when you're in the root directory of Whisper-WebUI.
+
+1. git clone this repository
+```
+git clone https://github.com/jhj0517/AdvancedLivePortrait-WebUI.git
+```
+2. Mount paths with your local paths in `docker-compose.yaml`
+https://github.com/jhj0517/Whisper-WebUI/blob/d13d773be5e9c1a19f829e31dc10c3c6a6329bc8/backend/docker-compose.yaml#L13-L16
+3. Build the image
+```
+docker compose -f backend/docker-compose.yaml build
+```
+4. Run the container
+```
+docker compose -f docker/docker-compose.yaml up
+```
+
 
 # Architecture
 
