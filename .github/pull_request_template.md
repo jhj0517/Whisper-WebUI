@@ -1,4 +1,4 @@
-## Related issues / PRs
+## Related issues / PRs. Summarize issues.
 - #
 
 ## Summarize Changes
