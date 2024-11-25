@@ -91,6 +91,9 @@ class ResultWriter:
     ):
         raise NotImplementedError
 
+    def to_segments(self, file_path: str):
+        raise NotImplementedError
+
 
 class WriteTXT(ResultWriter):
     extension: str = "txt"
@@ -100,6 +103,19 @@ class WriteTXT(ResultWriter):
     ):
         for segment in result["segments"]:
             print(segment["text"].strip(), file=file, flush=True)
+
+    def to_segments(self, file_path: str):
+        segments = []
+
+        blocks = read_file(file_path).split('\n')
+
+        for block in blocks:
+            segments.append(Segment(
+                start=None,
+                end=None,
+                text=block
+            ))
+        return segments
 
 
 class SubtitlesWriter(ResultWriter):
