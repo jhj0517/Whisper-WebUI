@@ -1,0 +1,34 @@
+services:
+  app:
+    build:
+      dockerfile: backend/Dockerfile
+      context: ..
+    image: jhj0517/whisper-webui-backend:latest
+
+    volumes:
+      # Update paths to mount models and output paths to your custom paths like this, e.g:
+      # - C:/your-local-path/Whisper-WebUI/models:/Whisper-WebUI/models
+      # - C:/your-local-path/Whisper-WebUI/outputs:/Whisper-WebUI/outputs
+      # - C:/your-local-path/Whisper-WebUI/backend:/Whisper-WebUI/backend
+      # The DB file is saved in /Whisper-WebUI/backend/records.db unless you edit it in /Whisper-WebUI/backend/configs/.env
+      - /Whisper-WebUI/models
+      - /Whisper-WebUI/outputs
+      - /Whisper-WebUI/backend
+
+    ports:
+      - "8000:8000"
+
+    stdin_open: true
+    tty: true
+
+    entrypoint: ["uvicorn", "backend.main:app", "--host", "0.0.0.0", "--port", "8000"]
+
+    # If you're not using Nvidia GPU, Update device to match yours.
+    # See more info at : https://docs.docker.com/compose/compose-file/deploy/#driver
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [ gpu ]
