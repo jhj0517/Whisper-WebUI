@@ -10,6 +10,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Clean up space for action
+        run: rm -rf /opt/hostedtoolcache
+
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
         with:
