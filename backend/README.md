@@ -1,6 +1,7 @@
 # Whisper-WebUI REST API
-REST API for Whisper-WebUI. 
-Documentation is available via [`app/redoc`](https://github.com/Redocly/redoc) or root URL with redirection.
+REST API for Whisper-WebUI. Documentation is auto-generated upon deploying the app.
+<br>[Swagger UI](https://github.com/swagger-api/swagger-ui) is available at `app/docs`. [Redoc](https://github.com/Redocly/redoc) is available at `app/redoc` or root URL with redirection.
+
 # Setup and Installation
 
 Installation assumes that you are in the root directory of Whisper-WebUI
@@ -10,7 +11,7 @@ Installation assumes that you are in the root directory of Whisper-WebUI
 HF_TOKEN="YOUR_HF_TOKEN FOR DIARIZATION MODEL (READ PERMISSION)"
 DB_URL="sqlite:///backend/records.db"
 ```
-`HF_TOKEN` is used for diarization model, `DB_URL` indicates where your db file is located. It is stored in `backend/` by default.
+`HF_TOKEN` is used to download diarization model, `DB_URL` indicates where your db file is located. It is stored in `backend/` by default.
 
 2. Install dependency
 ```
@@ -22,19 +23,19 @@ pip install -r backend/requirements-backend.txt
 uvicorn backend.main:app --host 0.0.0.0 --port 8000
 ```
 
-### Configuration
+## Configuration
 You can set some server configurations in [config.yaml](https://github.com/jhj0517/Whisper-WebUI/blob/feature/add-api/backend/configs/config.yaml).
-<br>For example, initial model size for Whisper or cache cleanup frequency and TTL for it.
-<br>All output files are stored in the `cache` directory, e.g. separated vocal/instrument files for `/bgm-separation`.
+<br>For example, initial model size for Whisper or the cleanup frequency and TTL for cached files.
+<br>All output files are stored in the `cache` directory, e.g. separated vocal/instrument files for `/bgm-separation` are saved in `cache` directory.
 
-### Dockerfile setup
+## Docker
 The Dockerfile should be built when you're in the root directory of Whisper-WebUI.
 
 1. git clone this repository
 ```
 git clone https://github.com/jhj0517/AdvancedLivePortrait-WebUI.git
 ```
-2. Mount paths with your local paths in `docker-compose.yaml`
+2. Mount volume paths with your local paths in `docker-compose.yaml`
 https://github.com/jhj0517/Whisper-WebUI/blob/d13d773be5e9c1a19f829e31dc10c3c6a6329bc8/backend/docker-compose.yaml#L13-L16
 3. Build the image
 ```
@@ -42,8 +43,10 @@ docker compose -f backend/docker-compose.yaml build
 ```
 4. Run the container
 ```
-docker compose -f docker/docker-compose.yaml up
+docker compose -f backend/docker-compose.yaml up
 ```
+
+5. Then you can read docs at `localhost:8000` (default port is set to `8000` in `docker-compose.yaml`) and run your own tests. 
 
 
 # Architecture
