@@ -7,6 +7,10 @@ A Gradio-based browser interface for [Whisper](https://github.com/openai/whisper
 If you wish to try this on Colab, you can do it in [here](https://colab.research.google.com/github/jhj0517/Whisper-WebUI/blob/master/notebook/whisper-webui.ipynb)!
 
 # Feature
+### Pipeline Diagram
+![Transcription Pipeline](https://github.com/user-attachments/assets/1d8c63ac-72a4-4a0b-9db0-e03695dcf088)
+
+
 - Select the Whisper implementation you want to use between :
    - [openai/whisper](https://github.com/openai/whisper)
    - [SYSTRAN/faster-whisper](https://github.com/SYSTRAN/faster-whisper) (used by default)
@@ -81,7 +85,7 @@ Please follow the links below to install the necessary software:
 
 After installing FFmpeg, **make sure to add the `FFmpeg/bin` folder to your system PATH!**
 
-### Automatic Installation
+### Installation Using the Script Files
 
 1. git clone this repository
 ```shell
@@ -104,19 +108,14 @@ According to faster-whisper, the efficiency of the optimized whisper model is as
 If you want to use an implementation other than faster-whisper, use `--whisper_type` arg and the repository name.<br>
 Read [wiki](https://github.com/jhj0517/Whisper-WebUI/wiki/Command-Line-Arguments) for more info about CLI args.
 
-## Available models
-This is Whisper's original VRAM usage table for models.
+If you want to use a fine-tuned model, manually place the models in `models/Whisper/` corresponding to the implementation.
 
-|  Size  | Parameters | English-only model | Multilingual model | Required VRAM | Relative speed |
-|:------:|:----------:|:------------------:|:------------------:|:-------------:|:--------------:|
-|  tiny  |    39 M    |     `tiny.en`      |       `tiny`       |     ~1 GB     |      ~32x      |
-|  base  |    74 M    |     `base.en`      |       `base`       |     ~1 GB     |      ~16x      |
-| small  |   244 M    |     `small.en`     |      `small`       |     ~2 GB     |      ~6x       |
-| medium |   769 M    |    `medium.en`     |      `medium`      |     ~5 GB     |      ~2x       |
-| large  |   1550 M   |        N/A         |      `large`       |    ~10 GB     |       1x       |
+Alternatively, if you enter the huggingface repo id (e.g, [deepdml/faster-whisper-large-v3-turbo-ct2](https://huggingface.co/deepdml/faster-whisper-large-v3-turbo-ct2)) in the "Model" dropdown, it will be automatically downloaded in the directory.
 
+![image](https://github.com/user-attachments/assets/76487a46-b0a5-4154-b735-ded73b2d83d4)
 
-`.en` models are for English only, and the cool thing is that you can use the `Translate to English` option from the "large" models!
+# REST API
+If you're interested in deploying this app as a REST API, please check out [/backend](https://github.com/jhj0517/Whisper-WebUI/tree/master/backend).
 
 ## TODO🗓
 
@@ -127,6 +126,7 @@ This is Whisper's original VRAM usage table for models.
 - [x] Integrate with whisperX ( Only speaker diarization part )
 - [x] Add background music separation pre-processing with [UVR](https://github.com/Anjok07/ultimatevocalremovergui)  
 - [ ] Add fast api script
+- [ ] Add CLI usages
 - [ ] Support real-time transcription for microphone
 
 ### Translation 🌐
