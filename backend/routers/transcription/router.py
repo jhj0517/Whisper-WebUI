@@ -11,6 +11,7 @@ from typing import List, Dict
 from sqlalchemy.orm import Session
 from datetime import datetime
 from modules.whisper.data_classes import *
+from modules.utils.paths import BACKEND_CACHE_DIR
 from modules.whisper.faster_whisper_inference import FasterWhisperInference
 from backend.common.audio import read_audio
 from backend.common.models import QueueResponse
@@ -28,7 +29,9 @@ transcription_router = APIRouter(prefix="/transcription", tags=["Transcription"]
 @functools.lru_cache
 def get_pipeline() -> 'FasterWhisperInference':
     config = load_server_config()["whisper"]
-    inferencer = FasterWhisperInference()
+    inferencer = FasterWhisperInference(
+        output_dir=BACKEND_CACHE_DIR
+    )
     inferencer.update_model(
         model_size=config["model_size"],
         compute_type=config["compute_type"]
