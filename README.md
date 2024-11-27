@@ -7,10 +7,6 @@ A Gradio-based browser interface for [Whisper](https://github.com/openai/whisper
 If you wish to try this on Colab, you can do it in [here](https://colab.research.google.com/github/jhj0517/Whisper-WebUI/blob/master/notebook/whisper-webui.ipynb)!
 
 # Feature
-### Pipeline Diagram
-![Transcription Pipeline](https://github.com/user-attachments/assets/1d8c63ac-72a4-4a0b-9db0-e03695dcf088)
-
-
 - Select the Whisper implementation you want to use between :
    - [openai/whisper](https://github.com/openai/whisper)
    - [SYSTRAN/faster-whisper](https://github.com/SYSTRAN/faster-whisper) (used by default)
@@ -34,6 +30,9 @@ If you wish to try this on Colab, you can do it in [here](https://colab.research
    - To download the pyannote model, you need to have a Huggingface token and manually accept their terms in the pages below.
       1. https://huggingface.co/pyannote/speaker-diarization-3.1
       2. https://huggingface.co/pyannote/segmentation-3.0
+
+### Pipeline Diagram
+![Transcription Pipeline](https://github.com/user-attachments/assets/1d8c63ac-72a4-4a0b-9db0-e03695dcf088)
 
 # Installation and Running
 
