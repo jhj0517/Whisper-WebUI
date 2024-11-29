@@ -67,11 +67,11 @@ async def get_file_task(
         if task.task_type == TaskType.BGM_SEPARATION:
             output_zip_path = os.path.join(BACKEND_CACHE_DIR, f"{identifier}_bgm_separation.zip")
             instrumental_path = find_file_by_hash(
-                os.path.join(BACKEND_CACHE_DIR, "instrumental"),
+                os.path.join(BACKEND_CACHE_DIR, "UVR", "instrumental"),
                 task.result["instrumental_hash"]
             )
             vocal_path = find_file_by_hash(
-                os.path.join(BACKEND_CACHE_DIR, "vocals"),
+                os.path.join(BACKEND_CACHE_DIR, "UVR", "vocals"),
                 task.result["vocal_hash"]
             )
 
