@@ -9,6 +9,7 @@ from fastapi import APIRouter, BackgroundTasks, Depends, Response, status
 from fastapi.responses import FileResponse
 from typing import List, Dict, Tuple
 from datetime import datetime
+import os
 
 from modules.whisper.data_classes import *
 from modules.uvr.music_separator import MusicSeparator
@@ -29,7 +30,7 @@ bgm_separation_router = APIRouter(prefix="/bgm-separation", tags=["BGM Separatio
 def get_bgm_separation_inferencer() -> 'MusicSeparator':
     config = load_server_config()["bgm_separation"]
     inferencer = MusicSeparator(
-        output_dir=BACKEND_CACHE_DIR
+        output_dir=os.path.join(BACKEND_CACHE_DIR, "UVR")
     )
     inferencer.update_model(
         model_name=config["model_size"],
