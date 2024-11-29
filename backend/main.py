@@ -37,10 +37,12 @@ async def lifespan(app: FastAPI):
     server_config = load_server_config()
     read_env("DB_URL")  # Place .env file into /configs/.env
     init_db()
+
     # Inferencer initialization
     transcription_pipeline = get_pipeline()
     vad_inferencer = get_vad_model()
     bgm_separation_inferencer = get_bgm_separation_inferencer()
+
     # Thread initialization
     cache_thread = clean_cache_thread(server_config["cache"]["ttl"], server_config["cache"]["frequency"])
     cache_thread.start()
@@ -59,7 +61,14 @@ app = FastAPI(
     REST API for Whisper-WebUI. Swagger UI is available via /docs, Redoc is available via /redoc or root URL with redirection.
     """,
     version="0.0.1",
-    lifespan=lifespan
+    lifespan=lifespan,
+    openapi_tags=[
+        {
+            "name": "BGM Separation",
+            "description": "Cached files for /bgm-separation are generated in the `backend/cache` directory,"
+                           " you can set TLL for these files in `backend/configs/config.yaml`."
+        }
+    ]
 )
 app.add_middleware(
     CORSMiddleware,
