@@ -16,6 +16,7 @@ git+https://github.com/jhj0517/pyrubberband.git
 # Backend dependencies
 python-dotenv
 uvicorn
+gunicorn
 SQLAlchemy
 sqlmodel
 pydantic
