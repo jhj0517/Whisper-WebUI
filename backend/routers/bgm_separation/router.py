@@ -39,7 +39,7 @@ def get_bgm_separation_inferencer() -> 'MusicSeparator':
     return inferencer
 
 
-async def run_bgm_separation(
+def run_bgm_separation(
     audio: np.ndarray,
     params: BGMSeparationParams,
     identifier: str,
