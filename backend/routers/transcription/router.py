@@ -39,7 +39,7 @@ def get_pipeline() -> 'FasterWhisperInference':
     return inferencer
 
 
-async def run_transcription(
+def run_transcription(
     audio: np.ndarray,
     params: TranscriptionPipelineParams,
     identifier: str,
