@@ -4,11 +4,11 @@ services:
     image: jhj0517/whisper-webui:latest
 
     volumes:
-      # Update paths to mount models and output paths to your custom paths like this, e.g:
-      # - C:/whisper-models/custom-path:/Whisper-WebUI/models
-      # - C:/whisper-webui-outputs/custom-path:/Whisper-WebUI/outputs
-      - /Whisper-WebUI/models
-      - /Whisper-WebUI/outputs
+      # You can mount the container's volume paths to directory paths on your local machine.
+      # Models will be stored in the `./models' directory on your machine.
+      # Similarly, all output files will be stored in the `./outputs` directory.
+      - ./models:/Whisper-WebUI/models
+      - ./outputs:/Whisper-WebUI/outputs
 
     ports:
       - "7860:7860"
