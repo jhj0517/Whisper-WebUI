@@ -97,8 +97,9 @@ class Task(SQLModel, table=True):
         default=None,
         description="Language of the file associated with the task"
     )
-    task_type: Optional[str] = Field(
+    task_type: Optional[TaskType] = Field(
         default=None,
+        sa_column=Field(sa_column=SQLAlchemyEnum(TaskType)),
         description="Type/category of the task"
     )
     task_params: Optional[dict] = Field(
