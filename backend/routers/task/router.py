@@ -92,7 +92,7 @@ async def get_file_task(
         raise HTTPException(status_code=404, detail="Identifier not found")
 
 
-# Delete method
+# Delete method, commented by default because this endpoint is likely to require special permissions
 # @task_router.delete(
 #     "/{identifier}",
 #     response_model=Response,
@@ -113,6 +113,7 @@ async def delete_task(
         raise HTTPException(status_code=404, detail="Task not found")
 
 
+# Get All method, commented by default because this endpoint is likely to require special permissions
 # @task_router.get(
 #     "/all",
 #     response_model=TasksResult,
