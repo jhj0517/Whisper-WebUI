@@ -16,7 +16,8 @@ from backend.db.task.models import (
 )
 from backend.common.models import (
     Response,
-    Result
+    Result,
+    TaskStatusResponse
 )
 from backend.common.compresser import compress_files, find_file_by_hash
 from modules.utils.paths import BACKEND_CACHE_DIR
@@ -41,7 +42,7 @@ async def get_task(
     task = get_task_status_from_db(identifier=identifier, session=session)
 
     if task is not None:
-        return task
+        return task.to_status_response()
     else:
         raise HTTPException(status_code=404, detail="Identifier not found")
 
