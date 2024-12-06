@@ -8,6 +8,8 @@ from datetime import datetime
 from sqlalchemy.types import Enum as SQLAlchemyEnum
 from sqlmodel import SQLModel, Field, JSON, Column
 
+from backend.common.models import TaskStatusResponse
+
 
 class ResultType(str, Enum):
     JSON = "json"
@@ -124,6 +126,20 @@ class Task(SQLModel, table=True):
         sa_column_kwargs={"onupdate": datetime.utcnow},
         description="Date and time of last update"
     )
+
+    @classmethod
+    def to_status_response(cls) -> "TaskStatusResponse":
+        """`TaskStatusResponse` is a wrapper class that hides sensitive information from `Task`"""
+        return TaskStatusResponse(
+            identifier=cls.uuid,
+            status=cls.status,
+            task_type=cls.task_type,
+            result_type=cls.result_type,
+            result=cls.result,
+            task_params=cls.task_params,
+            error=cls.error,
+            duration=cls.duration
+        )
 
 
 class TasksResult(BaseModel):
