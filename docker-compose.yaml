@@ -4,8 +4,8 @@ services:
     image: jhj0517/whisper-webui:latest
 
     volumes:
-      # You can place your models in the `./models` directory on your machine
-      # and they will be automatically available in the Docker container.
+      # You can mount the container's volume paths to directory paths on your local machine.
+      # Models will be stored in the `./models' directory on your machine.
       # Similarly, all output files will be stored in the `./outputs` directory.
       - ./models:/Whisper-WebUI/models
       - ./outputs:/Whisper-WebUI/outputs
