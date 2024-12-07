@@ -12,11 +12,12 @@ from backend.db.task.dao import (
 from backend.db.task.models import (
     TasksResult,
     Task,
+    TaskStatusResponse,
     TaskType
 )
 from backend.common.models import (
     Response,
-    Result
+    Result,
 )
 from backend.common.compresser import compress_files, find_file_by_hash
 from modules.utils.paths import BACKEND_CACHE_DIR
@@ -26,7 +27,7 @@ task_router = APIRouter(prefix="/task", tags=["Tasks"])
 
 @task_router.get(
     "/{identifier}",
-    response_model=Task,
+    response_model=TaskStatusResponse,
     status_code=status.HTTP_200_OK,
     summary="Retrieve Task by Identifier",
     description="Retrieve the specific task by its identifier.",
@@ -34,14 +35,14 @@ task_router = APIRouter(prefix="/task", tags=["Tasks"])
 async def get_task(
     identifier: str,
     session: Session = Depends(get_db_session),
-) -> Task:
+) -> TaskStatusResponse:
     """
     Retrieve the specific task by its identifier.
     """
     task = get_task_status_from_db(identifier=identifier, session=session)
 
     if task is not None:
-        return task
+        return task.to_response()
     else:
         raise HTTPException(status_code=404, detail="Identifier not found")
 
@@ -92,7 +93,7 @@ async def get_file_task(
         raise HTTPException(status_code=404, detail="Identifier not found")
 
 
-# Delete method
+# Delete method, commented by default because this endpoint is likely to require special permissions
 # @task_router.delete(
 #     "/{identifier}",
 #     response_model=Response,
@@ -113,6 +114,7 @@ async def delete_task(
         raise HTTPException(status_code=404, detail="Task not found")
 
 
+# Get All method, commented by default because this endpoint is likely to require special permissions
 # @task_router.get(
 #     "/all",
 #     response_model=TasksResult,

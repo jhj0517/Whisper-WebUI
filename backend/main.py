@@ -58,7 +58,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(
     title="Whisper-WebUI-Backend",
     description=f"""
-    REST API for Whisper-WebUI. Swagger UI is available via /docs, Redoc is available via /redoc or root URL with redirection.
+    REST API for Whisper-WebUI. Swagger UI is available via /docs or root URL with redirection. Redoc is available via /redoc. 
     """,
     version="0.0.1",
     lifespan=lifespan,
@@ -86,6 +86,7 @@ app.include_router(task_router)
 @app.get("/", response_class=RedirectResponse, include_in_schema=False)
 async def index():
     """
-    Redirect to the documentation. Defaults to redoc : https://github.com/Redocly/redoc
+    Redirect to the documentation. Defaults to Swagger UI.
+    You can also check the /redoc with redoc style: https://github.com/Redocly/redoc
     """
-    return "/redoc"
+    return "/docs"
