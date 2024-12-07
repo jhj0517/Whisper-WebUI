@@ -6,9 +6,8 @@ from typing import Optional, List
 from uuid import uuid4
 from datetime import datetime
 from sqlalchemy.types import Enum as SQLAlchemyEnum
+from typing import Any
 from sqlmodel import SQLModel, Field, JSON, Column
-
-from backend.common.models import TaskStatusResponse
 
 
 class ResultType(str, Enum):
@@ -37,6 +36,36 @@ class TaskType(str, Enum):
 
     def __str__(self):
         return self.value
+
+
+class TaskStatusResponse(BaseModel):
+    """`TaskStatusResponse` is a wrapper class that hides sensitive information from `Task`"""
+    identifier: str = Field(..., description="Unique identifier for the queued task that can be used for tracking")
+    status: TaskStatus = Field(..., description="Current status of the task")
+    task_type: Optional[TaskType] = Field(
+        default=None,
+        description="Type/category of the task"
+    )
+    result_type: Optional[ResultType] = Field(
+        default=ResultType.JSON,
+        description="Result type whether it's a filepath or JSON"
+    )
+    result: Optional[dict] = Field(
+        default=None,
+        description="JSON data representing the result of the task"
+    )
+    task_params: Optional[dict] = Field(
+        default=None,
+        description="Parameters of the task"
+    )
+    error: Optional[str] = Field(
+        default=None,
+        description="Error message, if any, associated with the task"
+    )
+    duration: Optional[float] = Field(
+        default=None,
+        description="Duration of the task execution"
+    )
 
 
 class Task(SQLModel, table=True):
@@ -127,18 +156,16 @@ class Task(SQLModel, table=True):
         description="Date and time of last update"
     )
 
-    @classmethod
-    def to_status_response(cls) -> "TaskStatusResponse":
-        """`TaskStatusResponse` is a wrapper class that hides sensitive information from `Task`"""
+    def to_response(self) -> "TaskStatusResponse":
         return TaskStatusResponse(
-            identifier=cls.uuid,
-            status=cls.status,
-            task_type=cls.task_type,
-            result_type=cls.result_type,
-            result=cls.result,
-            task_params=cls.task_params,
-            error=cls.error,
-            duration=cls.duration
+            identifier=self.uuid,
+            status=self.status,
+            task_type=self.task_type,
+            result_type=self.result_type,
+            result=self.result,
+            task_params=self.task_params,
+            error=self.error,
+            duration=self.duration
         )
 
 
