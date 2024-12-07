@@ -26,7 +26,7 @@ def get_vad_model() -> SileroVAD:
     return inferencer
 
 
-async def run_vad(
+def run_vad(
     audio: np.ndarray,
     params: VadOptions,
     identifier: str,
