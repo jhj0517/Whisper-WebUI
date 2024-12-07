@@ -2,6 +2,7 @@ import faster_whisper.transcribe
 import gradio as gr
 import torch
 from typing import Optional, Dict, List, Union, NamedTuple
+from fastapi import Query
 from pydantic import BaseModel, Field, field_validator, ConfigDict
 from gradio_i18n import Translate, gettext as _
 from enum import Enum
@@ -83,6 +84,8 @@ class BaseParams(BaseModel):
         return cls(**dict(zip(field_names, data_list)))
 
 
+# Models need to be wrapped with Field(Query()) to fix fastapi doc issue.
+# More info : https://github.com/fastapi/fastapi/discussions/8634#discussioncomment-5153136
 class VadParams(BaseParams):
     """Voice Activity Detection parameters"""
     vad_filter: bool = Field(default=False, description="Enable voice activity detection to filter out non-speech parts")
@@ -153,7 +156,7 @@ class VadParams(BaseParams):
 class DiarizationParams(BaseParams):
     """Speaker diarization parameters"""
     is_diarize: bool = Field(default=False, description="Enable speaker diarization")
-    device: str = Field(default="cuda", description="Device to run Diarization model.")
+    diarization_device: str = Field(default="cuda", description="Device to run Diarization model.")
     hf_token: str = Field(
         default="",
         description="Hugging Face token for downloading diarization models"
@@ -185,11 +188,11 @@ class DiarizationParams(BaseParams):
 class BGMSeparationParams(BaseParams):
     """Background music separation parameters"""
     is_separate_bgm: bool = Field(default=False, description="Enable background music separation")
-    model_size: str = Field(
+    uvr_model_size: str = Field(
         default="UVR-MDX-NET-Inst_HQ_4",
         description="UVR model size"
     )
-    device: str = Field(default="cuda", description="Device to run UVR model.")
+    uvr_device: str = Field(default="cuda", description="Device to run UVR model.")
     segment_size: int = Field(
         default=256,
         gt=0,
@@ -221,7 +224,7 @@ class BGMSeparationParams(BaseParams):
                 label=_("Model"),
                 choices=["UVR-MDX-NET-Inst_HQ_4",
                          "UVR-MDX-NET-Inst_3"] if available_models is None else available_models,
-                value=defaults.get("model_size", cls.__fields__["model_size"].default),
+                value=defaults.get("uvr_model_size", cls.__fields__["uvr_model_size"].default),
             ),
             gr.Dropdown(
                 label=_("Device"),

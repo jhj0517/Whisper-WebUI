@@ -255,7 +255,7 @@ class App:
                         files_audio = gr.Files(type="filepath", label=_("Upload Audio Files to separate background music"))
                         dd_uvr_device = gr.Dropdown(label=_("Device"), value=self.whisper_inf.music_separator.device,
                                                     choices=self.whisper_inf.music_separator.available_devices)
-                        dd_uvr_model_size = gr.Dropdown(label=_("Model"), value=uvr_params["model_size"],
+                        dd_uvr_model_size = gr.Dropdown(label=_("Model"), value=uvr_params["uvr_model_size"],
                                                         choices=self.whisper_inf.music_separator.available_models)
                         nb_uvr_segment_size = gr.Number(label="Segment Size", value=uvr_params["segment_size"],
                                                         precision=0)

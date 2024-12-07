@@ -46,7 +46,7 @@ diarization:
 
 bgm_separation:
   is_separate_bgm: false
-  model_size: "UVR-MDX-NET-Inst_HQ_4"
+  uvr_model_size: "UVR-MDX-NET-Inst_HQ_4"
   segment_size: 256
   save_file: false
   enable_offload: true
