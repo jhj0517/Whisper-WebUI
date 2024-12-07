@@ -50,7 +50,7 @@ class TaskStatusResponse(BaseModel):
         default=ResultType.JSON,
         description="Result type whether it's a filepath or JSON"
     )
-    result: Optional[dict] = Field(
+    result: Optional[Any] = Field(
         default=None,
         description="JSON data representing the result of the task"
     )
