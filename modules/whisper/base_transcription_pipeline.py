@@ -421,7 +421,7 @@ class BaseTranscriptionPipeline(ABC):
             del self.model
             self.model = None
         if self.device == "cuda":
-            torch.cuda.empty_cache()
+            self.release_cuda_memory()
         gc.collect()
 
     @staticmethod
