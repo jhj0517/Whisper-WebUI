@@ -2,6 +2,7 @@ import os
 import torch
 import gradio as gr
 from abc import ABC, abstractmethod
+import gc
 from typing import List
 from datetime import datetime
 
@@ -127,6 +128,15 @@ class TranslationBase(ABC):
             raise
         finally:
             self.release_cuda_memory()
+
+    def offload(self):
+        """Offload the model and free up the memory"""
+        if self.model is not None:
+            del self.model
+            self.model = None
+        if self.device == "cuda":
+            self.release_cuda_memory()
+        gc.collect()
 
     @staticmethod
     def get_device():
