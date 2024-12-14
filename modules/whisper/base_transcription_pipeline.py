@@ -8,6 +8,7 @@ from typing import BinaryIO, Union, Tuple, List
 import numpy as np
 from datetime import datetime
 from faster_whisper.vad import VadOptions
+import gc
 
 from modules.uvr.music_separator import MusicSeparator
 from modules.utils.paths import (WHISPER_MODELS_DIR, DIARIZATION_MODELS_DIR, OUTPUT_DIR, DEFAULT_PARAMETERS_CONFIG_PATH,
@@ -413,6 +414,15 @@ class BaseTranscriptionPipeline(ABC):
             return list(ctranslate2.get_supported_compute_types("cuda"))
         else:
             return list(ctranslate2.get_supported_compute_types("cpu"))
+
+    def offload(self):
+        """Offload the model and free up the memory"""
+        if self.model is not None:
+            del self.model
+            self.model = None
+        if self.device == "cuda":
+            self.release_cuda_memory()
+        gc.collect()
 
     @staticmethod
     def format_time(elapsed_time: float) -> str:
