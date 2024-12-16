@@ -124,7 +124,7 @@ If you're interested in deploying this app as a REST API, please check out [/bac
 - [x] Integrate with insanely-fast-whisper
 - [x] Integrate with whisperX ( Only speaker diarization part )
 - [x] Add background music separation pre-processing with [UVR](https://github.com/Anjok07/ultimatevocalremovergui)  
-- [ ] Add fast api script
+- [x] Add fast api script
 - [ ] Add CLI usages
 - [ ] Support real-time transcription for microphone
 
