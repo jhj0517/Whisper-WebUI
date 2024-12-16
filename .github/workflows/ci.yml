@@ -13,8 +13,7 @@ on:
       - intel-gpu
 
 jobs:
-  build:
-
+  test:
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -41,3 +40,62 @@ jobs:
 
       - name: Run test
         run: python -m pytest -rs tests
+
+  test-backend:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ["3.10", "3.11", "3.12"]
+
+    env:
+      DEEPL_API_KEY: ${{ secrets.DEEPL_API_KEY }}
+      TEST_ENV: true
+
+    steps:
+      - name: Clean up space for action
+        run: rm -rf /opt/hostedtoolcache
+
+      - uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+
+      - name: Install git and ffmpeg
+        run: sudo apt-get update && sudo apt-get install -y git ffmpeg
+
+      - name: Install dependencies
+        run: pip install -r backend/requirements-backend.txt pytest pytest-asyncio jiwer
+
+      - name: Run test
+        run: python -m pytest -rs backend/tests
+
+  test-shell-script:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: [ "3.10", "3.11", "3.12" ]
+
+    steps:
+      - name: Clean up space for action
+        run: rm -rf /opt/hostedtoolcache
+
+      - uses: actions/checkout@v4
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+
+      - name: Install git and ffmpeg
+        run: sudo apt-get update && sudo apt-get install -y git ffmpeg
+
+      - name: Execute Install.sh
+        run: |
+          chmod +x ./Install.sh
+          ./Install.sh
+
+      - name: Execute start-webui.sh
+        run: |
+          chmod +x ./start-webui.sh
+          timeout 60s ./start-webui.sh || true
+

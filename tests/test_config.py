@@ -1,6 +1,9 @@
 import functools
 import jiwer
 import os
+
+import pytest
+import requests
 import torch
 
 from modules.utils.paths import *
@@ -34,6 +37,22 @@ def is_pytube_detected_bot(url: str = TEST_YOUTUBE_URL):
     except Exception as e:
         print(f"Pytube has detected as a bot: {e}")
         return True
+
+
+@pytest.fixture(autouse=True)
+def download_file(url=TEST_FILE_DOWNLOAD_URL, file_path=TEST_FILE_PATH):
+    if os.path.exists(file_path):
+        return
+
+    if not os.path.exists(os.path.dirname(file_path)):
+        os.makedirs(os.path.dirname(file_path))
+
+    response = requests.get(url)
+
+    with open(file_path, "wb") as file:
+        file.write(response.content)
+
+    print(f"File downloaded to: {file_path}")
 
 
 def calculate_wer(answer, prediction):

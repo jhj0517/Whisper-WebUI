@@ -1,0 +1,23 @@
+whisper:
+  # Default implementation is faster-whisper. This indicates model name within `models\Whisper\faster-whisper`
+  model_size: large-v2
+  # Compute type. 'float16' for CUDA, 'float32' for CPU.
+  compute_type: float16
+
+bgm_separation:
+  # UVR model sizes between ["UVR-MDX-NET-Inst_HQ_4", "UVR-MDX-NET-Inst_3"]
+  model_size: UVR-MDX-NET-Inst_HQ_4
+  # Whether to offload the model after the inference. Should be true if your setup has a VRAM less than <16GB
+  enable_offload: true
+  # Device to load BGM separation model
+  device: cuda
+
+# Settings that apply to the `cache' directory. The output files for `/bgm-separation` are stored in the `cache' directory,
+# (You can check out the actual generated files by testing `/bgm-separation`.)
+# You can adjust the TTL/cleanup frequency of the files in the `cache' directory here.
+cache:
+  # TTL (Time-To-Live) in seconds, defaults to 10 minutes
+  ttl: 600
+  # Clean up frequency in seconds, defaults to 1 minutes
+  frequency: 60
+

@@ -85,6 +85,7 @@ def load_audio(file: Union[str, np.ndarray], sr: int = SAMPLE_RATE) -> np.ndarra
     return np.frombuffer(out, np.int16).flatten().astype(np.float32) / 32768.0
 
 
+
 def pad_or_trim(array, length: int = N_SAMPLES, *, axis: int = -1):
     """
     Pad or trim the audio array to N_SAMPLES, as expected by the encoder.
