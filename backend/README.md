@@ -1,6 +1,6 @@
 # Whisper-WebUI REST API
 REST API for Whisper-WebUI. Documentation is auto-generated upon deploying the app.
-<br>[Swagger UI](https://github.com/swagger-api/swagger-ui) is available at `app/docs`. [Redoc](https://github.com/Redocly/redoc) is available at `app/redoc` or root URL with redirection.
+<br>[Swagger UI](https://github.com/swagger-api/swagger-ui) is available at `app/docs` or root URL with redirection. [Redoc](https://github.com/Redocly/redoc) is available at `app/redoc`.
 
 # Setup and Installation
 
