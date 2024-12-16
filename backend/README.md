@@ -36,7 +36,7 @@ The Dockerfile should be built when you're in the root directory of Whisper-WebU
 git clone https://github.com/jhj0517/Whisper-WebUI.git
 ```
 2. Mount volume paths with your local paths in `docker-compose.yaml`
-https://github.com/jhj0517/Whisper-WebUI/blob/d13d773be5e9c1a19f829e31dc10c3c6a6329bc8/backend/docker-compose.yaml#L13-L16
+https://github.com/jhj0517/Whisper-WebUI/blob/1dd708ec3844dbf0c1f77de9ef5764e883dd4c78/backend/docker-compose.yaml#L12-L15
 3. Build the image
 ```
 docker compose -f backend/docker-compose.yaml build
