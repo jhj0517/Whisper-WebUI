@@ -18,7 +18,7 @@ async def read_audio(
     file: Optional[UploadFile] = None,
     file_url: Optional[str] = None
 ):
-    """This resamples sampling rates to 16000."""
+    """Read audio from "UploadFile". This resamples sampling rates to 16000."""
     if (file and file_url) or (not file and not file_url):
         raise HTTPException(status_code=400, detail="Provide only one of file or file_url")
 
