@@ -4,10 +4,12 @@ from faster_whisper.vad import VadOptions, get_vad_model
 import numpy as np
 from typing import BinaryIO, Union, List, Optional, Tuple
 import warnings
+import bisect
 import faster_whisper
-from modules.whisper.data_classes import *
 from faster_whisper.transcribe import SpeechTimestampsMap
 import gradio as gr
+
+from modules.whisper.data_classes import *
 
 
 class SileroVAD:
@@ -58,6 +60,7 @@ class SileroVAD:
             vad_options=vad_parameters,
             progress=progress
         )
+
         audio = self.collect_chunks(audio, speech_chunks)
         duration_after_vad = audio.shape[0] / sampling_rate
 
@@ -94,35 +97,27 @@ class SileroVAD:
         min_silence_duration_ms = vad_options.min_silence_duration_ms
         window_size_samples = self.window_size_samples
         speech_pad_ms = vad_options.speech_pad_ms
-        sampling_rate = 16000
-        min_speech_samples = sampling_rate * min_speech_duration_ms / 1000
-        speech_pad_samples = sampling_rate * speech_pad_ms / 1000
+        min_speech_samples = self.sampling_rate * min_speech_duration_ms / 1000
+        speech_pad_samples = self.sampling_rate * speech_pad_ms / 1000
         max_speech_samples = (
-                sampling_rate * max_speech_duration_s
+                self.sampling_rate * max_speech_duration_s
                 - window_size_samples
                 - 2 * speech_pad_samples
         )
-        min_silence_samples = sampling_rate * min_silence_duration_ms / 1000
-        min_silence_samples_at_max_speech = sampling_rate * 98 / 1000
+        min_silence_samples = self.sampling_rate * min_silence_duration_ms / 1000
+        min_silence_samples_at_max_speech = self.sampling_rate * 98 / 1000
 
         audio_length_samples = len(audio)
 
-        state, context = self.model.get_initial_states(batch_size=1)
-
-        speech_probs = []
-        for current_start_sample in range(0, audio_length_samples, window_size_samples):
-            progress(current_start_sample/audio_length_samples, desc="Detecting speeches only using VAD...")
-
-            chunk = audio[current_start_sample: current_start_sample + window_size_samples]
-            if len(chunk) < window_size_samples:
-                chunk = np.pad(chunk, (0, int(window_size_samples - len(chunk))))
-            speech_prob, state, context = self.model(chunk, state, context, sampling_rate)
-            speech_probs.append(speech_prob)
+        padded_audio = np.pad(
+            audio, (0, window_size_samples - audio.shape[0] % window_size_samples)
+        )
+        speech_probs = self.model(padded_audio.reshape(1, -1)).squeeze(0)
 
         triggered = False
         speeches = []
         current_speech = {}
-        neg_threshold = threshold - 0.15
+        neg_threshold = vad_options.neg_threshold
 
         # to save potential segment end (and tolerate some silence)
         temp_end = 0
@@ -222,6 +217,13 @@ class SileroVAD:
             return np.array([], dtype=np.float32)
 
         return np.concatenate([audio[chunk["start"]: chunk["end"]] for chunk in chunks])
+
+    def get_chunk_index(self, time: float) -> int:
+        sample = int(time * self.sampling_rate)
+        return min(
+            bisect.bisect(self.chunk_end_sample, sample),
+            len(self.chunk_end_sample) - 1,
+        )
 
     @staticmethod
     def format_timestamp(
