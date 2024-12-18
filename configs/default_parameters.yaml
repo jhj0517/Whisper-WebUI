@@ -28,7 +28,7 @@ whisper:
   max_new_tokens: null
   hallucination_silence_threshold: null
   hotwords: null
-  language_detection_threshold: null
+  language_detection_threshold: 0.5
   language_detection_segments: 1
   add_timestamp: true
 

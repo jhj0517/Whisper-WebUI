@@ -319,7 +319,7 @@ class WhisperParams(BaseParams):
     )
     hotwords: Optional[str] = Field(default=None, description="Hotwords/hint phrases for the model")
     language_detection_threshold: Optional[float] = Field(
-        default=None,
+        default=0.5,
         description="Threshold for language detection probability"
     )
     language_detection_segments: int = Field(
