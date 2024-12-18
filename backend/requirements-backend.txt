@@ -1,5 +1,5 @@
 # Whisper-WebUI dependencies
--r ./../requirements.txt
+-r ../requirements.txt
 
 # Backend dependencies
 python-dotenv
