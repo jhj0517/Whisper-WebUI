@@ -24,7 +24,7 @@ uvicorn backend.main:app --host 0.0.0.0 --port 8000
 ```
 
 ## Configuration
-You can set some server configurations in [config.yaml](https://github.com/jhj0517/Whisper-WebUI/blob/feature/add-api/backend/configs/config.yaml).
+You can set some server configurations in [config.yaml](https://github.com/jhj0517/Whisper-WebUI/blob/master/backend/configs/config.yaml). 
 <br>For example, initial model size for Whisper or the cleanup frequency and TTL for cached files.
 <br>If the endpoint generates and saves the file, all output files are stored in the `cache` directory, e.g. separated vocal/instrument files for `/bgm-separation` are saved in `cache` directory.
 
