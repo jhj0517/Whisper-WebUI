@@ -253,9 +253,11 @@ class WriteVTT(SubtitlesWriter):
     def write_result(
         self, result: dict, file: TextIO, options: Optional[dict] = None, **kwargs
     ):
-        print("WEBVTT\n", file=file)
-        for start, end, text in self.iterate_result(result, options, **kwargs):
-            print(f"{start} --> {end}\n{text}\n", file=file, flush=True)
+        print("WEBVTT\n", file=file, flush=True)
+        for i, (start, end, text) in enumerate(
+            self.iterate_result(result, options, **kwargs), start=1
+        ):
+            print(f"{i}\n{start} --> {end}\n{text}\n", file=file, flush=True)
 
     def to_segments(self, file_path: str) -> List[Segment]:
         segments = []
@@ -268,7 +270,7 @@ class WriteVTT(SubtitlesWriter):
                 index = lines[0]
                 time_line = lines[1].split(" --> ")
                 start, end = time_str_to_seconds(time_line[0], self.decimal_marker), time_str_to_seconds(time_line[1], self.decimal_marker)
-                sentence = ' '.join(lines[1:])
+                sentence = ' '.join(lines[2:])
 
                 segments.append(Segment(
                     start=start,
