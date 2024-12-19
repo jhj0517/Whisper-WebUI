@@ -265,7 +265,8 @@ class WriteVTT(SubtitlesWriter):
         for block in blocks:
             if block.strip() != '' and not block.strip().startswith("WEBVTT"):
                 lines = block.strip().split('\n')
-                time_line = lines[0].split(" --> ")
+                index = lines[0]
+                time_line = lines[1].split(" --> ")
                 start, end = time_str_to_seconds(time_line[0], self.decimal_marker), time_str_to_seconds(time_line[1], self.decimal_marker)
                 sentence = ' '.join(lines[1:])
 
