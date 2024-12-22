@@ -299,7 +299,8 @@ class App:
             ssl_verify=args.ssl_verify,
             ssl_keyfile=args.ssl_keyfile,
             ssl_keyfile_password=args.ssl_keyfile_password,
-            ssl_certfile=args.ssl_certfile
+            ssl_certfile=args.ssl_certfile,
+            allowed_paths=eval(args.allowed_paths) if args.allowed_paths else None
         )
 
     @staticmethod
@@ -333,6 +334,7 @@ parser.add_argument('--theme', type=str, default=None, help='Gradio Blocks theme
 parser.add_argument('--colab', type=str2bool, default=False, nargs='?', const=True, help='Is colab user or not')
 parser.add_argument('--api_open', type=str2bool, default=False, nargs='?', const=True,
                     help='Enable api or not in Gradio')
+parser.add_argument('--allowed_paths', type=str, default=None, help='Gradio allowed paths')
 parser.add_argument('--inbrowser', type=str2bool, default=True, nargs='?', const=True,
                     help='Whether to automatically start Gradio app or not')
 parser.add_argument('--ssl_verify', type=str2bool, default=True, nargs='?', const=True,
