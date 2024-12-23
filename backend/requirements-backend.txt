@@ -1,17 +1,5 @@
 # Whisper-WebUI dependencies
---extra-index-url https://download.pytorch.org/whl/cu124
-torch
-torchaudio
-git+https://github.com/jhj0517/jhj0517-whisper.git
-faster-whisper==1.0.3
-transformers
-gradio
-gradio-i18n
-pytubefix
-ruamel.yaml==0.18.6
-pyannote.audio==3.3.2
-git+https://github.com/jhj0517/ultimatevocalremover_api.git
-git+https://github.com/jhj0517/pyrubberband.git
+-r ../requirements.txt
 
 # Backend dependencies
 python-dotenv

@@ -1,7 +1,9 @@
 # Whisper-WebUI
 A Gradio-based browser interface for [Whisper](https://github.com/openai/whisper). You can use it as an Easy Subtitle Generator!
 
-![Whisper WebUI](https://github.com/jhj0517/Whsiper-WebUI/blob/master/screenshot.png)
+![screen](https://github.com/user-attachments/assets/caea3afd-a73c-40af-a347-8d57914b1d0f)
+
+
 
 ## Notebook
 If you wish to try this on Colab, you can do it in [here](https://colab.research.google.com/github/jhj0517/Whisper-WebUI/blob/master/notebook/whisper-webui.ipynb)!
@@ -124,7 +126,7 @@ If you're interested in deploying this app as a REST API, please check out [/bac
 - [x] Integrate with insanely-fast-whisper
 - [x] Integrate with whisperX ( Only speaker diarization part )
 - [x] Add background music separation pre-processing with [UVR](https://github.com/Anjok07/ultimatevocalremovergui)  
-- [ ] Add fast api script
+- [x] Add fast api script
 - [ ] Add CLI usages
 - [ ] Support real-time transcription for microphone
 

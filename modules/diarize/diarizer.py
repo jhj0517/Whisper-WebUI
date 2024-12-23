@@ -4,6 +4,7 @@ from typing import List, Union, BinaryIO, Optional, Tuple
 import numpy as np
 import time
 import logging
+import gc
 
 from modules.utils.paths import DIARIZATION_MODELS_DIR
 from modules.diarize.diarize_pipeline import DiarizationPipeline, assign_word_speakers
@@ -122,6 +123,16 @@ class Diarizer:
             cache_dir=self.model_dir
         )
         logger.disabled = False
+
+    def offload(self):
+        """Offload the model and free up the memory"""
+        if self.pipe is not None:
+            del self.pipe
+            self.pipe = None
+        if self.device == "cuda":
+            torch.cuda.empty_cache()
+            torch.cuda.reset_max_memory_allocated()
+        gc.collect()
 
     @staticmethod
     def get_device():

@@ -119,7 +119,8 @@ class MusicSeparator:
             )
             self.model.sample_rate = sample_rate
 
-        progress(0, desc="Separating background music from the audio..")
+        progress(0, desc="Separating background music from the audio.. "
+                         "(It will only display 0% until the job is complete.) ")
         result = self.model(audio)
         instrumental, vocals = result["instrumental"].T, result["vocals"].T
 
