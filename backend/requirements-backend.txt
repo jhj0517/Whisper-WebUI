@@ -4,7 +4,6 @@
 # Backend dependencies
 python-dotenv
 uvicorn
-gunicorn
 SQLAlchemy
 sqlmodel
 pydantic
