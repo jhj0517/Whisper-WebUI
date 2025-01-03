@@ -8,7 +8,7 @@
 torch
 torchaudio
 git+https://github.com/jhj0517/jhj0517-whisper.git
-git+https://github.com/SYSTRAN/faster-whisper.git
+faster-whisper==1.1.1
 transformers
 gradio
 gradio-i18n

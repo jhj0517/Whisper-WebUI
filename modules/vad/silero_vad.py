@@ -92,6 +92,7 @@ class SileroVAD:
             vad_options = VadOptions(**kwargs)
 
         threshold = vad_options.threshold
+        neg_threshold = vad_options.neg_threshold
         min_speech_duration_ms = vad_options.min_speech_duration_ms
         max_speech_duration_s = vad_options.max_speech_duration_s
         min_silence_duration_ms = vad_options.min_silence_duration_ms
@@ -117,7 +118,8 @@ class SileroVAD:
         triggered = False
         speeches = []
         current_speech = {}
-        neg_threshold = vad_options.neg_threshold
+        if neg_threshold is None:
+            neg_threshold = max(threshold - 0.15, 0.01)
 
         # to save potential segment end (and tolerate some silence)
         temp_end = 0

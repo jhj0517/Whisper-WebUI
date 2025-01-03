@@ -160,6 +160,8 @@ class BaseTranscriptionPipeline(ABC):
                 segments=result,
                 speech_chunks=speech_chunks,
             )
+            if not result:
+                raise ValueError("VAD detected no speech segments in the audio.")
 
         if diarization_params.is_diarize:
             result, elapsed_time_diarization = self.diarizer.run(
