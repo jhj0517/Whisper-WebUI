@@ -75,6 +75,10 @@ class NLLBInference(TranslationBase):
         model_dir_path = os.path.join(self.model_dir, model_dir_name)
         if os.path.exists(model_dir_path) and os.listdir(model_dir_path):
             return True
+        for model_dir_name in os.listdir(self.model_dir):
+            if (model_size in model_dir_name or model_size_name in model_dir_name) and \
+                    os.listdir(os.path.join(self.model_dir, model_dir_name)):
+                return True
         return False
 
 
