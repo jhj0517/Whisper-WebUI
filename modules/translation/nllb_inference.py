@@ -3,10 +3,10 @@ import gradio as gr
 import os
 
 from modules.utils.paths import TRANSLATION_OUTPUT_DIR, NLLB_MODELS_DIR
-import modules.translation.translation_base as base
+from modules.translation.translation_base import TranslationBase
 
 
-class NLLBInference(base.TranslationBase):
+class NLLBInference(TranslationBase):
     def __init__(self,
                  model_dir: str = NLLB_MODELS_DIR,
                  output_dir: str = TRANSLATION_OUTPUT_DIR
