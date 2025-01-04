@@ -3,10 +3,10 @@ import gradio as gr
 import os
 
 from modules.utils.paths import TRANSLATION_OUTPUT_DIR, NLLB_MODELS_DIR
-import modules.translation.translation_base as base
+from modules.translation.translation_base import TranslationBase
 
 
-class NLLBInference(base.TranslationBase):
+class NLLBInference(TranslationBase):
     def __init__(self,
                  model_dir: str = NLLB_MODELS_DIR,
                  output_dir: str = TRANSLATION_OUTPUT_DIR
@@ -75,6 +75,10 @@ class NLLBInference(base.TranslationBase):
         model_dir_path = os.path.join(self.model_dir, model_dir_name)
         if os.path.exists(model_dir_path) and os.listdir(model_dir_path):
             return True
+        for model_dir_name in os.listdir(self.model_dir):
+            if (model_size in model_dir_name or model_size_name in model_dir_name) and \
+                    os.listdir(os.path.join(self.model_dir, model_dir_name)):
+                return True
         return False
 
 
