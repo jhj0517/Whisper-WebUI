@@ -82,8 +82,6 @@ class App:
                                                                     available_devices=self.whisper_inf.diarizer.available_device,
                                                                     device=self.whisper_inf.diarizer.device)
 
-        dd_model.change(fn=self.on_change_models, inputs=[dd_model], outputs=[cb_translate])
-
         pipeline_inputs = [dd_model, dd_lang, cb_translate] + whisper_inputs + vad_inputs + diarization_inputs + uvr_inputs
 
         return (
@@ -310,14 +308,6 @@ class App:
         else:
             os.makedirs(folder_path, exist_ok=True)
             print(f"The directory path {folder_path} has newly created.")
-
-    @staticmethod
-    def on_change_models(model_size: str):
-        translatable_model = ["large", "large-v1", "large-v2", "large-v3"]
-        if model_size not in translatable_model:
-            return gr.Checkbox(visible=False, value=False, interactive=False)
-        else:
-            return gr.Checkbox(visible=True, value=False, label="Translate to English?", interactive=True)
 
 
 parser = argparse.ArgumentParser()
