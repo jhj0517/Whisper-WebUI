@@ -36,6 +36,7 @@ class App:
         self.deepl_api = DeepLAPI(
             output_dir=os.path.join(self.args.output_dir, "translations")
         )
+        self.i18n = load_yaml(I18N_YAML_PATH)
         self.default_params = load_yaml(DEFAULT_PARAMETERS_CONFIG_PATH)
         print(f"Use \"{self.args.whisper_type}\" implementation\n"
               f"Device \"{self.whisper_inf.device}\" is detected")
@@ -96,12 +97,11 @@ class App:
         uvr_params = self.default_params["bgm_separation"]
 
         with self.app:
-            lang = gr.Radio(choices=[("English", "en"), ("简体中文", "zh"), ("繁體中文", "zh-Hant"),  ("日本語", "ja"),
-                                     ("한국인", "ko"), ("español", "es"), ("française", "fr"), ("Deutsch", "de"), ],
+            lang = gr.Radio(choices=list(self.i18n.keys()),
                             label=_("Language"), interactive=True,
                             visible=False,  # Set it by development purpose.
                             )
-            with Translate(I18N_YAML_PATH, lang):
+            with Translate(I18N_YAML_PATH):
                 with gr.Row():
                     with gr.Column():
                         gr.Markdown(MARKDOWN, elem_id="md_project")
