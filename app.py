@@ -21,7 +21,6 @@ class App:
     def __init__(self, args):
         self.args = args
         self.app = gr.Blocks(css=CSS, theme=self.args.theme, delete_cache=(60, 3600))
-        self.i18n = Translate(I18N_YAML_PATH)
         self.whisper_inf = WhisperFactory.create_whisper_inference(
             whisper_type=self.args.whisper_type,
             whisper_model_dir=self.args.whisper_model_dir,
@@ -97,7 +96,12 @@ class App:
         uvr_params = self.default_params["bgm_separation"]
 
         with self.app:
-            with self.i18n:
+            lang = gr.Radio(choices=[("English", "en"), ("简体中文", "zh"), ("繁體中文", "zh-Hant"),  ("日本語", "ja"),
+                                     ("한국인", "ko"), ("español", "es"), ("française", "fr"), ("Deutsch", "de"), ],
+                            label=_("Language"), interactive=True,
+                            visible=False,  # Set it by development purpose.
+                            )
+            with Translate(I18N_YAML_PATH, lang):
                 with gr.Row():
                     with gr.Column():
                         gr.Markdown(MARKDOWN, elem_id="md_project")
