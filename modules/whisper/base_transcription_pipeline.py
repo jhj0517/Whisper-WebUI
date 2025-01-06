@@ -46,7 +46,6 @@ class BaseTranscriptionPipeline(ABC):
         self.current_model_size = None
         self.available_models = whisper.available_models()
         self.available_langs = sorted(list(whisper.tokenizer.LANGUAGES.values()))
-        self.translatable_models = ["large", "large-v1", "large-v2", "large-v3"]
         self.device = self.get_device()
         self.available_compute_types = self.get_available_compute_type()
         self.current_compute_type = self.get_compute_type()

@@ -12,7 +12,7 @@ en: # English
   Model: Model
   Automatic Detection: Automatic Detection
   File Format: File Format
-  Translate to English?: Translate to English?
+  Translate to English?: Translate to English? (Whisper's End-To-End Speech-To-Text translation feature)
   Add a timestamp to the end of the filename: Add a timestamp to the end of the filename
   Advanced Parameters: Advanced Parameters
   Background Music Remover Filter: Background Music Remover Filter

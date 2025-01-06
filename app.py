@@ -21,7 +21,6 @@ class App:
     def __init__(self, args):
         self.args = args
         self.app = gr.Blocks(css=CSS, theme=self.args.theme, delete_cache=(60, 3600))
-        self.i18n = Translate(I18N_YAML_PATH)
         self.whisper_inf = WhisperFactory.create_whisper_inference(
             whisper_type=self.args.whisper_type,
             whisper_model_dir=self.args.whisper_model_dir,
@@ -82,8 +81,6 @@ class App:
                                                                     available_devices=self.whisper_inf.diarizer.available_device,
                                                                     device=self.whisper_inf.diarizer.device)
 
-        dd_model.change(fn=self.on_change_models, inputs=[dd_model], outputs=[cb_translate])
-
         pipeline_inputs = [dd_model, dd_lang, cb_translate] + whisper_inputs + vad_inputs + diarization_inputs + uvr_inputs
 
         return (
@@ -99,7 +96,12 @@ class App:
         uvr_params = self.default_params["bgm_separation"]
 
         with self.app:
-            with self.i18n:
+            lang = gr.Radio(choices=[("English", "en"), ("简体中文", "zh"), ("繁體中文", "zh-Hant"),  ("日本語", "ja"),
+                                     ("한국인", "ko"), ("español", "es"), ("française", "fr"), ("Deutsch", "de"), ],
+                            label=_("Language"), interactive=True,
+                            visible=False,  # Set it by development purpose.
+                            )
+            with Translate(I18N_YAML_PATH, lang):
                 with gr.Row():
                     with gr.Column():
                         gr.Markdown(MARKDOWN, elem_id="md_project")
@@ -310,14 +312,6 @@ class App:
         else:
             os.makedirs(folder_path, exist_ok=True)
             print(f"The directory path {folder_path} has newly created.")
-
-    @staticmethod
-    def on_change_models(model_size: str):
-        translatable_model = ["large", "large-v1", "large-v2", "large-v3"]
-        if model_size not in translatable_model:
-            return gr.Checkbox(visible=False, value=False, interactive=False)
-        else:
-            return gr.Checkbox(visible=True, value=False, label="Translate to English?", interactive=True)
 
 
 parser = argparse.ArgumentParser()

@@ -65,7 +65,7 @@ class WhisperInference(BaseTranscriptionPipeline):
                                        beam_size=params.beam_size,
                                        logprob_threshold=params.log_prob_threshold,
                                        no_speech_threshold=params.no_speech_threshold,
-                                       task="translate" if params.is_translate and self.current_model_size in self.translatable_models else "transcribe",
+                                       task="translate" if params.is_translate else "transcribe",
                                        fp16=True if params.compute_type == "float16" else False,
                                        best_of=params.best_of,
                                        patience=params.patience,
