@@ -71,7 +71,7 @@ class FasterWhisperInference(BaseTranscriptionPipeline):
         segments, info = self.model.transcribe(
             audio=audio,
             language=params.lang,
-            task="translate" if params.is_translate and self.current_model_size in self.translatable_models else "transcribe",
+            task="translate" if params.is_translate else "transcribe",
             beam_size=params.beam_size,
             log_prob_threshold=params.log_prob_threshold,
             no_speech_threshold=params.no_speech_threshold,
