@@ -5,6 +5,14 @@ from gradio.utils import NamedString
 
 from modules.utils.paths import DEFAULT_PARAMETERS_CONFIG_PATH
 
+AUDIO_EXTENSION = ['.mp3', '.wav', '.wma', '.aac', '.flac', '.ogg', '.m4a', '.aiff', '.alac', '.opus', '.webm', '.ac3',
+                   '.amr', '.au', '.mid', '.midi', '.mka']
+
+VIDEO_EXTENSION = ['.mp4', '.mkv', '.flv', '.avi', '.mov', '.wmv', '.webm', '.m4v', '.mpeg', '.mpg', '.3gp',
+                   '.f4v', '.ogv', '.vob', '.mts', '.m2ts', '.divx', '.mxf', '.rm', '.rmvb', '.ts']
+
+MEDIA_EXTENSION = VIDEO_EXTENSION + AUDIO_EXTENSION
+
 
 def load_yaml(path: str = DEFAULT_PARAMETERS_CONFIG_PATH):
     yaml = YAML(typ="safe")
@@ -29,10 +37,7 @@ def save_yaml(data: dict, path: str = DEFAULT_PARAMETERS_CONFIG_PATH):
 
 
 def get_media_files(folder_path, include_sub_directory=False):
-    video_extensions = ['*.mp4', '*.mkv', '*.flv', '*.avi', '*.mov', '*.wmv', '*.webm', '*.m4v', '*.mpeg', '*.mpg',
-                        '*.3gp', '*.f4v', '*.ogv', '*.vob', '*.mts', '*.m2ts', '*.divx', '*.mxf', '*.rm', '*.rmvb']
-    audio_extensions = ['*.mp3', '*.wav', '*.aac', '*.flac', '*.ogg', '*.m4a']
-    media_extensions = video_extensions + audio_extensions
+    media_extensions = ['*' + extension for extension in MEDIA_EXTENSION]
 
     media_files = []
 
@@ -64,9 +69,8 @@ def format_gradio_files(files: list):
 
 
 def is_video(file_path):
-    video_extensions = ['.mp4', '.mkv', '.avi', '.mov', '.flv', '.wmv', '.webm', '.m4v', '.mpeg', '.mpg', '.3gp']
     extension = os.path.splitext(file_path)[1].lower()
-    return extension in video_extensions
+    return extension in VIDEO_EXTENSION
 
 
 def read_file(file_path):
