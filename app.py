@@ -95,6 +95,20 @@ class App:
         deepl_params = translation_params["deepl"]
         nllb_params = translation_params["nllb"]
         uvr_params = self.default_params["bgm_separation"]
+        
+        audio_extensions = [
+        '.mp3', '.wav', '.wma', '.aac', '.flac', '.ogg', 
+        '.m4a', '.aiff', '.alac', '.opus', '.webm', 
+        '.ac3', '.amr', '.au', '.mid', '.midi', '.mka'
+        ]
+
+        video_extensions = [
+            '.mp4', '.avi', '.mkv', '.mov', '.wmv', '.flv', 
+            '.webm', '.m4v', '.mpeg', '.mpg', '.3gp', 
+            '.ogv', '.ts', '.m2ts', '.divx', '.rmvb'
+        ]
+        
+        all_media_extensions = audio_extensions + video_extensions
 
         with self.app:
             lang = gr.Radio(choices=list(self.i18n.keys()),
@@ -108,7 +122,7 @@ class App:
                 with gr.Tabs():
                     with gr.TabItem(_("File")):  # tab1
                         with gr.Column():
-                            input_file = gr.Files(type="filepath", label=_("Upload File here"))
+                            input_file = gr.Files(type="filepath", label=_("Upload File here"), file_types=all_media_extensions)
                             tb_input_folder = gr.Textbox(label="Input Folder Path (Optional)",
                                                          info="Optional: Specify the folder path where the input files are located, if you prefer to use local files instead of uploading them."
                                                               " Leave this field empty if you do not wish to use a local path.",
