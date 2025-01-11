@@ -7,6 +7,7 @@
 **/.pytest_cache/
 **/venv/
 **/__pycache__/
+**/.gradio/
 outputs/
 models/
 modules/yt_tmp.wav
