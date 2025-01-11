@@ -7,7 +7,7 @@ import yaml
 from modules.utils.paths import (FASTER_WHISPER_MODELS_DIR, DIARIZATION_MODELS_DIR, OUTPUT_DIR, WHISPER_MODELS_DIR,
                                  INSANELY_FAST_WHISPER_MODELS_DIR, NLLB_MODELS_DIR, DEFAULT_PARAMETERS_CONFIG_PATH,
                                  UVR_MODELS_DIR, I18N_YAML_PATH)
-from modules.utils.files_manager import load_yaml
+from modules.utils.files_manager import load_yaml, MEDIA_EXTENSION
 from modules.whisper.whisper_factory import WhisperFactory
 from modules.translation.nllb_inference import NLLBInference
 from modules.ui.htmls import *
@@ -108,7 +108,7 @@ class App:
                 with gr.Tabs():
                     with gr.TabItem(_("File")):  # tab1
                         with gr.Column():
-                            input_file = gr.Files(type="filepath", label=_("Upload File here"))
+                            input_file = gr.Files(type="filepath", label=_("Upload File here"), file_types=MEDIA_EXTENSION)
                             tb_input_folder = gr.Textbox(label="Input Folder Path (Optional)",
                                                          info="Optional: Specify the folder path where the input files are located, if you prefer to use local files instead of uploading them."
                                                               " Leave this field empty if you do not wish to use a local path.",
