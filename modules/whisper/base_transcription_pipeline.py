@@ -9,6 +9,7 @@ import numpy as np
 from datetime import datetime
 from faster_whisper.vad import VadOptions
 import gc
+from copy import deepcopy
 
 from modules.uvr.music_separator import MusicSeparator
 from modules.utils.paths import (WHISPER_MODELS_DIR, DIARIZATION_MODELS_DIR, OUTPUT_DIR, DEFAULT_PARAMETERS_CONFIG_PATH,
@@ -106,7 +107,7 @@ class BaseTranscriptionPipeline(ABC):
         params = TranscriptionPipelineParams.from_list(list(pipeline_params))
         params = self.validate_gradio_values(params)
         bgm_params, vad_params, whisper_params, diarization_params = params.bgm_separation, params.vad, params.whisper, params.diarization
-        origin_audio = audio
+        origin_audio = deepcopy(audio)
 
         if bgm_params.is_separate_bgm:
             music, audio, _ = self.music_separator.separate(
