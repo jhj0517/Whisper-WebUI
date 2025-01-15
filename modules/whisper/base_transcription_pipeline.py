@@ -107,7 +107,6 @@ class BaseTranscriptionPipeline(ABC):
         params = TranscriptionPipelineParams.from_list(list(pipeline_params))
         params = self.validate_gradio_values(params)
         bgm_params, vad_params, whisper_params, diarization_params = params.bgm_separation, params.vad, params.whisper, params.diarization
-        origin_audio = deepcopy(audio)
 
         if bgm_params.is_separate_bgm:
             music, audio, _ = self.music_separator.separate(
@@ -129,6 +128,8 @@ class BaseTranscriptionPipeline(ABC):
 
             if bgm_params.enable_offload:
                 self.music_separator.offload()
+
+        origin_audio = deepcopy(audio)
 
         if vad_params.vad_filter:
             vad_options = VadOptions(
