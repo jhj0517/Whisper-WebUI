@@ -106,6 +106,7 @@ class BaseTranscriptionPipeline(ABC):
         params = TranscriptionPipelineParams.from_list(list(pipeline_params))
         params = self.validate_gradio_values(params)
         bgm_params, vad_params, whisper_params, diarization_params = params.bgm_separation, params.vad, params.whisper, params.diarization
+        origin_audio = audio
 
         if bgm_params.is_separate_bgm:
             music, audio, _ = self.music_separator.separate(
@@ -164,7 +165,7 @@ class BaseTranscriptionPipeline(ABC):
 
         if diarization_params.is_diarize:
             result, elapsed_time_diarization = self.diarizer.run(
-                audio=audio,
+                audio=origin_audio,
                 use_auth_token=diarization_params.hf_token,
                 transcribed_result=result,
                 device=diarization_params.diarization_device
