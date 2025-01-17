@@ -265,7 +265,7 @@ class BaseTranscriptionPipeline(ABC):
         except Exception as e:
             raise RuntimeError(f"Error transcribing file: {e}") from e
         finally:
-            self.release_cuda_memory()
+            self.release_xpu_memory()
 
     def transcribe_mic(self,
                        mic_audio: str,
@@ -328,7 +328,7 @@ class BaseTranscriptionPipeline(ABC):
         except Exception as e:
             raise RuntimeError(f"Error transcribing mic: {e}") from e
         finally:
-            self.release_cuda_memory()
+            self.release_xpu_memory()
 
     def transcribe_youtube(self,
                            youtube_link: str,
@@ -400,7 +400,7 @@ class BaseTranscriptionPipeline(ABC):
         except Exception as e:
             raise RuntimeError(f"Error transcribing youtube: {e}") from e
         finally:
-            self.release_cuda_memory()
+            self.release_xpu_memory()
 
     def get_compute_type(self):
         if "float16" in self.available_compute_types:
@@ -421,8 +421,8 @@ class BaseTranscriptionPipeline(ABC):
         if self.model is not None:
             del self.model
             self.model = None
-        if self.device == "cuda":
-            self.release_cuda_memory()
+        if self.device == "xpu":
+            self.release_xpu_memory()
         gc.collect()
 
     @staticmethod
@@ -454,8 +454,8 @@ class BaseTranscriptionPipeline(ABC):
 
     @staticmethod
     def get_device():
-        if torch.cuda.is_available():
-            return "cuda"
+        if torch.xpu.is_available():
+            return "xpu"
         elif torch.backends.mps.is_available():
             if not BaseTranscriptionPipeline.is_sparse_api_supported():
                 # Device `SparseMPS` is not supported for now. See : https://github.com/pytorch/pytorch/issues/87886
@@ -482,11 +482,11 @@ class BaseTranscriptionPipeline(ABC):
             return False
 
     @staticmethod
-    def release_cuda_memory():
+    def release_xpu_memory():
         """Release memory"""
-        if torch.cuda.is_available():
-            torch.cuda.empty_cache()
-            torch.cuda.reset_max_memory_allocated()
+        if torch.xpu.is_available():
+            torch.xpu.empty_cache()
+            torch.xpu.max_memory_allocated()
 
     @staticmethod
     def remove_input_files(file_paths: List[str]):

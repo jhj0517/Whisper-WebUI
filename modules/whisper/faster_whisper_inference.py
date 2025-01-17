@@ -183,8 +183,8 @@ class FasterWhisperInference(BaseTranscriptionPipeline):
 
     @staticmethod
     def get_device():
-        if torch.cuda.is_available():
-            return "cuda"
+        if torch.xpu.is_available():
+            return "xpu"
         else:
             return "auto"
 

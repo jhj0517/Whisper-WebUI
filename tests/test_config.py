@@ -21,8 +21,8 @@ TEST_SUBTITLE_VTT_PATH = os.path.join(WEBUI_DIR, "tests", "test_vtt.vtt")
 
 
 @functools.lru_cache
-def is_cuda_available():
-    return torch.cuda.is_available()
+def is_xpu_available():
+    return torch.xpu.is_available()
 
 
 @functools.lru_cache
