@@ -95,7 +95,6 @@ class App:
         deepl_params = translation_params["deepl"]
         nllb_params = translation_params["nllb"]
         uvr_params = self.default_params["bgm_separation"]
-        whisper_params = self.default_params["whisper"]
 
         with self.app:
             lang = gr.Radio(choices=list(self.i18n.keys()),
