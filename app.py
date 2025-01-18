@@ -95,6 +95,7 @@ class App:
         deepl_params = translation_params["deepl"]
         nllb_params = translation_params["nllb"]
         uvr_params = self.default_params["bgm_separation"]
+        whisper_params = self.default_params["whisper"]
 
         with self.app:
             lang = gr.Radio(choices=list(self.i18n.keys()),
@@ -114,7 +115,10 @@ class App:
                                                               " Leave this field empty if you do not wish to use a local path.",
                                                          visible=self.args.colab,
                                                          value="")
-
+                            cb_include_subdirectory = gr.Checkbox(label="Include Subdirectory Files",
+                                                                  info="When using Input Folder Path above, whether to include all files in the subdirectory or not",
+                                                                  visible=self.args.colab,
+                                                                  value=False)
                         pipeline_params, dd_file_format, cb_timestamp = self.create_pipeline_inputs()
 
                         with gr.Row():
@@ -124,7 +128,7 @@ class App:
                             files_subtitles = gr.Files(label=_("Downloadable output file"), scale=3, interactive=False)
                             btn_openfolder = gr.Button('📂', scale=1)
 
-                        params = [input_file, tb_input_folder, dd_file_format, cb_timestamp]
+                        params = [input_file, tb_input_folder, cb_include_subdirectory, dd_file_format, cb_timestamp]
                         btn_run.click(fn=self.whisper_inf.transcribe_file,
                                       inputs=params + pipeline_params,
                                       outputs=[tb_indicator, files_subtitles])
