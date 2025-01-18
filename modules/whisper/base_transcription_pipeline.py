@@ -11,6 +11,8 @@ from faster_whisper.vad import VadOptions
 import gc
 from copy import deepcopy
 
+import time
+
 from modules.uvr.music_separator import MusicSeparator
 from modules.utils.paths import (WHISPER_MODELS_DIR, DIARIZATION_MODELS_DIR, OUTPUT_DIR, DEFAULT_PARAMETERS_CONFIG_PATH,
                                  UVR_MODELS_DIR)
@@ -109,6 +111,9 @@ class BaseTranscriptionPipeline(ABC):
         elapsed_time: float
             elapsed time for running
         """
+
+        start_time = time.time()
+
         if not validate_audio(audio):
             logger.info(f"The audio file {audio} is not able to open or corrupted. Please check the file.")
             return [Segment()], 0
@@ -141,6 +146,7 @@ class BaseTranscriptionPipeline(ABC):
         origin_audio = deepcopy(audio)
 
         if vad_params.vad_filter:
+            progress(0, desc="removing silent parts from audio..")
             vad_options = VadOptions(
                 threshold=vad_params.threshold,
                 min_speech_duration_ms=vad_params.min_speech_duration_ms,
@@ -177,6 +183,7 @@ class BaseTranscriptionPipeline(ABC):
                 logger.info("VAD detected no speech segments in the audio.")
 
         if diarization_params.is_diarize:
+            progress(0.99, desc="detecting speakers..")
             result, elapsed_time_diarization = self.diarizer.run(
                 audio=origin_audio,
                 use_auth_token=diarization_params.hf_token,
@@ -190,6 +197,9 @@ class BaseTranscriptionPipeline(ABC):
             file_format=file_format,
             add_timestamp=add_timestamp
         )
+
+        progress(1.0, desc="finished")
+        elapsed_time = time.time() - start_time
         return result, elapsed_time
 
     def transcribe_file(self,
