@@ -130,7 +130,8 @@ class App:
                         params = [input_file, tb_input_folder, cb_include_subdirectory, dd_file_format, cb_timestamp]
                         btn_run.click(fn=self.whisper_inf.transcribe_file,
                                       inputs=params + pipeline_params,
-                                      outputs=[tb_indicator, files_subtitles])
+                                      outputs=[tb_indicator, files_subtitles],
+                                      trigger_mode="multiple")
                         btn_openfolder.click(fn=lambda: self.open_folder("outputs"), inputs=None, outputs=None)
 
                     with gr.TabItem(_("Youtube")):  # tab2
@@ -158,7 +159,8 @@ class App:
                                       inputs=params + pipeline_params,
                                       outputs=[tb_indicator, files_subtitles])
                         tb_youtubelink.change(get_ytmetas, inputs=[tb_youtubelink],
-                                              outputs=[img_thumbnail, tb_title, tb_description])
+                                              outputs=[img_thumbnail, tb_title, tb_description],
+                                              trigger_mode="multiple")
                         btn_openfolder.click(fn=lambda: self.open_folder("outputs"), inputs=None, outputs=None)
 
                     with gr.TabItem(_("Mic")):  # tab3
@@ -178,7 +180,8 @@ class App:
 
                         btn_run.click(fn=self.whisper_inf.transcribe_mic,
                                       inputs=params + pipeline_params,
-                                      outputs=[tb_indicator, files_subtitles])
+                                      outputs=[tb_indicator, files_subtitles],
+                                      trigger_mode="multiple")
                         btn_openfolder.click(fn=lambda: self.open_folder("outputs"), inputs=None, outputs=None)
 
                     with gr.TabItem(_("T2T Translation")):  # tab 4
@@ -213,7 +216,8 @@ class App:
                         btn_run.click(fn=self.deepl_api.translate_deepl,
                                       inputs=[tb_api_key, file_subs, dd_source_lang, dd_target_lang,
                                               cb_is_pro, cb_timestamp],
-                                      outputs=[tb_indicator, files_subtitles])
+                                      outputs=[tb_indicator, files_subtitles],
+                                      trigger_mode="multiple")
 
                         btn_openfolder.click(
                             fn=lambda: self.open_folder(os.path.join(self.args.output_dir, "translations")),
@@ -249,7 +253,8 @@ class App:
                         btn_run.click(fn=self.nllb_inf.translate_file,
                                       inputs=[file_subs, dd_model_size, dd_source_lang, dd_target_lang,
                                               nb_max_length, cb_timestamp],
-                                      outputs=[tb_indicator, files_subtitles])
+                                      outputs=[tb_indicator, files_subtitles],
+                                      trigger_mode="multiple")
 
                         btn_openfolder.click(
                             fn=lambda: self.open_folder(os.path.join(self.args.output_dir, "translations")),
@@ -278,7 +283,8 @@ class App:
                         btn_run.click(fn=self.whisper_inf.music_separator.separate_files,
                                       inputs=[files_audio, dd_uvr_model_size, dd_uvr_device, nb_uvr_segment_size,
                                               cb_uvr_save_file],
-                                      outputs=[ad_instrumental, ad_vocals])
+                                      outputs=[ad_instrumental, ad_vocals],
+                                      trigger_mode="multiple")
                         btn_open_instrumental_folder.click(inputs=None,
                                                            outputs=None,
                                                            fn=lambda: self.open_folder(os.path.join(
@@ -293,7 +299,9 @@ class App:
         # Launch the app with optional gradio settings
         args = self.args
         self.app.queue(
-            api_open=args.api_open
+            api_open=args.api_open,
+            default_concurrency_limit=args.default_concurrency_limit,
+            max_size=args.max_size
         ).launch(
             share=args.share,
             server_name=args.server_name,
@@ -328,6 +336,9 @@ parser.add_argument('--root_path', type=str, default=None, help='Gradio root pat
 parser.add_argument('--username', type=str, default=None, help='Gradio authentication username')
 parser.add_argument('--password', type=str, default=None, help='Gradio authentication password')
 parser.add_argument('--theme', type=str, default=None, help='Gradio Blocks theme')
+parser.add_argument('--default_concurrency_limit', type=int, default=None, help='Default concurrency limit of the '
+                                                                                'queue in the gradio app')
+parser.add_argument('--max_size', type=int, default=None, help='Max size of the queue in the gradio app')
 parser.add_argument('--colab', type=str2bool, default=False, nargs='?', const=True, help='Is colab user or not')
 parser.add_argument('--api_open', type=str2bool, default=False, nargs='?', const=True,
                     help='Enable api or not in Gradio')
