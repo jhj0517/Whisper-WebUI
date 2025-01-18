@@ -59,6 +59,7 @@ def test_transcribe(
     subtitle_str, file_paths = whisper_inferencer.transcribe_file(
         [audio_path],
         None,
+        None,
         "SRT",
         False,
         gr.Progress(),
