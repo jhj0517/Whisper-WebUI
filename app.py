@@ -115,11 +115,12 @@ class App:
                                                          visible=self.args.colab,
                                                          value="")
                             cb_include_subdirectory = gr.Checkbox(label="Include Subdirectory Files",
-                                                                  info="When using Input Folder Path above, whether to include all files in the subdirectory or not",
+                                                                  info="When using Input Folder Path above, whether to include all files in the subdirectory or not.",
                                                                   visible=self.args.colab,
                                                                   value=False)
                             cb_save_same_dir = gr.Checkbox(label="Save outputs at same directory",
-                                                           info="When using Input Folder Path above, whether to save output in the same directory as inputs or not.",
+                                                           info="When using Input Folder Path above, whether to save output in the same directory as inputs or not, instead of original"
+                                                                " output directory.",
                                                            visible=self.args.colab,
                                                            value=True)
                         pipeline_params, dd_file_format, cb_timestamp = self.create_pipeline_inputs()
