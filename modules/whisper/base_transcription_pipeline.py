@@ -169,6 +169,8 @@ class BaseTranscriptionPipeline(ABC):
             progress,
             *whisper_params.to_list()
         )
+        if whisper_params.enable_offload:
+            self.offload()
 
         if vad_params.vad_filter:
             restored_result = self.vad.restore_speech_timestamps(
@@ -188,6 +190,8 @@ class BaseTranscriptionPipeline(ABC):
                 transcribed_result=result,
                 device=diarization_params.diarization_device
             )
+            if diarization_params.enable_offload:
+                self.diarizer.offload()
 
         self.cache_parameters(
             params=params,
