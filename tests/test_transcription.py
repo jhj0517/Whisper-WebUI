@@ -60,6 +60,7 @@ def test_transcribe(
         [audio_path],
         None,
         None,
+        None,
         "SRT",
         False,
         gr.Progress(),
