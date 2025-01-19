@@ -118,6 +118,10 @@ class App:
                                                                   info="When using Input Folder Path above, whether to include all files in the subdirectory or not",
                                                                   visible=self.args.colab,
                                                                   value=False)
+                            cb_save_same_dir = gr.Checkbox(label="Save outputs at same directory",
+                                                           info="When using Input Folder Path above, whether to save output in the same directory as inputs or not.",
+                                                           visible=self.args.colab,
+                                                           value=True)
                         pipeline_params, dd_file_format, cb_timestamp = self.create_pipeline_inputs()
 
                         with gr.Row():
@@ -127,9 +131,11 @@ class App:
                             files_subtitles = gr.Files(label=_("Downloadable output file"), scale=3, interactive=False)
                             btn_openfolder = gr.Button('📂', scale=1)
 
-                        params = [input_file, tb_input_folder, cb_include_subdirectory, dd_file_format, cb_timestamp]
+                        params = [input_file, tb_input_folder, cb_include_subdirectory, cb_save_same_dir,
+                                  dd_file_format, cb_timestamp]
+                        params = params + pipeline_params
                         btn_run.click(fn=self.whisper_inf.transcribe_file,
-                                      inputs=params + pipeline_params,
+                                      inputs=params,
                                       outputs=[tb_indicator, files_subtitles])
                         btn_openfolder.click(fn=lambda: self.open_folder("outputs"), inputs=None, outputs=None)
 
