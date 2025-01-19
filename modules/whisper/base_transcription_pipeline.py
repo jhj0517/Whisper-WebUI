@@ -185,6 +185,7 @@ class BaseTranscriptionPipeline(ABC):
                         files: Optional[List] = None,
                         input_folder_path: Optional[str] = None,
                         include_subdirectory: Optional[str] = None,
+                        save_same_dir: Optional[str] = None,
                         file_format: str = "SRT",
                         add_timestamp: bool = True,
                         progress=gr.Progress(),
@@ -201,7 +202,11 @@ class BaseTranscriptionPipeline(ABC):
             Input folder path to transcribe from gr.Textbox(). If this is provided, `files` will be ignored and
             this will be used instead.
         include_subdirectory: Optional[str]
-            When using Input Folder Path above, whether to include all files in the subdirectory or not
+            When using `input_folder_path`, whether to include all files in the subdirectory or not
+        save_same_dir: Optional[str]
+            When using `input_folder_path`, whether to save output in the same directory as input or not.
+            This feature is only available when using `input_folder_path`, because gradio only allows to use
+            cached file path in the function yet.
         file_format: str
             Subtitle File format to write from gr.Dropdown(). Supported format: [SRT, WebVTT, txt]
         add_timestamp: bool
