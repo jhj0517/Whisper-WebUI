@@ -119,7 +119,7 @@ class App:
                                                                   visible=self.args.colab,
                                                                   value=False)
                             cb_save_same_dir = gr.Checkbox(label="Save outputs at same directory",
-                                                           info="When using Input Folder Path above, whether to save output in the same directory as inputs or not, instead of original"
+                                                           info="When using Input Folder Path above, whether to save output in the same directory as inputs or not, in addition to the original"
                                                                 " output directory.",
                                                            visible=self.args.colab,
                                                            value=True)
