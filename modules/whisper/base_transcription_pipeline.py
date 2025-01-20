@@ -179,7 +179,7 @@ class BaseTranscriptionPipeline(ABC):
         if diarization_params.is_diarize:
             result, elapsed_time_diarization = self.diarizer.run(
                 audio=origin_audio,
-                use_auth_token=diarization_params.hf_token,
+                use_auth_token=diarization_params.hf_token if diarization_params.hf_token else os.environ.get("HF_TOKEN"),
                 transcribed_result=result,
                 device=diarization_params.diarization_device
             )
