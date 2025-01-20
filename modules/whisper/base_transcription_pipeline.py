@@ -204,9 +204,9 @@ class BaseTranscriptionPipeline(ABC):
         include_subdirectory: Optional[str]
             When using `input_folder_path`, whether to include all files in the subdirectory or not
         save_same_dir: Optional[str]
-            When using `input_folder_path`, whether to save output in the same directory as inputs or not.
-            This feature is only available when using `input_folder_path`, because gradio only allows to use
-            cached file path in the function yet.
+            When using `input_folder_path`, whether to save output in the same directory as inputs or not, in addition
+            to the original output directory. This feature is only available when using `input_folder_path`, because
+            gradio only allows to use cached file path in the function yet.
         file_format: str
             Subtitle File format to write from gr.Dropdown(). Supported format: [SRT, WebVTT, txt]
         add_timestamp: bool
