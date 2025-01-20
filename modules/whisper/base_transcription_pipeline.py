@@ -249,10 +249,17 @@ class BaseTranscriptionPipeline(ABC):
                 file_name, file_ext = os.path.splitext(os.path.basename(file))
                 if save_same_dir and input_folder_path:
                     output_dir = os.path.dirname(file)
-                else:
-                    output_dir = self.output_dir
+                    subtitle, file_path = generate_file(
+                        output_dir=output_dir,
+                        output_file_name=file_name,
+                        output_format=file_format,
+                        result=transcribed_segments,
+                        add_timestamp=add_timestamp,
+                        **writer_options
+                    )
+
                 subtitle, file_path = generate_file(
-                    output_dir=output_dir,
+                    output_dir=self.output_dir,
                     output_file_name=file_name,
                     output_format=file_format,
                     result=transcribed_segments,
