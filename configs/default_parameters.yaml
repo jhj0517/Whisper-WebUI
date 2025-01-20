@@ -30,7 +30,7 @@ whisper:
   hotwords: null
   language_detection_threshold: 0.5
   language_detection_segments: 1
-  add_timestamp: true
+  add_timestamp: false
 
 vad:
   vad_filter: false
@@ -62,4 +62,4 @@ translation:
     source_lang: null
     target_lang: null
     max_length: 200
-  add_timestamp: true
+  add_timestamp: false
