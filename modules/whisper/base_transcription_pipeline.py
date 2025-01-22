@@ -15,12 +15,16 @@ from modules.uvr.music_separator import MusicSeparator
 from modules.utils.paths import (WHISPER_MODELS_DIR, DIARIZATION_MODELS_DIR, OUTPUT_DIR, DEFAULT_PARAMETERS_CONFIG_PATH,
                                  UVR_MODELS_DIR)
 from modules.utils.constants import *
+from modules.utils.logger import get_logger
 from modules.utils.subtitle_manager import *
 from modules.utils.youtube_manager import get_ytdata, get_ytaudio
 from modules.utils.files_manager import get_media_files, format_gradio_files, load_yaml, save_yaml, read_file
 from modules.whisper.data_classes import *
 from modules.diarize.diarizer import Diarizer
 from modules.vad.silero_vad import SileroVAD
+
+
+logger = get_logger()
 
 
 class BaseTranscriptionPipeline(ABC):
@@ -158,12 +162,14 @@ class BaseTranscriptionPipeline(ABC):
         )
 
         if vad_params.vad_filter:
-            result = self.vad.restore_speech_timestamps(
+            restored_result = self.vad.restore_speech_timestamps(
                 segments=result,
                 speech_chunks=speech_chunks,
             )
-            if not result:
-                raise ValueError("VAD detected no speech segments in the audio.")
+            if restored_result:
+                result = restored_result
+            else:
+                logger.info("VAD detected no speech segments in the audio.")
 
         if diarization_params.is_diarize:
             result, elapsed_time_diarization = self.diarizer.run(
