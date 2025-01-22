@@ -15,7 +15,7 @@ from modules.uvr.music_separator import MusicSeparator
 from modules.utils.paths import (WHISPER_MODELS_DIR, DIARIZATION_MODELS_DIR, OUTPUT_DIR, DEFAULT_PARAMETERS_CONFIG_PATH,
                                  UVR_MODELS_DIR)
 from modules.utils.constants import *
-from modules.utils.logger import get_gradio_logger
+from modules.utils.logger import get_logger
 from modules.utils.subtitle_manager import *
 from modules.utils.youtube_manager import get_ytdata, get_ytaudio
 from modules.utils.files_manager import get_media_files, format_gradio_files, load_yaml, save_yaml, read_file
@@ -24,7 +24,7 @@ from modules.diarize.diarizer import Diarizer
 from modules.vad.silero_vad import SileroVAD
 
 
-logger = get_gradio_logger()
+logger = get_logger()
 
 
 class BaseTranscriptionPipeline(ABC):
