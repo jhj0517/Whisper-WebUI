@@ -15,7 +15,8 @@ from .files_manager import read_file
 def format_timestamp(
     seconds: float, always_include_hours: bool = True, decimal_marker: str = ","
 ) -> str:
-    assert seconds >= 0, "non-negative timestamp expected"
+    assert seconds is not None and seconds >= 0, "Wrong timestamp provided"
+
     milliseconds = round(seconds * 1000.0)
 
     hours = milliseconds // 3_600_000
@@ -232,6 +233,9 @@ class SubtitlesWriter(ResultWriter):
                     yield subtitle_start, subtitle_end, subtitle_text
         else:
             for segment in result["segments"]:
+                if segment["text"] is None:
+                    continue
+
                 segment_start = self.format_timestamp(segment["start"])
                 segment_end = self.format_timestamp(segment["end"])
                 segment_text = segment["text"].strip().replace("-->", "->")

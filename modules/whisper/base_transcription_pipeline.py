@@ -19,6 +19,7 @@ from modules.utils.logger import get_logger
 from modules.utils.subtitle_manager import *
 from modules.utils.youtube_manager import get_ytdata, get_ytaudio
 from modules.utils.files_manager import get_media_files, format_gradio_files, load_yaml, save_yaml, read_file
+from modules.utils.audio_manager import validate_audio
 from modules.whisper.data_classes import *
 from modules.diarize.diarizer import Diarizer
 from modules.vad.silero_vad import SileroVAD
@@ -108,6 +109,10 @@ class BaseTranscriptionPipeline(ABC):
         elapsed_time: float
             elapsed time for running
         """
+        if not validate_audio(audio):
+            logger.info(f"The audio file {audio} is not able to open or corrupted. Please check the file.")
+            return [Segment()], -1
+
         params = TranscriptionPipelineParams.from_list(list(pipeline_params))
         params = self.validate_gradio_values(params)
         bgm_params, vad_params, whisper_params, diarization_params = params.bgm_separation, params.vad, params.whisper, params.diarization
