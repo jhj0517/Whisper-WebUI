@@ -444,13 +444,14 @@ def generate_file(
 
 def safe_filename(name):
     INVALID_FILENAME_CHARS = r'[<>:"/\\|?*\x00-\x1f]'
+    MAX_FILENAME_LENGTH = 200
     safe_name = re.sub(INVALID_FILENAME_CHARS, '_', name)
-    # Truncate the filename if it exceeds the max_length (20)
-    if len(safe_name) > 20:
+    # Truncate the filename if it exceeds the max_length (MAX_FILENAME_LENGTH)
+    if len(safe_name) > MAX_FILENAME_LENGTH:
         file_extension = safe_name.split('.')[-1]
-        if len(file_extension) + 1 < 20:
-            truncated_name = safe_name[:20 - len(file_extension) - 1]
+        if len(file_extension) + 1 < MAX_FILENAME_LENGTH:
+            truncated_name = safe_name[:MAX_FILENAME_LENGTH - len(file_extension) - 1]
             safe_name = truncated_name + '.' + file_extension
         else:
-            safe_name = safe_name[:20]
+            safe_name = safe_name[:MAX_FILENAME_LENGTH]
     return safe_name
