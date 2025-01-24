@@ -111,7 +111,6 @@ class BaseTranscriptionPipeline(ABC):
         elapsed_time: float
             elapsed time for running
         """
-
         start_time = time.time()
 
         if not validate_audio(audio):
@@ -142,11 +141,12 @@ class BaseTranscriptionPipeline(ABC):
 
             if bgm_params.enable_offload:
                 self.music_separator.offload()
+            elapsed_time_bgm_sep = time.time() - start_time
 
         origin_audio = deepcopy(audio)
 
         if vad_params.vad_filter:
-            progress(0, desc="removing silent parts from audio..")
+            progress(0, desc="Filtering silent parts from audio..")
             vad_options = VadOptions(
                 threshold=vad_params.threshold,
                 min_speech_duration_ms=vad_params.min_speech_duration_ms,
@@ -166,7 +166,7 @@ class BaseTranscriptionPipeline(ABC):
             else:
                 vad_params.vad_filter = False
 
-        result, elapsed_time = self.transcribe(
+        result, elapsed_time_transcription = self.transcribe(
             audio,
             progress,
             *whisper_params.to_list()
@@ -183,14 +183,13 @@ class BaseTranscriptionPipeline(ABC):
                 logger.info("VAD detected no speech segments in the audio.")
 
         if diarization_params.is_diarize:
-            progress(0.99, desc="detecting speakers..")
+            progress(0.99, desc="Diarizing speakers..")
             result, elapsed_time_diarization = self.diarizer.run(
                 audio=origin_audio,
                 use_auth_token=diarization_params.hf_token,
                 transcribed_result=result,
                 device=diarization_params.diarization_device
             )
-            elapsed_time += elapsed_time_diarization
 
         self.cache_parameters(
             params=params,
@@ -198,9 +197,9 @@ class BaseTranscriptionPipeline(ABC):
             add_timestamp=add_timestamp
         )
 
-        progress(1.0, desc="finished")
-        elapsed_time = time.time() - start_time
-        return result, elapsed_time
+        progress(1.0, desc="Finished.")
+        total_elapsed_time = time.time() - start_time
+        return result, total_elapsed_time
 
     def transcribe_file(self,
                         files: Optional[List] = None,
