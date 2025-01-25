@@ -134,6 +134,12 @@ class SubtitlesWriter(ResultWriter):
         align_lrc_words: bool = False,
         max_words_per_line: Optional[int] = None,
     ):
+        if not isinstance(result, dict):
+            return
+        if "segments" not in result or not isinstance(result["segments"], list):
+            return
+        if len(result["segments"]) == 0:
+            return
         options = options or {}
         max_line_width = max_line_width or options.get("max_line_width")
         max_line_count = max_line_count or options.get("max_line_count")
