@@ -113,7 +113,6 @@ class BaseTranscriptionPipeline(ABC):
         start_time = time.time()
 
         if not validate_audio(audio):
-            logger.info(f"The audio file {audio} is not able to open or corrupted. Please check the file.")
             return [Segment()], 0
 
         params = TranscriptionPipelineParams.from_list(list(pipeline_params))
