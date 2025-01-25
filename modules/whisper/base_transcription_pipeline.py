@@ -195,6 +195,10 @@ class BaseTranscriptionPipeline(ABC):
             add_timestamp=add_timestamp
         )
 
+        if not result:
+            logger.info(f"Whisper did not detected any speech segments in the audio.")
+            result = [Segment()]
+
         progress(1.0, desc="Finished.")
         total_elapsed_time = time.time() - start_time
         return result, total_elapsed_time
