@@ -11,6 +11,8 @@ from faster_whisper.vad import VadOptions
 import gc
 from copy import deepcopy
 import time
+import shutil
+import tempfile
 
 from modules.uvr.music_separator import MusicSeparator
 from modules.utils.paths import (WHISPER_MODELS_DIR, DIARIZATION_MODELS_DIR, OUTPUT_DIR, DEFAULT_PARAMETERS_CONFIG_PATH,
@@ -258,37 +260,47 @@ class BaseTranscriptionPipeline(ABC):
             if files and isinstance(files[0], gr.utils.NamedString):
                 files = [file.name for file in files]
 
-            files_info = {}
-            for file in files:
-                transcribed_segments, time_for_task = self.run(
-                    file,
-                    progress,
-                    file_format,
-                    add_timestamp,
-                    *pipeline_params,
-                )
 
-                file_name, file_ext = os.path.splitext(os.path.basename(file))
-                if save_same_dir and input_folder_path:
-                    output_dir = os.path.dirname(file)
+            progress(0, desc="getting input files")
+            files_info = {}
+            with tempfile.TemporaryDirectory(dir=".", prefix="_tmp_input") as tmp_folder:
+                tmp_files = []
+                for f in files:
+                    if "PYTEST_CURRENT_TEST" in os.environ:
+                        # during tests we do not want to move/delete our input files
+                        tmp_files.append(shutil.copy(f, tmp_folder))
+                    else:
+                        tmp_files.append(shutil.move(f, tmp_folder))
+                for file in tmp_files:
+                    transcribed_segments, time_for_task = self.run(
+                        file,
+                        progress,
+                        file_format,
+                        add_timestamp,
+                        *pipeline_params,
+                    )
+
+                    file_name, file_ext = os.path.splitext(os.path.basename(file))
+                    if save_same_dir and input_folder_path:
+                        output_dir = os.path.dirname(file)
+                        subtitle, file_path = generate_file(
+                            output_dir=output_dir,
+                            output_file_name=file_name,
+                            output_format=file_format,
+                            result=transcribed_segments,
+                            add_timestamp=add_timestamp,
+                            **writer_options
+                        )
+
                     subtitle, file_path = generate_file(
-                        output_dir=output_dir,
+                        output_dir=self.output_dir,
                         output_file_name=file_name,
                         output_format=file_format,
                         result=transcribed_segments,
                         add_timestamp=add_timestamp,
                         **writer_options
                     )
-
-                subtitle, file_path = generate_file(
-                    output_dir=self.output_dir,
-                    output_file_name=file_name,
-                    output_format=file_format,
-                    result=transcribed_segments,
-                    add_timestamp=add_timestamp,
-                    **writer_options
-                )
-                files_info[file_name] = {"subtitle": read_file(file_path), "time_for_task": time_for_task, "path": file_path}
+                    files_info[file_name] = {"subtitle": read_file(file_path), "time_for_task": time_for_task, "path": file_path}
 
             total_result = ''
             total_time = 0

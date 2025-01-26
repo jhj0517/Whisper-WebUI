@@ -137,7 +137,8 @@ class App:
                         params = params + pipeline_params
                         btn_run.click(fn=self.whisper_inf.transcribe_file,
                                       inputs=params,
-                                      outputs=[tb_indicator, files_subtitles])
+                                      outputs=[tb_indicator, files_subtitles]).then(
+                            fn=lambda value: gr.update(value=None), inputs=input_file, outputs=input_file)
                         btn_openfolder.click(fn=lambda: self.open_folder("outputs"), inputs=None, outputs=None)
 
                     with gr.TabItem(_("Youtube")):  # tab2
