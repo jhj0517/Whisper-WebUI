@@ -65,7 +65,7 @@ ko: # Korean
   Enabling this will remove background music: 받아쓰기 이전에 먼저 배경 음악 제거용 서브 모델을 활성화 합니다.
   Enable Background Music Remover Filter: 배경 음악 제거 필터 활성화
   Save separated files to output: 분리된 배경 음악 & 음성 파일 따로 출력 폴더에 저장
-  Offload sub model when finished: 완료되면 하위 모델 언로드. (VRAM 이 부족할 시 체크하세요.)
+  Offload sub model when finished: 완료 후 모델 오프로드. (VRAM 이 부족할 시 체크하세요.)
   Voice Detection Filter: 목소리 감지 필터
   Enable this to transcribe only detected voice: 서브 모델에 의해 목소리라고 판단된 부분만 받아쓰기를 진행합니다.
   Enable Silero VAD Filter: Silero VAD 필터 활성화 
