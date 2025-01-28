@@ -3,6 +3,8 @@ whisper:
   model_size: large-v2
   # Compute type. 'float16' for CUDA, 'float32' for CPU.
   compute_type: float16
+  # Whether to offload the model after the inference.
+  enable_offload: true
 
 bgm_separation:
   # UVR model sizes between ["UVR-MDX-NET-Inst_HQ_4", "UVR-MDX-NET-Inst_3"]
