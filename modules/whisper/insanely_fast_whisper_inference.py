@@ -157,7 +157,7 @@ class InsanelyFastWhisperInference(BaseTranscriptionPipeline):
         default_models = openai_models + distil_models
 
         existing_models = os.listdir(self.model_dir)
-        wrong_dirs = [".locks"]
+        wrong_dirs = [".locks", "insanely_fast_whisper_models_will_be_saved_here"]
 
         available_models = default_models + existing_models
         available_models = [model for model in available_models if model not in wrong_dirs]
