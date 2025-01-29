@@ -170,7 +170,7 @@ class FasterWhisperInference(BaseTranscriptionPipeline):
         faster_whisper_prefix = "models--Systran--faster-whisper-"
 
         existing_models = os.listdir(self.model_dir)
-        wrong_dirs = [".locks"]
+        wrong_dirs = [".locks", "faster_whisper_models_will_be_saved_here"]
         existing_models = list(set(existing_models) - set(wrong_dirs))
 
         for model_name in existing_models:
