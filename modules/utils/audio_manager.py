@@ -15,23 +15,13 @@ def validate_audio(audio: Optional[str] = None):
     if isinstance(audio, np.ndarray):
         return True
 
-    if is_video(audio):
-        try:
-            audio = decode_audio(audio)
-            return True
-        except Exception as e:
-            logger.info(f"The file {audio} is not able to open or corrupted. Please check the file. {e}")
-            return False
-
     if not os.path.exists(audio):
+        logger.info(f"The file {audio} does not exist. Please check the path.")
         return False
 
     try:
-        with sf.SoundFile(audio) as f:
-            if f.frames > 0:
-                return True
-            else:
-                return False
+        audio = decode_audio(audio)
+        return True
     except Exception as e:
         logger.info(f"The file {audio} is not able to open or corrupted. Please check the file. {e}")
         return False
