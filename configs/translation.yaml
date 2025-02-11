@@ -19,7 +19,7 @@ en: # English
   Enabling this will remove background music: Enabling this will remove background music by submodel before transcribing
   Enable Background Music Remover Filter: Enable Background Music Remover Filter
   Save separated files to output: Save separated files to output
-  Offload sub model when finished: Offload sub model when finished
+  Offload sub model when finished: Offload model when finished
   Voice Detection Filter: Voice Detection Filter
   Enable this to transcribe only detected voice: Enable this to transcribe only detected voice parts by submodel.
   Enable Silero VAD Filter: Enable Silero VAD Filter
@@ -111,7 +111,7 @@ ja: # Japanese
   Enabling this will remove background music: Enabling this will remove background music by submodel before transcribing
   Enable Background Music Remover Filter: Enable Background Music Remover Filter
   Save separated files to output: Save separated files to output
-  Offload sub model when finished: Offload sub model when finished
+  Offload sub model when finished: Offload model when finished
   Voice Detection Filter: Voice Detection Filter
   Enable this to transcribe only detected voice: Enable this to transcribe only detected voice parts by submodel.
   Enable Silero VAD Filter: Enable Silero VAD Filter
@@ -157,7 +157,7 @@ es: # Spanish
   Enabling this will remove background music: Enabling this will remove background music by submodel before transcribing
   Enable Background Music Remover Filter: Enable Background Music Remover Filter
   Save separated files to output: Save separated files to output
-  Offload sub model when finished: Offload sub model when finished
+  Offload sub model when finished: Offload model when finished
   Voice Detection Filter: Voice Detection Filter
   Enable this to transcribe only detected voice: Enable this to transcribe only detected voice parts by submodel.
   Enable Silero VAD Filter: Enable Silero VAD Filter
