@@ -4,7 +4,7 @@ import ctranslate2
 import gradio as gr
 import torchaudio
 from abc import ABC, abstractmethod
-from typing import BinaryIO, Union, Tuple, List
+from typing import BinaryIO, Union, Tuple, List, Callable
 import numpy as np
 from datetime import datetime
 from faster_whisper.vad import VadOptions
@@ -80,6 +80,7 @@ class BaseTranscriptionPipeline(ABC):
             progress: gr.Progress = gr.Progress(),
             file_format: str = "SRT",
             add_timestamp: bool = True,
+            progress_callback: Optional[Callable] = None,
             *pipeline_params,
             ) -> Tuple[List[Segment], float]:
         """
@@ -98,6 +99,9 @@ class BaseTranscriptionPipeline(ABC):
             Subtitle file format between ["SRT", "WebVTT", "txt", "lrc"]
         add_timestamp: bool
             Whether to add a timestamp at the end of the filename.
+        progress_callback: Optional[Callable]
+            callback function to show progress. Can be used to update progress in the backend.
+
         *pipeline_params: tuple
             Parameters for the transcription pipeline. This will be dealt with "TranscriptionPipelineParams" data class.
             This must be provided as a List with * wildcard because of the integration with gradio.
