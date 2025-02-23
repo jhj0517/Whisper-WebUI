@@ -66,6 +66,10 @@ class TaskStatusResponse(BaseModel):
         default=None,
         description="Duration of the task execution"
     )
+    progress: Optional[float] = Field(
+        default=0.0,
+        description="Progress of the task"
+    )
 
 
 class Task(SQLModel, table=True):
@@ -84,6 +88,7 @@ class Task(SQLModel, table=True):
     - error: Error message, if any, associated with the task.
     - created_at: Date and time of creation.
     - updated_at: Date and time of last update.
+    - progress: Progress of the task. If it is None, it means the progress tracking for the task is not started yet.
     """
 
     __tablename__ = "tasks"
@@ -154,6 +159,10 @@ class Task(SQLModel, table=True):
         default_factory=datetime.utcnow,
         sa_column_kwargs={"onupdate": datetime.utcnow},
         description="Date and time of last update"
+    )
+    progress: Optional[float] = Field(
+        default=0.0,
+        description="Progress of the task"
     )
 
     def to_response(self) -> "TaskStatusResponse":
