@@ -172,6 +172,7 @@ class BaseTranscriptionPipeline(ABC):
         result, elapsed_time_transcription = self.transcribe(
             audio,
             progress,
+            progress_callback,
             *whisper_params.to_list()
         )
         if whisper_params.enable_offload:
