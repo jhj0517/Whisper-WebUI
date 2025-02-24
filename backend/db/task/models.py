@@ -174,7 +174,8 @@ class Task(SQLModel, table=True):
             result=self.result,
             task_params=self.task_params,
             error=self.error,
-            duration=self.duration
+            duration=self.duration,
+            progress=self.progress
         )
 
 
