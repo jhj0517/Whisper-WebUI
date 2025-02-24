@@ -107,6 +107,7 @@ class FasterWhisperInference(BaseTranscriptionPipeline):
         for segment in segments:
             progress_n = segment.start / info.duration
             progress(progress_n, desc="Transcribing..")
+            progress_callback(progress_n)
             segments_result.append(Segment.from_faster_whisper(segment))
 
         elapsed_time = time.time() - start_time
