@@ -61,6 +61,7 @@ class BaseTranscriptionPipeline(ABC):
     def transcribe(self,
                    audio: Union[str, BinaryIO, np.ndarray],
                    progress: gr.Progress = gr.Progress(),
+                   progress_callback: Optional[Callable] = None,
                    *whisper_params,
                    ):
         """Inference whisper model to transcribe"""
