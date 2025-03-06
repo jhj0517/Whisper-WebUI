@@ -4,7 +4,7 @@ import ctranslate2
 import gradio as gr
 import torchaudio
 from abc import ABC, abstractmethod
-from typing import BinaryIO, Union, Tuple, List
+from typing import BinaryIO, Union, Tuple, List, Callable
 import numpy as np
 from datetime import datetime
 from faster_whisper.vad import VadOptions
@@ -61,6 +61,7 @@ class BaseTranscriptionPipeline(ABC):
     def transcribe(self,
                    audio: Union[str, BinaryIO, np.ndarray],
                    progress: gr.Progress = gr.Progress(),
+                   progress_callback: Optional[Callable] = None,
                    *whisper_params,
                    ):
         """Inference whisper model to transcribe"""
@@ -80,6 +81,7 @@ class BaseTranscriptionPipeline(ABC):
             progress: gr.Progress = gr.Progress(),
             file_format: str = "SRT",
             add_timestamp: bool = True,
+            progress_callback: Optional[Callable] = None,
             *pipeline_params,
             ) -> Tuple[List[Segment], float]:
         """
@@ -98,6 +100,9 @@ class BaseTranscriptionPipeline(ABC):
             Subtitle file format between ["SRT", "WebVTT", "txt", "lrc"]
         add_timestamp: bool
             Whether to add a timestamp at the end of the filename.
+        progress_callback: Optional[Callable]
+            callback function to show progress. Can be used to update progress in the backend.
+
         *pipeline_params: tuple
             Parameters for the transcription pipeline. This will be dealt with "TranscriptionPipelineParams" data class.
             This must be provided as a List with * wildcard because of the integration with gradio.
@@ -167,6 +172,7 @@ class BaseTranscriptionPipeline(ABC):
         result, elapsed_time_transcription = self.transcribe(
             audio,
             progress,
+            progress_callback,
             *whisper_params.to_list()
         )
         if whisper_params.enable_offload:
@@ -269,6 +275,7 @@ class BaseTranscriptionPipeline(ABC):
                     progress,
                     file_format,
                     add_timestamp,
+                    None,
                     *pipeline_params,
                 )
 
@@ -354,6 +361,7 @@ class BaseTranscriptionPipeline(ABC):
                 progress,
                 file_format,
                 add_timestamp,
+                None,
                 *pipeline_params,
             )
             progress(1, desc="Completed!")
@@ -420,6 +428,7 @@ class BaseTranscriptionPipeline(ABC):
                 progress,
                 file_format,
                 add_timestamp,
+                None,
                 *pipeline_params,
             )
 
