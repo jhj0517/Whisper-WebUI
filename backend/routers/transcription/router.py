@@ -33,7 +33,7 @@ def create_progress_callback(identifier: str):
             update_data={
                 "uuid": identifier,
                 "status": TaskStatus.IN_PROGRESS,
-                "progress": progress_value,
+                "progress": round(progress_value, 2),
                 "updated_at": datetime.utcnow()
             },
         )
