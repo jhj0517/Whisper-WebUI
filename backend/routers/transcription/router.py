@@ -85,7 +85,8 @@ def run_transcription(
             "status": TaskStatus.COMPLETED,
             "result": segments,
             "updated_at": datetime.utcnow(),
-            "duration": elapsed_time
+            "duration": elapsed_time,
+            "progress": 1.0,
         },
     )
     return segments
