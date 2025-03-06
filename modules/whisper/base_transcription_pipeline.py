@@ -275,6 +275,7 @@ class BaseTranscriptionPipeline(ABC):
                     progress,
                     file_format,
                     add_timestamp,
+                    None,
                     *pipeline_params,
                 )
 
@@ -360,6 +361,7 @@ class BaseTranscriptionPipeline(ABC):
                 progress,
                 file_format,
                 add_timestamp,
+                None,
                 *pipeline_params,
             )
             progress(1, desc="Completed!")
@@ -426,6 +428,7 @@ class BaseTranscriptionPipeline(ABC):
                 progress,
                 file_format,
                 add_timestamp,
+                None,
                 *pipeline_params,
             )
 
