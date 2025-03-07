@@ -1,11 +1,5 @@
 import os
 import torch
-
-try:
-    import intel_extension_for_pytorch as ipex
-except Exception:
-    pass
-
 from typing import List, Union, BinaryIO, Optional, Tuple
 import numpy as np
 import time
