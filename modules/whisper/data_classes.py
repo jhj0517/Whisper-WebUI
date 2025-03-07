@@ -7,7 +7,6 @@ from pydantic import BaseModel, Field, field_validator, ConfigDict
 from gradio_i18n import Translate, gettext as _
 from enum import Enum
 from copy import deepcopy
-
 import yaml
 
 from modules.utils.constants import *
@@ -156,7 +155,7 @@ class VadParams(BaseParams):
 class DiarizationParams(BaseParams):
     """Speaker diarization parameters"""
     is_diarize: bool = Field(default=False, description="Enable speaker diarization")
-    diarization_device: str = Field(default="xpu", description="Device to run Diarization model.")
+    diarization_device: str = Field(default="cuda", description="Device to run Diarization model.")
     hf_token: str = Field(
         default="",
         description="Hugging Face token for downloading diarization models"
@@ -178,7 +177,7 @@ class DiarizationParams(BaseParams):
             ),
             gr.Dropdown(
                 label=_("Device"),
-                choices=["cpu", "xpu"] if available_devices is None else available_devices,
+                choices=["cpu", "cuda", "xpu"] if available_devices is None else available_devices,
                 value=defaults.get("device", device),
             ),
             gr.Textbox(
@@ -200,7 +199,7 @@ class BGMSeparationParams(BaseParams):
         default="UVR-MDX-NET-Inst_HQ_4",
         description="UVR model size"
     )
-    uvr_device: str = Field(default="xpu", description="Device to run UVR model.")
+    uvr_device: str = Field(default="cuda", description="Device to run UVR model.")
     segment_size: int = Field(
         default=256,
         gt=0,
@@ -236,7 +235,7 @@ class BGMSeparationParams(BaseParams):
             ),
             gr.Dropdown(
                 label=_("Device"),
-                choices=["cpu", "xpu"] if available_devices is None else available_devices,
+                choices=["cpu", "cuda", "xpu"] if available_devices is None else available_devices,
                 value=defaults.get("device", device),
             ),
             gr.Number(
