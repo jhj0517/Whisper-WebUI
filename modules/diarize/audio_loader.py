@@ -6,15 +6,8 @@ from functools import lru_cache
 from typing import Optional, Union
 from scipy.io.wavfile import write
 import tempfile
-
 import numpy as np
 import torch
-
-try:
-    import intel_extension_for_pytorch as ipex
-except Exception:
-    pass
-
 import torch.nn.functional as F
 
 def exact_div(x, y):
