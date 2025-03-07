@@ -3,12 +3,6 @@ import time
 import numpy as np
 from typing import BinaryIO, Union, Tuple, List, Callable
 import torch
-
-try:
-    import intel_extension_for_pytorch as ipex
-except Exception:
-    pass
-
 from transformers import pipeline
 from transformers.utils import is_flash_attn_2_available
 import gradio as gr
