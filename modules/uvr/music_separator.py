@@ -158,8 +158,14 @@ class MusicSeparator:
 
     @staticmethod
     def get_device():
-        """Get device for the model"""
-        return "xpu" if torch.xpu.is_available() else "cpu"
+        if torch.cuda.is_available():
+            return "cuda"
+        if torch.xpu.is_available():
+            return "xpu"
+        elif torch.backends.mps.is_available():
+            return "mps"
+        else:
+            return "cpu"
 
     def offload(self):
         """Offload the model and free up the memory"""
