@@ -32,6 +32,11 @@ def is_xpu_available():
 
 
 @functools.lru_cache
+def is_cuda_available():
+    return torch.cuda.is_available()
+
+
+@functools.lru_cache
 def is_pytube_detected_bot(url: str = TEST_YOUTUBE_URL):
     try:
         yt_temp_path = os.path.join("modules", "yt_tmp.wav")
