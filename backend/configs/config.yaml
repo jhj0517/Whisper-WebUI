@@ -11,8 +11,8 @@ bgm_separation:
   model_size: UVR-MDX-NET-Inst_HQ_4
   # Whether to offload the model after the inference. Should be true if your setup has a VRAM less than <16GB
   enable_offload: true
-  # Device to load BGM separation model
-  device: xpu
+  # Device to load BGM separation model between ["cuda", "cpu", "xpu"]
+  device: cuda
 
 # Settings that apply to the `cache' directory. The output files for `/bgm-separation` are stored in the `cache' directory,
 # (You can check out the actual generated files by testing `/bgm-separation`.)
