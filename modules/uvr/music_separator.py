@@ -166,8 +166,13 @@ class MusicSeparator:
         if self.model is not None:
             del self.model
             self.model = None
+        if self.device == "cuda":
+            torch.cuda.empty_cache()
+            torch.cuda.reset_max_memory_allocated()
         if self.device == "xpu":
             torch.xpu.empty_cache()
+            torch.xpu.reset_accumulated_memory_stats()
+            torch.xpu.reset_peak_memory_stats()
         gc.collect()
         self.audio_info = None
 
