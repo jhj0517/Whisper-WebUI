@@ -316,8 +316,6 @@ class BaseTranscriptionPipeline(ABC):
 
         except Exception as e:
             raise RuntimeError(f"Error transcribing file: {e}") from e
-        finally:
-            self.release_xpu_memory()
 
     def transcribe_mic(self,
                        mic_audio: str,
@@ -380,8 +378,6 @@ class BaseTranscriptionPipeline(ABC):
             return result_str, file_path
         except Exception as e:
             raise RuntimeError(f"Error transcribing mic: {e}") from e
-        finally:
-            self.release_xpu_memory()
 
     def transcribe_youtube(self,
                            youtube_link: str,
@@ -453,8 +449,6 @@ class BaseTranscriptionPipeline(ABC):
 
         except Exception as e:
             raise RuntimeError(f"Error transcribing youtube: {e}") from e
-        finally:
-            self.release_xpu_memory()
 
     def get_compute_type(self):
         if "float16" in self.available_compute_types:
@@ -475,8 +469,13 @@ class BaseTranscriptionPipeline(ABC):
         if self.model is not None:
             del self.model
             self.model = None
+        if self.device == "cuda":
+            torch.cuda.empty_cache()
+            torch.cuda.reset_max_memory_allocated()
         if self.device == "xpu":
-            self.release_xpu_memory()
+            torch.xpu.empty_cache()
+            torch.xpu.reset_accumulated_memory_stats()
+            torch.xpu.reset_peak_memory_stats()
         gc.collect()
 
     @staticmethod
@@ -534,13 +533,6 @@ class BaseTranscriptionPipeline(ABC):
             return True
         except RuntimeError:
             return False
-
-    @staticmethod
-    def release_xpu_memory():
-        """Release memory"""
-        if torch.xpu.is_available():
-            torch.xpu.empty_cache()
-            torch.xpu.max_memory_allocated()
 
     @staticmethod
     def remove_input_files(file_paths: List[str]):
