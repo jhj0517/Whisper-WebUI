@@ -4,6 +4,12 @@ import torchaudio
 import soundfile as sf
 import os
 import torch
+
+try:
+    import intel_extension_for_pytorch as ipex
+except Exception:
+    pass
+
 import gc
 import gradio as gr
 from datetime import datetime

@@ -9,6 +9,12 @@ import tempfile
 
 import numpy as np
 import torch
+
+try:
+    import intel_extension_for_pytorch as ipex
+except Exception:
+    pass
+
 import torch.nn.functional as F
 
 def exact_div(x, y):

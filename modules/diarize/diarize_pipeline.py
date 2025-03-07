@@ -7,6 +7,12 @@ from pyannote.audio import Pipeline
 from typing import Optional, Union
 import torch
 
+try:
+    import intel_extension_for_pytorch as ipex
+except Exception:
+    pass
+
+
 from modules.whisper.data_classes import *
 from modules.utils.paths import DIARIZATION_MODELS_DIR
 from modules.diarize.audio_loader import load_audio, SAMPLE_RATE

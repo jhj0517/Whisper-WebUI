@@ -3,6 +3,12 @@ import time
 import huggingface_hub
 import numpy as np
 import torch
+
+try:
+    import intel_extension_for_pytorch as ipex
+except Exception:
+    pass
+
 from typing import BinaryIO, Union, Tuple, List
 import faster_whisper
 from faster_whisper.vad import VadOptions

@@ -3,7 +3,14 @@ import gradio as gr
 import time
 from typing import BinaryIO, Union, Tuple, List
 import numpy as np
+
 import torch
+
+try:
+    import intel_extension_for_pytorch as ipex
+except Exception:
+    pass
+
 import os
 from argparse import Namespace
 

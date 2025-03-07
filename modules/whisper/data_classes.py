@@ -1,6 +1,12 @@
 import faster_whisper.transcribe
 import gradio as gr
 import torch
+
+try:
+    import intel_extension_for_pytorch as ipex
+except Exception:
+    pass
+
 from typing import Optional, Dict, List, Union, NamedTuple
 from fastapi import Query
 from pydantic import BaseModel, Field, field_validator, ConfigDict

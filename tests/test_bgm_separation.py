@@ -7,6 +7,12 @@ from test_transcription import download_file, test_transcribe
 import gradio as gr
 import pytest
 import torch
+
+try:
+    import intel_extension_for_pytorch as ipex
+except Exception:
+    pass
+
 import os
 
 
