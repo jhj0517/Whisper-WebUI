@@ -1,11 +1,5 @@
 import os
 import torch
-
-try:
-    import intel_extension_for_pytorch as ipex
-except Exception:
-    pass
-
 import gradio as gr
 from abc import ABC, abstractmethod
 import gc
