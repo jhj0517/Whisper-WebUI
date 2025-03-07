@@ -1,16 +1,9 @@
 import functools
 import jiwer
 import os
-
 import pytest
 import requests
 import torch
-
-try:
-    import intel_extension_for_pytorch as ipex
-except Exception:
-    pass
-
 
 from modules.utils.paths import *
 from modules.utils.youtube_manager import *
