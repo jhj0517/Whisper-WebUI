@@ -7,7 +7,6 @@ from pydantic import BaseModel, Field, field_validator, ConfigDict
 from gradio_i18n import Translate, gettext as _
 from enum import Enum
 from copy import deepcopy
-
 import yaml
 
 from modules.utils.constants import *
@@ -178,7 +177,7 @@ class DiarizationParams(BaseParams):
             ),
             gr.Dropdown(
                 label=_("Device"),
-                choices=["cpu", "cuda"] if available_devices is None else available_devices,
+                choices=["cpu", "cuda", "xpu"] if available_devices is None else available_devices,
                 value=defaults.get("device", device),
             ),
             gr.Textbox(
@@ -236,7 +235,7 @@ class BGMSeparationParams(BaseParams):
             ),
             gr.Dropdown(
                 label=_("Device"),
-                choices=["cpu", "cuda"] if available_devices is None else available_devices,
+                choices=["cpu", "cuda", "xpu"] if available_devices is None else available_devices,
                 value=defaults.get("device", device),
             ),
             gr.Number(

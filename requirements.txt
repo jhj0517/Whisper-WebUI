@@ -1,8 +1,13 @@
-# Remove the --extra-index-url line below if you're not using Nvidia GPU.
-# If you're using it, update url to your CUDA version (CUDA 12.1 is minimum requirement):
-# For CUDA 12.1, use : https://download.pytorch.org/whl/cu121
-# For CUDA 12.4, use : https://download.pytorch.org/whl/cu124
 --extra-index-url https://download.pytorch.org/whl/cu124
+
+# Update above --extra-index-url according to your device.
+
+## Nvidia GPU
+# CUDA 12.1 : https://download.pytorch.org/whl/cu121
+# CUDA 12.4 : https://download.pytorch.org/whl/cu124
+
+## Intel GPU
+# https://download.pytorch.org/whl/xpu
 
 
 torch
