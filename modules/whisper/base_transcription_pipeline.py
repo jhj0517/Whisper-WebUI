@@ -4,23 +4,29 @@ import ctranslate2
 import gradio as gr
 import torchaudio
 from abc import ABC, abstractmethod
-from typing import BinaryIO, Union, Tuple, List
+from typing import BinaryIO, Union, Tuple, List, Callable
 import numpy as np
 from datetime import datetime
 from faster_whisper.vad import VadOptions
 import gc
 from copy import deepcopy
+import time
 
 from modules.uvr.music_separator import MusicSeparator
 from modules.utils.paths import (WHISPER_MODELS_DIR, DIARIZATION_MODELS_DIR, OUTPUT_DIR, DEFAULT_PARAMETERS_CONFIG_PATH,
                                  UVR_MODELS_DIR)
 from modules.utils.constants import *
+from modules.utils.logger import get_logger
 from modules.utils.subtitle_manager import *
 from modules.utils.youtube_manager import get_ytdata, get_ytaudio
 from modules.utils.files_manager import get_media_files, format_gradio_files, load_yaml, save_yaml, read_file
+from modules.utils.audio_manager import validate_audio
 from modules.whisper.data_classes import *
 from modules.diarize.diarizer import Diarizer
 from modules.vad.silero_vad import SileroVAD
+
+
+logger = get_logger()
 
 
 class BaseTranscriptionPipeline(ABC):
@@ -55,6 +61,7 @@ class BaseTranscriptionPipeline(ABC):
     def transcribe(self,
                    audio: Union[str, BinaryIO, np.ndarray],
                    progress: gr.Progress = gr.Progress(),
+                   progress_callback: Optional[Callable] = None,
                    *whisper_params,
                    ):
         """Inference whisper model to transcribe"""
@@ -74,6 +81,7 @@ class BaseTranscriptionPipeline(ABC):
             progress: gr.Progress = gr.Progress(),
             file_format: str = "SRT",
             add_timestamp: bool = True,
+            progress_callback: Optional[Callable] = None,
             *pipeline_params,
             ) -> Tuple[List[Segment], float]:
         """
@@ -92,6 +100,9 @@ class BaseTranscriptionPipeline(ABC):
             Subtitle file format between ["SRT", "WebVTT", "txt", "lrc"]
         add_timestamp: bool
             Whether to add a timestamp at the end of the filename.
+        progress_callback: Optional[Callable]
+            callback function to show progress. Can be used to update progress in the backend.
+
         *pipeline_params: tuple
             Parameters for the transcription pipeline. This will be dealt with "TranscriptionPipelineParams" data class.
             This must be provided as a List with * wildcard because of the integration with gradio.
@@ -104,6 +115,11 @@ class BaseTranscriptionPipeline(ABC):
         elapsed_time: float
             elapsed time for running
         """
+        start_time = time.time()
+
+        if not validate_audio(audio):
+            return [Segment()], 0
+
         params = TranscriptionPipelineParams.from_list(list(pipeline_params))
         params = self.validate_gradio_values(params)
         bgm_params, vad_params, whisper_params, diarization_params = params.bgm_separation, params.vad, params.whisper, params.diarization
@@ -128,10 +144,12 @@ class BaseTranscriptionPipeline(ABC):
 
             if bgm_params.enable_offload:
                 self.music_separator.offload()
+            elapsed_time_bgm_sep = time.time() - start_time
 
         origin_audio = deepcopy(audio)
 
         if vad_params.vad_filter:
+            progress(0, desc="Filtering silent parts from audio..")
             vad_options = VadOptions(
                 threshold=vad_params.threshold,
                 min_speech_duration_ms=vad_params.min_speech_duration_ms,
@@ -151,39 +169,55 @@ class BaseTranscriptionPipeline(ABC):
             else:
                 vad_params.vad_filter = False
 
-        result, elapsed_time = self.transcribe(
+        result, elapsed_time_transcription = self.transcribe(
             audio,
             progress,
+            progress_callback,
             *whisper_params.to_list()
         )
+        if whisper_params.enable_offload:
+            self.offload()
 
         if vad_params.vad_filter:
-            result = self.vad.restore_speech_timestamps(
+            restored_result = self.vad.restore_speech_timestamps(
                 segments=result,
                 speech_chunks=speech_chunks,
             )
-            if not result:
-                raise ValueError("VAD detected no speech segments in the audio.")
+            if restored_result:
+                result = restored_result
+            else:
+                logger.info("VAD detected no speech segments in the audio.")
 
         if diarization_params.is_diarize:
+            progress(0.99, desc="Diarizing speakers..")
             result, elapsed_time_diarization = self.diarizer.run(
                 audio=origin_audio,
-                use_auth_token=diarization_params.hf_token,
+                use_auth_token=diarization_params.hf_token if diarization_params.hf_token else os.environ.get("HF_TOKEN"),
                 transcribed_result=result,
                 device=diarization_params.diarization_device
             )
-            elapsed_time += elapsed_time_diarization
+            if diarization_params.enable_offload:
+                self.diarizer.offload()
 
         self.cache_parameters(
             params=params,
             file_format=file_format,
             add_timestamp=add_timestamp
         )
-        return result, elapsed_time
+
+        if not result:
+            logger.info(f"Whisper did not detected any speech segments in the audio.")
+            result = [Segment()]
+
+        progress(1.0, desc="Finished.")
+        total_elapsed_time = time.time() - start_time
+        return result, total_elapsed_time
 
     def transcribe_file(self,
                         files: Optional[List] = None,
                         input_folder_path: Optional[str] = None,
+                        include_subdirectory: Optional[str] = None,
+                        save_same_dir: Optional[str] = None,
                         file_format: str = "SRT",
                         add_timestamp: bool = True,
                         progress=gr.Progress(),
@@ -196,9 +230,15 @@ class BaseTranscriptionPipeline(ABC):
         ----------
         files: list
             List of files to transcribe from gr.Files()
-        input_folder_path: str
+        input_folder_path: Optional[str]
             Input folder path to transcribe from gr.Textbox(). If this is provided, `files` will be ignored and
             this will be used instead.
+        include_subdirectory: Optional[str]
+            When using `input_folder_path`, whether to include all files in the subdirectory or not
+        save_same_dir: Optional[str]
+            When using `input_folder_path`, whether to save output in the same directory as inputs or not, in addition
+            to the original output directory. This feature is only available when using `input_folder_path`, because
+            gradio only allows to use cached file path in the function yet.
         file_format: str
             Subtitle File format to write from gr.Dropdown(). Supported format: [SRT, WebVTT, txt]
         add_timestamp: bool
@@ -222,7 +262,7 @@ class BaseTranscriptionPipeline(ABC):
             }
 
             if input_folder_path:
-                files = get_media_files(input_folder_path)
+                files = get_media_files(input_folder_path, include_sub_directory=include_subdirectory)
             if isinstance(files, str):
                 files = [files]
             if files and isinstance(files[0], gr.utils.NamedString):
@@ -235,10 +275,22 @@ class BaseTranscriptionPipeline(ABC):
                     progress,
                     file_format,
                     add_timestamp,
+                    None,
                     *pipeline_params,
                 )
 
                 file_name, file_ext = os.path.splitext(os.path.basename(file))
+                if save_same_dir and input_folder_path:
+                    output_dir = os.path.dirname(file)
+                    subtitle, file_path = generate_file(
+                        output_dir=output_dir,
+                        output_file_name=file_name,
+                        output_format=file_format,
+                        result=transcribed_segments,
+                        add_timestamp=add_timestamp,
+                        **writer_options
+                    )
+
                 subtitle, file_path = generate_file(
                     output_dir=self.output_dir,
                     output_file_name=file_name,
@@ -309,6 +361,7 @@ class BaseTranscriptionPipeline(ABC):
                 progress,
                 file_format,
                 add_timestamp,
+                None,
                 *pipeline_params,
             )
             progress(1, desc="Completed!")
@@ -375,6 +428,7 @@ class BaseTranscriptionPipeline(ABC):
                 progress,
                 file_format,
                 add_timestamp,
+                None,
                 *pipeline_params,
             )
 

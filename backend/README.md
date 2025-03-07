@@ -59,6 +59,7 @@ You can set some server configurations in [config.yaml](https://github.com/jhj05
 <br>If the endpoint generates and saves the file, all output files are stored in the `cache` directory, e.g. separated vocal/instrument files for `/bgm-separation` are saved in `cache` directory.
 
 ## Docker
+You can also deploy the server with Docker for easy deployment.
 The Dockerfile should be built when you're in the root directory of Whisper-WebUI.
 
 1. git clone this repository

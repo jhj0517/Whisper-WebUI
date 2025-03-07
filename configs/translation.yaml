@@ -19,7 +19,7 @@ en: # English
   Enabling this will remove background music: Enabling this will remove background music by submodel before transcribing
   Enable Background Music Remover Filter: Enable Background Music Remover Filter
   Save separated files to output: Save separated files to output
-  Offload sub model after removing background music: Offload sub model after removing background music
+  Offload sub model when finished: Offload model when finished
   Voice Detection Filter: Voice Detection Filter
   Enable this to transcribe only detected voice: Enable this to transcribe only detected voice parts by submodel.
   Enable Silero VAD Filter: Enable Silero VAD Filter
@@ -65,7 +65,7 @@ ko: # Korean
   Enabling this will remove background music: 받아쓰기 이전에 먼저 배경 음악 제거용 서브 모델을 활성화 합니다.
   Enable Background Music Remover Filter: 배경 음악 제거 필터 활성화
   Save separated files to output: 분리된 배경 음악 & 음성 파일 따로 출력 폴더에 저장
-  Offload sub model after removing background music: 배경 음악 제거 후 서브 모델을 비활성화 합니다. (VRAM 이 부족할 시 체크하세요.)
+  Offload sub model when finished: 완료 후 모델 오프로드. (VRAM 이 부족할 시 체크하세요.)
   Voice Detection Filter: 목소리 감지 필터
   Enable this to transcribe only detected voice: 서브 모델에 의해 목소리라고 판단된 부분만 받아쓰기를 진행합니다.
   Enable Silero VAD Filter: Silero VAD 필터 활성화 
@@ -111,7 +111,7 @@ ja: # Japanese
   Enabling this will remove background music: Enabling this will remove background music by submodel before transcribing
   Enable Background Music Remover Filter: Enable Background Music Remover Filter
   Save separated files to output: Save separated files to output
-  Offload sub model after removing background music: Offload sub model after removing background music
+  Offload sub model when finished: Offload model when finished
   Voice Detection Filter: Voice Detection Filter
   Enable this to transcribe only detected voice: Enable this to transcribe only detected voice parts by submodel.
   Enable Silero VAD Filter: Enable Silero VAD Filter
@@ -157,7 +157,7 @@ es: # Spanish
   Enabling this will remove background music: Enabling this will remove background music by submodel before transcribing
   Enable Background Music Remover Filter: Enable Background Music Remover Filter
   Save separated files to output: Save separated files to output
-  Offload sub model after removing background music: Offload sub model after removing background music
+  Offload sub model when finished: Offload model when finished
   Voice Detection Filter: Voice Detection Filter
   Enable this to transcribe only detected voice: Enable this to transcribe only detected voice parts by submodel.
   Enable Silero VAD Filter: Enable Silero VAD Filter
@@ -203,7 +203,7 @@ fr: # French
   Enabling this will remove background music: L'activation supprimera la musique de fond via un sous-modèle avant la transcription
   Enable Background Music Remover Filter: Activer le filtre de suppression de musique de fond
   Save separated files to output: Sauvegarder les fichiers séparés dans la sortie
-  Offload sub model after removing background music: Décharger le sous-modèle après avoir supprimé la musique de fond
+  Offload sub model when finished: Décharger le sous-modèle une fois terminé
   Voice Detection Filter: Filtre de détection vocale
   Enable this to transcribe only detected voice: Activer pour transcrire uniquement la voix détectée
   Enable Silero VAD Filter: Activer le filtre Silero VAD
@@ -249,7 +249,7 @@ de: # Deutsch
   Enabling this will remove background music: Aktivierung entfernt Hintergrundmusik mithilfe des Submodells vor der Transkription
   Enable Background Music Remover Filter: Hintergrundmusik-Entfernungsfilter aktivieren
   Save separated files to output: Getrennte Dateien in der Ausgabe speichern
-  Offload sub model after removing background music: Submodell nach Entfernung der Hintergrundmusik entladen
+  Offload sub model when finished: Submodell entladen wenn nicht mehr benötigt
   Voice Detection Filter: Sprachfilter
   Enable this to transcribe only detected voice: Aktivieren, um nur erkannte Sprachsegmente mithilfe des Submodells zu transkribieren.
   Enable Silero VAD Filter: Silero VAD-Filter aktivieren
@@ -296,7 +296,7 @@ zh: # Chinese
   Enabling this will remove background music: 启用此功能将会在进行转录前去除背景音乐
   Enable Background Music Remover Filter: 去除背景音乐
   Save separated files to output: 导出分离出的音频文件
-  Offload sub model after removing background music: 移除背景音乐后卸载子模型
+  Offload sub model when finished: 完成后卸载子模型
   Voice Detection Filter: 话音检测设置
   Enable this to transcribe only detected voice: 启用此功能将仅转录检测到的语音部分
   Enable Silero VAD Filter: 启用 Silero 语音活动检测 (VAD) 
@@ -342,7 +342,7 @@ uk: # Ukrainian
   Enabling this will remove background music: Увімкнення цього видалить фонову музику за допомогою підмоделі перед транскрипцією
   Enable Background Music Remover Filter: Увімкнути фільтр видалення фонової музики
   Save separated files to output: Зберегти розділені файли до вихідної папки
-  Offload sub model after removing background music: Вивантажити підмодель після видалення фонової музики
+  Offload sub model when finished: Після завершення вивантажте підмодель
   Voice Detection Filter: Фільтр розпізнавання голосу
   Enable this to transcribe only detected voice: Увімкніть це, щоб транскрибувати лише розпізнані голосові частини за допомогою підмоделі
   Enable Silero VAD Filter: Увімкнути фільтр Silero VAD
@@ -388,7 +388,7 @@ ru: # Russian
   Enabling this will remove background music: Включение этого удалит фоновую музыку с помощью подмодели перед транскрипцией
   Enable Background Music Remover Filter: Включить фильтр удаления фоновой музыки
   Save separated files to output: Сохранить разделенные файлы в выходную папку
-  Offload sub model after removing background music: Выгрузить подмодель после удаления фоновой музыки
+  Offload sub model when finished: Выгрузить подмодель после завершения
   Voice Detection Filter: Фильтр обнаружения голоса
   Enable this to transcribe only detected voice: Включите это, чтобы транскрибировать только обнаруженные голосовые части с помощью подмодели
   Enable Silero VAD Filter: Включить фильтр Silero VAD
@@ -434,7 +434,7 @@ tr: # Turkish
   Enabling this will remove background music: Bunu etkinleştirmek, arka plan müziğini alt model tarafından transkripsiyondan önce kaldıracaktır
   Enable Background Music Remover Filter: Arka Plan Müziği Kaldırma Filtresini Etkinleştir
   Save separated files to output: Ayrılmış dosyaları çıktıya kaydet
-  Offload sub model after removing background music: Arka plan müziği kaldırıldıktan sonra alt modeli devre dışı bırak
+  Offload sub model when finished: Alt modeli bitirdiğinizde boşaltın
   Voice Detection Filter: Ses Algılama Filtresi
   Enable this to transcribe only detected voice: Bunu etkinleştirerek yalnızca alt model tarafından algılanan ses kısımlarını transkribe et
   Enable Silero VAD Filter: Silero VAD Filtresini Etkinleştir
@@ -480,7 +480,7 @@ eu: # Basque
   Enabling this will remove background music: Hau aktibatuz, transkribatu aurretik atzeko musika ezabatuko zaio azpieredu baten bidez
   Enable Background Music Remover Filter: Aktibatu Atzeko Musika Ezabatzeko Filtroa
   Save separated files to output: Gorde fitxategi bereiziak irteeran
-  Offload sub model after removing background music: Atzeko musika kendu ondoren azpieredua memoriatik kendu
+  Offload sub model when finished: Deskargatu azpieredua amaitutakoan
   Voice Detection Filter: Ahots Detekzio Filtroa
   Enable this to transcribe only detected voice: Aktibatu hau azpieredu batekin soilik detektatutako ahots zatiak transkribatzeko.
   Enable Silero VAD Filter: Aktibatu Silero VAD Filtroa

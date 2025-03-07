@@ -1,7 +1,7 @@
 import os
 import time
 import numpy as np
-from typing import BinaryIO, Union, Tuple, List
+from typing import BinaryIO, Union, Tuple, List, Callable
 import torch
 
 try:
@@ -43,6 +43,7 @@ class InsanelyFastWhisperInference(BaseTranscriptionPipeline):
     def transcribe(self,
                    audio: Union[str, np.ndarray, torch.Tensor],
                    progress: gr.Progress = gr.Progress(),
+                   progress_callback: Optional[Callable] = None,
                    *whisper_params,
                    ) -> Tuple[List[Segment], float]:
         """
@@ -54,6 +55,8 @@ class InsanelyFastWhisperInference(BaseTranscriptionPipeline):
             Audio path or file binary or Audio numpy array
         progress: gr.Progress
             Indicator to show progress directly in gradio.
+        progress_callback: Optional[Callable]
+            callback function to show progress. Can be used to update progress in the backend.
         *whisper_params: tuple
             Parameters related with whisper. This will be dealt with "WhisperParameters" data class
 
@@ -163,7 +166,7 @@ class InsanelyFastWhisperInference(BaseTranscriptionPipeline):
         default_models = openai_models + distil_models
 
         existing_models = os.listdir(self.model_dir)
-        wrong_dirs = [".locks"]
+        wrong_dirs = [".locks", "insanely_fast_whisper_models_will_be_saved_here"]
 
         available_models = default_models + existing_models
         available_models = [model for model in available_models if model not in wrong_dirs]

@@ -3,13 +3,7 @@ import time
 import huggingface_hub
 import numpy as np
 import torch
-
-try:
-    import intel_extension_for_pytorch as ipex
-except Exception:
-    pass
-
-from typing import BinaryIO, Union, Tuple, List
+from typing import BinaryIO, Union, Tuple, List, Callable
 import faster_whisper
 from faster_whisper.vad import VadOptions
 import ast
@@ -46,6 +40,7 @@ class FasterWhisperInference(BaseTranscriptionPipeline):
     def transcribe(self,
                    audio: Union[str, BinaryIO, np.ndarray],
                    progress: gr.Progress = gr.Progress(),
+                   progress_callback: Optional[Callable] = None,
                    *whisper_params,
                    ) -> Tuple[List[Segment], float]:
         """
@@ -57,6 +52,8 @@ class FasterWhisperInference(BaseTranscriptionPipeline):
             Audio path or file binary or Audio numpy array
         progress: gr.Progress
             Indicator to show progress directly in gradio.
+        progress_callback: Optional[Callable]
+            callback function to show progress. Can be used to update progress in the backend.
         *whisper_params: tuple
             Parameters related with whisper. This will be dealt with "WhisperParameters" data class
 
@@ -108,7 +105,10 @@ class FasterWhisperInference(BaseTranscriptionPipeline):
 
         segments_result = []
         for segment in segments:
-            progress(segment.start / info.duration, desc="Transcribing..")
+            progress_n = segment.start / info.duration
+            progress(progress_n, desc="Transcribing..")
+            if progress_callback is not None:
+                progress_callback(progress_n)
             segments_result.append(Segment.from_faster_whisper(segment))
 
         elapsed_time = time.time() - start_time
@@ -176,7 +176,7 @@ class FasterWhisperInference(BaseTranscriptionPipeline):
         faster_whisper_prefix = "models--Systran--faster-whisper-"
 
         existing_models = os.listdir(self.model_dir)
-        wrong_dirs = [".locks"]
+        wrong_dirs = [".locks", "faster_whisper_models_will_be_saved_here"]
         existing_models = list(set(existing_models) - set(wrong_dirs))
 
         for model_name in existing_models:
@@ -189,8 +189,8 @@ class FasterWhisperInference(BaseTranscriptionPipeline):
 
     @staticmethod
     def get_device():
-        if torch.xpu.is_available():
-            return "xpu"
+        if torch.cuda.is_available():
+            return "cuda"
         else:
             return "auto"
 
