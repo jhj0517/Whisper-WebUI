@@ -11,7 +11,7 @@ import os
 
 
 @pytest.mark.skipif(
-    not is_xpu_available(),
+    not is_cuda_available(),
     reason="Skipping because the test only works on GPU"
 )
 @pytest.mark.parametrize(
