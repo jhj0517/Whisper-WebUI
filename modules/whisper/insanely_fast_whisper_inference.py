@@ -14,6 +14,9 @@ from argparse import Namespace
 from modules.utils.paths import (INSANELY_FAST_WHISPER_MODELS_DIR, DIARIZATION_MODELS_DIR, UVR_MODELS_DIR, OUTPUT_DIR)
 from modules.whisper.data_classes import *
 from modules.whisper.base_transcription_pipeline import BaseTranscriptionPipeline
+from modules.utils.logger import get_logger
+
+logger = get_logger()
 
 
 class InsanelyFastWhisperInference(BaseTranscriptionPipeline):
@@ -175,7 +178,7 @@ class InsanelyFastWhisperInference(BaseTranscriptionPipeline):
         progress: gr.Progress
     ):
         progress(0, 'Initializing model..')
-        print(f'Downloading {model_size} to "{download_root}"....')
+        logger.info(f'Downloading {model_size} to "{download_root}"....')
 
         os.makedirs(download_root, exist_ok=True)
         download_list = [

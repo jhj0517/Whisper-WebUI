@@ -15,7 +15,7 @@ def get_logger(name: Optional[str] = None):
         )
 
         handler = logging.StreamHandler()
-        handler.setFormatter(formatter)
+        # handler.setFormatter(formatter)
 
         logger.addHandler(handler)
 

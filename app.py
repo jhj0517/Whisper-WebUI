@@ -15,6 +15,10 @@ from modules.utils.cli_manager import str2bool
 from modules.utils.youtube_manager import get_ytmetas
 from modules.translation.deepl_api import DeepLAPI
 from modules.whisper.data_classes import *
+from modules.utils.logger import get_logger
+
+
+logger = get_logger()
 
 
 class App:
@@ -38,8 +42,8 @@ class App:
         )
         self.i18n = load_yaml(I18N_YAML_PATH)
         self.default_params = load_yaml(DEFAULT_PARAMETERS_CONFIG_PATH)
-        print(f"Use \"{self.args.whisper_type}\" implementation\n"
-              f"Device \"{self.whisper_inf.device}\" is detected")
+        logger.info(f"Use \"{self.args.whisper_type}\" implementation\n"
+                    f"Device \"{self.whisper_inf.device}\" is detected")
 
     def create_pipeline_inputs(self):
         whisper_params = self.default_params["whisper"]
@@ -322,7 +326,7 @@ class App:
             os.system(f"start {folder_path}")
         else:
             os.makedirs(folder_path, exist_ok=True)
-            print(f"The directory path {folder_path} has newly created.")
+            logger.info(f"The directory path {folder_path} has newly created.")
 
 
 parser = argparse.ArgumentParser()
