@@ -152,8 +152,10 @@ class Diarizer:
     @staticmethod
     def get_available_device():
         devices = ["cpu"]
+        if torch.cuda.is_available():
+            devices.append("cuda")
         if torch.xpu.is_available():
             devices.append("xpu")
-        elif torch.backends.mps.is_available():
+        if torch.backends.mps.is_available():
             devices.append("mps")
         return devices
