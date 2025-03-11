@@ -20,7 +20,7 @@ class MusicSeparator:
                  output_dir: Optional[str] = UVR_OUTPUT_DIR):
         self.model = None
         self.device = self.get_device()
-        self.available_devices = ["cpu", "cuda", "xpu"]
+        self.available_devices = ["cpu", "cuda", "xpu", "mps"]
         self.model_dir = model_dir
         self.output_dir = output_dir
         instrumental_output_dir = os.path.join(self.output_dir, "instrumental")
