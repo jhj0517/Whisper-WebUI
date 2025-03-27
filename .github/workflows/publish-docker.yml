@@ -2,8 +2,11 @@ name: Publish to Docker Hub
 
 on:
   push:
+    branches:
+      - master
     tags:
-      - 'v*.*.*'  # Triggers on tags like v1.2.3
+      - 'v*.*.*'  # Triggers on version tags like v1.2.3
+  workflow_dispatch:  # Manual trigger via GitHub Actions UI
 
 jobs:
   build-and-push-webui:
@@ -31,8 +34,12 @@ jobs:
       - name: Extract Git tag and short SHA
         id: vars
         run: |
-          echo "GIT_TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
           echo "SHORT_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+          if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
+            echo "GIT_TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+          else
+            echo "GIT_TAG=dev" >> $GITHUB_ENV
+          fi
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
@@ -73,8 +80,12 @@ jobs:
       - name: Extract Git tag and short SHA
         id: vars
         run: |
-          echo "GIT_TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
           echo "SHORT_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+          if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
+            echo "GIT_TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+          else
+            echo "GIT_TAG=dev" >> $GITHUB_ENV
+          fi
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
