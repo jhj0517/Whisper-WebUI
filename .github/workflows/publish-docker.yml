@@ -1,27 +1,18 @@
-name: Publish to Docker Hub
+name: Publish to GHCR
 
 on:
   push:
     branches:
       - master
     tags:
-      - 'v*.*.*'  # Triggers on version tags like v1.2.3
-  workflow_dispatch:  # Manual trigger via GitHub Actions UI
+      - 'v*.*.*'
+  workflow_dispatch:
 
 jobs:
   build-and-push-webui:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Clean up space for action
-        run: rm -rf /opt/hostedtoolcache
-
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-
       - name: Checkout repository
         uses: actions/checkout@v3
 
@@ -40,6 +31,13 @@ jobs:
           else
             echo "GIT_TAG=dev" >> $GITHUB_ENV
           fi
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
@@ -48,26 +46,14 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: |
-            ${{ secrets.DOCKER_USERNAME }}/whisper-webui:${{ env.GIT_TAG }}
-            ${{ secrets.DOCKER_USERNAME }}/whisper-webui:${{ env.GIT_TAG }}-${{ env.SHORT_SHA }}
-            ${{ secrets.DOCKER_USERNAME }}/whisper-webui:latest
-
-      - name: Log out of Docker Hub
-        run: docker logout
+            ghcr.io/${{ github.repository_owner }}/whisper-webui:${{ env.GIT_TAG }}
+            ghcr.io/${{ github.repository_owner }}/whisper-webui:${{ env.GIT_TAG }}-${{ env.SHORT_SHA }}
+            ghcr.io/${{ github.repository_owner }}/whisper-webui:latest
 
   build-and-push-backend:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Clean up space for action
-        run: rm -rf /opt/hostedtoolcache
-
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v2
-        with:
-          username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-
       - name: Checkout repository
         uses: actions/checkout@v3
 
@@ -87,6 +73,13 @@ jobs:
             echo "GIT_TAG=dev" >> $GITHUB_ENV
           fi
 
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
@@ -94,9 +87,6 @@ jobs:
           file: ./backend/Dockerfile
           push: true
           tags: |
-            ${{ secrets.DOCKER_USERNAME }}/whisper-webui-backend:${{ env.GIT_TAG }}
-            ${{ secrets.DOCKER_USERNAME }}/whisper-webui-backend:${{ env.GIT_TAG }}-${{ env.SHORT_SHA }}
-            ${{ secrets.DOCKER_USERNAME }}/whisper-webui-backend:latest
-
-      - name: Log out of Docker Hub
-        run: docker logout
+            ghcr.io/${{ github.repository_owner }}/whisper-webui-backend:${{ env.GIT_TAG }}
+            ghcr.io/${{ github.repository_owner }}/whisper-webui-backend:${{ env.GIT_TAG }}-${{ env.SHORT_SHA }}
+            ghcr.io/${{ github.repository_owner }}/whisper-webui-backend:latest
