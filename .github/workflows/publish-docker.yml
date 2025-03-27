@@ -39,6 +39,10 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: Set lowercase owner
+        id: repo
+        run: echo "REPO_OWNER_LC=${GITHUB_REPOSITORY_OWNER,,}" >> $GITHUB_ENV
+
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
@@ -46,9 +50,9 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: |
-            ghcr.io/${{ github.repository_owner }}/whisper-webui:${{ env.GIT_TAG }}
-            ghcr.io/${{ github.repository_owner }}/whisper-webui:${{ env.GIT_TAG }}-${{ env.SHORT_SHA }}
-            ghcr.io/${{ github.repository_owner }}/whisper-webui:latest
+            ghcr.io/${{ env.REPO_OWNER_LC }}/whisper-webui:${{ env.GIT_TAG }}
+            ghcr.io/${{ env.REPO_OWNER_LC }}/whisper-webui:${{ env.GIT_TAG }}-${{ env.SHORT_SHA }}
+            ghcr.io/${{ env.REPO_OWNER_LC }}/whisper-webui:latest
 
   build-and-push-backend:
     runs-on: ubuntu-latest
@@ -79,10 +83,6 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Set lowercase owner
-        id: repo
-        run: echo "REPO_OWNER_LC=${GITHUB_REPOSITORY_OWNER,,}" >> $GITHUB_ENV
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
