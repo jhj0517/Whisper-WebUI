@@ -32,16 +32,15 @@ jobs:
             echo "GIT_TAG=dev" >> $GITHUB_ENV
           fi
 
+      - name: Set lowercase GitHub owner
+        run: echo "REPO_OWNER_LC=${GITHUB_REPOSITORY_OWNER,,}" >> $GITHUB_ENV
+
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v2
         with:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Set lowercase owner
-        id: repo
-        run: echo "REPO_OWNER_LC=${GITHUB_REPOSITORY_OWNER,,}" >> $GITHUB_ENV
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
@@ -77,6 +76,9 @@ jobs:
             echo "GIT_TAG=dev" >> $GITHUB_ENV
           fi
 
+      - name: Set lowercase GitHub owner
+        run: echo "REPO_OWNER_LC=${GITHUB_REPOSITORY_OWNER,,}" >> $GITHUB_ENV
+
       - name: Log in to GitHub Container Registry
         uses: docker/login-action@v2
         with:
@@ -91,6 +93,6 @@ jobs:
           file: ./backend/Dockerfile
           push: true
           tags: |
-            ghcr.io/${{ env.REPO_OWNER_LC }}/whisper-webui:${{ env.GIT_TAG }}
-            ghcr.io/${{ env.REPO_OWNER_LC }}/whisper-webui:${{ env.GIT_TAG }}-${{ env.SHORT_SHA }}
-            ghcr.io/${{ env.REPO_OWNER_LC }}/whisper-webui:latest
+            ghcr.io/${{ env.REPO_OWNER_LC }}/whisper-webui-backend:${{ env.GIT_TAG }}
+            ghcr.io/${{ env.REPO_OWNER_LC }}/whisper-webui-backend:${{ env.GIT_TAG }}-${{ env.SHORT_SHA }}
+            ghcr.io/${{ env.REPO_OWNER_LC }}/whisper-webui-backend:latest
