@@ -2,8 +2,8 @@ name: Publish to Docker Hub
 
 on:
   push:
-    branches:
-      - master
+    tags:
+      - 'v*.*.*'  # Triggers on tags like v1.2.3
 
 jobs:
   build-and-push-webui:
@@ -28,13 +28,22 @@ jobs:
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
 
+      - name: Extract Git tag and short SHA
+        id: vars
+        run: |
+          echo "GIT_TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+          echo "SHORT_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
           context: .
           file: ./Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/whisper-webui:latest
+          tags: |
+            ${{ secrets.DOCKER_USERNAME }}/whisper-webui:${{ env.GIT_TAG }}
+            ${{ secrets.DOCKER_USERNAME }}/whisper-webui:${{ env.GIT_TAG }}-${{ env.SHORT_SHA }}
+            ${{ secrets.DOCKER_USERNAME }}/whisper-webui:latest
 
       - name: Log out of Docker Hub
         run: docker logout
@@ -61,13 +70,22 @@ jobs:
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
 
+      - name: Extract Git tag and short SHA
+        id: vars
+        run: |
+          echo "GIT_TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+          echo "SHORT_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
+
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
           context: .
           file: ./backend/Dockerfile
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/whisper-webui-backend:latest
+          tags: |
+            ${{ secrets.DOCKER_USERNAME }}/whisper-webui-backend:${{ env.GIT_TAG }}
+            ${{ secrets.DOCKER_USERNAME }}/whisper-webui-backend:${{ env.GIT_TAG }}-${{ env.SHORT_SHA }}
+            ${{ secrets.DOCKER_USERNAME }}/whisper-webui-backend:latest
 
       - name: Log out of Docker Hub
         run: docker logout
