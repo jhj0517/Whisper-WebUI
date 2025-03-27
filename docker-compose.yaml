@@ -1,5 +1,6 @@
 services:
-  app:
+  whisper-webui:
+    container_name: whisper-webui
     build: .
     image: jhj0517/whisper-webui:latest
 
