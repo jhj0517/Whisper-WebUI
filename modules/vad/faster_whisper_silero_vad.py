@@ -10,9 +10,11 @@ from faster_whisper.transcribe import SpeechTimestampsMap
 import gradio as gr
 
 from modules.whisper.data_classes import *
+from modules.vad.base_silero_vad import BaseSileroVAD
 
 
-class SileroVAD:
+# This is VAD implementation from faster-whisper
+class FasterWhisperSileroVAD:
     def __init__(self):
         self.sampling_rate = 16000
         self.window_size_samples = 512

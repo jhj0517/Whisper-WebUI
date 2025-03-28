@@ -23,7 +23,7 @@ from modules.utils.files_manager import get_media_files, format_gradio_files, lo
 from modules.utils.audio_manager import validate_audio
 from modules.whisper.data_classes import *
 from modules.diarize.diarizer import Diarizer
-from modules.vad.silero_vad import SileroVAD
+from modules.vad.faster_whisper_silero_vad import FasterWhisperSileroVAD
 
 
 logger = get_logger()
@@ -43,7 +43,7 @@ class BaseTranscriptionPipeline(ABC):
         self.diarizer = Diarizer(
             model_dir=diarization_model_dir
         )
-        self.vad = SileroVAD()
+        self.vad = FasterWhisperSileroVAD()
         self.music_separator = MusicSeparator(
             model_dir=uvr_model_dir,
             output_dir=os.path.join(output_dir, "UVR")

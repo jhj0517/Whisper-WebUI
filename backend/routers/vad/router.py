@@ -9,7 +9,7 @@ from fastapi import APIRouter, BackgroundTasks, Depends, Response, status
 from typing import List, Dict
 from datetime import datetime
 
-from modules.vad.silero_vad import SileroVAD
+from modules.vad.faster_whisper_silero_vad import FasterWhisperSileroVAD
 from modules.whisper.data_classes import VadParams
 from backend.common.audio import read_audio
 from backend.common.models import QueueResponse
@@ -20,8 +20,8 @@ vad_router = APIRouter(prefix="/vad", tags=["Voice Activity Detection"])
 
 
 @functools.lru_cache
-def get_vad_model() -> SileroVAD:
-    inferencer = SileroVAD()
+def get_vad_model() -> FasterWhisperSileroVAD:
+    inferencer = FasterWhisperSileroVAD()
     inferencer.update_model()
     return inferencer
 
