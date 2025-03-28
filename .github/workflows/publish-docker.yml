@@ -33,17 +33,18 @@ jobs:
       - name: Extract metadata
         id: meta
         run: |
-          echo "SHORT_SHA=$(git rev-parse --short HEAD)" >> $GITHUB_ENV
-
-          # Determine GIT_TAG if this is a tag push
+          SHORT_SHA=$(git rev-parse --short HEAD)
+          echo "SHORT_SHA=$SHORT_SHA" >> $GITHUB_ENV
+      
           if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
-            echo "GIT_TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
+            TAG_NAME="${GITHUB_REF#refs/tags/}"
+            echo "GIT_TAG=$TAG_NAME" >> $GITHUB_ENV
             echo "IS_RELEASE=true" >> $GITHUB_ENV
           else
-            echo "GIT_TAG=v1.0.0-${{ env.SHORT_SHA }}" >> $GITHUB_ENV
+            echo "GIT_TAG=v1.0.0-$SHORT_SHA" >> $GITHUB_ENV
             echo "IS_RELEASE=false" >> $GITHUB_ENV
           fi
-
+      
           echo "REPO_OWNER_LC=${GITHUB_REPOSITORY_OWNER,,}" >> $GITHUB_ENV
 
       - name: Log in to GitHub Container Registry
