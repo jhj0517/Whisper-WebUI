@@ -14,11 +14,7 @@ jobs:
 
     strategy:
       matrix:
-        component:
-          - name: whisper-webui
-            dockerfile: ./Dockerfile
-          - name: whisper-webui-backend
-            dockerfile: ./backend/Dockerfile
+        name: [whisper-webui, whisper-webui-backend]
 
     steps:
       - name: Checkout repository
