@@ -3,7 +3,7 @@ import pytest
 import os
 
 from modules.whisper.data_classes import *
-from modules.vad.silero_vad import SileroVAD
+from modules.vad.faster_whisper_silero_vad import FasterWhisperSileroVAD
 from test_config import *
 from test_transcription import download_file, test_transcribe
 from faster_whisper.vad import VadOptions, get_speech_timestamps
@@ -43,7 +43,7 @@ def test_vad(
     if not os.path.exists(audio_path):
         download_file(TEST_FILE_DOWNLOAD_URL, audio_path_dir)
 
-    vad_model = SileroVAD()
+    vad_model = FasterWhisperSileroVAD()
     vad_model.update_model()
 
     audio, speech_chunks = vad_model.run(
