@@ -35,7 +35,7 @@ jobs:
         run: |
           SHORT_SHA=$(git rev-parse --short HEAD)
           echo "SHORT_SHA=$SHORT_SHA" >> $GITHUB_ENV
-      
+
           if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
             TAG_NAME="${GITHUB_REF#refs/tags/}"
             echo "GIT_TAG=$TAG_NAME" >> $GITHUB_ENV
@@ -44,7 +44,7 @@ jobs:
             echo "GIT_TAG=v1.0.0-$SHORT_SHA" >> $GITHUB_ENV
             echo "IS_RELEASE=false" >> $GITHUB_ENV
           fi
-      
+
           echo "REPO_OWNER_LC=${GITHUB_REPOSITORY_OWNER,,}" >> $GITHUB_ENV
 
       - name: Log in to GitHub Container Registry
@@ -54,7 +54,7 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and push Docker image
+      - name: Build and push Docker image (version tag)
         uses: docker/build-push-action@v5
         with:
           context: .
@@ -62,4 +62,11 @@ jobs:
           push: true
           tags: |
             ghcr.io/${{ env.REPO_OWNER_LC }}/${{ matrix.component.name }}:${{ env.GIT_TAG }}
-            ${{ env.IS_RELEASE == 'true' && format('ghcr.io/{0}/{1}:latest', env.REPO_OWNER_LC, matrix.component.name) || '' }}
+
+      - name: Tag and push as latest (if release)
+        if: env.IS_RELEASE == 'true'
+        run: |
+          docker pull ghcr.io/${{ env.REPO_OWNER_LC }}/${{ matrix.component.name }}:${{ env.GIT_TAG }}
+          docker tag ghcr.io/${{ env.REPO_OWNER_LC }}/${{ matrix.component.name }}:${{ env.GIT_TAG }} \
+                     ghcr.io/${{ env.REPO_OWNER_LC }}/${{ matrix.component.name }}:latest
+          docker push ghcr.io/${{ env.REPO_OWNER_LC }}/${{ matrix.component.name }}:latest
