@@ -35,16 +35,20 @@ jobs:
         run: |
           SHORT_SHA=$(git rev-parse --short HEAD)
           echo "SHORT_SHA=$SHORT_SHA" >> $GITHUB_ENV
-
+      
           if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
             TAG_NAME="${GITHUB_REF#refs/tags/}"
             echo "GIT_TAG=$TAG_NAME" >> $GITHUB_ENV
             echo "IS_RELEASE=true" >> $GITHUB_ENV
           else
-            echo "GIT_TAG=v1.0.0-$SHORT_SHA" >> $GITHUB_ENV
+            # Fetch all tags and get the latest semver tag (sorted using version sort)
+            git fetch --tags
+            LATEST_TAG=$(git tag --list 'v*.*.*' | sort -V | tail -n1)
+            FALLBACK_TAG="${LATEST_TAG:-v0.0.0}"
+            echo "GIT_TAG=${FALLBACK_TAG}-${SHORT_SHA}" >> $GITHUB_ENV
             echo "IS_RELEASE=false" >> $GITHUB_ENV
           fi
-
+      
           echo "REPO_OWNER_LC=${GITHUB_REPOSITORY_OWNER,,}" >> $GITHUB_ENV
 
       - name: Log in to GitHub Container Registry
