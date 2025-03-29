@@ -1,4 +1,10 @@
-# Adapted from https://github.com/SYSTRAN/faster-whisper/blob/master/faster_whisper/vad.py
+"""
+This is VAD implementation from faster-whisper.
+Adapted from https://github.com/SYSTRAN/faster-whisper/blob/master/faster_whisper/vad.py
+
+This strategy cutoff non-speech parts of the audio to preprocess the audio before transcribing it.
+When it restores the timestamps, it assumes the VAD detected same amount of speeches as transcriber (whisper).
+"""
 
 from faster_whisper.vad import VadOptions, get_vad_model
 import numpy as np
@@ -13,7 +19,6 @@ from modules.whisper.data_classes import *
 from modules.vad.base_silero_vad import BaseSileroVAD
 
 
-# This is VAD implementation from faster-whisper
 class FasterWhisperSileroVAD(BaseSileroVAD):
     def __init__(self):
         super().__init__()
