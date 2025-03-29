@@ -32,7 +32,7 @@ class FasterWhisperSileroVAD(BaseSileroVAD):
             progress: gr.Progress = gr.Progress()
             ) -> Tuple[np.ndarray, List[dict]]:
         """
-        Run VAD
+        Run VAD. This strategy cutoff non-speech parts of the audio to preprocess the audio before transcribing it.
 
         Parameters
         ----------
