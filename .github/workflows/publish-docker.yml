@@ -1,11 +1,14 @@
 name: Publish to Docker Hub
 
 on:
+  # Minor version ( vX.Y.Z-ShortHash )
   push:
     branches:
       - master
-    tags:
-      - 'v*.*.*'
+  # Major version ( vX.Y.Z )
+  release:
+    types: [created]
+
   workflow_dispatch:
 
 jobs:
