@@ -35,10 +35,13 @@ jobs:
           SHORT_SHA=$(git rev-parse --short HEAD)
           echo "SHORT_SHA=$SHORT_SHA" >> $GITHUB_ENV
 
-          if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
-            TAG_NAME="${GITHUB_REF#refs/tags/}"
+          # Triggered by a release event — versioning as major ( vX.Y.Z )
+          if [[ "${GITHUB_EVENT_NAME}" == "release" ]]; then
+            TAG_NAME="${{ github.event.release.tag_name }}"
             echo "GIT_TAG=$TAG_NAME" >> $GITHUB_ENV
             echo "IS_RELEASE=true" >> $GITHUB_ENV
+
+          # Triggered by a general push event — versioning as minor ( vX.Y.Z-ShortHash )
           else
             git fetch --tags
             LATEST_TAG=$(git tag --list 'v*.*.*' | sort -V | tail -n1)
@@ -46,8 +49,6 @@ jobs:
             echo "GIT_TAG=${FALLBACK_TAG}-${SHORT_SHA}" >> $GITHUB_ENV
             echo "IS_RELEASE=false" >> $GITHUB_ENV
           fi
-
-          echo "REPO_OWNER_LC=${GITHUB_REPOSITORY_OWNER,,}" >> $GITHUB_ENV
 
       - name: Set Dockerfile path
         id: dockerfile
