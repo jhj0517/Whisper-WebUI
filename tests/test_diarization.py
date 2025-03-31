@@ -1,12 +1,12 @@
+import gradio as gr
+import pytest
+import os
+
 from modules.utils.paths import *
 from modules.whisper.whisper_factory import WhisperFactory
 from modules.whisper.data_classes import *
 from test_config import *
-from test_transcription import download_file, test_transcribe
-
-import gradio as gr
-import pytest
-import os
+from test_transcription import download_file, run_asr_pipeline
 
 
 @pytest.mark.skipif(
@@ -27,5 +27,5 @@ def test_diarization_pipeline(
     bgm_separation: bool,
     diarization: bool,
 ):
-    test_transcribe(whisper_type, vad_filter, bgm_separation, diarization)
+    run_asr_pipeline(whisper_type, vad_filter, bgm_separation, diarization)
 

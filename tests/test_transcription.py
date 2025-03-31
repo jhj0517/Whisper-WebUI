@@ -1,24 +1,16 @@
+import requests
+import pytest
+import gradio as gr
+import os
+
 from modules.whisper.whisper_factory import WhisperFactory
 from modules.whisper.data_classes import *
 from modules.utils.subtitle_manager import read_file
 from modules.utils.paths import WEBUI_DIR
 from test_config import *
 
-import requests
-import pytest
-import gradio as gr
-import os
 
-
-@pytest.mark.parametrize(
-    "whisper_type,vad_filter,bgm_separation,diarization",
-    [
-        (WhisperImpl.WHISPER.value, False, False, False),
-        (WhisperImpl.FASTER_WHISPER.value, False, False, False),
-        (WhisperImpl.INSANELY_FAST_WHISPER.value, False, False, False)
-    ]
-)
-def test_transcribe(
+def run_asr_pipeline(
     whisper_type: str,
     vad_filter: bool,
     bgm_separation: bool,
@@ -90,5 +82,22 @@ def test_transcribe(
     subtitle = read_file(file_path).split("\n")
     wer = calculate_wer(answer, subtitle[2].strip().replace(",", "").replace(".", ""))
     assert wer < 0.1, f"WER is too high, it's {wer}"
+
+
+@pytest.mark.parametrize(
+    "whisper_type,vad_filter,bgm_separation,diarization",
+    [
+        (WhisperImpl.WHISPER.value, False, False, False),
+        (WhisperImpl.FASTER_WHISPER.value, False, False, False),
+        (WhisperImpl.INSANELY_FAST_WHISPER.value, False, False, False)
+    ]
+)
+def test_transcribe(
+    whisper_type: str,
+    vad_filter: bool,
+    bgm_separation: bool,
+    diarization: bool,
+):
+    run_asr_pipeline(whisper_type, vad_filter, bgm_separation, diarization)
 
 
