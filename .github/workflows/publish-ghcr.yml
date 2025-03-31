@@ -49,6 +49,8 @@ jobs:
             echo "GIT_TAG=${FALLBACK_TAG}-${SHORT_SHA}" >> $GITHUB_ENV
             echo "IS_RELEASE=false" >> $GITHUB_ENV
           fi
+          
+          echo "REPO_OWNER_LC=${GITHUB_REPOSITORY_OWNER,,}" >> $GITHUB_ENV
 
       - name: Set Dockerfile path
         id: dockerfile
