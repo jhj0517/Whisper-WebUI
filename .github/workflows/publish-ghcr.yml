@@ -81,7 +81,7 @@ jobs:
       - name: Tag and push as latest (if release)
         if: env.IS_RELEASE == 'true'
         run: |
-          docker pull ghcr.io/${{ secrets.DOCKER_USERNAME }}/${{ matrix.name }}:${{ env.GIT_TAG }}
-          docker tag ghcr.io/${{ secrets.DOCKER_USERNAME }}/${{ matrix.name }}:${{ env.GIT_TAG }} \
-                     ghcr.io/${{ secrets.DOCKER_USERNAME }}/${{ matrix.name }}:latest
-          docker push ghcr.io/${{ secrets.DOCKER_USERNAME }}/${{ matrix.name }}:latest
+          docker pull ghcr.io/${{ env.REPO_OWNER_LC }}/${{ matrix.name }}:${{ env.GIT_TAG }}
+          docker tag ghcr.io/${{ env.REPO_OWNER_LC }}/${{ matrix.name }}:${{ env.GIT_TAG }} \
+                     ghcr.io/${{ env.REPO_OWNER_LC }}/${{ matrix.name }}:latest
+          docker push ghcr.io/${{ env.REPO_OWNER_LC }}/${{ matrix.name }}:latest
