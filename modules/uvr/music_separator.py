@@ -7,6 +7,7 @@ import torch
 import gc
 import gradio as gr
 from datetime import datetime
+import traceback
 
 from modules.utils.paths import DEFAULT_PARAMETERS_CONFIG_PATH, UVR_MODELS_DIR, UVR_OUTPUT_DIR
 from modules.utils.files_manager import load_yaml, save_yaml, is_video
@@ -20,7 +21,7 @@ except Exception as e:
     logger.warning(
         "Failed to import uvr. BGM separation feature will not work. "
         "Please open an issue on GitHub if you encounter this error. "
-        f"Error: {e}"
+        f"Error: {traceback.format_exc()}"
     )
 
 
