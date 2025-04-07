@@ -21,7 +21,7 @@ except Exception as e:
     logger.warning(
         "Failed to import uvr. BGM separation feature will not work. "
         "Please open an issue on GitHub if you encounter this error. "
-        f"Error: {traceback.format_exc()}"
+        f"Error: {type(e).__name__}: {traceback.format_exc()}"
     )
 
 
