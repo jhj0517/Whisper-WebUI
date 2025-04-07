@@ -7,11 +7,22 @@ import torch
 import gc
 import gradio as gr
 from datetime import datetime
+import traceback
 
-from uvr.models import MDX, Demucs, VrNetwork, MDXC
 from modules.utils.paths import DEFAULT_PARAMETERS_CONFIG_PATH, UVR_MODELS_DIR, UVR_OUTPUT_DIR
 from modules.utils.files_manager import load_yaml, save_yaml, is_video
 from modules.diarize.audio_loader import load_audio
+from modules.utils.logger import get_logger
+logger = get_logger()
+
+try:
+    from uvr.models import MDX, Demucs, VrNetwork, MDXC
+except Exception as e:
+    logger.warning(
+        "Failed to import uvr. BGM separation feature will not work. "
+        "Please open an issue on GitHub if you encounter this error. "
+        f"Error: {type(e).__name__}: {traceback.format_exc()}"
+    )
 
 
 class MusicSeparator:
