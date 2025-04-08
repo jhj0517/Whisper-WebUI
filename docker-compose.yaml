@@ -21,6 +21,7 @@ services:
 
     # If you're not using nvidia GPU, Update device to match yours.
     # See more info at : https://docs.docker.com/compose/compose-file/deploy/#driver
+    # You can remove the entire `deploy' section if you are using CPU.
     deploy:
       resources:
         reservations:
