@@ -24,7 +24,8 @@ logger = get_logger()
 class App:
     def __init__(self, args):
         self.args = args
-        self.app = gr.Blocks(css=CSS, theme=self.args.theme, delete_cache=(60, 3600))
+        # Check every 1 hour (3600) for cached files and delete them if older than 1 day (86400)
+        self.app = gr.Blocks(css=CSS, theme=self.args.theme, delete_cache=(3600, 86400))
         self.whisper_inf = WhisperFactory.create_whisper_inference(
             whisper_type=self.args.whisper_type,
             whisper_model_dir=self.args.whisper_model_dir,
