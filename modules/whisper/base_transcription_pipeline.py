@@ -221,6 +221,8 @@ class BaseTranscriptionPipeline(ABC):
                         file_format: str = "SRT",
                         add_timestamp: bool = True,
                         progress=gr.Progress(),
+                        max_line_width: Optional[int] = None,  # ← new
+                        max_line_count: Optional[int] = None,  # ← new
                         *pipeline_params,
                         ) -> Tuple[str, List]:
         """
@@ -258,7 +260,9 @@ class BaseTranscriptionPipeline(ABC):
         try:
             params = TranscriptionPipelineParams.from_list(list(pipeline_params))
             writer_options = {
-                "highlight_words": True if params.whisper.word_timestamps else False
+                "highlight_words": bool(params.whisper.word_timestamps),
+                "max_line_width": max_line_width,
+                "max_line_count": max_line_count
             }
 
             if input_folder_path:
@@ -322,6 +326,8 @@ class BaseTranscriptionPipeline(ABC):
                        file_format: str = "SRT",
                        add_timestamp: bool = True,
                        progress=gr.Progress(),
+                       max_line_width: Optional[int] = None,  # ← new
+                       max_line_count: Optional[int] = None,  # ← new
                        *pipeline_params,
                        ) -> Tuple[str, str]:
         """
@@ -350,9 +356,11 @@ class BaseTranscriptionPipeline(ABC):
         try:
             params = TranscriptionPipelineParams.from_list(list(pipeline_params))
             writer_options = {
-                "highlight_words": True if params.whisper.word_timestamps else False
+                "highlight_words": bool(params.whisper.word_timestamps),
+                # previously missing:
+                "max_line_width": params.whisper.max_line_width,
+                "max_line_count": params.whisper.max_line_count
             }
-
             progress(0, desc="Loading Audio..")
             transcribed_segments, time_for_task = self.run(
                 mic_audio,
@@ -384,6 +392,8 @@ class BaseTranscriptionPipeline(ABC):
                            file_format: str = "SRT",
                            add_timestamp: bool = True,
                            progress=gr.Progress(),
+                           max_line_width: Optional[int] = None,  # ← new
+                           max_line_count: Optional[int] = None,  # ← new
                            *pipeline_params,
                            ) -> Tuple[str, str]:
         """
@@ -412,7 +422,9 @@ class BaseTranscriptionPipeline(ABC):
         try:
             params = TranscriptionPipelineParams.from_list(list(pipeline_params))
             writer_options = {
-                "highlight_words": True if params.whisper.word_timestamps else False
+                "highlight_words": bool(params.whisper.word_timestamps),
+                "max_line_width": max_line_width,
+                "max_line_count": max_line_count
             }
 
             progress(0, desc="Loading Audio from Youtube..")

@@ -339,7 +339,10 @@ class WhisperParams(BaseParams):
         default=True,
         description="Offload Whisper model after transcription"
     )
-
+    max_line_width: int = Field(default=20,
+                                description="Maximum characters per line in subtitle files")
+    max_line_count: int = Field(default=2,
+                                description="Maximum lines per subtitle block")
     @field_validator('lang')
     def validate_lang(cls, v):
         from modules.utils.constants import AUTOMATIC_DETECTION
@@ -499,6 +502,16 @@ class WhisperParams(BaseParams):
                 label="Word Timestamps",
                 value=defaults.get("word_timestamps", cls.__fields__["word_timestamps"].default),
                 info="Extract word-level timestamps"
+            ),
+            gr.Number(
+                label="Max line width (chars)",
+                value=defaults.get("max_line_width", cls.__fields__["max_line_width"].default),
+                precision=0
+            ),
+            gr.Number(
+                label="Max lines per subtitle",
+                value=defaults.get("max_line_count", cls.__fields__["max_line_count"].default),
+                precision=0
             ),
             gr.Textbox(
                 label="Prepend Punctuations",
