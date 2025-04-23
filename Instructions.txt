@@ -1,0 +1,6 @@
+https://github.com/jhj0517/Whisper-WebUI
+
+docker compose build 
+docker compose up
+
+http://localhost:7860

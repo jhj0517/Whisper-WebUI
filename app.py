@@ -72,7 +72,18 @@ class App:
                                                             whisper_type=self.args.whisper_type,
                                                             available_compute_types=self.whisper_inf.available_compute_types,
                                                             compute_type=self.whisper_inf.current_compute_type)
-
+            nb_max_line_width = gr.Number(
+                label = "Max line width (chars)",
+                value = whisper_params.get("max_line_width", 100),
+                precision = 0,
+                info = "Maximum characters per line in subtitle files"
+            )
+            nb_max_line_count = gr.Number(
+                label = "Max lines per subtitle",
+                value = whisper_params.get("max_line_count", 2),
+                precision = 0,
+                info = "Maximum lines per subtitle block"
+            )
         with gr.Accordion(_("Background Music Remover Filter"), open=False):
             uvr_inputs = BGMSeparationParams.to_gradio_input(defaults=uvr_params,
                                                              available_models=self.whisper_inf.music_separator.available_models,
@@ -92,7 +103,9 @@ class App:
         return (
             pipeline_inputs,
             dd_file_format,
-            cb_timestamp
+            cb_timestamp,
+            nb_max_line_width,
+            nb_max_line_count
         )
 
     def launch(self):
@@ -128,7 +141,7 @@ class App:
                                                                 " output directory.",
                                                            visible=self.args.colab,
                                                            value=True)
-                        pipeline_params, dd_file_format, cb_timestamp = self.create_pipeline_inputs()
+                        pipeline_params, dd_file_format, cb_timestamp, nb_max_line_width, nb_max_line_count = self.create_pipeline_inputs()
 
                         with gr.Row():
                             btn_run = gr.Button(_("GENERATE SUBTITLE FILE"), variant="primary")
@@ -138,7 +151,7 @@ class App:
                             btn_openfolder = gr.Button('📂', scale=1)
 
                         params = [input_file, tb_input_folder, cb_include_subdirectory, cb_save_same_dir,
-                                  dd_file_format, cb_timestamp]
+                                  dd_file_format, cb_timestamp, nb_max_line_width, nb_max_line_count]
                         params = params + pipeline_params
                         btn_run.click(fn=self.whisper_inf.transcribe_file,
                                       inputs=params,
@@ -155,7 +168,7 @@ class App:
                                 tb_title = gr.Label(label=_("Youtube Title"))
                                 tb_description = gr.Textbox(label=_("Youtube Description"), max_lines=15)
 
-                        pipeline_params, dd_file_format, cb_timestamp = self.create_pipeline_inputs()
+                        pipeline_params, dd_file_format, cb_timestamp, nb_max_line_width, nb_max_line_count = self.create_pipeline_inputs()
 
                         with gr.Row():
                             btn_run = gr.Button(_("GENERATE SUBTITLE FILE"), variant="primary")
@@ -164,7 +177,7 @@ class App:
                             files_subtitles = gr.Files(label=_("Downloadable output file"), scale=3)
                             btn_openfolder = gr.Button('📂', scale=1)
 
-                        params = [tb_youtubelink, dd_file_format, cb_timestamp]
+                        params = [tb_youtubelink, dd_file_format, cb_timestamp, nb_max_line_width, nb_max_line_count]
 
                         btn_run.click(fn=self.whisper_inf.transcribe_youtube,
                                       inputs=params + pipeline_params,
@@ -178,7 +191,7 @@ class App:
                             mic_input = gr.Microphone(label=_("Record with Mic"), type="filepath", interactive=True,
                                                       show_download_button=True)
 
-                        pipeline_params, dd_file_format, cb_timestamp = self.create_pipeline_inputs()
+                        pipeline_params, dd_file_format, cb_timestamp, nb_max_line_width, nb_max_line_count = self.create_pipeline_inputs()
 
                         with gr.Row():
                             btn_run = gr.Button(_("GENERATE SUBTITLE FILE"), variant="primary")
@@ -187,7 +200,7 @@ class App:
                             files_subtitles = gr.Files(label=_("Downloadable output file"), scale=3)
                             btn_openfolder = gr.Button('📂', scale=1)
 
-                        params = [mic_input, dd_file_format, cb_timestamp]
+                        params = [mic_input, dd_file_format, cb_timestamp, nb_max_line_width, nb_max_line_count]
 
                         btn_run.click(fn=self.whisper_inf.transcribe_mic,
                                       inputs=params + pipeline_params,
