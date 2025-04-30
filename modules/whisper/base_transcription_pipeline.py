@@ -282,7 +282,12 @@ class BaseTranscriptionPipeline(ABC):
                 file_name, file_ext = os.path.splitext(os.path.basename(file))
                 if save_same_dir and input_folder_path:
                     output_dir = os.path.dirname(file)
-                    subtitle, file_path = generate_file(
+                else:
+                    output_dir = self.output_dir
+
+                files_info[file_name] = [
+                    {"subtitle": subtitle, "time_for_task": time_for_task, "path": output_path}
+                    for subtitle, output_path in generate_file(
                         output_dir=output_dir,
                         output_file_name=file_name,
                         output_format=file_format,
@@ -290,27 +295,18 @@ class BaseTranscriptionPipeline(ABC):
                         add_timestamp=add_timestamp,
                         **writer_options
                     )
-
-                subtitle, file_path = generate_file(
-                    output_dir=self.output_dir,
-                    output_file_name=file_name,
-                    output_format=file_format,
-                    result=transcribed_segments,
-                    add_timestamp=add_timestamp,
-                    **writer_options
-                )
-                files_info[file_name] = {"subtitle": read_file(file_path), "time_for_task": time_for_task, "path": file_path}
+                ]
 
             total_result = ''
             total_time = 0
-            for file_name, info in files_info.items():
+            for file_name, infos in files_info.items():
                 total_result += '------------------------------------\n'
                 total_result += f'{file_name}\n\n'
-                total_result += f'{info["subtitle"]}'
-                total_time += info["time_for_task"]
+                total_result += f'{infos[0]["subtitle"]}'
+                total_time += infos[0]["time_for_task"]
 
             result_str = f"Done in {self.format_time(total_time)}! Subtitle is in the outputs folder.\n\n{total_result}"
-            result_file_path = [info['path'] for info in files_info.values()]
+            result_file_path = [item["path"] for _, items in files_info.items() for item in items]
 
             return result_str, result_file_path
 
@@ -372,7 +368,7 @@ class BaseTranscriptionPipeline(ABC):
                 result=transcribed_segments,
                 add_timestamp=add_timestamp,
                 **writer_options
-            )
+            )[0]
 
             result_str = f"Done in {self.format_time(time_for_task)}! Subtitle file is in the outputs folder.\n\n{subtitle}"
             return result_str, file_path
@@ -438,7 +434,7 @@ class BaseTranscriptionPipeline(ABC):
                 result=transcribed_segments,
                 add_timestamp=add_timestamp,
                 **writer_options
-            )
+            )[0]
 
             result_str = f"Done in {self.format_time(time_for_task)}! Subtitle file is in the outputs folder.\n\n{subtitle}"
 
