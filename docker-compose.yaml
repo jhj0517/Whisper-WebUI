@@ -10,6 +10,7 @@ services:
       # Similarly, all output files will be stored in the `./outputs` directory.
       - ./models:/Whisper-WebUI/models
       - ./outputs:/Whisper-WebUI/outputs
+      - ./configs:/Whisper-WebUI/configs
 
     ports:
       - "7860:7860"
