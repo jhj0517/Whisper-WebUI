@@ -78,7 +78,7 @@ If needed, update the [`docker-compose.yaml`](https://github.com/jhj0517/Whisper
 To run this WebUI, you need to have `git`, `3.10 <= python <= 3.12`, `FFmpeg`.
 
 **Edit `--extra-index-url` in the [`requirements.txt`](https://github.com/jhj0517/Whisper-WebUI/blob/master/requirements.txt) to match your device.<br>** 
-By default, the WebUI assumes you're using an Nvidia GPU and CUDA 12.4. If you're using Intel or another CUDA version, read the [`requirements.txt`](https://github.com/jhj0517/Whisper-WebUI/blob/master/requirements.txt) and edit `--extra-index-url`.
+By default, the WebUI assumes you're using an Nvidia GPU and **CUDA 12.6.** If you're using Intel or another CUDA version, read the [`requirements.txt`](https://github.com/jhj0517/Whisper-WebUI/blob/master/requirements.txt) and edit `--extra-index-url`.
 
 Please follow the links below to install the necessary software:
 - git : [https://git-scm.com/downloads](https://git-scm.com/downloads)
