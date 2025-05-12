@@ -5,7 +5,7 @@
 **/.env
 **/.idea/
 **/.pytest_cache/
-**/venv/
+**/.venv/
 **/__pycache__/
 outputs/
 models/
