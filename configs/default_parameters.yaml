@@ -1,5 +1,5 @@
 whisper:
-  model_size: "large-v2"
+  model_size: "large-v3"
   file_format: "SRT"
   lang: "Automatic Detection"
   is_translate: false
