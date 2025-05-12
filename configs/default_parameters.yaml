@@ -1,7 +1,7 @@
 whisper:
   model_size: "large-v3"
   file_format: "SRT"
-  lang: "Automatic Detection"
+  lang: "danish"
   is_translate: false
   beam_size: 5
   log_prob_threshold: -1
