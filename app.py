@@ -134,16 +134,20 @@ class App:
                             btn_run = gr.Button(_("GENERATE SUBTITLE FILE"), variant="primary")
                         with gr.Row():
                             tb_indicator = gr.Textbox(label=_("Output"), scale=5)
-                            files_subtitles = gr.Files(label=_("Downloadable output file"), scale=3, interactive=False)
-                            btn_openfolder = gr.Button('📂', scale=1)
+                            files_subtitles = gr.Files(
+                                label=_("Downloadable output file (will be deleted after 24 hours)"),
+                                scale=3,
+                                interactive=False
+                            )
+                            # btn_openfolder = gr.Button('📂', scale=1)
 
                         params = [input_file, tb_input_folder, cb_include_subdirectory, cb_save_same_dir,
                                   dd_file_format, cb_timestamp]
                         params = params + pipeline_params
                         btn_run.click(fn=self.whisper_inf.transcribe_file,
                                       inputs=params,
-                                      outputs=[tb_indicator, files_subtitles])
-                        btn_openfolder.click(fn=lambda: self.open_folder("outputs"), inputs=None, outputs=None)
+                                      outputs=[tb_indicator])
+                        # btn_openfolder.click(fn=lambda: self.open_folder("outputs"), inputs=None, outputs=None)
 
                     with gr.TabItem(_("Youtube")):  # tab2
                         with gr.Row():
