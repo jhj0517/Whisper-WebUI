@@ -38,7 +38,7 @@ CSS = """
 """
 
 MARKDOWN = """
-### [Whisper-WebUI](https://github.com/jhj0517/Whsiper-WebUI)
+### Alexandra Whisper Service
 """
 
 

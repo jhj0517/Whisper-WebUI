@@ -25,7 +25,7 @@ class App:
     def __init__(self, args):
         self.args = args
         # Check every 1 hour (3600) for cached files and delete them if older than 1 day (86400)
-        self.app = gr.Blocks(css=CSS, theme=self.args.theme, delete_cache=(3600, 86400))
+        self.app = gr.Blocks(css=CSS, theme=self.args.theme, delete_cache=(3600, 86400), title=args.title)
         self.whisper_inf = WhisperFactory.create_whisper_inference(
             whisper_type=self.args.whisper_type,
             whisper_model_dir=self.args.whisper_model_dir,
@@ -318,7 +318,8 @@ class App:
             ssl_keyfile=args.ssl_keyfile,
             ssl_keyfile_password=args.ssl_keyfile_password,
             ssl_certfile=args.ssl_certfile,
-            allowed_paths=eval(args.allowed_paths) if args.allowed_paths else None
+            allowed_paths=eval(args.allowed_paths) if args.allowed_paths else None,
+            favicon_path=args.favicon_path
         )
 
     @staticmethod
@@ -366,6 +367,8 @@ parser.add_argument('--nllb_model_dir', type=str, default=NLLB_MODELS_DIR,
 parser.add_argument('--uvr_model_dir', type=str, default=UVR_MODELS_DIR,
                     help='Directory path of the UVR model')
 parser.add_argument('--output_dir', type=str, default=OUTPUT_DIR, help='Directory path of the outputs')
+parser.add_argument('--title', type=str, default="Alexandra Whisper Service", help='Gradio title')
+parser.add_argument('--favicon_path', type=str, default="gfx/alexandra_logo.png", help='Path to the favicon file')
 _args = parser.parse_args()
 
 if __name__ == "__main__":
