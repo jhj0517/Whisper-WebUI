@@ -309,7 +309,7 @@ class BaseTranscriptionPipeline(ABC):
                 total_result += f'{info["subtitle"]}'
                 total_time += info["time_for_task"]
 
-            result_str = f"Done in {self.format_time(total_time)}! Subtitle is in the outputs folder.\n\n{total_result}"
+            result_str = f"Done in {self.format_time(total_time)}!\n\n{total_result}"
             result_file_path = [info['path'] for info in files_info.values()]
 
             return result_str, result_file_path
