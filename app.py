@@ -6,7 +6,7 @@ import yaml
 
 from modules.utils.paths import (FASTER_WHISPER_MODELS_DIR, DIARIZATION_MODELS_DIR, OUTPUT_DIR, WHISPER_MODELS_DIR,
                                  INSANELY_FAST_WHISPER_MODELS_DIR, NLLB_MODELS_DIR, DEFAULT_PARAMETERS_CONFIG_PATH,
-                                 UVR_MODELS_DIR, I18N_YAML_PATH)
+                                 UVR_MODELS_DIR, I18N_YAML_PATH, SERVER_DOTENV_PATH)
 from modules.utils.files_manager import load_yaml, MEDIA_EXTENSION
 from modules.whisper.whisper_factory import WhisperFactory
 from modules.translation.nllb_inference import NLLBInference
@@ -17,6 +17,9 @@ from modules.translation.deepl_api import DeepLAPI
 from modules.whisper.data_classes import *
 from modules.utils.logger import get_logger
 
+from dotenv import load_dotenv
+
+load_dotenv(dotenv_path=SERVER_DOTENV_PATH)
 
 logger = get_logger()
 
@@ -50,6 +53,7 @@ class App:
         whisper_params = self.default_params["whisper"]
         vad_params = self.default_params["vad"]
         diarization_params = self.default_params["diarization"]
+        diarization_params["hf_token"] = os.getenv("HF_TOKEN")
         uvr_params = self.default_params["bgm_separation"]
 
         with gr.Row():
