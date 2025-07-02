@@ -13,7 +13,7 @@ services:
       - ./configs:/Whisper-WebUI/configs
 
     ports:
-      - "7860:7860"
+      - "3052:7860"
 
     stdin_open: true
     tty: true
@@ -23,10 +23,10 @@ services:
     # If you're not using nvidia GPU, Update device to match yours.
     # See more info at : https://docs.docker.com/compose/compose-file/deploy/#driver
     # You can remove the entire `deploy' section if you are using CPU.
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: all
-              capabilities: [ gpu ]
+#    deploy:
+#      resources:
+#        reservations:
+#          devices:
+#            - driver: nvidia
+#              count: all
+#              capabilities: [ gpu ]
