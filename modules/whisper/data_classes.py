@@ -368,7 +368,7 @@ class WhisperParams(BaseParams):
                          available_langs: Optional[List] = None,
                          available_compute_types: Optional[List] = None,
                          compute_type: Optional[str] = None):
-        whisper_type = WhisperImpl.FASTER_WHISPER.value if whisper_type is None else whisper_type.strip().lower()
+        whisper_type = WhisperImpl.WHISPER.value if whisper_type is None else whisper_type.strip().lower()
 
         inputs = []
         if not only_advanced:

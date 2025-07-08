@@ -91,8 +91,8 @@ class WhisperFactory:
                 uvr_model_dir=uvr_model_dir
             )
         else:
-            return FasterWhisperInference(
-                model_dir=faster_whisper_model_dir,
+            return WhisperInference(
+                model_dir=whisper_model_dir,
                 output_dir=output_dir,
                 diarization_model_dir=diarization_model_dir,
                 uvr_model_dir=uvr_model_dir

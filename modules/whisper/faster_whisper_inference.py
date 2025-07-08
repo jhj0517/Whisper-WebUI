@@ -64,12 +64,14 @@ class FasterWhisperInference(BaseTranscriptionPipeline):
         elapsed_time: float
             elapsed time for transcription
         """
+        logger.info("Transcribe called")
         start_time = time.time()
 
         params = WhisperParams.from_list(list(whisper_params))
 
         if params.model_size != self.current_model_size or self.model is None or self.current_compute_type != params.compute_type:
             self.update_model(params.model_size, params.compute_type, progress)
+            logger.info(f"Model set to {params.model_size} ({params.compute_type})")
 
         segments, info = self.model.transcribe(
             audio=audio,
@@ -112,6 +114,7 @@ class FasterWhisperInference(BaseTranscriptionPipeline):
             segments_result.append(Segment.from_faster_whisper(segment))
 
         elapsed_time = time.time() - start_time
+        logger.info(f"Transcription done in {elapsed_time:.2f}s")
         return segments_result, elapsed_time
 
     def update_model(self,
@@ -133,6 +136,7 @@ class FasterWhisperInference(BaseTranscriptionPipeline):
         progress: gr.Progress
             Indicator to show progress directly in gradio.
         """
+        logger.info(f"Loading model {model_size} with compute_type {compute_type}")
         progress(0, desc="Initializing Model..")
 
         model_size_dirname = model_size.replace("/", "--") if "/" in model_size else model_size
@@ -163,6 +167,7 @@ class FasterWhisperInference(BaseTranscriptionPipeline):
             compute_type=self.current_compute_type,
             local_files_only=local_files_only
         )
+        logger.info("Model initialized")
 
     def get_model_paths(self):
         """
