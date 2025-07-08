@@ -88,7 +88,6 @@ def run_asr_pipeline(
     "whisper_type,vad_filter,bgm_separation,diarization",
     [
         (WhisperImpl.WHISPER.value, False, False, False),
-        (WhisperImpl.FASTER_WHISPER.value, False, False, False),
         (WhisperImpl.INSANELY_FAST_WHISPER.value, False, False, False)
     ]
 )
