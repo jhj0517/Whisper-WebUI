@@ -90,7 +90,7 @@ class FasterWhisperInference(BaseTranscriptionPipeline):
             suppress_blank=params.suppress_blank,
             suppress_tokens=params.suppress_tokens,
             max_initial_timestamp=params.max_initial_timestamp,
-            word_timestamps=params.word_timestamps,
+            word_timestamps=True,  # Set it to always True as it reduces hallucinations
             prepend_punctuations=params.prepend_punctuations,
             append_punctuations=params.append_punctuations,
             max_new_tokens=params.max_new_tokens,
