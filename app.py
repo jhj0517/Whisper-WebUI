@@ -102,11 +102,11 @@ class App:
         uvr_params = self.default_params["bgm_separation"]
 
         with self.app:
-            lang = gr.Radio(choices=list(self.i18n.keys()),
-                            label=_("Language"), interactive=True,
-                            visible=False,  # Set it by development purpose.
-                            )
             with Translate(I18N_YAML_PATH):
+                lang = gr.Radio(choices=list(self.i18n.keys()),
+                                label=_("Language"), interactive=True,
+                                visible=False,  # Set it by development purpose.
+                                )
                 with gr.Row():
                     with gr.Column():
                         gr.Markdown(MARKDOWN, elem_id="md_project")

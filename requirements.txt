@@ -15,7 +15,7 @@ torchaudio
 git+https://github.com/jhj0517/jhj0517-whisper.git
 faster-whisper==1.1.1
 transformers==4.47.1
-gradio
+gradio==5.34.0
 git+https://github.com/jhj0517/gradio-i18n.git  # Fix encoding issue
 pytubefix
 ruamel.yaml==0.18.6
