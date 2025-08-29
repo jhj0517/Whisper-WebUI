@@ -85,6 +85,7 @@ class FasterWhisperInference(BaseTranscriptionPipeline):
             compression_ratio_threshold=params.compression_ratio_threshold,
             length_penalty=params.length_penalty,
             repetition_penalty=params.repetition_penalty,
+            condition_on_previous_text=params.condition_on_previous_text,
             no_repeat_ngram_size=params.no_repeat_ngram_size,
             prefix=params.prefix,
             suppress_blank=params.suppress_blank,
