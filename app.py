@@ -104,7 +104,7 @@ class App:
         with self.app:
             lang = gr.Radio(choices=list(self.i18n.keys()),
                             label=_("Language"), interactive=True,
-                            visible=True,  # Set it by development purpose.
+                            visible=False,  # Set it by development purpose.
                             )
             with Translate(I18N_YAML_PATH):  # Add `lang = lang` here to test dynamic change of the languages.
                 with gr.Row():
