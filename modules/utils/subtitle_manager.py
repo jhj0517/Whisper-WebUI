@@ -198,6 +198,15 @@ class SubtitlesWriter(ResultWriter):
             if len(subtitle) > 0:
                 yield subtitle
 
+        # first merge consecutive same-speaker segments
+        if len(result["segments"]) > 0:
+            if "SPEAKER_" in result["segments"][0]["text"]:
+                # If diarization is enabled, merge segments by speaker
+                result = {"segments": merge_segments_by_speaker(result["segments"])}
+            else:
+                # Otherwise, merge segments by duration
+                result = {"segments": merge_segments_by_duration(result["segments"], min_duration=60.0)}
+
         if len(result["segments"]) > 0 and "words" in result["segments"][0] and result["segments"][0]["words"]:
             for subtitle in iterate_subtitles():
                 subtitle_start = self.format_timestamp(subtitle[0]["start"])
@@ -291,7 +300,6 @@ class WriteSRT(SubtitlesWriter):
         self, result: dict, file: TextIO, options: Optional[dict] = None, **kwargs
     ):
 
-        result = {"segments": merge_segments_by_duration(result["segments"], min_duration=60.0)}
 
         for i, (start, end, text) in enumerate(
             self.iterate_result(result, options, **kwargs), start=1
@@ -318,6 +326,50 @@ class WriteSRT(SubtitlesWriter):
                 ))
 
         return segments
+
+def merge_segments_by_speaker(segments: List[dict]) -> List[dict]:
+    if not segments:
+        return segments
+
+    def split_speaker(text: str) -> Tuple[Optional[str], str]:
+        if "|" in text:
+            spk, content = text.split("|", 1)
+            return spk, content
+        return None, text
+
+    merged = []
+    current = None
+
+    for seg in segments:
+        seg_text = seg.get("text") or ""
+        spk, content = split_speaker(seg_text)
+
+        if current is None:
+            # start new
+            current = seg.copy()
+            # normalize current text to "SPEAKER|content" when speaker exists
+            if spk is not None:
+                current["text"] = f"{spk}|{content}"
+        else:
+            cur_spk, cur_content = split_speaker(current.get("text") or "")
+            if cur_spk is not None and spk is not None and cur_spk == spk:
+                # same speaker: concatenate without repeating speaker id
+                current["end"] = seg["end"]
+                current["text"] = f"{cur_spk}|{cur_content} {content}"
+                # merge words if present
+                if current.get("words") and seg.get("words"):
+                    current["words"].extend(seg["words"])
+            else:
+                # different or missing speakers: push current and start new
+                merged.append(current)
+                current = seg.copy()
+                if spk is not None:
+                    current["text"] = f"{spk}|{content}"
+
+    if current is not None:
+        merged.append(current)
+
+    return merged
 
 def merge_segments_by_duration(segments: List[dict], min_duration: float = 30.0) -> List[dict]:
     """
