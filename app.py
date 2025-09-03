@@ -108,7 +108,7 @@ class App:
         with self.app:
             lang = gr.Radio(choices=list(self.i18n.keys()),
                             label=_("Language"), interactive=True,
-                            visible=False,  # Set it by development purpose.
+                            visible=True,  # Set it by development purpose.
                             )
             with Translate(I18N_YAML_PATH):
                 with gr.Row():
