@@ -290,6 +290,9 @@ class WriteSRT(SubtitlesWriter):
     def write_result(
         self, result: dict, file: TextIO, options: Optional[dict] = None, **kwargs
     ):
+
+        result = {"segments": merge_segments_by_duration(result["segments"], min_duration=60.0)}
+
         for i, (start, end, text) in enumerate(
             self.iterate_result(result, options, **kwargs), start=1
         ):
@@ -316,6 +319,49 @@ class WriteSRT(SubtitlesWriter):
 
         return segments
 
+def merge_segments_by_duration(segments: List[dict], min_duration: float = 30.0) -> List[dict]:
+    """
+    Merge segments such that only the last segment may be shorter than min_duration seconds.
+    
+    Parameters
+    ----------
+    segments: List[dict]
+        List of segments to merge
+    min_duration: float
+        Minimum duration for segments (except the last one)
+        
+    Returns
+    ----------
+    List[dict]
+        List of merged segments
+    """
+    if not segments:
+        return segments
+    
+    merged_segments = []
+    current_segment = None
+    
+    for segment in segments:
+        if current_segment is None:
+            current_segment = segment.copy()
+        else:
+            # Calculate current segment duration
+            current_duration = current_segment["end"] - current_segment["start"]
+            
+            # If current segment is already long enough, add it to merged_segments
+            if current_duration >= min_duration:
+                merged_segments.append(current_segment)
+                current_segment = segment.copy()
+            else:
+                # Merge with next segment
+                current_segment["end"] = segment["end"]
+                current_segment["text"] = current_segment["text"] + " " + segment["text"]
+                
+    # Add the last segment (which may be shorter than min_duration)
+    if current_segment is not None:
+        merged_segments.append(current_segment)
+    
+    return merged_segments
 
 class WriteLRC(SubtitlesWriter):
     extension: str = "lrc"
