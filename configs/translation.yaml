@@ -629,3 +629,51 @@ he: # Hebrew
   Instrumental: אינסטרומנטלי
   Vocals: שירה
   SEPARATE BACKGROUND MUSIC: הפרד מוזיקת רקע
+zh-TW:
+  Language: 語言
+  Upload File here: 在此處上傳檔案
+  Model: 模型
+  Automatic Detection: 自動偵測
+  File Format: 檔案格式
+  Translate to English? (Whisper's End-To-End Speech-To-Text translation feature): 翻譯成英文？(Whisper 的端到端語音轉文字翻譯功能)
+  Add a timestamp to the end of the filename: 在檔名結尾加入時間戳記
+  Offload model when finished: 完成後卸載模型
+  Advanced Parameters: 進階參數
+  Enabling this will remove background music by submodel before transcribing: 啟用此功能將在轉錄前，透過子模型移除背景音樂
+  Enable Background Music Remover Filter: 啟用背景音樂移除濾波器
+  Device: 裝置
+  Save separated files to output: 將分離的檔案儲存至輸出資料夾
+  Background Music Remover Filter: 背景音樂移除濾波器
+  Enable this to transcribe only detected voice parts by submodel.: 啟用此功能，只轉錄子模型偵測到的語音部分
+  Enable Silero VAD Filter: 啟用 Silero VAD 濾波器
+  Voice Detection Filter: 語音偵測濾波器
+  Enable Diarization: 啟用語者分離（Diarization）
+  This is only needed the first time you download the model: 只有第一次下載模型時才需要此步驟。
+ 如果您已經有模型，則無需輸入。若要下載模型，您必須手動前往 "https://huggingface.co/pyannote/speaker-diarization-3.1" 和 "https://huggingface.co/pyannote/segmentation-3.0" 並同意其要求
+  HuggingFace Token: HuggingFace 權杖（Token）
+  Diarization: 語者分離
+  GENERATE SUBTITLE FILE: 產生字幕檔案
+  Output: 輸出
+  Downloadable output file: 可下載的輸出檔案
+  File: 檔案
+  Youtube Link: YouTube 連結
+  Youtube Thumbnail: YouTube 縮圖
+  Youtube Title: YouTube 標題
+  Youtube Description: YouTube 說明
+  Youtube: YouTube
+  Record with Mic: 使用麥克風錄音
+  Mic: 麥克風
+  Upload Subtitle Files to translate here: 在此處上傳要翻譯的字幕檔案
+  Your Auth Key (API KEY): 您的驗證金鑰 (API KEY)
+	Source Language: 來源語言
+	Target Language: 目標語言
+	Pro User?: 專業使用者？
+	TRANSLATE SUBTITLE FILE: 翻譯字幕檔案
+	DeepL API: DeepL API
+	NLLB: NLLB
+	T2T Translation: T2T 翻譯
+	Upload Audio Files to separate background music: 在此處上傳要分離背景音樂的音訊檔案
+	SEPARATE BACKGROUND MUSIC: 分離背景音樂
+	Instrumental: 樂器
+	Vocals: 人聲
+	BGM Separation: 背景音樂分離
