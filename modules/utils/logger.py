@@ -14,9 +14,12 @@ def get_logger(name: Optional[str] = None):
             "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
         )
 
-        handler = logging.StreamHandler()
-        # handler.setFormatter(formatter)
+        stream_handler = logging.StreamHandler()
+        stream_handler.setFormatter(formatter)
+        logger.addHandler(stream_handler)
 
-        logger.addHandler(handler)
+        file_handler = logging.FileHandler("webui.log")
+        file_handler.setFormatter(formatter)
+        logger.addHandler(file_handler)
 
     return logger

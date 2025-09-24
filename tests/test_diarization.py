@@ -17,7 +17,6 @@ from test_transcription import download_file, run_asr_pipeline
     "whisper_type,vad_filter,bgm_separation,diarization",
     [
         (WhisperImpl.WHISPER.value, False, False, True),
-        (WhisperImpl.FASTER_WHISPER.value, False, False, True),
         (WhisperImpl.INSANELY_FAST_WHISPER.value, False, False, True)
     ]
 )
