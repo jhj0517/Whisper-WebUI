@@ -316,7 +316,7 @@ class BaseTranscriptionPipeline(ABC):
             return result_str, result_file_path
 
         except Exception as e:
-            logger.error(f"Error transcribing file: {e}")
+            logger.error(f"Error transcribing file {file} with error: {e}")
             raise RuntimeError(f"Error transcribing file: {e}") from e
 
     def transcribe_mic(self,
