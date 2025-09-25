@@ -334,7 +334,7 @@ class WhisperParams(BaseParams):
         gt=0,
         description="Number of segments for language detection"
     )
-    batch_size: int = Field(default=24, gt=0, description="Batch size for processing")
+    batch_size: int = Field(default=12, gt=0, description="Batch size for processing")
     enable_offload: bool = Field(
         default=True,
         description="Offload Whisper model after transcription"
