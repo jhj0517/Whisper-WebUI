@@ -12,6 +12,7 @@ VIDEO_EXTENSION = ['.mp4', '.mkv', '.flv', '.avi', '.mov', '.wmv', '.webm', '.m4
                    '.f4v', '.ogv', '.vob', '.mts', '.m2ts', '.divx', '.mxf', '.rm', '.rmvb', '.ts']
 
 MEDIA_EXTENSION = VIDEO_EXTENSION + AUDIO_EXTENSION
+MEDIA_EXTENSION += [ext.upper() for ext in MEDIA_EXTENSION]
 
 
 def load_yaml(path: str = DEFAULT_PARAMETERS_CONFIG_PATH):
