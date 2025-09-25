@@ -270,6 +270,7 @@ class BaseTranscriptionPipeline(ABC):
 
             files_info = {}
             for file in files:
+                logger.info(f"Transcribing file: {file}")
                 transcribed_segments, time_for_task = self.run(
                     file,
                     progress,
@@ -315,6 +316,7 @@ class BaseTranscriptionPipeline(ABC):
             return result_str, result_file_path
 
         except Exception as e:
+            logger.error(f"Error transcribing file: {e}")
             raise RuntimeError(f"Error transcribing file: {e}") from e
 
     def transcribe_mic(self,
