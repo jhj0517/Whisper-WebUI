@@ -328,21 +328,19 @@ nl:
   Translate to English?: Naar Engels vertalen? (Whispers End-To-End Speech-To-Text
     vertaalfunctie)
   Add a timestamp to the end of the filename: Tijdstempel aan het einde van de bestandsnaam toevoegen
-  Offload sub model when finished: Offload model bij afronding
+  Offload sub model when finished: Offload model na voltooiing
   Advanced Parameters: Geavanceerde Parameters
-  Enabling this will remove background music: Dit inschakelen laat het submodel achtergrondmuziek 
-    verwijderen, voorafgaand de transcriptie
+  Enabling this will remove background music: Hiermee wordt achtergrondmuziek door het submodel verwijderd, voorafgaand aan de transcriptie
   Enable Background Music Remover Filter: Achtergrondmuziek-verwijderingsfilter inschakelen
   Device: Apparaat
   Save separated files to output: Resultaat als aparte bestanden opslaan
   Background Music Remover Filter: Achtergrondmuziek-verwijderingsfilter
-  Enable this to transcribe only detected voice: Dit inschakelen om alleen de door het submodel
-    gedetecteerde stemsegmenten te transcriberen
+  Enable this to transcribe only detected voice: Hiermee worden alleen de door het submodel gedetecteerde stemsegmenten getranscribeerd
   Enable Silero VAD Filter: Silero VAD-filter inschakelen
   Voice Detection Filter: Stemdetectie-filter
   Enable Diarization: Diarisatie inschakelen
   This is only needed the first time you download the model: Dit is alleen nodig de eerste keer dat
-    je het model download. Als je al modellen hebt, is dit niet nodig. Om het model te downloaden
+    je het model downloadt. Als je al modellen hebt, is dit niet nodig. Om het model te downloaden
     kun je naar "https://huggingface.co/pyannote/speaker-diarization-3.1" en "https://huggingface.co/pyannote/segmentation-3.0" 
     gaan en daar de voorwaarden accepteren.
   HuggingFace Token: HuggingFace-token
@@ -358,7 +356,7 @@ nl:
   Youtube: Youtube
   Record with Mic: Met microfoon opnemen
   Mic: Microfoon
-  Upload Subtitle Files to translate here: Te vertalen ondertitelingsbestanden hier uploaden
+  Upload Subtitle Files to translate here: Upload hier te vertalen ondertitelingsbestanden
   Your Auth Key (API KEY): Jouw autorisatiesleutel (API KEY)
   Source Language: Brontaal
   Target Language: Doeltaal
