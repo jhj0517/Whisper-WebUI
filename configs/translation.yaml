@@ -319,6 +319,57 @@ de:
   Instrumental: Instrumental
   Vocals: Gesang
   BGM Separation: Hintergrundmusik herausfiltern
+nl:
+  Language: Taal
+  Upload File here: Upload Bestand Hier
+  Model: Model
+  Automatic Detection: Automatische Detectie
+  File Format: Bestandstype
+  Translate to English?: Naar Engels vertalen? (Whispers End-To-End Speech-To-Text
+    vertaalfunctie)
+  Add a timestamp to the end of the filename: Tijdstempel aan het einde van de bestandsnaam toevoegen
+  Offload sub model when finished: Offload model na voltooiing
+  Advanced Parameters: Geavanceerde Parameters
+  Enabling this will remove background music: Hiermee wordt achtergrondmuziek door het submodel verwijderd, voorafgaand aan de transcriptie
+  Enable Background Music Remover Filter: Achtergrondmuziek-verwijderingsfilter inschakelen
+  Device: Apparaat
+  Save separated files to output: Resultaat als aparte bestanden opslaan
+  Background Music Remover Filter: Achtergrondmuziek-verwijderingsfilter
+  Enable this to transcribe only detected voice: Hiermee worden alleen de door het submodel gedetecteerde stemsegmenten getranscribeerd
+  Enable Silero VAD Filter: Silero VAD-filter inschakelen
+  Voice Detection Filter: Stemdetectie-filter
+  Enable Diarization: Diarisatie inschakelen
+  This is only needed the first time you download the model: Dit is alleen nodig de eerste keer dat
+    je het model downloadt. Als je al modellen hebt, is dit niet nodig. Om het model te downloaden
+    kun je naar "https://huggingface.co/pyannote/speaker-diarization-3.1" en "https://huggingface.co/pyannote/segmentation-3.0" 
+    gaan en daar de voorwaarden accepteren.
+  HuggingFace Token: HuggingFace-token
+  Diarization: Diarisatie
+  GENERATE SUBTITLE FILE: ONDERTITELINGSBESTAND GENEREREN
+  Output: Resultaat
+  Downloadable output file: Downloadbaar resultaat
+  File: Bestand
+  Youtube Link: Youtube-link
+  Youtube Thumbnail: Youtube-thumbnail
+  Youtube Title: Youtube-titel
+  Youtube Description: Youtube-beschrijving
+  Youtube: Youtube
+  Record with Mic: Met microfoon opnemen
+  Mic: Microfoon
+  Upload Subtitle Files to translate here: Upload hier te vertalen ondertitelingsbestanden
+  Your Auth Key (API KEY): Jouw autorisatiesleutel (API KEY)
+  Source Language: Brontaal
+  Target Language: Doeltaal
+  Pro User?: Pro gebruiker?
+  TRANSLATE SUBTITLE FILE: ONDERTITELINGSBESTAND VERTALEN
+  DeepL API: DeepL API
+  NLLB: NLLB
+  T2T Translation: T2T Vertaling
+  Upload Audio Files to separate background music: Audiobestanden uploaden, om achtergrondmuziek te scheiden
+  SEPARATE BACKGROUND MUSIC: ACHTERGRONDMUZIEK SCHEIDEN
+  Instrumental: Instrumenteel
+  Vocals: Stemmen
+  BGM Separation: BGM Separatie
 zh:
   Language: 语言
   Upload File here: 上传文件
