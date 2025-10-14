@@ -22,6 +22,9 @@ from backend.db.task.dao import (
     update_task_status_in_db
 )
 from backend.db.task.models import TaskStatus, TaskType
+from modules.utils.logger import get_logger
+
+logger = get_logger()
 
 transcription_router = APIRouter(prefix="/transcription", tags=["Transcription"])
 

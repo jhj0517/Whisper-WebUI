@@ -11,6 +11,10 @@ services:
       - ./models:/Whisper-WebUI/models
       - ./outputs:/Whisper-WebUI/outputs
       - ./configs:/Whisper-WebUI/configs
+      - type: bind
+        source: ${PWD}/backend/configs/.env
+        target: /Whisper-WebUI/backend/configs/.env
+        read_only: true
 
     ports:
       - "7860:7860"

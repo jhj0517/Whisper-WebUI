@@ -1,5 +1,5 @@
 whisper:
-  model_size: large-v3
+  model_size: large-v2
   lang: danish
   is_translate: false
   beam_size: 5
@@ -34,16 +34,16 @@ whisper:
   add_timestamp: false
   file_format: SRT
 vad:
-  vad_filter: false
+  vad_filter: true
   threshold: 0.5
   min_speech_duration_ms: 250
   max_speech_duration_s: 9999
   min_silence_duration_ms: 1000
   speech_pad_ms: 2000
 diarization:
-  is_diarize: false
+  is_diarize: true
   diarization_device: cuda
-  hf_token: ''
+  hf_token: null
   enable_offload: true
 bgm_separation:
   is_separate_bgm: false

@@ -28,12 +28,14 @@ en:
   Diarization: Diarization
   GENERATE SUBTITLE FILE: GENERATE SUBTITLE FILE
   Output: Output
-  Downloadable output file: Downloadable output file
+  Downloadable output file (will be deleted after 24 hours): Downloadable output file
+    (will be deleted after 24 hours)
   File: File
   Youtube Link: Youtube Link
   Youtube Thumbnail: Youtube Thumbnail
   Youtube Title: Youtube Title
   Youtube Description: Youtube Description
+  Downloadable output file: Downloadable output file
   Youtube: Youtube
   Record with Mic: Record with Mic
   Mic: Mic

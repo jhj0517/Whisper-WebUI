@@ -118,6 +118,7 @@ class BaseTranscriptionPipeline(ABC):
         start_time = time.time()
 
         if not validate_audio(audio):
+            logger.info("Audio is not valid.")
             return [Segment()], 0
 
         params = TranscriptionPipelineParams.from_list(list(pipeline_params))
@@ -313,6 +314,7 @@ class BaseTranscriptionPipeline(ABC):
             result_str = f"Done in {self.format_time(total_time)}!\n\n{total_result}"
             result_file_path = [info['path'] for info in files_info.values()]
 
+            logger.info(f"Transcribed file: {file_name} in {self.format_time(total_time)}")
             return result_str, result_file_path
 
         except Exception as e:

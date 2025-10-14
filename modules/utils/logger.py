@@ -11,12 +11,14 @@ def get_logger(name: Optional[str] = None):
         logger.setLevel(logging.INFO)
 
         formatter = logging.Formatter(
-            "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+            "%(asctime)s - %(name)s - %(levelname)s - %(message)s",
+            "%Y-%m-%d %H:%M:%S",
         )
 
         handler = logging.StreamHandler()
-        # handler.setFormatter(formatter)
+        handler.setFormatter(formatter)
 
         logger.addHandler(handler)
 
     return logger
+    

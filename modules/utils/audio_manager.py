@@ -13,6 +13,7 @@ logger = get_logger()
 def validate_audio(audio: Optional[str] = None):
     """Validate audio file and check if it's corrupted"""
     if isinstance(audio, np.ndarray):
+        logger.info(f"Audio length: {audio.shape[0] / 16000 / 60} minutes")
         return True
 
     if not os.path.exists(audio):
@@ -21,6 +22,7 @@ def validate_audio(audio: Optional[str] = None):
 
     try:
         audio = decode_audio(audio)
+        logger.info(f"Audio length: {audio.shape[0] / 16000 / 60} minutes")
         return True
     except Exception as e:
         logger.info(f"The file {audio} is not able to open or corrupted. Please check the file. {e}")
