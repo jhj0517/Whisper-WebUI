@@ -53,56 +53,56 @@ en:
   Vocals: Vocals
   BGM Separation: BGM Separation
 ko:
-  Language: ì–¸ì–´
-  Upload File here: íŒŒì¼ì„ ì—…ë¡œë“œ í•˜ì„¸ìš”
-  Model: ëª¨ë¸
-  Automatic Detection: ìë™ ê°ì§€
-  File Format: íŒŒì¼ í˜•ì‹
-  Translate to English?: ì˜ì–´ë¡œ ë²ˆì—­í•©ë‹ˆê¹Œ? (ìœ„ìŠ¤í¼ ëª¨ë¸ ìì²´ ë²ˆì—­ ê¸°ëŠ¥)
-  Add a timestamp to the end of the filename: íŒŒì¼ ì´ë¦„ ëì— íƒ€ì„ìŠ¤íƒœí”„ ë¶™ì´ê¸°
-  Offload sub model when finished: ì™„ë£Œ í›„ ëª¨ë¸ ì˜¤í”„ë¡œë“œ. (VRAM ì´ ë¶€ì¡±í•  ì‹œ ì²´í¬í•˜ì„¸ìš”.)
-  Advanced Parameters: ê³ ê¸‰ ë³€ìˆ˜
-  Enabling this will remove background music: ë°›ì•„ì“°ê¸° ì´ì „ì— ë¨¼ì € ë°°ê²½ ìŒì•… ì œê±°ìš© ì„œë¸Œ ëª¨ë¸ì„ í™œì„±í™” í•©ë‹ˆë‹¤.
-  Enable Background Music Remover Filter: ë°°ê²½ ìŒì•… ì œê±° í•„í„° í™œì„±í™”
-  Device: ë””ë°”ì´ìŠ¤
-  Save separated files to output: ë¶„ë¦¬ëœ ë°°ê²½ ìŒì•… & ìŒì„± íŒŒì¼ ë”°ë¡œ ì¶œë ¥ í´ë”ì— ì €ì¥
-  Background Music Remover Filter: ë°°ê²½ ìŒì•… ì œê±° í•„í„°
-  Enable this to transcribe only detected voice: ì„œë¸Œ ëª¨ë¸ì— ì˜í•´ ëª©ì†Œë¦¬ë¼ê³  íŒë‹¨ëœ ë¶€ë¶„ë§Œ ë°›ì•„ì“°ê¸°ë¥¼ ì§„í–‰í•©ë‹ˆë‹¤.
-  Enable Silero VAD Filter: Silero VAD í•„í„° í™œì„±í™”
-  Voice Detection Filter: ëª©ì†Œë¦¬ ê°ì§€ í•„í„°
-  Enable Diarization: í™”ì êµ¬ë¶„ í™œì„±í™”
-  This is only needed the first time you download the model: ëª¨ë¸ì„ ì²˜ìŒ ë‹¤ìš´ë°›ì„ ë•Œë§Œ í† í°ì´ í•„ìš”í•©ë‹ˆë‹¤.
-    ì´ë¯¸ ë‹¤ìš´ë¡œë“œ ë°›ìœ¼ì‹  ìƒíƒœë¼ë©´ ì…ë ¥í•˜ì§€ ì•Šì•„ë„ ë©ë‹ˆë‹¤. ëª¨ë¸ì„ ë‹¤ìš´ ë°›ê¸° ìœ„í•´ì„  "https://huggingface.co/pyannote/speaker-diarization-3.1"
-    ì™€ "https://huggingface.co/pyannote/segmentation-3.0" ì—ì„œ ë¨¼ì € ì‚¬ìš© ì§€ì¹¨ì— ë™ì˜í•˜ì…”ì•¼ í•©ë‹ˆë‹¤.
-  HuggingFace Token: í—ˆê¹…í˜ì´ìŠ¤ í† í°
-  Diarization: í™”ì êµ¬ë¶„
-  GENERATE SUBTITLE FILE: ìë§‰ íŒŒì¼ ìƒì„±
-  Output: ê²°ê³¼ë¬¼
-  Downloadable output file: ê²°ê³¼ë¬¼ íŒŒì¼ ë‹¤ìš´ë¡œë“œ
-  File: íŒŒì¼
-  Youtube Link: ìœ íŠœë¸Œ ë§í¬
-  Youtube Thumbnail: ìœ íŠœë¸Œ ì¸ë„¤ì¼
-  Youtube Title: ìœ íŠœë¸Œ ì œëª©
-  Youtube Description: ìœ íŠœë¸Œ ì„¤ëª…
-  Youtube: ìœ íŠœë¸Œ
-  Record with Mic: ë§ˆì´í¬ë¡œ ë…¹ìŒí•˜ì„¸ìš”
-  Mic: ë§ˆì´í¬
-  Upload Subtitle Files to translate here: ë²ˆì—­í•  ìë§‰ íŒŒì¼ì„ ì—…ë¡œë“œ í•˜ì„¸ìš”
-  Your Auth Key (API KEY): DeepL API í‚¤
-  Source Language: ì›ë³¸ ì–¸ì–´
-  Target Language: ëŒ€ìƒ ì–¸ì–´
-  Pro User?: Pro ë²„ì „ ì‚¬ìš©ì
-  TRANSLATE SUBTITLE FILE: ìë§‰ íŒŒì¼ ë²ˆì—­
+  Language: ¾ğ¾î
+  Upload File here: ÆÄÀÏÀ» ¾÷·Îµå ÇÏ¼¼¿ä
+  Model: ¸ğµ¨
+  Automatic Detection: ÀÚµ¿ °¨Áö
+  File Format: ÆÄÀÏ Çü½Ä
+  Translate to English?: ¿µ¾î·Î ¹ø¿ªÇÕ´Ï±î? (À§½ºÆÛ ¸ğµ¨ ÀÚÃ¼ ¹ø¿ª ±â´É)
+  Add a timestamp to the end of the filename: ÆÄÀÏ ÀÌ¸§ ³¡¿¡ Å¸ÀÓ½ºÅÂÇÁ ºÙÀÌ±â
+  Offload sub model when finished: ¿Ï·á ÈÄ ¸ğµ¨ ¿ÀÇÁ·Îµå. (VRAM ÀÌ ºÎÁ·ÇÒ ½Ã Ã¼Å©ÇÏ¼¼¿ä.)
+  Advanced Parameters: °í±Ş º¯¼ö
+  Enabling this will remove background music: ¹Ş¾Æ¾²±â ÀÌÀü¿¡ ¸ÕÀú ¹è°æ À½¾Ç Á¦°Å¿ë ¼­ºê ¸ğµ¨À» È°¼ºÈ­ ÇÕ´Ï´Ù.
+  Enable Background Music Remover Filter: ¹è°æ À½¾Ç Á¦°Å ÇÊÅÍ È°¼ºÈ­
+  Device: µğ¹ÙÀÌ½º
+  Save separated files to output: ºĞ¸®µÈ ¹è°æ À½¾Ç & À½¼º ÆÄÀÏ µû·Î Ãâ·Â Æú´õ¿¡ ÀúÀå
+  Background Music Remover Filter: ¹è°æ À½¾Ç Á¦°Å ÇÊÅÍ
+  Enable this to transcribe only detected voice: ¼­ºê ¸ğµ¨¿¡ ÀÇÇØ ¸ñ¼Ò¸®¶ó°í ÆÇ´ÜµÈ ºÎºĞ¸¸ ¹Ş¾Æ¾²±â¸¦ ÁøÇàÇÕ´Ï´Ù.
+  Enable Silero VAD Filter: Silero VAD ÇÊÅÍ È°¼ºÈ­
+  Voice Detection Filter: ¸ñ¼Ò¸® °¨Áö ÇÊÅÍ
+  Enable Diarization: È­ÀÚ ±¸ºĞ È°¼ºÈ­
+  This is only needed the first time you download the model: ¸ğµ¨À» Ã³À½ ´Ù¿î¹ŞÀ» ¶§¸¸ ÅäÅ«ÀÌ ÇÊ¿äÇÕ´Ï´Ù.
+    ÀÌ¹Ì ´Ù¿î·Îµå ¹ŞÀ¸½Å »óÅÂ¶ó¸é ÀÔ·ÂÇÏÁö ¾Ê¾Æµµ µË´Ï´Ù. ¸ğµ¨À» ´Ù¿î ¹Ş±â À§ÇØ¼± "https://huggingface.co/pyannote/speaker-diarization-3.1"
+    ¿Í "https://huggingface.co/pyannote/segmentation-3.0" ¿¡¼­ ¸ÕÀú »ç¿ë ÁöÄ§¿¡ µ¿ÀÇÇÏ¼Å¾ß ÇÕ´Ï´Ù.
+  HuggingFace Token: Çã±ëÆäÀÌ½º ÅäÅ«
+  Diarization: È­ÀÚ ±¸ºĞ
+  GENERATE SUBTITLE FILE: ÀÚ¸· ÆÄÀÏ »ı¼º
+  Output: °á°ú¹°
+  Downloadable output file: °á°ú¹° ÆÄÀÏ ´Ù¿î·Îµå
+  File: ÆÄÀÏ
+  Youtube Link: À¯Æ©ºê ¸µÅ©
+  Youtube Thumbnail: À¯Æ©ºê ½æ³×ÀÏ
+  Youtube Title: À¯Æ©ºê Á¦¸ñ
+  Youtube Description: À¯Æ©ºê ¼³¸í
+  Youtube: À¯Æ©ºê
+  Record with Mic: ¸¶ÀÌÅ©·Î ³ìÀ½ÇÏ¼¼¿ä
+  Mic: ¸¶ÀÌÅ©
+  Upload Subtitle Files to translate here: ¹ø¿ªÇÒ ÀÚ¸· ÆÄÀÏÀ» ¾÷·Îµå ÇÏ¼¼¿ä
+  Your Auth Key (API KEY): DeepL API Å°
+  Source Language: ¿øº» ¾ğ¾î
+  Target Language: ´ë»ó ¾ğ¾î
+  Pro User?: Pro ¹öÀü »ç¿ëÀÚ
+  TRANSLATE SUBTITLE FILE: ÀÚ¸· ÆÄÀÏ ¹ø¿ª
   DeepL API: DeepL API
   NLLB: NLLB
-  T2T Translation: T2T ìë§‰ ë²ˆì—­
-  Upload Audio Files to separate background music: ë°°ê²½ ìŒì•…ì„ ë¶„ë¦¬í•  ì˜¤ë””ì˜¤ íŒŒì¼ì„ ì—…ë¡œë“œ í•˜ì„¸ìš”
-  SEPARATE BACKGROUND MUSIC: ë°°ê²½ ìŒì•… ë¶„ë¦¬
-  Instrumental: ì•…ê¸°
-  Vocals: ë³´ì»¬
-  BGM Separation: ë°°ê²½ ìŒì•… ë¶„ë¦¬
+  T2T Translation: T2T ÀÚ¸· ¹ø¿ª
+  Upload Audio Files to separate background music: ¹è°æ À½¾ÇÀ» ºĞ¸®ÇÒ ¿Àµğ¿À ÆÄÀÏÀ» ¾÷·Îµå ÇÏ¼¼¿ä
+  SEPARATE BACKGROUND MUSIC: ¹è°æ À½¾Ç ºĞ¸®
+  Instrumental: ¾Ç±â
+  Vocals: º¸ÄÃ
+  BGM Separation: ¹è°æ À½¾Ç ºĞ¸®
 ja:
-  Language: è¨€èª
+  Language: åëåŞ
   Upload File here: Upload File here
   Model: Model
   Automatic Detection: Automatic Detection
@@ -209,37 +209,37 @@ es:
   BGM Separation: BGM Separation
 fr:
   Language: Langue
-  Upload File here: TÃ©lÃ©verser un fichier ici
-  Model: ModÃ¨le
-  Automatic Detection: DÃ©tection automatique
+  Upload File here: T?l?verser un fichier ici
+  Model: Mod?le
+  Automatic Detection: D?tection automatique
   File Format: Format de fichier
   Translate to English?: Traduire en anglais ?
-  Add a timestamp to the end of the filename: Ajouter un timestamp Ã  la fin du nom
+  Add a timestamp to the end of the filename: Ajouter un timestamp ? la fin du nom
     de fichier
-  Offload sub model when finished: DÃ©charger le sous-modÃ¨le une fois terminÃ©
-  Advanced Parameters: ParamÃ¨tres avancÃ©s
+  Offload sub model when finished: D?charger le sous-mod?le une fois termin?
+  Advanced Parameters: Param?tres avanc?s
   Enabling this will remove background music: L'activation supprimera la musique de
-    fond via un sous-modÃ¨le avant la transcription
+    fond via un sous-mod?le avant la transcription
   Enable Background Music Remover Filter: Activer le filtre de suppression de musique
     de fond
-  Device: PÃ©riphÃ©rique
-  Save separated files to output: Sauvegarder les fichiers sÃ©parÃ©s dans la sortie
+  Device: P?riph?rique
+  Save separated files to output: Sauvegarder les fichiers s?par?s dans la sortie
   Background Music Remover Filter: Filtre de suppression de musique de fond
   Enable this to transcribe only detected voice: Activer pour transcrire uniquement
-    la voix dÃ©tectÃ©e
+    la voix d?tect?e
   Enable Silero VAD Filter: Activer le filtre Silero VAD
-  Voice Detection Filter: Filtre de dÃ©tection vocale
+  Voice Detection Filter: Filtre de d?tection vocale
   Enable Diarization: Activer la diarisation
-  This is only needed the first time you download the model: Le token n'est nÃ©cessaire
-    que lors du premier tÃ©lÃ©chargement du modÃ¨le. Si vous avez dÃ©jÃ  les modÃ¨les, vous
-    n'avez pas besoin de l'entrer. Pour tÃ©lÃ©charger le modÃ¨le, vous devez aller manuellement
+  This is only needed the first time you download the model: Le token n'est n?cessaire
+    que lors du premier t?l?chargement du mod?le. Si vous avez d?j? les mod?les, vous
+    n'avez pas besoin de l'entrer. Pour t?l?charger le mod?le, vous devez aller manuellement
     sur "https://huggingface.co/pyannote/speaker-diarization-3.1" et "https://huggingface.co/pyannote/segmentation-3.0"
     et accepter leurs conditions.
   HuggingFace Token: Token HuggingFace
   Diarization: Diarisation
-  GENERATE SUBTITLE FILE: GÃ‰NÃ‰RER UN FICHIER DE SOUS-TITRES
+  GENERATE SUBTITLE FILE: G?N?RER UN FICHIER DE SOUS-TITRES
   Output: Sortie
-  Downloadable output file: Fichier de sortie tÃ©lÃ©chargeable
+  Downloadable output file: Fichier de sortie t?l?chargeable
   File: Fichier
   Youtube Link: Lien Youtube
   Youtube Thumbnail: Miniature Youtube
@@ -248,9 +248,9 @@ fr:
   Youtube: Youtube
   Record with Mic: Enregistrer avec le microphone
   Mic: Microphone
-  Upload Subtitle Files to translate here: TÃ©lÃ©verser ici les fichiers de sous-titres
-    Ã  traduire
-  Your Auth Key (API KEY): Votre clÃ© d'authentification (API KEY)
+  Upload Subtitle Files to translate here: T?l?verser ici les fichiers de sous-titres
+    ? traduire
+  Your Auth Key (API KEY): Votre cl? d'authentification (API KEY)
   Source Language: Langue source
   Target Language: Langue cible
   Pro User?: Utilisateur Pro ?
@@ -258,26 +258,26 @@ fr:
   DeepL API: DeepL API
   NLLB: NLLB
   T2T Translation: Traduction T2T
-  Upload Audio Files to separate background music: TÃ©lÃ©verser les fichiers audio pour
-    sÃ©parer la musique de fond
-  SEPARATE BACKGROUND MUSIC: SÃ‰PARER LA MUSIQUE DE FOND
+  Upload Audio Files to separate background music: T?l?verser les fichiers audio pour
+    s?parer la musique de fond
+  SEPARATE BACKGROUND MUSIC: S?PARER LA MUSIQUE DE FOND
   Instrumental: Instrumental
   Vocals: Voix
-  BGM Separation: SÃ©paration de la musique de fond
+  BGM Separation: S?paration de la musique de fond
 de:
   Language: Sprache
   Upload File here: Datei hier hochladen
   Model: Modell
   Automatic Detection: Automatische Erkennung
   File Format: Dateiformat
-  Translate to English?: Ins Englische Ã¼bersetzen?
-  Add a timestamp to the end of the filename: Zeitstempel an den Dateinamen anhÃ¤ngen
-  Offload sub model when finished: Submodell entladen wenn nicht mehr benÃ¶tigt
+  Translate to English?: Ins Englische ?bersetzen?
+  Add a timestamp to the end of the filename: Zeitstempel an den Dateinamen anh?ngen
+  Offload sub model when finished: Submodell entladen wenn nicht mehr ben?tigt
   Advanced Parameters: Erweiterte Parameter
   Enabling this will remove background music: Aktivierung entfernt Hintergrundmusik
     mithilfe des Submodells vor der Transkription
   Enable Background Music Remover Filter: Hintergrundmusik-Entfernungsfilter aktivieren
-  Device: GerÃ¤t
+  Device: Ger?t
   Save separated files to output: Getrennte Dateien in der Ausgabe speichern
   Background Music Remover Filter: Hintergrundmusik-Entfernungsfilter
   Enable this to transcribe only detected voice: Aktivieren, um nur erkannte Sprachsegmente
@@ -287,8 +287,8 @@ de:
   Enable Diarization: Diarisierung aktivieren
   This is only needed the first time you download the model: Dies ist nur erforderlich,
     wenn Sie das Modell zum ersten Mal herunterladen. Falls Sie die Modelle bereits
-    besitzen, ist dies nicht nÃ¶tig. Um das Modell herunterzuladen, mÃ¼ssen Sie manuell
-    die Seiten â€https://huggingface.co/pyannote/speaker-diarization-3.1â€œ und â€https://huggingface.co/pyannote/segmentation-3.0â€œ
+    besitzen, ist dies nicht n?tig. Um das Modell herunterzuladen, m?ssen Sie manuell
+    die Seiten ?https://huggingface.co/pyannote/speaker-diarization-3.1¡° und ?https://huggingface.co/pyannote/segmentation-3.0¡°
     besuchen und deren Anforderungen zustimmen.
   HuggingFace Token: HuggingFace-Token
   Diarization: Diarisierung
@@ -303,16 +303,16 @@ de:
   Youtube: Youtube
   Record with Mic: Mit Mikrofon aufnehmen
   Mic: Mikrofon
-  Upload Subtitle Files to translate here: Untertiteldateien zur Ãœbersetzung hier
+  Upload Subtitle Files to translate here: Untertiteldateien zur ?bersetzung hier
     hochladen
-  Your Auth Key (API KEY): Ihr AuthentifizierungsschlÃ¼ssel (API-SchlÃ¼ssel)
+  Your Auth Key (API KEY): Ihr Authentifizierungsschl?ssel (API-Schl?ssel)
   Source Language: Ausgangssprache
   Target Language: Zielsprache
   Pro User?: Pro-Benutzer?
-  TRANSLATE SUBTITLE FILE: UNTERTITELDATEI ÃœBERSETZEN
+  TRANSLATE SUBTITLE FILE: UNTERTITELDATEI ?BERSETZEN
   DeepL API: DeepL API
   NLLB: NLLB
-  T2T Translation: Text zu Text Ãœbersetzung
+  T2T Translation: Text zu Text ?bersetzung
   Upload Audio Files to separate background music: Audiodateien hochladen, um Hintergrundmusik
     zu trennen
   SEPARATE BACKGROUND MUSIC: HINTERGRUNDMUSIK TRENNEN
@@ -371,217 +371,217 @@ nl:
   Vocals: Stemmen
   BGM Separation: BGM Separatie
 zh:
-  Language: è¯­è¨€
-  Upload File here: ä¸Šä¼ æ–‡ä»¶
-  Model: æ¨¡å‹é€‰æ‹©
-  Automatic Detection: è‡ªåŠ¨æ£€æµ‹è¯­è¨€
-  File Format: å­—å¹•æ–‡ä»¶æ ¼å¼
-  Translate to English?: å°†å­—å¹•ç¿»è¯‘æˆè‹±è¯­
-  Add a timestamp to the end of the filename: åœ¨æ–‡ä»¶åæœ«å°¾åŠ å…¥æ—¶é—´æˆ³
-  Offload sub model when finished: å®Œæˆåå¸è½½å­æ¨¡å‹
-  Advanced Parameters: é«˜çº§å‚æ•°
-  Enabling this will remove background music: å¯ç”¨æ­¤åŠŸèƒ½å°†ä¼šåœ¨è¿›è¡Œè½¬å½•å‰å»é™¤èƒŒæ™¯éŸ³ä¹
-  Enable Background Music Remover Filter: å»é™¤èƒŒæ™¯éŸ³ä¹
-  Device: è®¾å¤‡
-  Save separated files to output: å¯¼å‡ºåˆ†ç¦»å‡ºçš„éŸ³é¢‘æ–‡ä»¶
-  Background Music Remover Filter: èƒŒæ™¯éŸ³ä¹æ¶ˆé™¤è®¾ç½®
-  Enable this to transcribe only detected voice: å¯ç”¨æ­¤åŠŸèƒ½å°†ä»…è½¬å½•æ£€æµ‹åˆ°çš„è¯­éŸ³éƒ¨åˆ†
-  Enable Silero VAD Filter: å¯ç”¨ Silero è¯­éŸ³æ´»åŠ¨æ£€æµ‹ (VAD)
-  Voice Detection Filter: è¯éŸ³æ£€æµ‹è®¾ç½®
-  Enable Diarization: è¿›è¡Œè¯´è¯äººåˆ†ç¦»å¤„ç†
-  This is only needed the first time you download the model: å½“ä¸”ä»…å½“æ‚¨é¦–æ¬¡ä¸‹è½½æ¨¡å‹æ—¶æ‰éœ€è¦åœ¨æ­¤è¾“å…¥ä»¤ç‰Œï¼Œå¦‚æœæ‚¨å·²æœ‰æ¨¡å‹åˆ™æ— éœ€è¾“å…¥ã€‚
-    è¦ä¸‹è½½æ¨¡å‹ï¼Œæ‚¨å¿…é¡»å…ˆåœ¨"https://huggingface.co/pyannote/speaker-diarization-3.1" ä¸ "https://huggingface.co/pyannote/segmentation-3.0"
-    ä¸ŠåŒæ„ä»–ä»¬çš„ä½¿ç”¨æ¡æ¬¾ã€‚
-  HuggingFace Token: HuggingFaceä»¤ç‰Œ
-  Diarization: è¯´è¯äººåˆ†ç¦»è®¾ç½®
-  GENERATE SUBTITLE FILE: ç”Ÿæˆå­—å¹•æ–‡ä»¶
-  Output: è¾“å‡º
-  Downloadable output file: ç”Ÿæˆçš„å­—å¹•æ–‡ä»¶
-  File: æ–‡ä»¶
-  Youtube Link: Youtubeè§†é¢‘é“¾æ¥
-  Youtube Thumbnail: Youtubeè§†é¢‘å°é¢
-  Youtube Title: Youtubeè§†é¢‘æ ‡é¢˜
-  Youtube Description: Youtubeè§†é¢‘ç®€ä»‹
+  Language: ?åë
+  Upload File here: ß¾?ÙşËì
+  Model: Ù¼úş??
+  Automatic Detection: í»????åë
+  File Format: í®Ø­ÙşËìÌ«ãÒ
+  Translate to English?: ?í®Ø­??à÷çÈ?
+  Add a timestamp to the end of the filename: î¤ÙşËìÙ£ØÇÚ­Ê¥ìı???
+  Offload sub model when finished: èÇà÷ı¨??í­Ù¼úş
+  Advanced Parameters: ÍÔ???
+  Enabling this will remove background music: ?éÄó®ÍíÒö??î¤?ú¼??îñËÛğ¶ÛÎÌØëå?
+  Enable Background Music Remover Filter: ËÛğ¶ÛÎÌØëå?
+  Device: ??
+  Save separated files to output: ?õóİÂ?õóîÜëå?ÙşËì
+  Background Music Remover Filter: ÛÎÌØëå?á¼ğ¶?öÇ
+  Enable this to transcribe only detected voice: ?éÄó®ÍíÒö??????ÓğîÜ?ëåİ»İÂ
+  Enable Silero VAD Filter: ?éÄ Silero ?ëåüÀ??? (VAD)
+  Voice Detection Filter: ?ëå???öÇ
+  Enable Diarization: ?ú¼??ìÑİÂ??×â
+  This is only needed the first time you download the model: ?ó¦???âÏó­ù»?Ù¼úş?î¦âÍé©î¤ó®?ìıÖµø«£¬åıÍı?ì«êóÙ¼úş?ÙéâÍ?ìı¡£
+    é©ù»?Ù¼úş£¬?ù±?à»î¤"https://huggingface.co/pyannote/speaker-diarization-3.1" ? "https://huggingface.co/pyannote/segmentation-3.0"
+    ß¾ÔÒëòöâ?îÜŞÅéÄ?Î³¡£
+  HuggingFace Token: HuggingFaceÖµø«
+  Diarization: ??ìÑİÂ??öÇ
+  GENERATE SUBTITLE FILE: ßæà÷í®Ø­ÙşËì
+  Output: ?õó
+  Downloadable output file: ßæà÷îÜí®Ø­ÙşËì
+  File: ÙşËì
+  Youtube Link: Youtube???ïÈ
+  Youtube Thumbnail: Youtube??ÜæØü
+  Youtube Title: Youtube????
+  Youtube Description: Youtube???Ë¿
   Youtube: Youtube
-  Record with Mic: é€šè¿‡éº¦å…‹é£å½•åˆ¶
-  Mic: éº¦å…‹é£
-  Upload Subtitle Files to translate here: ä¸Šä¼ å¾…ç¿»è¯‘çš„å­—å¹•æ–‡ä»¶
-  Your Auth Key (API KEY): å¡«å†™æ‚¨çš„è®¤è¯ä»¤ç‰Œ(API KEY)
-  Source Language: åŸè¯­è¨€
-  Target Language: ç›®æ ‡è¯­è¨€
-  Pro User?: æ‚¨æ˜¯å¦ä¸ºä¸“ä¸šç‰ˆç”¨æˆ·ï¼Ÿ
-  TRANSLATE SUBTITLE FILE: ç¿»è¯‘å­—å¹•æ–‡ä»¶
+  Record with Mic: ÷×??Ğº??ğ¤
+  Mic: ?Ğº?
+  Upload Subtitle Files to translate here: ß¾?Óâ??îÜí®Ø­ÙşËì
+  Your Auth Key (API KEY): ???îÜ??Öµø«(API KEY)
+  Source Language: ê«?åë
+  Target Language: ÙÍ??åë
+  Pro User?: ?ãÀÜú???÷úéÄ?£¿
+  TRANSLATE SUBTITLE FILE: ??í®Ø­ÙşËì
   DeepL API: DeepL API
   NLLB: NLLB
-  T2T Translation: æ–‡å­—ç¿»è¯‘
-  Upload Audio Files to separate background music: ä¸Šä¼ å¾…åˆ†ç¦»èƒŒæ™¯éŸ³ä¹çš„éŸ³é¢‘æ–‡ä»¶
-  SEPARATE BACKGROUND MUSIC: åˆ†ç¦»èƒŒæ™¯éŸ³ä¹ä¸äººå£°
-  Instrumental: å™¨ä¹å£°
-  Vocals: äººå£°
-  BGM Separation: èƒŒæ™¯éŸ³ä¹åˆ†ç¦»
+  T2T Translation: Ùşí®??
+  Upload Audio Files to separate background music: ß¾?ÓâİÂ?ÛÎÌØëå?îÜëå?ÙşËì
+  SEPARATE BACKGROUND MUSIC: İÂ?ÛÎÌØëå??ìÑ?
+  Instrumental: Ğï??
+  Vocals: ìÑ?
+  BGM Separation: ÛÎÌØëå?İÂ?
 uk:
-  Language: ĞœĞ¾Ğ²Ğ°
-  Upload File here: Ğ—Ğ°Ğ²Ğ°Ğ½Ñ‚Ğ°Ğ¶Ñ‚Ğµ Ñ„Ğ°Ğ¹Ğ» Ñ‚ÑƒÑ‚
-  Model: ĞœĞ¾Ğ´ĞµĞ»ÑŒ
-  Automatic Detection: ĞĞ²Ñ‚Ğ¾Ğ¼Ğ°Ñ‚Ğ¸Ñ‡Ğ½Ğµ Ğ²Ğ¸Ğ·Ğ½Ğ°Ñ‡ĞµĞ½Ğ½Ñ
-  File Format: Ğ¤Ğ¾Ñ€Ğ¼Ğ°Ñ‚ Ñ„Ğ°Ğ¹Ğ»Ñƒ
-  Translate to English?: ĞŸĞµÑ€ĞµĞºĞ»Ğ°ÑÑ‚Ğ¸ Ğ½Ğ° Ğ°Ğ½Ğ³Ğ»Ñ–Ğ¹ÑÑŒĞºÑƒ?
-  Add a timestamp to the end of the filename: Ğ”Ğ¾Ğ´Ğ°Ñ‚Ğ¸ Ğ¼Ñ–Ñ‚ĞºÑƒ Ñ‡Ğ°ÑÑƒ Ğ´Ğ¾ ĞºÑ–Ğ½Ñ†Ñ Ñ–Ğ¼ĞµĞ½Ñ– Ñ„Ğ°Ğ¹Ğ»Ñƒ
-  Offload sub model when finished: ĞŸÑ–ÑĞ»Ñ Ğ·Ğ°Ğ²ĞµÑ€ÑˆĞµĞ½Ğ½Ñ Ğ²Ğ¸Ğ²Ğ°Ğ½Ñ‚Ğ°Ğ¶Ñ‚Ğµ Ğ¿Ñ–Ğ´Ğ¼Ğ¾Ğ´ĞµĞ»ÑŒ
-  Advanced Parameters: Ğ Ğ¾Ğ·ÑˆĞ¸Ñ€ĞµĞ½Ñ– Ğ¿Ğ°Ñ€Ğ°Ğ¼ĞµÑ‚Ñ€Ğ¸
-  Enabling this will remove background music: Ğ£Ğ²Ñ–Ğ¼ĞºĞ½ĞµĞ½Ğ½Ñ Ñ†ÑŒĞ¾Ğ³Ğ¾ Ğ²Ğ¸Ğ´Ğ°Ğ»Ğ¸Ñ‚ÑŒ Ñ„Ğ¾Ğ½Ğ¾Ğ²Ñƒ Ğ¼ÑƒĞ·Ğ¸ĞºÑƒ
-    Ğ·Ğ° Ğ´Ğ¾Ğ¿Ğ¾Ğ¼Ğ¾Ğ³Ğ¾Ñ Ğ¿Ñ–Ğ´Ğ¼Ğ¾Ğ´ĞµĞ»Ñ– Ğ¿ĞµÑ€ĞµĞ´ Ñ‚Ñ€Ğ°Ğ½ÑĞºÑ€Ğ¸Ğ¿Ñ†Ñ–Ñ”Ñ
-  Enable Background Music Remover Filter: Ğ£Ğ²Ñ–Ğ¼ĞºĞ½ÑƒÑ‚Ğ¸ Ñ„Ñ–Ğ»ÑŒÑ‚Ñ€ Ğ²Ğ¸Ğ´Ğ°Ğ»ĞµĞ½Ğ½Ñ Ñ„Ğ¾Ğ½Ğ¾Ğ²Ğ¾Ñ— Ğ¼ÑƒĞ·Ğ¸ĞºĞ¸
-  Device: ĞŸÑ€Ğ¸ÑÑ‚Ñ€Ñ–Ğ¹
-  Save separated files to output: Ğ—Ğ±ĞµÑ€ĞµĞ³Ñ‚Ğ¸ Ñ€Ğ¾Ğ·Ğ´Ñ–Ğ»ĞµĞ½Ñ– Ñ„Ğ°Ğ¹Ğ»Ğ¸ Ğ´Ğ¾ Ğ²Ğ¸Ñ…Ñ–Ğ´Ğ½Ğ¾Ñ— Ğ¿Ğ°Ğ¿ĞºĞ¸
-  Background Music Remover Filter: Ğ¤Ñ–Ğ»ÑŒÑ‚Ñ€ Ğ²Ğ¸Ğ´Ğ°Ğ»ĞµĞ½Ğ½Ñ Ñ„Ğ¾Ğ½Ğ¾Ğ²Ğ¾Ñ— Ğ¼ÑƒĞ·Ğ¸ĞºĞ¸
-  Enable this to transcribe only detected voice: Ğ£Ğ²Ñ–Ğ¼ĞºĞ½Ñ–Ñ‚ÑŒ Ñ†Ğµ, Ñ‰Ğ¾Ğ± Ñ‚Ñ€Ğ°Ğ½ÑĞºÑ€Ğ¸Ğ±ÑƒĞ²Ğ°Ñ‚Ğ¸
-    Ğ»Ğ¸ÑˆĞµ Ñ€Ğ¾Ğ·Ğ¿Ñ–Ğ·Ğ½Ğ°Ğ½Ñ– Ğ³Ğ¾Ğ»Ğ¾ÑĞ¾Ğ²Ñ– Ñ‡Ğ°ÑÑ‚Ğ¸Ğ½Ğ¸ Ğ·Ğ° Ğ´Ğ¾Ğ¿Ğ¾Ğ¼Ğ¾Ğ³Ğ¾Ñ Ğ¿Ñ–Ğ´Ğ¼Ğ¾Ğ´ĞµĞ»Ñ–
-  Enable Silero VAD Filter: Ğ£Ğ²Ñ–Ğ¼ĞºĞ½ÑƒÑ‚Ğ¸ Ñ„Ñ–Ğ»ÑŒÑ‚Ñ€ Silero VAD
-  Voice Detection Filter: Ğ¤Ñ–Ğ»ÑŒÑ‚Ñ€ Ñ€Ğ¾Ğ·Ğ¿Ñ–Ğ·Ğ½Ğ°Ğ²Ğ°Ğ½Ğ½Ñ Ğ³Ğ¾Ğ»Ğ¾ÑÑƒ
-  Enable Diarization: Ğ£Ğ²Ñ–Ğ¼ĞºĞ½ÑƒÑ‚Ğ¸ Ğ´Ñ–Ğ°Ñ€Ğ¸Ğ·Ğ°Ñ†Ñ–Ñ
-  This is only needed the first time you download the model: Ğ¦Ğµ Ğ¿Ğ¾Ñ‚Ñ€Ñ–Ğ±Ğ½Ğ¾ Ğ»Ğ¸ÑˆĞµ Ğ¿Ñ€Ğ¸
-    Ğ¿ĞµÑ€ÑˆĞ¾Ğ¼Ñƒ Ğ·Ğ°Ğ²Ğ°Ğ½Ñ‚Ğ°Ğ¶ĞµĞ½Ğ½Ñ– Ğ¼Ğ¾Ğ´ĞµĞ»Ñ–. Ğ¯ĞºÑ‰Ğ¾ Ñƒ Ğ²Ğ°Ñ Ğ²Ğ¶Ğµ Ñ” Ğ¼Ğ¾Ğ´ĞµĞ»Ñ–, Ğ²Ğ²Ğ¾Ğ´Ğ¸Ñ‚Ğ¸ Ğ½Ğµ Ğ¿Ğ¾Ñ‚Ñ€Ñ–Ğ±Ğ½Ğ¾. Ğ©Ğ¾Ğ±
-    Ğ·Ğ°Ğ²Ğ°Ğ½Ñ‚Ğ°Ğ¶Ğ¸Ñ‚Ğ¸ Ğ¼Ğ¾Ğ´ĞµĞ»ÑŒ, Ğ¿Ğ¾Ñ‚Ñ€Ñ–Ğ±Ğ½Ğ¾ Ğ²Ñ€ÑƒÑ‡Ğ½Ñƒ Ğ¿ĞµÑ€ĞµĞ¹Ñ‚Ğ¸ Ğ½Ğ° "https://huggingface.co/pyannote/speaker-diarization-3.1"
-    Ñ‚Ğ° "https://huggingface.co/pyannote/segmentation-3.0" Ñ– Ğ¿Ğ¾Ğ³Ğ¾Ğ´Ğ¸Ñ‚Ğ¸ÑÑ Ğ· Ñ—Ñ…Ğ½Ñ–Ğ¼Ğ¸ Ğ²Ğ¸Ğ¼Ğ¾Ğ³Ğ°Ğ¼Ğ¸.
-  HuggingFace Token: Ğ¢Ğ¾ĞºĞµĞ½ HuggingFace
-  Diarization: Ğ”Ñ–Ğ°Ñ€Ğ¸Ğ·Ğ°Ñ†Ñ–Ñ
-  GENERATE SUBTITLE FILE: Ğ¡Ğ¢Ğ’ĞĞ Ğ˜Ğ¢Ğ˜ Ğ¤ĞĞ™Ğ› Ğ¡Ğ£Ğ‘Ğ¢Ğ˜Ğ¢Ğ Ğ†Ğ’
-  Output: Ğ ĞµĞ·ÑƒĞ»ÑŒÑ‚Ğ°Ñ‚
-  Downloadable output file: Ğ—Ğ°Ğ²Ğ°Ğ½Ñ‚Ğ°Ğ¶ÑƒĞ²Ğ°Ğ½Ğ¸Ğ¹ Ñ„Ğ°Ğ¹Ğ» Ñ€ĞµĞ·ÑƒĞ»ÑŒÑ‚Ğ°Ñ‚Ñƒ
-  File: Ğ¤Ğ°Ğ¹Ğ»
-  Youtube Link: ĞŸĞ¾ÑĞ¸Ğ»Ğ°Ğ½Ğ½Ñ Ğ½Ğ° Youtube
-  Youtube Thumbnail: Ğ•ÑĞºÑ–Ğ· Youtube
-  Youtube Title: ĞĞ°Ğ·Ğ²Ğ° Youtube
-  Youtube Description: ĞĞ¿Ğ¸Ñ Youtube
+  Language: ¬®¬à¬Ó¬Ñ
+  Upload File here: ¬©¬Ñ¬Ó¬Ñ¬ß¬ä¬Ñ¬Ø¬ä¬Ö ¬æ¬Ñ¬Û¬İ ¬ä¬å¬ä
+  Model: ¬®¬à¬Õ¬Ö¬İ¬î
+  Automatic Detection: ¬¡¬Ó¬ä¬à¬Ş¬Ñ¬ä¬Ú¬é¬ß¬Ö ¬Ó¬Ú¬Ù¬ß¬Ñ¬é¬Ö¬ß¬ß¬ñ
+  File Format: ¬¶¬à¬â¬Ş¬Ñ¬ä ¬æ¬Ñ¬Û¬İ¬å
+  Translate to English?: ¬±¬Ö¬â¬Ö¬Ü¬İ¬Ñ¬ã¬ä¬Ú ¬ß¬Ñ ¬Ñ¬ß¬Ô¬İ?¬Û¬ã¬î¬Ü¬å?
+  Add a timestamp to the end of the filename: ¬¥¬à¬Õ¬Ñ¬ä¬Ú ¬Ş?¬ä¬Ü¬å ¬é¬Ñ¬ã¬å ¬Õ¬à ¬Ü?¬ß¬è¬ñ ?¬Ş¬Ö¬ß? ¬æ¬Ñ¬Û¬İ¬å
+  Offload sub model when finished: ¬±?¬ã¬İ¬ñ ¬Ù¬Ñ¬Ó¬Ö¬â¬ê¬Ö¬ß¬ß¬ñ ¬Ó¬Ú¬Ó¬Ñ¬ß¬ä¬Ñ¬Ø¬ä¬Ö ¬á?¬Õ¬Ş¬à¬Õ¬Ö¬İ¬î
+  Advanced Parameters: ¬²¬à¬Ù¬ê¬Ú¬â¬Ö¬ß? ¬á¬Ñ¬â¬Ñ¬Ş¬Ö¬ä¬â¬Ú
+  Enabling this will remove background music: ¬µ¬Ó?¬Ş¬Ü¬ß¬Ö¬ß¬ß¬ñ ¬è¬î¬à¬Ô¬à ¬Ó¬Ú¬Õ¬Ñ¬İ¬Ú¬ä¬î ¬æ¬à¬ß¬à¬Ó¬å ¬Ş¬å¬Ù¬Ú¬Ü¬å
+    ¬Ù¬Ñ ¬Õ¬à¬á¬à¬Ş¬à¬Ô¬à¬ğ ¬á?¬Õ¬Ş¬à¬Õ¬Ö¬İ? ¬á¬Ö¬â¬Ö¬Õ ¬ä¬â¬Ñ¬ß¬ã¬Ü¬â¬Ú¬á¬è??¬ğ
+  Enable Background Music Remover Filter: ¬µ¬Ó?¬Ş¬Ü¬ß¬å¬ä¬Ú ¬æ?¬İ¬î¬ä¬â ¬Ó¬Ú¬Õ¬Ñ¬İ¬Ö¬ß¬ß¬ñ ¬æ¬à¬ß¬à¬Ó¬à? ¬Ş¬å¬Ù¬Ú¬Ü¬Ú
+  Device: ¬±¬â¬Ú¬ã¬ä¬â?¬Û
+  Save separated files to output: ¬©¬Ò¬Ö¬â¬Ö¬Ô¬ä¬Ú ¬â¬à¬Ù¬Õ?¬İ¬Ö¬ß? ¬æ¬Ñ¬Û¬İ¬Ú ¬Õ¬à ¬Ó¬Ú¬ç?¬Õ¬ß¬à? ¬á¬Ñ¬á¬Ü¬Ú
+  Background Music Remover Filter: ¬¶?¬İ¬î¬ä¬â ¬Ó¬Ú¬Õ¬Ñ¬İ¬Ö¬ß¬ß¬ñ ¬æ¬à¬ß¬à¬Ó¬à? ¬Ş¬å¬Ù¬Ú¬Ü¬Ú
+  Enable this to transcribe only detected voice: ¬µ¬Ó?¬Ş¬Ü¬ß?¬ä¬î ¬è¬Ö, ¬ë¬à¬Ò ¬ä¬â¬Ñ¬ß¬ã¬Ü¬â¬Ú¬Ò¬å¬Ó¬Ñ¬ä¬Ú
+    ¬İ¬Ú¬ê¬Ö ¬â¬à¬Ù¬á?¬Ù¬ß¬Ñ¬ß? ¬Ô¬à¬İ¬à¬ã¬à¬Ó? ¬é¬Ñ¬ã¬ä¬Ú¬ß¬Ú ¬Ù¬Ñ ¬Õ¬à¬á¬à¬Ş¬à¬Ô¬à¬ğ ¬á?¬Õ¬Ş¬à¬Õ¬Ö¬İ?
+  Enable Silero VAD Filter: ¬µ¬Ó?¬Ş¬Ü¬ß¬å¬ä¬Ú ¬æ?¬İ¬î¬ä¬â Silero VAD
+  Voice Detection Filter: ¬¶?¬İ¬î¬ä¬â ¬â¬à¬Ù¬á?¬Ù¬ß¬Ñ¬Ó¬Ñ¬ß¬ß¬ñ ¬Ô¬à¬İ¬à¬ã¬å
+  Enable Diarization: ¬µ¬Ó?¬Ş¬Ü¬ß¬å¬ä¬Ú ¬Õ?¬Ñ¬â¬Ú¬Ù¬Ñ¬è?¬ğ
+  This is only needed the first time you download the model: ¬¸¬Ö ¬á¬à¬ä¬â?¬Ò¬ß¬à ¬İ¬Ú¬ê¬Ö ¬á¬â¬Ú
+    ¬á¬Ö¬â¬ê¬à¬Ş¬å ¬Ù¬Ñ¬Ó¬Ñ¬ß¬ä¬Ñ¬Ø¬Ö¬ß¬ß? ¬Ş¬à¬Õ¬Ö¬İ?. ¬Á¬Ü¬ë¬à ¬å ¬Ó¬Ñ¬ã ¬Ó¬Ø¬Ö ? ¬Ş¬à¬Õ¬Ö¬İ?, ¬Ó¬Ó¬à¬Õ¬Ú¬ä¬Ú ¬ß¬Ö ¬á¬à¬ä¬â?¬Ò¬ß¬à. ¬»¬à¬Ò
+    ¬Ù¬Ñ¬Ó¬Ñ¬ß¬ä¬Ñ¬Ø¬Ú¬ä¬Ú ¬Ş¬à¬Õ¬Ö¬İ¬î, ¬á¬à¬ä¬â?¬Ò¬ß¬à ¬Ó¬â¬å¬é¬ß¬å ¬á¬Ö¬â¬Ö¬Û¬ä¬Ú ¬ß¬Ñ "https://huggingface.co/pyannote/speaker-diarization-3.1"
+    ¬ä¬Ñ "https://huggingface.co/pyannote/segmentation-3.0" ? ¬á¬à¬Ô¬à¬Õ¬Ú¬ä¬Ú¬ã¬ñ ¬Ù ?¬ç¬ß?¬Ş¬Ú ¬Ó¬Ú¬Ş¬à¬Ô¬Ñ¬Ş¬Ú.
+  HuggingFace Token: ¬´¬à¬Ü¬Ö¬ß HuggingFace
+  Diarization: ¬¥?¬Ñ¬â¬Ú¬Ù¬Ñ¬è?¬ñ
+  GENERATE SUBTITLE FILE: ¬³¬´¬£¬°¬²¬ª¬´¬ª ¬¶¬¡¬«¬­ ¬³¬µ¬¢¬´¬ª¬´¬²?¬£
+  Output: ¬²¬Ö¬Ù¬å¬İ¬î¬ä¬Ñ¬ä
+  Downloadable output file: ¬©¬Ñ¬Ó¬Ñ¬ß¬ä¬Ñ¬Ø¬å¬Ó¬Ñ¬ß¬Ú¬Û ¬æ¬Ñ¬Û¬İ ¬â¬Ö¬Ù¬å¬İ¬î¬ä¬Ñ¬ä¬å
+  File: ¬¶¬Ñ¬Û¬İ
+  Youtube Link: ¬±¬à¬ã¬Ú¬İ¬Ñ¬ß¬ß¬ñ ¬ß¬Ñ Youtube
+  Youtube Thumbnail: ¬¦¬ã¬Ü?¬Ù Youtube
+  Youtube Title: ¬¯¬Ñ¬Ù¬Ó¬Ñ Youtube
+  Youtube Description: ¬°¬á¬Ú¬ã Youtube
   Youtube: Youtube
-  Record with Mic: Ğ—Ğ°Ğ¿Ğ¸ÑĞ°Ñ‚Ğ¸ Ğ· Ğ¼Ñ–ĞºÑ€Ğ¾Ñ„Ğ¾Ğ½Ğ°
-  Mic: ĞœÑ–ĞºÑ€Ğ¾Ñ„Ğ¾Ğ½
-  Upload Subtitle Files to translate here: Ğ—Ğ°Ğ²Ğ°Ğ½Ñ‚Ğ°Ğ¶Ñ‚Ğµ Ñ„Ğ°Ğ¹Ğ»Ğ¸ ÑÑƒĞ±Ñ‚Ğ¸Ñ‚Ñ€Ñ–Ğ² Ğ´Ğ»Ñ Ğ¿ĞµÑ€ĞµĞºĞ»Ğ°Ğ´Ñƒ
-    Ñ‚ÑƒÑ‚
-  Your Auth Key (API KEY): Ğ’Ğ°Ñˆ ĞºĞ»ÑÑ‡ Ğ°Ğ²Ñ‚Ğ¾Ñ€Ğ¸Ğ·Ğ°Ñ†Ñ–Ñ— (API KEY)
-  Source Language: ĞœĞ¾Ğ²Ğ° Ğ´Ğ¶ĞµÑ€ĞµĞ»Ğ°
-  Target Language: ĞœĞ¾Ğ²Ğ° Ğ¿ĞµÑ€ĞµĞºĞ»Ğ°Ğ´Ñƒ
-  Pro User?: ĞŸÑ€Ğ¾Ñ„ĞµÑÑ–Ğ¹Ğ½Ğ¸Ğ¹ ĞºĞ¾Ñ€Ğ¸ÑÑ‚ÑƒĞ²Ğ°Ñ‡?
-  TRANSLATE SUBTITLE FILE: ĞŸĞ•Ğ Ğ•ĞšĞ›ĞĞ¡Ğ¢Ğ˜ Ğ¤ĞĞ™Ğ› Ğ¡Ğ£Ğ‘Ğ¢Ğ˜Ğ¢Ğ Ğ†Ğ’
+  Record with Mic: ¬©¬Ñ¬á¬Ú¬ã¬Ñ¬ä¬Ú ¬Ù ¬Ş?¬Ü¬â¬à¬æ¬à¬ß¬Ñ
+  Mic: ¬®?¬Ü¬â¬à¬æ¬à¬ß
+  Upload Subtitle Files to translate here: ¬©¬Ñ¬Ó¬Ñ¬ß¬ä¬Ñ¬Ø¬ä¬Ö ¬æ¬Ñ¬Û¬İ¬Ú ¬ã¬å¬Ò¬ä¬Ú¬ä¬â?¬Ó ¬Õ¬İ¬ñ ¬á¬Ö¬â¬Ö¬Ü¬İ¬Ñ¬Õ¬å
+    ¬ä¬å¬ä
+  Your Auth Key (API KEY): ¬£¬Ñ¬ê ¬Ü¬İ¬ğ¬é ¬Ñ¬Ó¬ä¬à¬â¬Ú¬Ù¬Ñ¬è?? (API KEY)
+  Source Language: ¬®¬à¬Ó¬Ñ ¬Õ¬Ø¬Ö¬â¬Ö¬İ¬Ñ
+  Target Language: ¬®¬à¬Ó¬Ñ ¬á¬Ö¬â¬Ö¬Ü¬İ¬Ñ¬Õ¬å
+  Pro User?: ¬±¬â¬à¬æ¬Ö¬ã?¬Û¬ß¬Ú¬Û ¬Ü¬à¬â¬Ú¬ã¬ä¬å¬Ó¬Ñ¬é?
+  TRANSLATE SUBTITLE FILE: ¬±¬¦¬²¬¦¬¬¬­¬¡¬³¬´¬ª ¬¶¬¡¬«¬­ ¬³¬µ¬¢¬´¬ª¬´¬²?¬£
   DeepL API: DeepL API
   NLLB: NLLB
-  T2T Translation: T2T ĞŸĞµÑ€ĞµĞºĞ»Ğ°Ğ´
-  Upload Audio Files to separate background music: Ğ—Ğ°Ğ²Ğ°Ğ½Ñ‚Ğ°Ğ¶Ñ‚Ğµ Ğ°ÑƒĞ´Ñ–Ğ¾Ñ„Ğ°Ğ¹Ğ»Ğ¸ Ğ´Ğ»Ñ Ñ€Ğ¾Ğ·Ğ´Ñ–Ğ»ĞµĞ½Ğ½Ñ
-    Ñ„Ğ¾Ğ½Ğ¾Ğ²Ğ¾Ñ— Ğ¼ÑƒĞ·Ğ¸ĞºĞ¸
-  SEPARATE BACKGROUND MUSIC: Ğ ĞĞ—Ğ”Ğ†Ğ›Ğ˜Ğ¢Ğ˜ Ğ¤ĞĞĞĞ’Ğ£ ĞœĞ£Ğ—Ğ˜ĞšĞ£
-  Instrumental: Ğ†Ğ½ÑÑ‚Ñ€ÑƒĞ¼ĞµĞ½Ñ‚Ğ°Ğ»
-  Vocals: Ğ’Ğ¾ĞºĞ°Ğ»
-  BGM Separation: Ğ Ğ¾Ğ·Ğ´Ñ–Ğ»ĞµĞ½Ğ½Ñ Ñ„Ğ¾Ğ½Ğ¾Ğ²Ğ¾Ñ— Ğ¼ÑƒĞ·Ğ¸ĞºĞ¸
+  T2T Translation: T2T ¬±¬Ö¬â¬Ö¬Ü¬İ¬Ñ¬Õ
+  Upload Audio Files to separate background music: ¬©¬Ñ¬Ó¬Ñ¬ß¬ä¬Ñ¬Ø¬ä¬Ö ¬Ñ¬å¬Õ?¬à¬æ¬Ñ¬Û¬İ¬Ú ¬Õ¬İ¬ñ ¬â¬à¬Ù¬Õ?¬İ¬Ö¬ß¬ß¬ñ
+    ¬æ¬à¬ß¬à¬Ó¬à? ¬Ş¬å¬Ù¬Ú¬Ü¬Ú
+  SEPARATE BACKGROUND MUSIC: ¬²¬°¬©¬¥?¬­¬ª¬´¬ª ¬¶¬°¬¯¬°¬£¬µ ¬®¬µ¬©¬ª¬¬¬µ
+  Instrumental: ?¬ß¬ã¬ä¬â¬å¬Ş¬Ö¬ß¬ä¬Ñ¬İ
+  Vocals: ¬£¬à¬Ü¬Ñ¬İ
+  BGM Separation: ¬²¬à¬Ù¬Õ?¬İ¬Ö¬ß¬ß¬ñ ¬æ¬à¬ß¬à¬Ó¬à? ¬Ş¬å¬Ù¬Ú¬Ü¬Ú
 ru:
-  Language: Ğ¯Ğ·Ñ‹Ğº
-  Upload File here: Ğ—Ğ°Ğ³Ñ€ÑƒĞ·Ğ¸Ñ‚Ğµ Ñ„Ğ°Ğ¹Ğ» Ğ·Ğ´ĞµÑÑŒ
-  Model: ĞœĞ¾Ğ´ĞµĞ»ÑŒ
-  Automatic Detection: ĞĞ²Ñ‚Ğ¾Ğ¼Ğ°Ñ‚Ğ¸Ñ‡ĞµÑĞºĞ¾Ğµ Ğ¾Ğ¿Ñ€ĞµĞ´ĞµĞ»ĞµĞ½Ğ¸Ğµ
-  File Format: Ğ¤Ğ¾Ñ€Ğ¼Ğ°Ñ‚ Ñ„Ğ°Ğ¹Ğ»Ğ°
-  Translate to English?: ĞŸĞµÑ€ĞµĞ²ĞµÑÑ‚Ğ¸ Ğ½Ğ° Ğ°Ğ½Ğ³Ğ»Ğ¸Ğ¹ÑĞºĞ¸Ğ¹?
-  Add a timestamp to the end of the filename: Ğ”Ğ¾Ğ±Ğ°Ğ²Ğ¸Ñ‚ÑŒ Ğ¼ĞµÑ‚ĞºÑƒ Ğ²Ñ€ĞµĞ¼ĞµĞ½Ğ¸ Ğ² ĞºĞ¾Ğ½ĞµÑ† Ğ¸Ğ¼ĞµĞ½Ğ¸
-    Ñ„Ğ°Ğ¹Ğ»Ğ°
-  Offload sub model when finished: Ğ’Ñ‹Ğ³Ñ€ÑƒĞ·Ğ¸Ñ‚ÑŒ Ğ¿Ğ¾Ğ´Ğ¼Ğ¾Ğ´ĞµĞ»ÑŒ Ğ¿Ğ¾ÑĞ»Ğµ Ğ·Ğ°Ğ²ĞµÑ€ÑˆĞµĞ½Ğ¸Ñ
-  Advanced Parameters: Ğ Ğ°ÑÑˆĞ¸Ñ€ĞµĞ½Ğ½Ñ‹Ğµ Ğ¿Ğ°Ñ€Ğ°Ğ¼ĞµÑ‚Ñ€Ñ‹
-  Enabling this will remove background music: Ğ’ĞºĞ»ÑÑ‡ĞµĞ½Ğ¸Ğµ ÑÑ‚Ğ¾Ğ³Ğ¾ ÑƒĞ´Ğ°Ğ»Ğ¸Ñ‚ Ñ„Ğ¾Ğ½Ğ¾Ğ²ÑƒÑ Ğ¼ÑƒĞ·Ñ‹ĞºÑƒ
-    Ñ Ğ¿Ğ¾Ğ¼Ğ¾Ñ‰ÑŒÑ Ğ¿Ğ¾Ğ´Ğ¼Ğ¾Ğ´ĞµĞ»Ğ¸ Ğ¿ĞµÑ€ĞµĞ´ Ñ‚Ñ€Ğ°Ğ½ÑĞºÑ€Ğ¸Ğ¿Ñ†Ğ¸ĞµĞ¹
-  Enable Background Music Remover Filter: Ğ’ĞºĞ»ÑÑ‡Ğ¸Ñ‚ÑŒ Ñ„Ğ¸Ğ»ÑŒÑ‚Ñ€ ÑƒĞ´Ğ°Ğ»ĞµĞ½Ğ¸Ñ Ñ„Ğ¾Ğ½Ğ¾Ğ²Ğ¾Ğ¹ Ğ¼ÑƒĞ·Ñ‹ĞºĞ¸
-  Device: Ğ£ÑÑ‚Ñ€Ğ¾Ğ¹ÑÑ‚Ğ²Ğ¾
-  Save separated files to output: Ğ¡Ğ¾Ñ…Ñ€Ğ°Ğ½Ğ¸Ñ‚ÑŒ Ñ€Ğ°Ğ·Ğ´ĞµĞ»ĞµĞ½Ğ½Ñ‹Ğµ Ñ„Ğ°Ğ¹Ğ»Ñ‹ Ğ² Ğ²Ñ‹Ñ…Ğ¾Ğ´Ğ½ÑƒÑ Ğ¿Ğ°Ğ¿ĞºÑƒ
-  Background Music Remover Filter: Ğ¤Ğ¸Ğ»ÑŒÑ‚Ñ€ ÑƒĞ´Ğ°Ğ»ĞµĞ½Ğ¸Ñ Ñ„Ğ¾Ğ½Ğ¾Ğ²Ğ¾Ğ¹ Ğ¼ÑƒĞ·Ñ‹ĞºĞ¸
-  Enable this to transcribe only detected voice: Ğ’ĞºĞ»ÑÑ‡Ğ¸Ñ‚Ğµ ÑÑ‚Ğ¾, Ñ‡Ñ‚Ğ¾Ğ±Ñ‹ Ñ‚Ñ€Ğ°Ğ½ÑĞºÑ€Ğ¸Ğ±Ğ¸Ñ€Ğ¾Ğ²Ğ°Ñ‚ÑŒ
-    Ñ‚Ğ¾Ğ»ÑŒĞºĞ¾ Ğ¾Ğ±Ğ½Ğ°Ñ€ÑƒĞ¶ĞµĞ½Ğ½Ñ‹Ğµ Ğ³Ğ¾Ğ»Ğ¾ÑĞ¾Ğ²Ñ‹Ğµ Ñ‡Ğ°ÑÑ‚Ğ¸ Ñ Ğ¿Ğ¾Ğ¼Ğ¾Ñ‰ÑŒÑ Ğ¿Ğ¾Ğ´Ğ¼Ğ¾Ğ´ĞµĞ»Ğ¸
-  Enable Silero VAD Filter: Ğ’ĞºĞ»ÑÑ‡Ğ¸Ñ‚ÑŒ Ñ„Ğ¸Ğ»ÑŒÑ‚Ñ€ Silero VAD
-  Voice Detection Filter: Ğ¤Ğ¸Ğ»ÑŒÑ‚Ñ€ Ğ¾Ğ±Ğ½Ğ°Ñ€ÑƒĞ¶ĞµĞ½Ğ¸Ñ Ğ³Ğ¾Ğ»Ğ¾ÑĞ°
-  Enable Diarization: Ğ’ĞºĞ»ÑÑ‡Ğ¸Ñ‚ÑŒ Ğ´Ğ¸Ğ°Ñ€Ğ¸Ğ·Ğ°Ñ†Ğ¸Ñ
-  This is only needed the first time you download the model: Ğ­Ñ‚Ğ¾ Ğ½ÑƒĞ¶Ğ½Ğ¾ Ñ‚Ğ¾Ğ»ÑŒĞºĞ¾ Ğ¿Ñ€Ğ¸
-    Ğ¿ĞµÑ€Ğ²Ğ¾Ğ¼ ÑĞºĞ°Ñ‡Ğ¸Ğ²Ğ°Ğ½Ğ¸Ğ¸ Ğ¼Ğ¾Ğ´ĞµĞ»Ğ¸. Ğ•ÑĞ»Ğ¸ Ñƒ Ğ²Ğ°Ñ ÑƒĞ¶Ğµ ĞµÑÑ‚ÑŒ Ğ¼Ğ¾Ğ´ĞµĞ»Ğ¸, Ğ²Ğ²Ğ¾Ğ´Ğ¸Ñ‚ÑŒ Ğ½Ğµ Ğ½ÑƒĞ¶Ğ½Ğ¾. Ğ§Ñ‚Ğ¾Ğ±Ñ‹
-    ÑĞºĞ°Ñ‡Ğ°Ñ‚ÑŒ Ğ¼Ğ¾Ğ´ĞµĞ»ÑŒ, Ğ½ÑƒĞ¶Ğ½Ğ¾ Ğ²Ñ€ÑƒÑ‡Ğ½ÑƒÑ Ğ¿ĞµÑ€ĞµĞ¹Ñ‚Ğ¸ Ğ½Ğ° "https://huggingface.co/pyannote/speaker-diarization-3.1"
-    Ğ¸ "https://huggingface.co/pyannote/segmentation-3.0" Ğ¸ ÑĞ¾Ğ³Ğ»Ğ°ÑĞ¸Ñ‚ÑŒÑÑ Ñ Ğ¸Ñ… Ñ‚Ñ€ĞµĞ±Ğ¾Ğ²Ğ°Ğ½Ğ¸ÑĞ¼Ğ¸.
-  HuggingFace Token: Ğ¢Ğ¾ĞºĞµĞ½ HuggingFace
-  Diarization: Ğ”Ğ¸Ğ°Ñ€Ğ¸Ğ·Ğ°Ñ†Ğ¸Ñ
-  GENERATE SUBTITLE FILE: Ğ¡Ğ“Ğ•ĞĞ•Ğ Ğ˜Ğ ĞĞ’ĞĞ¢Ğ¬ Ğ¤ĞĞ™Ğ› Ğ¡Ğ£Ğ‘Ğ¢Ğ˜Ğ¢Ğ ĞĞ’
-  Output: Ğ ĞµĞ·ÑƒĞ»ÑŒÑ‚Ğ°Ñ‚
-  Downloadable output file: Ğ—Ğ°Ğ³Ñ€ÑƒĞ¶Ğ°ĞµĞ¼Ñ‹Ğ¹ Ñ„Ğ°Ğ¹Ğ» Ñ€ĞµĞ·ÑƒĞ»ÑŒÑ‚Ğ°Ñ‚Ğ°
-  File: Ğ¤Ğ°Ğ¹Ğ»
-  Youtube Link: Ğ¡ÑÑ‹Ğ»ĞºĞ° Ğ½Ğ° Youtube
-  Youtube Thumbnail: ĞœĞ¸Ğ½Ğ¸Ğ°Ñ‚ÑÑ€Ğ° Youtube
-  Youtube Title: ĞĞ°Ğ·Ğ²Ğ°Ğ½Ğ¸Ğµ Youtube
-  Youtube Description: ĞĞ¿Ğ¸ÑĞ°Ğ½Ğ¸Ğµ Youtube
+  Language: ¬Á¬Ù¬í¬Ü
+  Upload File here: ¬©¬Ñ¬Ô¬â¬å¬Ù¬Ú¬ä¬Ö ¬æ¬Ñ¬Û¬İ ¬Ù¬Õ¬Ö¬ã¬î
+  Model: ¬®¬à¬Õ¬Ö¬İ¬î
+  Automatic Detection: ¬¡¬Ó¬ä¬à¬Ş¬Ñ¬ä¬Ú¬é¬Ö¬ã¬Ü¬à¬Ö ¬à¬á¬â¬Ö¬Õ¬Ö¬İ¬Ö¬ß¬Ú¬Ö
+  File Format: ¬¶¬à¬â¬Ş¬Ñ¬ä ¬æ¬Ñ¬Û¬İ¬Ñ
+  Translate to English?: ¬±¬Ö¬â¬Ö¬Ó¬Ö¬ã¬ä¬Ú ¬ß¬Ñ ¬Ñ¬ß¬Ô¬İ¬Ú¬Û¬ã¬Ü¬Ú¬Û?
+  Add a timestamp to the end of the filename: ¬¥¬à¬Ò¬Ñ¬Ó¬Ú¬ä¬î ¬Ş¬Ö¬ä¬Ü¬å ¬Ó¬â¬Ö¬Ş¬Ö¬ß¬Ú ¬Ó ¬Ü¬à¬ß¬Ö¬è ¬Ú¬Ş¬Ö¬ß¬Ú
+    ¬æ¬Ñ¬Û¬İ¬Ñ
+  Offload sub model when finished: ¬£¬í¬Ô¬â¬å¬Ù¬Ú¬ä¬î ¬á¬à¬Õ¬Ş¬à¬Õ¬Ö¬İ¬î ¬á¬à¬ã¬İ¬Ö ¬Ù¬Ñ¬Ó¬Ö¬â¬ê¬Ö¬ß¬Ú¬ñ
+  Advanced Parameters: ¬²¬Ñ¬ã¬ê¬Ú¬â¬Ö¬ß¬ß¬í¬Ö ¬á¬Ñ¬â¬Ñ¬Ş¬Ö¬ä¬â¬í
+  Enabling this will remove background music: ¬£¬Ü¬İ¬ğ¬é¬Ö¬ß¬Ú¬Ö ¬ï¬ä¬à¬Ô¬à ¬å¬Õ¬Ñ¬İ¬Ú¬ä ¬æ¬à¬ß¬à¬Ó¬å¬ğ ¬Ş¬å¬Ù¬í¬Ü¬å
+    ¬ã ¬á¬à¬Ş¬à¬ë¬î¬ğ ¬á¬à¬Õ¬Ş¬à¬Õ¬Ö¬İ¬Ú ¬á¬Ö¬â¬Ö¬Õ ¬ä¬â¬Ñ¬ß¬ã¬Ü¬â¬Ú¬á¬è¬Ú¬Ö¬Û
+  Enable Background Music Remover Filter: ¬£¬Ü¬İ¬ğ¬é¬Ú¬ä¬î ¬æ¬Ú¬İ¬î¬ä¬â ¬å¬Õ¬Ñ¬İ¬Ö¬ß¬Ú¬ñ ¬æ¬à¬ß¬à¬Ó¬à¬Û ¬Ş¬å¬Ù¬í¬Ü¬Ú
+  Device: ¬µ¬ã¬ä¬â¬à¬Û¬ã¬ä¬Ó¬à
+  Save separated files to output: ¬³¬à¬ç¬â¬Ñ¬ß¬Ú¬ä¬î ¬â¬Ñ¬Ù¬Õ¬Ö¬İ¬Ö¬ß¬ß¬í¬Ö ¬æ¬Ñ¬Û¬İ¬í ¬Ó ¬Ó¬í¬ç¬à¬Õ¬ß¬å¬ğ ¬á¬Ñ¬á¬Ü¬å
+  Background Music Remover Filter: ¬¶¬Ú¬İ¬î¬ä¬â ¬å¬Õ¬Ñ¬İ¬Ö¬ß¬Ú¬ñ ¬æ¬à¬ß¬à¬Ó¬à¬Û ¬Ş¬å¬Ù¬í¬Ü¬Ú
+  Enable this to transcribe only detected voice: ¬£¬Ü¬İ¬ğ¬é¬Ú¬ä¬Ö ¬ï¬ä¬à, ¬é¬ä¬à¬Ò¬í ¬ä¬â¬Ñ¬ß¬ã¬Ü¬â¬Ú¬Ò¬Ú¬â¬à¬Ó¬Ñ¬ä¬î
+    ¬ä¬à¬İ¬î¬Ü¬à ¬à¬Ò¬ß¬Ñ¬â¬å¬Ø¬Ö¬ß¬ß¬í¬Ö ¬Ô¬à¬İ¬à¬ã¬à¬Ó¬í¬Ö ¬é¬Ñ¬ã¬ä¬Ú ¬ã ¬á¬à¬Ş¬à¬ë¬î¬ğ ¬á¬à¬Õ¬Ş¬à¬Õ¬Ö¬İ¬Ú
+  Enable Silero VAD Filter: ¬£¬Ü¬İ¬ğ¬é¬Ú¬ä¬î ¬æ¬Ú¬İ¬î¬ä¬â Silero VAD
+  Voice Detection Filter: ¬¶¬Ú¬İ¬î¬ä¬â ¬à¬Ò¬ß¬Ñ¬â¬å¬Ø¬Ö¬ß¬Ú¬ñ ¬Ô¬à¬İ¬à¬ã¬Ñ
+  Enable Diarization: ¬£¬Ü¬İ¬ğ¬é¬Ú¬ä¬î ¬Õ¬Ú¬Ñ¬â¬Ú¬Ù¬Ñ¬è¬Ú¬ğ
+  This is only needed the first time you download the model: ¬¿¬ä¬à ¬ß¬å¬Ø¬ß¬à ¬ä¬à¬İ¬î¬Ü¬à ¬á¬â¬Ú
+    ¬á¬Ö¬â¬Ó¬à¬Ş ¬ã¬Ü¬Ñ¬é¬Ú¬Ó¬Ñ¬ß¬Ú¬Ú ¬Ş¬à¬Õ¬Ö¬İ¬Ú. ¬¦¬ã¬İ¬Ú ¬å ¬Ó¬Ñ¬ã ¬å¬Ø¬Ö ¬Ö¬ã¬ä¬î ¬Ş¬à¬Õ¬Ö¬İ¬Ú, ¬Ó¬Ó¬à¬Õ¬Ú¬ä¬î ¬ß¬Ö ¬ß¬å¬Ø¬ß¬à. ¬¹¬ä¬à¬Ò¬í
+    ¬ã¬Ü¬Ñ¬é¬Ñ¬ä¬î ¬Ş¬à¬Õ¬Ö¬İ¬î, ¬ß¬å¬Ø¬ß¬à ¬Ó¬â¬å¬é¬ß¬å¬ğ ¬á¬Ö¬â¬Ö¬Û¬ä¬Ú ¬ß¬Ñ "https://huggingface.co/pyannote/speaker-diarization-3.1"
+    ¬Ú "https://huggingface.co/pyannote/segmentation-3.0" ¬Ú ¬ã¬à¬Ô¬İ¬Ñ¬ã¬Ú¬ä¬î¬ã¬ñ ¬ã ¬Ú¬ç ¬ä¬â¬Ö¬Ò¬à¬Ó¬Ñ¬ß¬Ú¬ñ¬Ş¬Ú.
+  HuggingFace Token: ¬´¬à¬Ü¬Ö¬ß HuggingFace
+  Diarization: ¬¥¬Ú¬Ñ¬â¬Ú¬Ù¬Ñ¬è¬Ú¬ñ
+  GENERATE SUBTITLE FILE: ¬³¬¤¬¦¬¯¬¦¬²¬ª¬²¬°¬£¬¡¬´¬¾ ¬¶¬¡¬«¬­ ¬³¬µ¬¢¬´¬ª¬´¬²¬°¬£
+  Output: ¬²¬Ö¬Ù¬å¬İ¬î¬ä¬Ñ¬ä
+  Downloadable output file: ¬©¬Ñ¬Ô¬â¬å¬Ø¬Ñ¬Ö¬Ş¬í¬Û ¬æ¬Ñ¬Û¬İ ¬â¬Ö¬Ù¬å¬İ¬î¬ä¬Ñ¬ä¬Ñ
+  File: ¬¶¬Ñ¬Û¬İ
+  Youtube Link: ¬³¬ã¬í¬İ¬Ü¬Ñ ¬ß¬Ñ Youtube
+  Youtube Thumbnail: ¬®¬Ú¬ß¬Ú¬Ñ¬ä¬ğ¬â¬Ñ Youtube
+  Youtube Title: ¬¯¬Ñ¬Ù¬Ó¬Ñ¬ß¬Ú¬Ö Youtube
+  Youtube Description: ¬°¬á¬Ú¬ã¬Ñ¬ß¬Ú¬Ö Youtube
   Youtube: Youtube
-  Record with Mic: Ğ—Ğ°Ğ¿Ğ¸ÑĞ°Ñ‚ÑŒ Ñ Ğ¼Ğ¸ĞºÑ€Ğ¾Ñ„Ğ¾Ğ½Ğ°
-  Mic: ĞœĞ¸ĞºÑ€Ğ¾Ñ„Ğ¾Ğ½
-  Upload Subtitle Files to translate here: Ğ—Ğ°Ğ³Ñ€ÑƒĞ·Ğ¸Ñ‚Ğµ Ñ„Ğ°Ğ¹Ğ»Ñ‹ ÑÑƒĞ±Ñ‚Ğ¸Ñ‚Ñ€Ğ¾Ğ² Ğ´Ğ»Ñ Ğ¿ĞµÑ€ĞµĞ²Ğ¾Ğ´Ğ°
-    Ğ·Ğ´ĞµÑÑŒ
-  Your Auth Key (API KEY): Ğ’Ğ°Ñˆ Auth Key (API KEY)
-  Source Language: Ğ˜ÑÑ…Ğ¾Ğ´Ğ½Ñ‹Ğ¹ ÑĞ·Ñ‹Ğº
-  Target Language: Ğ¦ĞµĞ»ĞµĞ²Ğ¾Ğ¹ ÑĞ·Ñ‹Ğº
-  Pro User?: ĞŸÑ€Ğ¾Ñ„ĞµÑÑĞ¸Ğ¾Ğ½Ğ°Ğ»ÑŒĞ½Ñ‹Ğ¹ Ğ¿Ğ¾Ğ»ÑŒĞ·Ğ¾Ğ²Ğ°Ñ‚ĞµĞ»ÑŒ?
-  TRANSLATE SUBTITLE FILE: ĞŸĞ•Ğ Ğ•Ğ’Ğ•Ğ¡Ğ¢Ğ˜ Ğ¤ĞĞ™Ğ› Ğ¡Ğ£Ğ‘Ğ¢Ğ˜Ğ¢Ğ ĞĞ’
+  Record with Mic: ¬©¬Ñ¬á¬Ú¬ã¬Ñ¬ä¬î ¬ã ¬Ş¬Ú¬Ü¬â¬à¬æ¬à¬ß¬Ñ
+  Mic: ¬®¬Ú¬Ü¬â¬à¬æ¬à¬ß
+  Upload Subtitle Files to translate here: ¬©¬Ñ¬Ô¬â¬å¬Ù¬Ú¬ä¬Ö ¬æ¬Ñ¬Û¬İ¬í ¬ã¬å¬Ò¬ä¬Ú¬ä¬â¬à¬Ó ¬Õ¬İ¬ñ ¬á¬Ö¬â¬Ö¬Ó¬à¬Õ¬Ñ
+    ¬Ù¬Õ¬Ö¬ã¬î
+  Your Auth Key (API KEY): ¬£¬Ñ¬ê Auth Key (API KEY)
+  Source Language: ¬ª¬ã¬ç¬à¬Õ¬ß¬í¬Û ¬ñ¬Ù¬í¬Ü
+  Target Language: ¬¸¬Ö¬İ¬Ö¬Ó¬à¬Û ¬ñ¬Ù¬í¬Ü
+  Pro User?: ¬±¬â¬à¬æ¬Ö¬ã¬ã¬Ú¬à¬ß¬Ñ¬İ¬î¬ß¬í¬Û ¬á¬à¬İ¬î¬Ù¬à¬Ó¬Ñ¬ä¬Ö¬İ¬î?
+  TRANSLATE SUBTITLE FILE: ¬±¬¦¬²¬¦¬£¬¦¬³¬´¬ª ¬¶¬¡¬«¬­ ¬³¬µ¬¢¬´¬ª¬´¬²¬°¬£
   DeepL API: DeepL API
   NLLB: NLLB
-  T2T Translation: ĞŸĞµÑ€ĞµĞ²Ğ¾Ğ´ T2T
-  Upload Audio Files to separate background music: Ğ—Ğ°Ğ³Ñ€ÑƒĞ·Ğ¸Ñ‚Ğµ Ğ°ÑƒĞ´Ğ¸Ğ¾Ñ„Ğ°Ğ¹Ğ»Ñ‹ Ğ´Ğ»Ñ Ñ€Ğ°Ğ·Ğ´ĞµĞ»ĞµĞ½Ğ¸Ñ
-    Ñ„Ğ¾Ğ½Ğ¾Ğ²Ğ¾Ğ¹ Ğ¼ÑƒĞ·Ñ‹ĞºĞ¸
-  SEPARATE BACKGROUND MUSIC: Ğ ĞĞ—Ğ”Ğ•Ğ›Ğ˜Ğ¢Ğ¬ Ğ¤ĞĞĞĞ’Ğ£Ğ® ĞœĞ£Ğ—Ğ«ĞšĞ£
-  Instrumental: Ğ˜Ğ½ÑÑ‚Ñ€ÑƒĞ¼ĞµĞ½Ñ‚Ğ°Ğ»
-  Vocals: Ğ’Ğ¾ĞºĞ°Ğ»
-  BGM Separation: Ğ Ğ°Ğ·Ğ´ĞµĞ»ĞµĞ½Ğ¸Ğµ Ñ„Ğ¾Ğ½Ğ¾Ğ²Ğ¾Ğ¹ Ğ¼ÑƒĞ·Ñ‹ĞºĞ¸
+  T2T Translation: ¬±¬Ö¬â¬Ö¬Ó¬à¬Õ T2T
+  Upload Audio Files to separate background music: ¬©¬Ñ¬Ô¬â¬å¬Ù¬Ú¬ä¬Ö ¬Ñ¬å¬Õ¬Ú¬à¬æ¬Ñ¬Û¬İ¬í ¬Õ¬İ¬ñ ¬â¬Ñ¬Ù¬Õ¬Ö¬İ¬Ö¬ß¬Ú¬ñ
+    ¬æ¬à¬ß¬à¬Ó¬à¬Û ¬Ş¬å¬Ù¬í¬Ü¬Ú
+  SEPARATE BACKGROUND MUSIC: ¬²¬¡¬©¬¥¬¦¬­¬ª¬´¬¾ ¬¶¬°¬¯¬°¬£¬µ¬À ¬®¬µ¬©¬½¬¬¬µ
+  Instrumental: ¬ª¬ß¬ã¬ä¬â¬å¬Ş¬Ö¬ß¬ä¬Ñ¬İ
+  Vocals: ¬£¬à¬Ü¬Ñ¬İ
+  BGM Separation: ¬²¬Ñ¬Ù¬Õ¬Ö¬İ¬Ö¬ß¬Ú¬Ö ¬æ¬à¬ß¬à¬Ó¬à¬Û ¬Ş¬å¬Ù¬í¬Ü¬Ú
 tr:
   Language: Dil
-  Upload File here: Dosya YÃ¼kle
+  Upload File here: Dosya Y?kle
   Model: Model
-  Automatic Detection: Otomatik AlgÄ±lama
-  File Format: Dosya FormatÄ±
-  Translate to English?: Ä°ngilizceye Ã‡evir?
-  Add a timestamp to the end of the filename: Dosya adÄ±nÄ±n sonuna zaman damgasÄ± ekle
-  Offload sub model when finished: Alt modeli bitirdiÄŸinizde boÅŸaltÄ±n
-  Advanced Parameters: GeliÅŸmiÅŸ Parametreler
-  Enabling this will remove background music: Bunu etkinleÅŸtirmek, arka plan mÃ¼ziÄŸini
-    alt model tarafÄ±ndan transkripsiyondan Ã¶nce kaldÄ±racaktÄ±r
-  Enable Background Music Remover Filter: Arka Plan MÃ¼ziÄŸi KaldÄ±rma Filtresini EtkinleÅŸtir
+  Automatic Detection: Otomatik Alg©¥lama
+  File Format: Dosya Format©¥
+  Translate to English?: ?ngilizceye ?evir?
+  Add a timestamp to the end of the filename: Dosya ad©¥n©¥n sonuna zaman damgas©¥ ekle
+  Offload sub model when finished: Alt modeli bitirdi?inizde bo?alt©¥n
+  Advanced Parameters: Geli?mi? Parametreler
+  Enabling this will remove background music: Bunu etkinle?tirmek, arka plan m?zi?ini
+    alt model taraf©¥ndan transkripsiyondan ?nce kald©¥racakt©¥r
+  Enable Background Music Remover Filter: Arka Plan M?zi?i Kald©¥rma Filtresini Etkinle?tir
   Device: Cihaz
-  Save separated files to output: AyrÄ±lmÄ±ÅŸ dosyalarÄ± Ã§Ä±ktÄ±ya kaydet
-  Background Music Remover Filter: Arka Plan MÃ¼ziÄŸi KaldÄ±rma Filtresi
-  Enable this to transcribe only detected voice: Bunu etkinleÅŸtirerek yalnÄ±zca alt
-    model tarafÄ±ndan algÄ±lanan ses kÄ±sÄ±mlarÄ±nÄ± transkribe et
-  Enable Silero VAD Filter: Silero VAD Filtresini EtkinleÅŸtir
-  Voice Detection Filter: Ses AlgÄ±lama Filtresi
-  Enable Diarization: KonuÅŸmacÄ± AyrÄ±mÄ±nÄ± EtkinleÅŸtir
+  Save separated files to output: Ayr©¥lm©¥? dosyalar©¥ ?©¥kt©¥ya kaydet
+  Background Music Remover Filter: Arka Plan M?zi?i Kald©¥rma Filtresi
+  Enable this to transcribe only detected voice: Bunu etkinle?tirerek yaln©¥zca alt
+    model taraf©¥ndan alg©¥lanan ses k©¥s©¥mlar©¥n©¥ transkribe et
+  Enable Silero VAD Filter: Silero VAD Filtresini Etkinle?tir
+  Voice Detection Filter: Ses Alg©¥lama Filtresi
+  Enable Diarization: Konu?mac©¥ Ayr©¥m©¥n©¥ Etkinle?tir
   This is only needed the first time you download the model: Bu, modeli ilk kez indirirken
-    gereklidir. Zaten modelleriniz varsa girmenize gerek yok. Modeli indirmek iÃ§in
+    gereklidir. Zaten modelleriniz varsa girmenize gerek yok. Modeli indirmek i?in
     "https://huggingface.co/pyannote/speaker-diarization-3.1" ve "https://huggingface.co/pyannote/segmentation-3.0"
     adreslerine gidip gereksinimlerini kabul etmeniz gerekiyor
-  HuggingFace Token: HuggingFace AnahtarÄ±
-  Diarization: KonuÅŸmacÄ± AyrÄ±mÄ±
-  GENERATE SUBTITLE FILE: ALTYAZI DOSYASI OLUÅTUR
-  Output: Ã‡Ä±ktÄ±
-  Downloadable output file: Ä°ndirilebilir Ã§Ä±ktÄ± dosyasÄ±
+  HuggingFace Token: HuggingFace Anahtar©¥
+  Diarization: Konu?mac©¥ Ayr©¥m©¥
+  GENERATE SUBTITLE FILE: ALTYAZI DOSYASI OLU?TUR
+  Output: ?©¥kt©¥
+  Downloadable output file: ?ndirilebilir ?©¥kt©¥ dosyas©¥
   File: Dosya
-  Youtube Link: Youtube BaÄŸlantÄ±sÄ±
-  Youtube Thumbnail: Youtube KÃ¼Ã§Ã¼k Resmi
-  Youtube Title: Youtube BaÅŸlÄ±ÄŸÄ±
-  Youtube Description: Youtube AÃ§Ä±klamasÄ±
+  Youtube Link: Youtube Ba?lant©¥s©¥
+  Youtube Thumbnail: Youtube K???k Resmi
+  Youtube Title: Youtube Ba?l©¥?©¥
+  Youtube Description: Youtube A?©¥klamas©¥
   Youtube: Youtube
   Record with Mic: Mikrofonla Kaydet
   Mic: Mikrofon
-  Upload Subtitle Files to translate here: Ã‡eviri iÃ§in altyazÄ± dosyalarÄ±nÄ± buraya
-    yÃ¼kle
-  Your Auth Key (API KEY): Yetki AnahtarÄ±nÄ±z (API ANAHTARI)
+  Upload Subtitle Files to translate here: ?eviri i?in altyaz©¥ dosyalar©¥n©¥ buraya
+    y?kle
+  Your Auth Key (API KEY): Yetki Anahtar©¥n©¥z (API ANAHTARI)
   Source Language: Kaynak Dil
   Target Language: Hedef Dil
-  Pro User?: Pro KullanÄ±cÄ±?
-  TRANSLATE SUBTITLE FILE: ALTYAZI DOSYASINI Ã‡EVÄ°R
+  Pro User?: Pro Kullan©¥c©¥?
+  TRANSLATE SUBTITLE FILE: ALTYAZI DOSYASINI ?EV?R
   DeepL API: DeepL API
   NLLB: NLLB
-  T2T Translation: T2T Ã‡eviri
-  Upload Audio Files to separate background music: Arka plan mÃ¼ziÄŸini ayÄ±rmak iÃ§in
-    ses dosyalarÄ±nÄ± yÃ¼kle
-  SEPARATE BACKGROUND MUSIC: ARKA PLAN MÃœZÄ°ÄÄ°NÄ° AYIR
-  Instrumental: EnstrÃ¼mantal
+  T2T Translation: T2T ?eviri
+  Upload Audio Files to separate background music: Arka plan m?zi?ini ay©¥rmak i?in
+    ses dosyalar©¥n©¥ y?kle
+  SEPARATE BACKGROUND MUSIC: ARKA PLAN M?Z???N? AYIR
+  Instrumental: Enstr?mantal
   Vocals: Vokal
-  BGM Separation: Arka Plan MÃ¼ziÄŸi AyÄ±rma
+  BGM Separation: Arka Plan M?zi?i Ay©¥rma
 eu:
   Language: Hizkuntza
   Upload File here: Igo fitxategia hemen
@@ -636,95 +636,95 @@ eu:
   Vocals: Ahotsak
   BGM Separation: BGM Bereizpena
 he: # Hebrew
-  Language: ×©×¤×”
-  File: ×§×•×‘×¥
-  Youtube: ×™×•×˜×™×•×‘
-  Mic: ××™×§×¨×•×¤×•×Ÿ
-  T2T Translation: ×ª×¨×’×•× T2T
-  BGM Separation: ×”×¤×¨×“×ª ××•×–×™×§×ª ×¨×§×¢
-  GENERATE SUBTITLE FILE: ×¦×•×¨ ×§×•×‘×¥ ×›×ª×•×‘×™×•×ª
-  Output: ×¤×œ×˜
-  Downloadable output file: ×§×•×‘×¥ ×¤×œ×˜ ×œ×”×•×¨×“×”
-  Upload File here: ×”×¢×œ×” ×§×•×‘×¥ ×›××Ÿ
-  Model: ××•×“×œ
-  Automatic Detection: ×–×™×”×•×™ ××•×˜×•××˜×™
-  File Format: ×¤×•×¨××˜ ×§×•×‘×¥
-  Translate to English?: ×œ×ª×¨×’× ×œ×× ×’×œ×™×ª?
-  Add a timestamp to the end of the filename: ×”×•×¡×£ ×—×•×ª××ª ×–××Ÿ ×œ×¡×•×£ ×©× ×”×§×•×‘×¥
-  Advanced Parameters: ×¤×¨××˜×¨×™× ××ª×§×“××™×
-  Background Music Remover Filter: ××¡× ×Ÿ ×”×¡×¨×ª ××•×–×™×§×ª ×¨×§×¢
-  Enabling this will remove background music: ×”×¤×¢×œ×” ×ª×¡×™×¨ ××•×–×™×§×ª ×¨×§×¢ ×‘×××¦×¢×•×ª ××•×“×œ ××©× ×” ×œ×¤× ×™ ×ª××œ×•×œ
-  Enable Background Music Remover Filter: ××¤×©×¨ ××¡× ×Ÿ ×”×¡×¨×ª ××•×–×™×§×ª ×¨×§×¢
-  Save separated files to output: ×©××•×¨ ×§×‘×¦×™× ××•×¤×¨×“×™× ×œ×¤×œ×˜
-  Offload sub model when finished: × ×ª×§ ××•×“×œ ××©× ×” ×œ××—×¨ ×¡×™×•×
-  Voice Detection Filter: ××¡× ×Ÿ ×–×™×”×•×™ ×§×•×œ
-  Enable this to transcribe only detected voice: ××¤×©×¨ ×–××ª ×›×“×™ ×œ×ª××œ×œ ×¨×§ ×§×˜×¢×™ ×§×•×œ ×©×–×•×”×• ×¢×œ ×™×“×™ ××•×“×œ ×”××©× ×”
-  Enable Silero VAD Filter: ××¤×©×¨ ××¡× ×Ÿ Silero VAD
-  Diarization: ×“×™××¨×™×–×¦×™×” (×–×™×”×•×™ ×“×•×‘×¨×™×)
-  Enable Diarization: ××¤×©×¨ ×“×™××¨×™×–×¦×™×”
-  HuggingFace Token: ××¡×™××•×Ÿ HuggingFace
-  This is only needed the first time you download the model: ×–×” × ×“×¨×© ×¨×§ ×‘×¤×¢× ×”×¨××©×•× ×” ×©××ª×” ××•×¨×™×“ ××ª ×”××•×“×œ. ×× ×›×‘×¨ ×™×© ×œ×š ××ª ×”××•×“×œ×™×, ××™×Ÿ ×¦×•×¨×š ×œ×”×–×™×Ÿ ×–××ª
-  Device: ×”×ª×§×Ÿ
-  Youtube Link: ×§×™×©×•×¨ ×™×•×˜×™×•×‘
-  Youtube Thumbnail: ×ª××•× ×ª ×ª×¦×•×’×” ××§×“×™××” ×©×œ ×™×•×˜×™×•×‘
-  Youtube Title: ×›×•×ª×¨×ª ×™×•×˜×™×•×‘
-  Youtube Description: ×ª×™××•×¨ ×™×•×˜×™×•×‘
-  Record with Mic: ×”×§×œ×˜ ×¢× ××™×§×¨×•×¤×•×Ÿ
-  Upload Subtitle Files to translate here: ×”×¢×œ×” ×›××Ÿ ×§×‘×¦×™ ×›×ª×•×‘×™×•×ª ×œ×ª×¨×’×•×
-  Your Auth Key (API KEY): ××¤×ª×— ××™××•×ª ×©×œ×š (API KEY)
-  Source Language: ×©×¤×ª ××§×•×¨
-  Target Language: ×©×¤×ª ×™×¢×“
-  Pro User?: ××©×ª××© ×¤×¨×•?
-  TRANSLATE SUBTITLE FILE: ×ª×¨×’× ×§×•×‘×¥ ×›×ª×•×‘×™×•×ª
-  Upload Audio Files to separate background music: ×”×¢×œ×” ×§×‘×¦×™ ×©××¢ ×œ×”×¤×¨×“×ª ××•×–×™×§×ª ×¨×§×¢
-  Instrumental: ××™× ×¡×˜×¨×•×× ×˜×œ×™
-  Vocals: ×©×™×¨×”
-  SEPARATE BACKGROUND MUSIC: ×”×¤×¨×“ ××•×–×™×§×ª ×¨×§×¢
+  Language: ???
+  File: ????
+  Youtube: ??????
+  Mic: ????????
+  T2T Translation: ????? T2T
+  BGM Separation: ????? ?????? ???
+  GENERATE SUBTITLE FILE: ??? ???? ???????
+  Output: ???
+  Downloadable output file: ???? ??? ??????
+  Upload File here: ???? ???? ???
+  Model: ????
+  Automatic Detection: ????? ???????
+  File Format: ????? ????
+  Translate to English?: ????? ????????
+  Add a timestamp to the end of the filename: ???? ????? ??? ???? ?? ?????
+  Advanced Parameters: ??????? ???????
+  Background Music Remover Filter: ???? ???? ?????? ???
+  Enabling this will remove background music: ????? ???? ?????? ??? ??????? ???? ???? ???? ?????
+  Enable Background Music Remover Filter: ???? ???? ???? ?????? ???
+  Save separated files to output: ???? ????? ??????? ????
+  Offload sub model when finished: ??? ???? ???? ???? ????
+  Voice Detection Filter: ???? ????? ???
+  Enable this to transcribe only detected voice: ???? ??? ??? ????? ?? ???? ??? ????? ?? ??? ???? ?????
+  Enable Silero VAD Filter: ???? ???? Silero VAD
+  Diarization: ????????? (????? ??????)
+  Enable Diarization: ???? ?????????
+  HuggingFace Token: ?????? HuggingFace
+  This is only needed the first time you download the model: ?? ???? ?? ???? ??????? ???? ????? ?? ?????. ?? ??? ?? ?? ?? ???????, ??? ???? ????? ???
+  Device: ????
+  Youtube Link: ????? ??????
+  Youtube Thumbnail: ????? ????? ?????? ?? ??????
+  Youtube Title: ????? ??????
+  Youtube Description: ????? ??????
+  Record with Mic: ???? ?? ????????
+  Upload Subtitle Files to translate here: ???? ??? ???? ??????? ??????
+  Your Auth Key (API KEY): ???? ????? ??? (API KEY)
+  Source Language: ??? ????
+  Target Language: ??? ???
+  Pro User?: ????? ????
+  TRANSLATE SUBTITLE FILE: ???? ???? ???????
+  Upload Audio Files to separate background music: ???? ???? ??? ?????? ?????? ???
+  Instrumental: ????????????
+  Vocals: ????
+  SEPARATE BACKGROUND MUSIC: ???? ?????? ???
 zh-TW:
-  Language: èªè¨€
-  Upload File here: åœ¨æ­¤è™•ä¸Šå‚³æª”æ¡ˆ
-  Model: æ¨¡å‹
-  Automatic Detection: è‡ªå‹•åµæ¸¬
-  File Format: æª”æ¡ˆæ ¼å¼
-  Translate to English? (Whisper's End-To-End Speech-To-Text translation feature): ç¿»è­¯æˆè‹±æ–‡ï¼Ÿ(Whisper çš„ç«¯åˆ°ç«¯èªéŸ³è½‰æ–‡å­—ç¿»è­¯åŠŸèƒ½)
-  Add a timestamp to the end of the filename: åœ¨æª”åçµå°¾åŠ å…¥æ™‚é–“æˆ³è¨˜
-  Offload sub model when finished: å®Œæˆå¾Œå¸è¼‰æ¨¡å‹
-  Advanced Parameters: é€²éšåƒæ•¸
-  Enabling this will remove background music: å•Ÿç”¨æ­¤åŠŸèƒ½å°‡åœ¨è½‰éŒ„å‰ï¼Œé€éå­æ¨¡å‹ç§»é™¤èƒŒæ™¯éŸ³æ¨‚
-  Enable Background Music Remover Filter: å•Ÿç”¨èƒŒæ™¯éŸ³æ¨‚ç§»é™¤æ¿¾æ³¢å™¨
-  Device: è£ç½®
-  Save separated files to output: å°‡åˆ†é›¢çš„æª”æ¡ˆå„²å­˜è‡³è¼¸å‡ºè³‡æ–™å¤¾
-  Background Music Remover Filter: èƒŒæ™¯éŸ³æ¨‚ç§»é™¤æ¿¾æ³¢å™¨
-  Enable this to transcribe only detected voice: å•Ÿç”¨æ­¤åŠŸèƒ½ï¼Œåªè½‰éŒ„å­æ¨¡å‹åµæ¸¬åˆ°çš„èªéŸ³éƒ¨åˆ†
-  Enable Silero VAD Filter: å•Ÿç”¨ Silero VAD æ¿¾æ³¢å™¨
-  Voice Detection Filter: èªéŸ³åµæ¸¬æ¿¾æ³¢å™¨
-  Enable Diarization: å•Ÿç”¨èªè€…åˆ†é›¢ï¼ˆDiarizationï¼‰
-  This is only needed the first time you download the model: åªæœ‰ç¬¬ä¸€æ¬¡ä¸‹è¼‰æ¨¡å‹æ™‚æ‰éœ€è¦æ­¤æ­¥é©Ÿã€‚
-     å¦‚æœæ‚¨å·²ç¶“æœ‰æ¨¡å‹ï¼Œå‰‡ç„¡éœ€è¼¸å…¥ã€‚è‹¥è¦ä¸‹è¼‰æ¨¡å‹ï¼Œæ‚¨å¿…é ˆæ‰‹å‹•å‰å¾€ "https://huggingface.co/pyannote/speaker-diarization-3.1" å’Œ "https://huggingface.co/pyannote/segmentation-3.0" ä¸¦åŒæ„å…¶è¦æ±‚
-  HuggingFace Token: HuggingFace æ¬Šæ–ï¼ˆTokenï¼‰
-  Diarization: èªè€…åˆ†é›¢
-  GENERATE SUBTITLE FILE: ç”¢ç”Ÿå­—å¹•æª”æ¡ˆ
-  Output: è¼¸å‡º
-  Downloadable output file: å¯ä¸‹è¼‰çš„è¼¸å‡ºæª”æ¡ˆ
-  File: æª”æ¡ˆ
-  Youtube Link: YouTube é€£çµ
-  Youtube Thumbnail: YouTube ç¸®åœ–
-  Youtube Title: YouTube æ¨™é¡Œ
-  Youtube Description: YouTube èªªæ˜
+  Language: åŞåë
+  Upload File here: î¤ó®ô¥ß¾îî?äĞ
+  Model: Ù¼úş
+  Automatic Detection: í»ÔÑïÏö´
+  File Format: ?äĞÌ«ãÒ
+  Translate to English? (Whisper's End-To-End Speech-To-Text translation feature): ?æ»à÷çÈÙş£¿(Whisper îÜÓ®ÓğÓ®åŞëåï®Ùşí®?æ»ÍíÒö)
+  Add a timestamp to the end of the filename: î¤?Ù£Ì¿Ú­Ê¥ìıãÁÊà?ÑÀ
+  Offload sub model when finished: èÇà÷ı­?î°Ù¼úş
+  Advanced Parameters: òäÍ­óÑâ¦
+  Enabling this will remove background music: ?éÄó®ÍíÒöíâî¤ï®Öâîñ£¬÷âÎ¦í­Ù¼úşì¹ğ¶ÛÎÌØëåäÅ
+  Enable Background Music Remover Filter: ?éÄÛÎÌØëåäÅì¹ğ¶Õë÷îĞï
+  Device: íûöÇ
+  Save separated files to output: íâİÂ×îîÜ?äĞî¹ğíò¸âÃõóíÀÖùúñ
+  Background Music Remover Filter: ÛÎÌØëåäÅì¹ğ¶Õë÷îĞï
+  Enable this to transcribe only detected voice: ?éÄó®ÍíÒö£¬ñşï®Öâí­Ù¼úşïÏö´ÓğîÜåŞëåİ»İÂ
+  Enable Silero VAD Filter: ?éÄ Silero VAD Õë÷îĞï
+  Voice Detection Filter: åŞëåïÏö´Õë÷îĞï
+  Enable Diarization: ?éÄåŞíºİÂ×î£¨Diarization£©
+  This is only needed the first time you download the model: ñşêóğ¯ìéó­ù»î°Ù¼úşãÁî¦âÍé©ó®ÜÆö®¡£
+     åıÍı?ì«ÌèêóÙ¼úş£¬öÎÙíâÍâÃìı¡£å´é©ù»î°Ù¼úş£¬?ù±âÎâ¢ÔÑîñèÙ "https://huggingface.co/pyannote/speaker-diarization-3.1" ûú "https://huggingface.co/pyannote/segmentation-3.0" ?ÔÒëòĞìé©Ï´
+  HuggingFace Token: HuggingFace Ïííè£¨Token£©
+  Diarization: åŞíºİÂ×î
+  GENERATE SUBTITLE FILE: ?ßæí®Ø­?äĞ
+  Output: âÃõó
+  Downloadable output file: Ê¦ù»î°îÜâÃõó?äĞ
+  File: ?äĞ
+  Youtube Link: YouTube Ö§Ì¿
+  Youtube Thumbnail: YouTube õêÓñ
+  Youtube Title: YouTube øöğ¹
+  Youtube Description: YouTube àãÙ¥
   Youtube: YouTube
-  Record with Mic: ä½¿ç”¨éº¥å…‹é¢¨éŒ„éŸ³
-  Mic: éº¥å…‹é¢¨
-  Upload Subtitle Files to translate here: åœ¨æ­¤è™•ä¸Šå‚³è¦ç¿»è­¯çš„å­—å¹•æª”æ¡ˆ
-  Your Auth Key (API KEY): æ‚¨çš„é©—è­‰é‡‘é‘° (API KEY)
-  Source Language: ä¾†æºèªè¨€
-  Target Language: ç›®æ¨™èªè¨€
-  Pro User?: å°ˆæ¥­ä½¿ç”¨è€…ï¼Ÿ
-  TRANSLATE SUBTITLE FILE: ç¿»è­¯å­—å¹•æª”æ¡ˆ
+  Record with Mic: ŞÅéÄØêĞºù¦Öâëå
+  Mic: ØêĞºù¦
+  Upload Subtitle Files to translate here: î¤ó®ô¥ß¾îîé©?æ»îÜí®Ø­?äĞ
+  Your Auth Key (API KEY): ?îÜúĞñûÑÑ? (API KEY)
+  Source Language: ÕÎê¹åŞåë
+  Target Language: ÙÍøöåŞåë
+  Pro User?: îöåöŞÅéÄíº£¿
+  TRANSLATE SUBTITLE FILE: ?æ»í®Ø­?äĞ
   DeepL API: DeepL API
   NLLB: NLLB
-  T2T Translation: T2T ç¿»è­¯
-  Upload Audio Files to separate background music: åœ¨æ­¤è™•ä¸Šå‚³è¦åˆ†é›¢èƒŒæ™¯éŸ³æ¨‚çš„éŸ³è¨Šæª”æ¡ˆ
-  SEPARATE BACKGROUND MUSIC: åˆ†é›¢èƒŒæ™¯éŸ³æ¨‚
-  Instrumental: æ¨‚å™¨
-  Vocals: äººè²
-  BGM Separation: èƒŒæ™¯éŸ³æ¨‚åˆ†é›¢
+  T2T Translation: T2T ?æ»
+  Upload Audio Files to separate background music: î¤ó®ô¥ß¾îîé©İÂ×îÛÎÌØëåäÅîÜëåãò?äĞ
+  SEPARATE BACKGROUND MUSIC: İÂ×îÛÎÌØëåäÅ
+  Instrumental: äÅĞï
+  Vocals: ìÑá¢
+  BGM Separation: ÛÎÌØëåäÅİÂ×î
