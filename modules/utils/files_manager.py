@@ -12,14 +12,38 @@ VIDEO_EXTENSION = ['.mp4', '.mkv', '.flv', '.avi', '.mov', '.wmv', '.webm', '.m4
                    '.f4v', '.ogv', '.vob', '.mts', '.m2ts', '.divx', '.mxf', '.rm', '.rmvb', '.ts']
 
 MEDIA_EXTENSION = VIDEO_EXTENSION + AUDIO_EXTENSION
+FALLBACK_ENCODINGS = ['cp949', 'euc-kr']
 
 
-def load_yaml(path: str = DEFAULT_PARAMETERS_CONFIG_PATH):
+def load_yaml(path: str = DEFAULT_PARAMETERS_CONFIG_PATH, use_fallback: bool = True):
     yaml = YAML(typ="safe")
     yaml.preserve_quotes = True
-    with open(path, 'r', encoding='utf-8') as file:
-        config = yaml.load(file)
-    return config
+    try:
+        with open(path, 'r', encoding='utf-8') as file:
+            return yaml.load(file)
+    except UnicodeDecodeError:
+        if not use_fallback:
+            raise
+
+        print(f"UTF-8 decoding failed for {path}. Trying fallback encodings...")
+
+        try:
+            with open(path, 'rb') as file:
+                raw_bytes = file.read()
+        except IOError as e:
+            raise RuntimeError(f"Failed to read file {path} as binary.") from e
+
+        for encoding in FALLBACK_ENCODINGS:
+            try:
+                content = raw_bytes.decode(encoding)
+                config = yaml.load(content)
+                print(f"Successfully loaded {path} with '{encoding}'. Consider converting the file to UTF-8.")
+                return config
+            except Exception as inner_e:  # Catches both UnicodeDecodeError and YAMLError
+                print(f"   -> Loading with '{encoding}' failed: {inner_e}")
+                continue
+
+        raise RuntimeError(f"All attempted encodings ({['utf-8'] + FALLBACK_ENCODINGS}) failed to load {path}.")
 
 
 def save_yaml(data: dict, path: str = DEFAULT_PARAMETERS_CONFIG_PATH):

@@ -106,7 +106,7 @@ class App:
                             label=_("Language"), interactive=True,
                             visible=False,  # Set it by development purpose.
                             )
-            with Translate(I18N_YAML_PATH):  # Add `lang = lang` here to test dynamic change of the languages.
+            with Translate(self.i18n):  # Add `lang = lang` here to test dynamic change of the languages.
                 with gr.Row():
                     with gr.Column():
                         gr.Markdown(MARKDOWN, elem_id="md_project")
