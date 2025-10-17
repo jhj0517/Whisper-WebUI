@@ -15,38 +15,35 @@ MEDIA_EXTENSION = VIDEO_EXTENSION + AUDIO_EXTENSION
 FALLBACK_ENCODINGS = ['cp949', 'euc-kr']
 
 
-def load_yaml(path: str = DEFAULT_PARAMETERS_CONFIG_PATH, force_utf8_conversion: bool = True):
+def load_yaml(path: str = DEFAULT_PARAMETERS_CONFIG_PATH, use_fallback: bool = True):
+    yaml = YAML(typ="safe")
+    yaml.preserve_quotes = True
     try:
-        yaml = YAML(typ="safe")
-        yaml.preserve_quotes = True
         with open(path, 'r', encoding='utf-8') as file:
-            config = yaml.load(file)
-        return config
-    except UnicodeDecodeError as e:
-        if not force_utf8_conversion:
+            return yaml.load(file)
+    except UnicodeDecodeError:
+        if not use_fallback:
             raise
+
+        print(f"UTF-8 decoding failed for {path}. Trying fallback encodings...")
+
+        try:
+            with open(path, 'rb') as file:
+                raw_bytes = file.read()
+        except IOError as e:
+            raise RuntimeError(f"Failed to read file {path} as binary.") from e
 
         for encoding in FALLBACK_ENCODINGS:
             try:
-                with open(path, 'rb') as file:
-                    raw_bytes = file.read()
                 content = raw_bytes.decode(encoding)
-
-                with open(path, 'w', encoding='utf-8') as file:
-                    file.write(content)
-                print(f"{path} is converted from {encoding}' to 'utf-8'")
-
-                with open(path, 'r', encoding='utf-8') as file:
-                    yaml = YAML(typ="safe")
-                    config = yaml.load(file)
-
+                config = yaml.load(content)
+                print(f"Successfully loaded {path} with '{encoding}'. Consider converting the file to UTF-8.")
                 return config
-
-            except UnicodeDecodeError as inner_e:
-                print(f"   -> '{encoding}' decoding failed: {inner_e}")
+            except Exception as inner_e:  # Catches both UnicodeDecodeError and YAMLError
+                print(f"   -> Loading with '{encoding}' failed: {inner_e}")
                 continue
 
-        raise RuntimeError(f"Every encoding ({['utf-8'] + FALLBACK_ENCODINGS}) couldn't load {path} file.")
+        raise RuntimeError(f"All attempted encodings ({['utf-8'] + FALLBACK_ENCODINGS}) failed to load {path}.")
 
 
 def save_yaml(data: dict, path: str = DEFAULT_PARAMETERS_CONFIG_PATH):
