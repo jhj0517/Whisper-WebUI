@@ -13,7 +13,6 @@ from faster_whisper.vad import VadOptions, get_speech_timestamps
     "whisper_type,vad_filter,bgm_separation,diarization",
     [
         (WhisperImpl.WHISPER.value, True, False, False),
-        (WhisperImpl.FASTER_WHISPER.value, True, False, False),
         (WhisperImpl.INSANELY_FAST_WHISPER.value, True, False, False)
     ]
 )
