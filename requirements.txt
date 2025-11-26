@@ -9,7 +9,7 @@
 ## Intel GPU
 # https://download.pytorch.org/whl/xpu
 
-
+matplotlib
 torch
 torchaudio>=2.8.0,<2.9.0
 git+https://github.com/jhj0517/jhj0517-whisper.git
