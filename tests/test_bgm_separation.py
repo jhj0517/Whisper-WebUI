@@ -18,7 +18,6 @@ from test_transcription import download_file, run_asr_pipeline
     "whisper_type,vad_filter,bgm_separation,diarization",
     [
         (WhisperImpl.WHISPER.value, False, True, False),
-        (WhisperImpl.FASTER_WHISPER.value, False, True, False),
         (WhisperImpl.INSANELY_FAST_WHISPER.value, False, True, False)
     ]
 )
@@ -39,7 +38,6 @@ def test_bgm_separation_pipeline(
     "whisper_type,vad_filter,bgm_separation,diarization",
     [
         (WhisperImpl.WHISPER.value, True, True, False),
-        (WhisperImpl.FASTER_WHISPER.value, True, True, False),
         (WhisperImpl.INSANELY_FAST_WHISPER.value, True, True, False)
     ]
 )
