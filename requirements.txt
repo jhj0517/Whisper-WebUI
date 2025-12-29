@@ -10,8 +10,8 @@
 # https://download.pytorch.org/whl/xpu
 
 matplotlib
-torch
-torchaudio>=2.8.0,<2.9.0
+torch>=2.8.0,<2.9.0 # Needs to be harmonized with torchaudio
+torchaudio>=2.8.0,<2.9.0 # 2.9 deprecates used functions
 git+https://github.com/jhj0517/jhj0517-whisper.git
 faster-whisper==1.1.1
 transformers==4.47.1
