@@ -331,7 +331,7 @@ class App:
 
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--whisper_type', type=str, default=WhisperImpl.FASTER_WHISPER.value,
+parser.add_argument('--whisper_type', type=str, default=WhisperImpl.WHISPER.value,
                     choices=[item.value for item in WhisperImpl],
                     help='A type of the whisper implementation (Github repo name)')
 parser.add_argument('--share', type=str2bool, default=False, nargs='?', const=True, help='Gradio share value')

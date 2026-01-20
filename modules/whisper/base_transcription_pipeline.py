@@ -117,6 +117,8 @@ class BaseTranscriptionPipeline(ABC):
         """
         start_time = time.time()
 
+        logger.info(f"Run started. audio={audio}")
+
         if not validate_audio(audio):
             return [Segment()], 0
 
@@ -125,6 +127,7 @@ class BaseTranscriptionPipeline(ABC):
         bgm_params, vad_params, whisper_params, diarization_params = params.bgm_separation, params.vad, params.whisper, params.diarization
 
         if bgm_params.is_separate_bgm:
+            logger.info("Starting background music separation")
             music, audio, _ = self.music_separator.separate(
                 audio=audio,
                 model_name=bgm_params.uvr_model_size,
@@ -145,10 +148,12 @@ class BaseTranscriptionPipeline(ABC):
             if bgm_params.enable_offload:
                 self.music_separator.offload()
             elapsed_time_bgm_sep = time.time() - start_time
+            logger.info("BGM separation completed")
 
         origin_audio = deepcopy(audio)
 
         if vad_params.vad_filter:
+            logger.info("Applying VAD")
             progress(0, desc="Filtering silent parts from audio..")
             vad_options = VadOptions(
                 threshold=vad_params.threshold,
@@ -168,7 +173,9 @@ class BaseTranscriptionPipeline(ABC):
                 audio = vad_processed
             else:
                 vad_params.vad_filter = False
+            logger.info("VAD completed")
 
+        logger.info("Starting transcription")
         result, elapsed_time_transcription = self.transcribe(
             audio,
             progress,
@@ -177,6 +184,7 @@ class BaseTranscriptionPipeline(ABC):
         )
         if whisper_params.enable_offload:
             self.offload()
+        logger.info("Transcription completed")
 
         if vad_params.vad_filter:
             restored_result = self.vad.restore_speech_timestamps(
@@ -189,6 +197,7 @@ class BaseTranscriptionPipeline(ABC):
                 logger.info("VAD detected no speech segments in the audio.")
 
         if diarization_params.is_diarize:
+            logger.info("Running diarization")
             progress(0.99, desc="Diarizing speakers..")
             result, elapsed_time_diarization = self.diarizer.run(
                 audio=origin_audio,
@@ -198,6 +207,7 @@ class BaseTranscriptionPipeline(ABC):
             )
             if diarization_params.enable_offload:
                 self.diarizer.offload()
+            logger.info("Diarization completed")
 
         self.cache_parameters(
             params=params,
@@ -261,6 +271,8 @@ class BaseTranscriptionPipeline(ABC):
                 "highlight_words": True if params.whisper.word_timestamps else False
             }
 
+            logger.info(f"Transcribing files: {files} input_folder={input_folder_path}")
+
             if input_folder_path:
                 files = get_media_files(input_folder_path, include_sub_directory=include_subdirectory)
             if isinstance(files, str):
@@ -270,6 +282,7 @@ class BaseTranscriptionPipeline(ABC):
 
             files_info = {}
             for file in files:
+                logger.info(f"Processing file {file}")
                 transcribed_segments, time_for_task = self.run(
                     file,
                     progress,
@@ -312,6 +325,7 @@ class BaseTranscriptionPipeline(ABC):
             result_str = f"Done in {self.format_time(total_time)}! Subtitle is in the outputs folder.\n\n{total_result}"
             result_file_path = [info['path'] for info in files_info.values()]
 
+            logger.info("File transcription completed")
             return result_str, result_file_path
 
         except Exception as e:
