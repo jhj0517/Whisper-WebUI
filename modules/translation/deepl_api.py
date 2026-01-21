@@ -153,24 +153,25 @@ class DeepLAPI:
                 for i, translated_text in enumerate(translated_texts):
                     segments[batch_start + i].text = translated_text["text"]
 
-            subtitle, output_path = generate_file(
-                output_dir=self.output_dir,
-                output_file_name=file_name,
-                output_format=file_ext,
-                result=segments,
-                add_timestamp=add_timestamp
-            )
-
-            files_info[file_name] = {"subtitle": subtitle, "path": output_path}
+            files_info[file_name] = [
+                {"subtitle": subtitle, "path": output_path}
+                for subtitle, output_path in generate_file(
+                    output_dir=self.output_dir,
+                    output_file_name=file_name,
+                    output_format=file_ext,
+                    result=segments,
+                    add_timestamp=add_timestamp
+                )
+            ]
 
         total_result = ''
-        for file_name, info in files_info.items():
+        for file_name, infos in files_info.items():
             total_result += '------------------------------------\n'
             total_result += f'{file_name}\n\n'
-            total_result += f'{info["subtitle"]}'
+            total_result += f'{infos[0]["subtitle"]}'
         gr_str = f"Done! Subtitle is in the outputs/translation folder.\n\n{total_result}"
 
-        output_file_paths = [item["path"] for key, item in files_info.items()]
+        output_file_paths = [item["path"] for _, items in files_info.items() for item in items]
         return [gr_str, output_file_paths]
 
     def request_deepl_translate(self,

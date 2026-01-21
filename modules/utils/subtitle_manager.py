@@ -102,8 +102,35 @@ class WriteTXT(ResultWriter):
     def write_result(
         self, result: Union[Dict, List[Segment]], file: TextIO, options: Optional[dict] = None, **kwargs
     ):
+        curr_speaker = ""
+        sep = ""
+        has_speaker = True
+        rematch = re.compile(r"(\w+)\|(.*?)$")
+
         for segment in result["segments"]:
-            print(segment["text"].strip(), file=file, flush=True)
+            t = segment["text"].strip()
+
+            if has_speaker:
+                m = rematch.fullmatch(t)
+
+                if m is not None:
+                    new_speaker = m.group(1)
+                    t = m.group(2)
+
+                    if curr_speaker != new_speaker:
+                        segment_start = format_timestamp(segment["start"])
+                        print(f"{sep}{sep}{segment_start}\n{new_speaker}\n{t}", end="", file=file, flush=True)
+                    else:
+                        print(f" {t}", end="", file=file, flush=True)
+
+                    curr_speaker = new_speaker
+                    sep = "\n"
+                else:
+                    has_speaker = False
+                    print(t, file=file, flush=True)
+            else:
+                print(t, file=file, flush=True)
+
 
     def to_segments(self, file_path: str):
         segments = []
@@ -391,29 +418,28 @@ class WriteJSON(ResultWriter):
     ):
         json.dump(result, file)
 
+writers = {
+    "txt": WriteTXT,
+    "vtt": WriteVTT,
+    "srt": WriteSRT,
+    "tsv": WriteTSV,
+    "json": WriteJSON,
+    "lrc": WriteLRC
+}
 
 def get_writer(
     output_format: str, output_dir: str
-) -> Callable[[dict, TextIO, dict], None]:
+) -> Callable[[Union[dict, List[Segment]], str, Optional[dict]], None]:
     output_format = output_format.strip().lower().replace(".", "")
-
-    writers = {
-        "txt": WriteTXT,
-        "vtt": WriteVTT,
-        "srt": WriteSRT,
-        "tsv": WriteTSV,
-        "json": WriteJSON,
-        "lrc": WriteLRC
-    }
 
     if output_format == "all":
         all_writers = [writer(output_dir) for writer in writers.values()]
 
         def write_all(
-            result: dict, file: TextIO, options: Optional[dict] = None, **kwargs
+            result: Union[dict, List[Segment]], output_file_name: str, options: Optional[dict] = None, **kwargs
         ):
             for writer in all_writers:
-                writer(result, file, options, **kwargs)
+                writer(result, output_file_name, options, **kwargs)
 
         return write_all
 
@@ -423,7 +449,7 @@ def get_writer(
 def generate_file(
     output_format: str, output_dir: str, result: Union[dict, List[Segment]], output_file_name: str,
     add_timestamp: bool = True, **kwargs
-) -> Tuple[str, str]:
+) -> List[Tuple[str, str]]:
     output_format = output_format.strip().lower().replace(".", "")
     output_format = "vtt" if output_format == "webvtt" else output_format
 
@@ -431,15 +457,22 @@ def generate_file(
         timestamp = datetime.now().strftime("%m%d%H%M%S")
         output_file_name += f"-{timestamp}"
 
-    file_path = os.path.join(output_dir, f"{output_file_name}.{output_format}")
     file_writer = get_writer(output_format=output_format, output_dir=output_dir)
 
     if isinstance(file_writer, WriteLRC) and kwargs.get("highlight_words", False):
         kwargs["highlight_words"], kwargs["align_lrc_words"] = False, True
 
-    file_writer(result=result, output_file_name=output_file_name, **kwargs)
-    content = read_file(file_path)
-    return content, file_path
+    file_writer(result, output_file_name, **kwargs)
+
+    if output_format == "all":
+        file_list = []
+        for output_format_key in writers.keys():
+            file_path = os.path.join(output_dir, f"{output_file_name}.{output_format_key}")
+            file_list.append((read_file(file_path), file_path))
+        return file_list
+    else:
+        file_path = os.path.join(output_dir, f"{output_file_name}.{output_format}")
+        return [(read_file(file_path), file_path)]
 
 
 def safe_filename(name):
