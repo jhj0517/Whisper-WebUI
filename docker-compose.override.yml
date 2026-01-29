@@ -1,0 +1,26 @@
+# Nginx reverse proxy with authentication and TLS
+#
+# Setup:
+#   1. Copy .env.example to .env and configure DOMAIN or IP
+#   2. Create .htpasswd: ./scripts/htpasswd-add.sh admin
+#   3. Run: docker compose up -d
+
+services:
+  nginx:
+    build: ./nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/.htpasswd:/etc/nginx/.htpasswd:ro
+      - ./nginx/certs:/etc/nginx/certs
+      - ./nginx/acme:/var/cache/nginx/acme
+    env_file:
+      - .env
+    depends_on:
+      - whisper-webui
+    restart: unless-stopped
+
+  # Override whisper-webui to not expose port directly
+  whisper-webui:
+    ports: !reset []
