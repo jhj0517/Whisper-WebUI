@@ -59,14 +59,10 @@ if [ "$USE_LETSENCRYPT" = "true" ]; then
         ssl_certificate \$acme_certificate;
         ssl_certificate_key \$acme_certificate_key;"
 
-    OCSP_STAPLING_CONFIG=$(cat <<'EOF'
-ssl_stapling on;
-ssl_stapling_verify on;
-EOF
-)
+    OCSP_STAPLING_CONFIG="ssl_stapling on;
+        ssl_stapling_verify on;"
 else
     echo "==> Using self-signed certificates"
-
     OCSP_STAPLING_CONFIG=""
 
     # Generate self-signed certificate if not exists or SERVER_NAME changed
@@ -98,6 +94,9 @@ else
 
     SSL_CERTIFICATE_CONFIG="ssl_certificate ${SELF_SIGNED_CERT};
         ssl_certificate_key ${SELF_SIGNED_KEY};"
+
+    # Explicitly disable stapling with a comment
+    OCSP_STAPLING_CONFIG="# OCSP Stapling disabled"
 fi
 
 # Export variables for envsubst
