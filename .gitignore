@@ -11,3 +11,9 @@ outputs/
 models/
 modules/yt_tmp.wav
 configs/default_parameters.yaml
+
+# Nginx proxy
+nginx/.htpasswd
+nginx/certs/
+nginx/acme/
+docker-compose.override.yml

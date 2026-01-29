@@ -1,0 +1,126 @@
+load_module modules/ngx_http_acme_module.so;
+
+worker_processes auto;
+error_log /var/log/nginx/error.log warn;
+pid /var/run/nginx.pid;
+
+events {
+    worker_connections 4096;
+    multi_accept on;
+    use epoll;
+}
+
+http {
+    include /etc/nginx/mime.types;
+    default_type application/octet-stream;
+
+    log_format main '$remote_addr - $remote_user [$time_local] "$request" '
+                    '$status $body_bytes_sent "$http_referer" '
+                    '"$http_user_agent" "$http_x_forwarded_for"';
+
+    access_log /var/log/nginx/access.log main;
+
+    sendfile on;
+    tcp_nopush on;
+    tcp_nodelay on;
+    keepalive_timeout 65;
+    types_hash_max_size 2048;
+
+    # Resolver for ACME (use Docker DNS + Google/Cloudflare fallback)
+    resolver 127.0.0.11 8.8.8.8 1.1.1.1 valid=300s;
+    resolver_timeout 5s;
+
+    # SSL Configuration - Mozilla Modern (TLS 1.3 only)
+    ssl_protocols TLSv1.3;
+    ssl_prefer_server_ciphers off;
+    ssl_session_timeout 1d;
+    ssl_session_cache shared:SSL:10m;
+    ssl_session_tickets off;
+
+    # DH parameters
+    ssl_dhparam /etc/nginx/certs/dhparam.pem;
+
+    # OCSP Stapling
+    ssl_stapling on;
+    ssl_stapling_verify on;
+
+    # ACME Issuer configuration (only used when USE_LETSENCRYPT=true)
+    acme_issuer letsencrypt {
+        uri ${ACME_SERVER};
+        contact ${ACME_EMAIL};
+        state_path /var/cache/nginx/acme;
+        accept_terms_of_service;
+    }
+
+    acme_shared_zone zone=ngx_acme_shared:1M;
+
+    # Upstream
+    upstream whisper {
+        server whisper-webui:7860;
+    }
+
+    # HTTP server - only for ACME challenges, redirect everything else
+    server {
+        listen 80;
+        server_name ${SERVER_NAME};
+
+        # Allow ACME challenges
+        location /.well-known/acme-challenge/ {
+            root /var/www/acme;
+            allow all;
+        }
+
+        # Redirect all other traffic to HTTPS
+        location / {
+            return 301 https://$host$request_uri;
+        }
+    }
+
+    # HTTPS server
+    server {
+        listen 443 ssl;
+        http2 on;
+        server_name ${SERVER_NAME};
+
+        # Certificate configuration (set by entrypoint)
+        ${SSL_CERTIFICATE_CONFIG}
+
+        # Security headers
+        add_header Strict-Transport-Security "max-age=63072000; includeSubDomains; preload" always;
+        add_header X-Frame-Options "SAMEORIGIN" always;
+        add_header X-Content-Type-Options "nosniff" always;
+        add_header X-XSS-Protection "1; mode=block" always;
+        add_header Referrer-Policy "strict-origin-when-cross-origin" always;
+
+        # Basic authentication
+        auth_basic "Restricted Access";
+        auth_basic_user_file /etc/nginx/.htpasswd;
+
+        # Proxy to whisper-webui
+        location / {
+            proxy_pass http://whisper;
+            proxy_http_version 1.1;
+
+            proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+
+            # WebSocket support (for Gradio)
+            proxy_set_header Upgrade $http_upgrade;
+            proxy_set_header Connection "upgrade";
+
+            # Timeouts for long-running transcription tasks
+            proxy_connect_timeout 600;
+            proxy_send_timeout 600;
+            proxy_read_timeout 600;
+
+            # Buffering
+            proxy_buffering off;
+            proxy_request_buffering off;
+
+            # Large file uploads
+            client_max_body_size 0;
+        }
+    }
+}
