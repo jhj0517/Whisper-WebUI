@@ -7,7 +7,7 @@ RUN apk add --no-cache wget \
     && apk add --no-cache nginx nginx-module-acme
 
 # Stage 2: Final image
-FROM nginx:1.27-alpine
+FROM nginx:alpine
 
 # Copy ACME module from builder
 COPY --from=builder /usr/lib/nginx/modules/ngx_http_acme_module.so /usr/lib/nginx/modules/
