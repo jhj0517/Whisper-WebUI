@@ -16,4 +16,3 @@ configs/default_parameters.yaml
 nginx/.htpasswd
 nginx/certs/
 nginx/acme/
-docker-compose.override.yml
