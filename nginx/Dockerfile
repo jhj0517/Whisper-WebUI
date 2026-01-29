@@ -1,9 +1,10 @@
 # Stage 1: Install nginx-module-acme from mainline repo
-FROM alpine:3.21 AS builder
+FROM alpine:latest AS builder
 
 RUN apk add --no-cache wget \
     && wget -O /etc/apk/keys/nginx_signing.rsa.pub https://nginx.org/keys/nginx_signing.rsa.pub \
-    && echo "https://nginx.org/packages/mainline/alpine/v3.21/main" >> /etc/apk/repositories \
+    && ALPINE_VERSION=$(cut -d. -f1,2 /etc/alpine-release) \
+    && echo "https://nginx.org/packages/mainline/alpine/v${ALPINE_VERSION}/main" >> /etc/apk/repositories \
     && apk add --no-cache nginx nginx-module-acme
 
 # Stage 2: Final image
