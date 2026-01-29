@@ -41,10 +41,9 @@ http {
     ssl_dhparam /etc/nginx/certs/dhparam.pem;
 
     # OCSP Stapling
-    ssl_stapling on;
-    ssl_stapling_verify on;
+    ${OCSP_STAPLING_CONFIG}
 
-    # ACME Issuer configuration (only used when USE_LETSENCRYPT=true)
+    # ACME Issuer configuration
     acme_issuer letsencrypt {
         uri ${ACME_SERVER};
         contact ${ACME_EMAIL};

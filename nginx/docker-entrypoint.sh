@@ -58,8 +58,16 @@ if [ "$USE_LETSENCRYPT" = "true" ]; then
     SSL_CERTIFICATE_CONFIG="acme_certificate letsencrypt ${SERVER_NAME};
         ssl_certificate \$acme_certificate;
         ssl_certificate_key \$acme_certificate_key;"
+
+    OCSP_STAPLING_CONFIG=$(cat <<'EOF'
+ssl_stapling on;
+ssl_stapling_verify on;
+EOF
+)
 else
     echo "==> Using self-signed certificates"
+
+    OCSP_STAPLING_CONFIG=""
 
     # Generate self-signed certificate if not exists or SERVER_NAME changed
     CERT_CN=""
@@ -97,10 +105,11 @@ export SERVER_NAME
 export ACME_SERVER
 export ACME_EMAIL
 export SSL_CERTIFICATE_CONFIG
+export OCSP_STAPLING_CONFIG
 
 # Generate nginx config from template
 echo "==> Generating nginx configuration..."
-envsubst '${SERVER_NAME} ${ACME_SERVER} ${ACME_EMAIL} ${SSL_CERTIFICATE_CONFIG}' \
+envsubst '${SERVER_NAME} ${ACME_SERVER} ${ACME_EMAIL} ${SSL_CERTIFICATE_CONFIG} ${OCSP_STAPLING_CONFIG}' \
     < /etc/nginx/nginx.conf.template \
     > /etc/nginx/nginx.conf
 
