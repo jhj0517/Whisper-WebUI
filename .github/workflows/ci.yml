@@ -36,7 +36,7 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y git ffmpeg
 
       - name: Install dependencies
-        run: pip install -r requirements.txt pytest jiwer
+        run: pip install wheel && pip install --no-build-isolation -r requirements.txt pytest jiwer
 
       - name: Run test
         run: python -m pytest -rs tests
