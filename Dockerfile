@@ -11,7 +11,7 @@ COPY requirements.txt .
 
 RUN python3 -m venv venv && \
     . venv/bin/activate && \
-    pip install wheel && \
+    pip install --no-cache-dir -U wheel && \
     pip install --no-build-isolation --no-cache-dir -U -r requirements.txt
 
 
