@@ -3,13 +3,15 @@ whisper:
   model_size: large-v2
   # Compute type. 'float16' for CUDA, 'float32' for CPU.
   compute_type: float16
+  # Whether to offload the model after the inference.
+  enable_offload: true
 
 bgm_separation:
   # UVR model sizes between ["UVR-MDX-NET-Inst_HQ_4", "UVR-MDX-NET-Inst_3"]
   model_size: UVR-MDX-NET-Inst_HQ_4
   # Whether to offload the model after the inference. Should be true if your setup has a VRAM less than <16GB
   enable_offload: true
-  # Device to load BGM separation model
+  # Device to load BGM separation model between ["cuda", "cpu", "xpu"]
   device: cuda
 
 # Settings that apply to the `cache' directory. The output files for `/bgm-separation` are stored in the `cache' directory,

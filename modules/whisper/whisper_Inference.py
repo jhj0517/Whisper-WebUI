@@ -1,7 +1,7 @@
 import whisper
 import gradio as gr
 import time
-from typing import BinaryIO, Union, Tuple, List
+from typing import BinaryIO, Union, Tuple, List, Callable, Optional
 import numpy as np
 import torch
 import os
@@ -29,6 +29,7 @@ class WhisperInference(BaseTranscriptionPipeline):
     def transcribe(self,
                    audio: Union[str, np.ndarray, torch.Tensor],
                    progress: gr.Progress = gr.Progress(),
+                   progress_callback: Optional[Callable] = None,
                    *whisper_params,
                    ) -> Tuple[List[Segment], float]:
         """
@@ -40,6 +41,8 @@ class WhisperInference(BaseTranscriptionPipeline):
             Audio path or file binary or Audio numpy array
         progress: gr.Progress
             Indicator to show progress directly in gradio.
+        progress_callback: Optional[Callable]
+            callback function to show progress. Can be used to update progress in the backend.
         *whisper_params: tuple
             Parameters related with whisper. This will be dealt with "WhisperParameters" data class
 
@@ -65,7 +68,7 @@ class WhisperInference(BaseTranscriptionPipeline):
                                        beam_size=params.beam_size,
                                        logprob_threshold=params.log_prob_threshold,
                                        no_speech_threshold=params.no_speech_threshold,
-                                       task="translate" if params.is_translate and self.current_model_size in self.translatable_models else "transcribe",
+                                       task="translate" if params.is_translate else "transcribe",
                                        fp16=True if params.compute_type == "float16" else False,
                                        best_of=params.best_of,
                                        patience=params.patience,

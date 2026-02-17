@@ -1,17 +1,22 @@
-# Remove the --extra-index-url line below if you're not using Nvidia GPU.
-# If you're using it, update url to your CUDA version (CUDA 12.1 is minimum requirement):
-# For CUDA 12.1, use : https://download.pytorch.org/whl/cu121
-# For CUDA 12.4, use : https://download.pytorch.org/whl/cu124
---extra-index-url https://download.pytorch.org/whl/cu124
+--extra-index-url https://download.pytorch.org/whl/cu128
 
+# Update above --extra-index-url according to your device.
 
-torch
-torchaudio
+## Nvidia GPU
+# CUDA 12.6 : https://download.pytorch.org/whl/cu126
+# CUDA 12.8 : https://download.pytorch.org/whl/cu128
+
+## Intel GPU
+# https://download.pytorch.org/whl/xpu
+
+matplotlib
+torch>=2.8.0,<2.9.0 # Needs to be harmonized with torchaudio
+torchaudio>=2.8.0,<2.9.0 # 2.9 deprecates used functions
 git+https://github.com/jhj0517/jhj0517-whisper.git
-git+https://github.com/SYSTRAN/faster-whisper.git
-transformers
-gradio
-gradio-i18n
+faster-whisper==1.1.1
+transformers==4.47.1
+gradio==5.29.0
+gradio-i18n==0.3.1
 pytubefix
 ruamel.yaml==0.18.6
 pyannote.audio==3.3.2

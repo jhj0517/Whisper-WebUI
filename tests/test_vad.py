@@ -5,7 +5,7 @@ import os
 from modules.whisper.data_classes import *
 from modules.vad.silero_vad import SileroVAD
 from test_config import *
-from test_transcription import download_file, test_transcribe
+from test_transcription import download_file, run_asr_pipeline
 from faster_whisper.vad import VadOptions, get_speech_timestamps
 
 
@@ -23,7 +23,7 @@ def test_vad_pipeline(
     bgm_separation: bool,
     diarization: bool,
 ):
-    test_transcribe(whisper_type, vad_filter, bgm_separation, diarization)
+    run_asr_pipeline(whisper_type, vad_filter, bgm_separation, diarization)
 
 
 @pytest.mark.parametrize(

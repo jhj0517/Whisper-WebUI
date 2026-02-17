@@ -7,7 +7,6 @@ from pydantic import BaseModel, Field, field_validator, ConfigDict
 from gradio_i18n import Translate, gettext as _
 from enum import Enum
 from copy import deepcopy
-
 import yaml
 
 from modules.utils.constants import *
@@ -161,6 +160,10 @@ class DiarizationParams(BaseParams):
         default="",
         description="Hugging Face token for downloading diarization models"
     )
+    enable_offload: bool = Field(
+        default=True,
+        description="Offload Diarization model after Speaker diarization"
+    )
 
     @classmethod
     def to_gradio_inputs(cls,
@@ -174,7 +177,7 @@ class DiarizationParams(BaseParams):
             ),
             gr.Dropdown(
                 label=_("Device"),
-                choices=["cpu", "cuda"] if available_devices is None else available_devices,
+                choices=["cpu", "cuda", "xpu"] if available_devices is None else available_devices,
                 value=defaults.get("device", device),
             ),
             gr.Textbox(
@@ -182,6 +185,10 @@ class DiarizationParams(BaseParams):
                 value=defaults.get("hf_token", cls.__fields__["hf_token"].default),
                 info=_("This is only needed the first time you download the model")
             ),
+            gr.Checkbox(
+                label=_("Offload sub model when finished"),
+                value=defaults.get("enable_offload", cls.__fields__["enable_offload"].default),
+            )
         ]
 
 
@@ -228,7 +235,7 @@ class BGMSeparationParams(BaseParams):
             ),
             gr.Dropdown(
                 label=_("Device"),
-                choices=["cpu", "cuda"] if available_devices is None else available_devices,
+                choices=["cpu", "cuda", "xpu"] if available_devices is None else available_devices,
                 value=defaults.get("device", device),
             ),
             gr.Number(
@@ -242,7 +249,7 @@ class BGMSeparationParams(BaseParams):
                 value=defaults.get("save_file", cls.__fields__["save_file"].default),
             ),
             gr.Checkbox(
-                label=_("Offload sub model after removing background music"),
+                label=_("Offload sub model when finished"),
                 value=defaults.get("enable_offload", cls.__fields__["enable_offload"].default),
             )
         ]
@@ -328,6 +335,10 @@ class WhisperParams(BaseParams):
         description="Number of segments for language detection"
     )
     batch_size: int = Field(default=24, gt=0, description="Batch size for processing")
+    enable_offload: bool = Field(
+        default=True,
+        description="Offload Whisper model after transcription"
+    )
 
     @field_validator('lang')
     def validate_lang(cls, v):
@@ -555,6 +566,13 @@ class WhisperParams(BaseParams):
                 input_component.visible = False
 
         inputs += faster_whisper_inputs + insanely_fast_whisper_inputs
+
+        inputs += [
+            gr.Checkbox(
+                label=_("Offload sub model when finished"),
+                value=defaults.get("enable_offload", cls.__fields__["enable_offload"].default),
+            )
+        ]
 
         return inputs
 

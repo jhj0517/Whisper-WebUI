@@ -26,6 +26,20 @@ from backend.db.task.models import TaskStatus, TaskType
 transcription_router = APIRouter(prefix="/transcription", tags=["Transcription"])
 
 
+def create_progress_callback(identifier: str):
+    def progress_callback(progress_value: float):
+        update_task_status_in_db(
+            identifier=identifier,
+            update_data={
+                "uuid": identifier,
+                "status": TaskStatus.IN_PROGRESS,
+                "progress": round(progress_value, 2),
+                "updated_at": datetime.utcnow()
+            },
+        )
+    return progress_callback
+
+
 @functools.lru_cache
 def get_pipeline() -> 'FasterWhisperInference':
     config = load_server_config()["whisper"]
@@ -53,11 +67,13 @@ def run_transcription(
         },
     )
 
+    progress_callback = create_progress_callback(identifier)
     segments, elapsed_time = get_pipeline().run(
         audio,
         gr.Progress(),
         "SRT",
         False,
+        progress_callback,  
         *params.to_list()
     )
     segments = [seg.model_dump() for seg in segments]
@@ -69,7 +85,8 @@ def run_transcription(
             "status": TaskStatus.COMPLETED,
             "result": segments,
             "updated_at": datetime.utcnow(),
-            "duration": elapsed_time
+            "duration": elapsed_time,
+            "progress": 1.0,
         },
     )
     return segments

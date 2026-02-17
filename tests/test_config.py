@@ -1,7 +1,6 @@
 import functools
 import jiwer
 import os
-
 import pytest
 import requests
 import torch
@@ -18,6 +17,11 @@ TEST_UVR_MODEL = "UVR-MDX-NET-Inst_HQ_4"
 TEST_NLLB_MODEL = "facebook/nllb-200-distilled-600M"
 TEST_SUBTITLE_SRT_PATH = os.path.join(WEBUI_DIR, "tests", "test_srt.srt")
 TEST_SUBTITLE_VTT_PATH = os.path.join(WEBUI_DIR, "tests", "test_vtt.vtt")
+
+
+@functools.lru_cache
+def is_xpu_available():
+    return torch.xpu.is_available()
 
 
 @functools.lru_cache

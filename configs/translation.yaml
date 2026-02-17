@@ -1,506 +1,730 @@
-en: # English
+en:
   Language: Language
-  File: File
-  Youtube: Youtube
-  Mic: Mic
-  T2T Translation: T2T Translation
-  BGM Separation: BGM Separation
-  GENERATE SUBTITLE FILE: GENERATE SUBTITLE FILE
-  Output: Output
-  Downloadable output file: Downloadable output file
   Upload File here: Upload File here
   Model: Model
   Automatic Detection: Automatic Detection
   File Format: File Format
-  Translate to English?: Translate to English?
+  Translate to English?: Translate to English? (Whisper's End-To-End Speech-To-Text
+    translation feature)
   Add a timestamp to the end of the filename: Add a timestamp to the end of the filename
+  Offload sub model when finished: Offload model when finished
   Advanced Parameters: Advanced Parameters
-  Background Music Remover Filter: Background Music Remover Filter
-  Enabling this will remove background music: Enabling this will remove background music by submodel before transcribing
+  Enabling this will remove background music: Enabling this will remove background
+    music by submodel before transcribing
   Enable Background Music Remover Filter: Enable Background Music Remover Filter
-  Save separated files to output: Save separated files to output
-  Offload sub model after removing background music: Offload sub model after removing background music
-  Voice Detection Filter: Voice Detection Filter
-  Enable this to transcribe only detected voice: Enable this to transcribe only detected voice parts by submodel.
-  Enable Silero VAD Filter: Enable Silero VAD Filter
-  Diarization: Diarization
-  Enable Diarization: Enable Diarization
-  HuggingFace Token: HuggingFace Token
-  This is only needed the first time you download the model: This is only needed the first time you download the model. If you already have models, you don't need to enter. To download the model, you must manually go to "https://huggingface.co/pyannote/speaker-diarization-3.1" and "https://huggingface.co/pyannote/segmentation-3.0" and agree to their requirement.
   Device: Device
+  Save separated files to output: Save separated files to output
+  Background Music Remover Filter: Background Music Remover Filter
+  Enable this to transcribe only detected voice: Enable this to transcribe only detected
+    voice parts by submodel.
+  Enable Silero VAD Filter: Enable Silero VAD Filter
+  Voice Detection Filter: Voice Detection Filter
+  Enable Diarization: Enable Diarization
+  This is only needed the first time you download the model: This is only needed the
+    first time you download the model. If you already have models, you don't need
+    to enter. To download the model, you must manually go to "https://huggingface.co/pyannote/speaker-diarization-3.1"
+    and "https://huggingface.co/pyannote/segmentation-3.0" and agree to their requirement.
+  HuggingFace Token: HuggingFace Token
+  Diarization: Diarization
+  GENERATE SUBTITLE FILE: GENERATE SUBTITLE FILE
+  Output: Output
+  Downloadable output file: Downloadable output file
+  File: File
   Youtube Link: Youtube Link
   Youtube Thumbnail: Youtube Thumbnail
   Youtube Title: Youtube Title
   Youtube Description: Youtube Description
+  Youtube: Youtube
   Record with Mic: Record with Mic
+  Mic: Mic
   Upload Subtitle Files to translate here: Upload Subtitle Files to translate here
   Your Auth Key (API KEY): Your Auth Key (API KEY)
   Source Language: Source Language
   Target Language: Target Language
   Pro User?: Pro User?
   TRANSLATE SUBTITLE FILE: TRANSLATE SUBTITLE FILE
-  Upload Audio Files to separate background music: Upload Audio Files to separate background music
+  DeepL API: DeepL API
+  NLLB: NLLB
+  T2T Translation: T2T Translation
+  Upload Audio Files to separate background music: Upload Audio Files to separate
+    background music
+  SEPARATE BACKGROUND MUSIC: SEPARATE BACKGROUND MUSIC
   Instrumental: Instrumental
   Vocals: Vocals
-  SEPARATE BACKGROUND MUSIC: SEPARATE BACKGROUND MUSIC
-
-ko: # Korean
+  BGM Separation: BGM Separation
+ko:
   Language: 언어
-  File: 파일
-  Youtube: 유튜브
-  Mic: 마이크
-  T2T Translation: T2T 자막 번역
-  BGM Separation: 배경 음악 분리
-  GENERATE SUBTITLE FILE: 자막 파일 생성
-  Output: 결과물
-  Downloadable output file: 결과물 파일 다운로드
   Upload File here: 파일을 업로드 하세요
   Model: 모델
   Automatic Detection: 자동 감지
   File Format: 파일 형식
   Translate to English?: 영어로 번역합니까? (위스퍼 모델 자체 번역 기능)
   Add a timestamp to the end of the filename: 파일 이름 끝에 타임스태프 붙이기
+  Offload sub model when finished: 완료 후 모델 오프로드. (VRAM 이 부족할 시 체크하세요.)
   Advanced Parameters: 고급 변수
-  Background Music Remover Filter: 배경 음악 제거 필터
   Enabling this will remove background music: 받아쓰기 이전에 먼저 배경 음악 제거용 서브 모델을 활성화 합니다.
   Enable Background Music Remover Filter: 배경 음악 제거 필터 활성화
-  Save separated files to output: 분리된 배경 음악 & 음성 파일 따로 출력 폴더에 저장
-  Offload sub model after removing background music: 배경 음악 제거 후 서브 모델을 비활성화 합니다. (VRAM 이 부족할 시 체크하세요.)
-  Voice Detection Filter: 목소리 감지 필터
-  Enable this to transcribe only detected voice: 서브 모델에 의해 목소리라고 판단된 부분만 받아쓰기를 진행합니다.
-  Enable Silero VAD Filter: Silero VAD 필터 활성화 
-  Diarization: 화자 구분
-  Enable Diarization: 화자 구분 활성화 
-  HuggingFace Token: 허깅페이스 토큰
-  This is only needed the first time you download the model: 모델을 처음 다운받을 때만 토큰이 필요합니다. 이미 다운로드 받으신 상태라면 입력하지 않아도 됩니다. 모델을 다운 받기 위해선 "https://huggingface.co/pyannote/speaker-diarization-3.1" 와 "https://huggingface.co/pyannote/segmentation-3.0" 에서 먼저 사용 지침에 동의하셔야 합니다.
   Device: 디바이스
+  Save separated files to output: 분리된 배경 음악 & 음성 파일 따로 출력 폴더에 저장
+  Background Music Remover Filter: 배경 음악 제거 필터
+  Enable this to transcribe only detected voice: 서브 모델에 의해 목소리라고 판단된 부분만 받아쓰기를 진행합니다.
+  Enable Silero VAD Filter: Silero VAD 필터 활성화
+  Voice Detection Filter: 목소리 감지 필터
+  Enable Diarization: 화자 구분 활성화
+  This is only needed the first time you download the model: 모델을 처음 다운받을 때만 토큰이 필요합니다.
+    이미 다운로드 받으신 상태라면 입력하지 않아도 됩니다. 모델을 다운 받기 위해선 "https://huggingface.co/pyannote/speaker-diarization-3.1"
+    와 "https://huggingface.co/pyannote/segmentation-3.0" 에서 먼저 사용 지침에 동의하셔야 합니다.
+  HuggingFace Token: 허깅페이스 토큰
+  Diarization: 화자 구분
+  GENERATE SUBTITLE FILE: 자막 파일 생성
+  Output: 결과물
+  Downloadable output file: 결과물 파일 다운로드
+  File: 파일
   Youtube Link: 유튜브 링크
   Youtube Thumbnail: 유튜브 썸네일
   Youtube Title: 유튜브 제목
   Youtube Description: 유튜브 설명
+  Youtube: 유튜브
   Record with Mic: 마이크로 녹음하세요
+  Mic: 마이크
   Upload Subtitle Files to translate here: 번역할 자막 파일을 업로드 하세요
   Your Auth Key (API KEY): DeepL API 키
   Source Language: 원본 언어
   Target Language: 대상 언어
   Pro User?: Pro 버전 사용자
   TRANSLATE SUBTITLE FILE: 자막 파일 번역
+  DeepL API: DeepL API
+  NLLB: NLLB
+  T2T Translation: T2T 자막 번역
   Upload Audio Files to separate background music: 배경 음악을 분리할 오디오 파일을 업로드 하세요
+  SEPARATE BACKGROUND MUSIC: 배경 음악 분리
   Instrumental: 악기
   Vocals: 보컬
-  SEPARATE BACKGROUND MUSIC: 배경 음악 분리
-
-ja: # Japanese
+  BGM Separation: 배경 음악 분리
+ja:
   Language: 言語
-  File: File
-  Youtube: Youtube
-  Mic: Mic
-  T2T Translation: T2T Translation
-  BGM Separation: BGM Separation
-  GENERATE SUBTITLE FILE: GENERATE SUBTITLE FILE
-  Output: Output
-  Downloadable output file: Downloadable output file
   Upload File here: Upload File here
   Model: Model
   Automatic Detection: Automatic Detection
   File Format: File Format
   Translate to English?: Translate to English?
   Add a timestamp to the end of the filename: Add a timestamp to the end of the filename
+  Offload sub model when finished: Offload model when finished
   Advanced Parameters: Advanced Parameters
-  Background Music Remover Filter: Background Music Remover Filter
-  Enabling this will remove background music: Enabling this will remove background music by submodel before transcribing
+  Enabling this will remove background music: Enabling this will remove background
+    music by submodel before transcribing
   Enable Background Music Remover Filter: Enable Background Music Remover Filter
-  Save separated files to output: Save separated files to output
-  Offload sub model after removing background music: Offload sub model after removing background music
-  Voice Detection Filter: Voice Detection Filter
-  Enable this to transcribe only detected voice: Enable this to transcribe only detected voice parts by submodel.
-  Enable Silero VAD Filter: Enable Silero VAD Filter
-  Diarization: Diarization
-  Enable Diarization: Enable Diarization
-  HuggingFace Token: HuggingFace Token
-  This is only needed the first time you download the model: This is only needed the first time you download the model. If you already have models, you don't need to enter. To download the model, you must manually go to "https://huggingface.co/pyannote/speaker-diarization-3.1" and "https://huggingface.co/pyannote/segmentation-3.0" and agree to their requirement.
   Device: Device
+  Save separated files to output: Save separated files to output
+  Background Music Remover Filter: Background Music Remover Filter
+  Enable this to transcribe only detected voice: Enable this to transcribe only detected
+    voice parts by submodel.
+  Enable Silero VAD Filter: Enable Silero VAD Filter
+  Voice Detection Filter: Voice Detection Filter
+  Enable Diarization: Enable Diarization
+  This is only needed the first time you download the model: This is only needed the
+    first time you download the model. If you already have models, you don't need
+    to enter. To download the model, you must manually go to "https://huggingface.co/pyannote/speaker-diarization-3.1"
+    and "https://huggingface.co/pyannote/segmentation-3.0" and agree to their requirement.
+  HuggingFace Token: HuggingFace Token
+  Diarization: Diarization
+  GENERATE SUBTITLE FILE: GENERATE SUBTITLE FILE
+  Output: Output
+  Downloadable output file: Downloadable output file
+  File: File
   Youtube Link: Youtube Link
   Youtube Thumbnail: Youtube Thumbnail
   Youtube Title: Youtube Title
   Youtube Description: Youtube Description
+  Youtube: Youtube
   Record with Mic: Record with Mic
+  Mic: Mic
   Upload Subtitle Files to translate here: Upload Subtitle Files to translate here
   Your Auth Key (API KEY): Your Auth Key (API KEY)
   Source Language: Source Language
   Target Language: Target Language
   Pro User?: Pro User?
   TRANSLATE SUBTITLE FILE: TRANSLATE SUBTITLE FILE
-  Upload Audio Files to separate background music: Upload Audio Files to separate background music
+  DeepL API: DeepL API
+  NLLB: NLLB
+  T2T Translation: T2T Translation
+  Upload Audio Files to separate background music: Upload Audio Files to separate
+    background music
+  SEPARATE BACKGROUND MUSIC: SEPARATE BACKGROUND MUSIC
   Instrumental: Instrumental
   Vocals: Vocals
-  SEPARATE BACKGROUND MUSIC: SEPARATE BACKGROUND MUSIC
-
-es: # Spanish
+  BGM Separation: BGM Separation
+es:
   Language: Idioma
-  File: File
-  Youtube: Youtube
-  Mic: Mic
-  T2T Translation: T2T Translation
-  BGM Separation: BGM Separation
-  GENERATE SUBTITLE FILE: GENERATE SUBTITLE FILE
-  Output: Output
-  Downloadable output file: Downloadable output file
   Upload File here: Upload File here
   Model: Model
   Automatic Detection: Automatic Detection
   File Format: File Format
   Translate to English?: Translate to English?
   Add a timestamp to the end of the filename: Add a timestamp to the end of the filename
+  Offload sub model when finished: Offload model when finished
   Advanced Parameters: Advanced Parameters
-  Background Music Remover Filter: Background Music Remover Filter
-  Enabling this will remove background music: Enabling this will remove background music by submodel before transcribing
+  Enabling this will remove background music: Enabling this will remove background
+    music by submodel before transcribing
   Enable Background Music Remover Filter: Enable Background Music Remover Filter
-  Save separated files to output: Save separated files to output
-  Offload sub model after removing background music: Offload sub model after removing background music
-  Voice Detection Filter: Voice Detection Filter
-  Enable this to transcribe only detected voice: Enable this to transcribe only detected voice parts by submodel.
-  Enable Silero VAD Filter: Enable Silero VAD Filter
-  Diarization: Diarization
-  Enable Diarization: Enable Diarization
-  HuggingFace Token: HuggingFace Token
-  This is only needed the first time you download the model: This is only needed the first time you download the model. If you already have models, you don't need to enter. To download the model, you must manually go to "https://huggingface.co/pyannote/speaker-diarization-3.1" and "https://huggingface.co/pyannote/segmentation-3.0" and agree to their requirement.
   Device: Device
+  Save separated files to output: Save separated files to output
+  Background Music Remover Filter: Background Music Remover Filter
+  Enable this to transcribe only detected voice: Enable this to transcribe only detected
+    voice parts by submodel.
+  Enable Silero VAD Filter: Enable Silero VAD Filter
+  Voice Detection Filter: Voice Detection Filter
+  Enable Diarization: Enable Diarization
+  This is only needed the first time you download the model: This is only needed the
+    first time you download the model. If you already have models, you don't need
+    to enter. To download the model, you must manually go to "https://huggingface.co/pyannote/speaker-diarization-3.1"
+    and "https://huggingface.co/pyannote/segmentation-3.0" and agree to their requirement.
+  HuggingFace Token: HuggingFace Token
+  Diarization: Diarization
+  GENERATE SUBTITLE FILE: GENERATE SUBTITLE FILE
+  Output: Output
+  Downloadable output file: Downloadable output file
+  File: File
   Youtube Link: Youtube Link
   Youtube Thumbnail: Youtube Thumbnail
   Youtube Title: Youtube Title
   Youtube Description: Youtube Description
+  Youtube: Youtube
   Record with Mic: Record with Mic
+  Mic: Mic
   Upload Subtitle Files to translate here: Upload Subtitle Files to translate here
   Your Auth Key (API KEY): Your Auth Key (API KEY)
   Source Language: Source Language
   Target Language: Target Language
   Pro User?: Pro User?
   TRANSLATE SUBTITLE FILE: TRANSLATE SUBTITLE FILE
-  Upload Audio Files to separate background music: Upload Audio Files to separate background music
+  DeepL API: DeepL API
+  NLLB: NLLB
+  T2T Translation: T2T Translation
+  Upload Audio Files to separate background music: Upload Audio Files to separate
+    background music
+  SEPARATE BACKGROUND MUSIC: SEPARATE BACKGROUND MUSIC
   Instrumental: Instrumental
   Vocals: Vocals
-  SEPARATE BACKGROUND MUSIC: SEPARATE BACKGROUND MUSIC
-
-fr: # French
+  BGM Separation: BGM Separation
+fr:
   Language: Langue
-  File: Fichier
-  Youtube: Youtube
-  Mic: Microphone
-  T2T Translation: Traduction T2T
-  BGM Separation: Séparation de la musique de fond
-  GENERATE SUBTITLE FILE: GÉNÉRER UN FICHIER DE SOUS-TITRES
-  Output: Sortie
-  Downloadable output file: Fichier de sortie téléchargeable
   Upload File here: Téléverser un fichier ici
   Model: Modèle
   Automatic Detection: Détection automatique
   File Format: Format de fichier
   Translate to English?: Traduire en anglais ?
-  Add a timestamp to the end of the filename: Ajouter un timestamp à la fin du nom de fichier
+  Add a timestamp to the end of the filename: Ajouter un timestamp à la fin du nom
+    de fichier
+  Offload sub model when finished: Décharger le sous-modèle une fois terminé
   Advanced Parameters: Paramètres avancés
-  Background Music Remover Filter: Filtre de suppression de musique de fond
-  Enabling this will remove background music: L'activation supprimera la musique de fond via un sous-modèle avant la transcription
-  Enable Background Music Remover Filter: Activer le filtre de suppression de musique de fond
-  Save separated files to output: Sauvegarder les fichiers séparés dans la sortie
-  Offload sub model after removing background music: Décharger le sous-modèle après avoir supprimé la musique de fond
-  Voice Detection Filter: Filtre de détection vocale
-  Enable this to transcribe only detected voice: Activer pour transcrire uniquement la voix détectée
-  Enable Silero VAD Filter: Activer le filtre Silero VAD
-  Diarization: Diarisation
-  Enable Diarization: Activer la diarisation
-  HuggingFace Token: Token HuggingFace
-  This is only needed the first time you download the model: Le token n'est nécessaire que lors du premier téléchargement du modèle. Si vous avez déjà les modèles, vous n'avez pas besoin de l'entrer. Pour télécharger le modèle, vous devez aller manuellement sur "https://huggingface.co/pyannote/speaker-diarization-3.1" et "https://huggingface.co/pyannote/segmentation-3.0" et accepter leurs conditions.
+  Enabling this will remove background music: L'activation supprimera la musique de
+    fond via un sous-modèle avant la transcription
+  Enable Background Music Remover Filter: Activer le filtre de suppression de musique
+    de fond
   Device: Périphérique
+  Save separated files to output: Sauvegarder les fichiers séparés dans la sortie
+  Background Music Remover Filter: Filtre de suppression de musique de fond
+  Enable this to transcribe only detected voice: Activer pour transcrire uniquement
+    la voix détectée
+  Enable Silero VAD Filter: Activer le filtre Silero VAD
+  Voice Detection Filter: Filtre de détection vocale
+  Enable Diarization: Activer la diarisation
+  This is only needed the first time you download the model: Le token n'est nécessaire
+    que lors du premier téléchargement du modèle. Si vous avez déjà les modèles, vous
+    n'avez pas besoin de l'entrer. Pour télécharger le modèle, vous devez aller manuellement
+    sur "https://huggingface.co/pyannote/speaker-diarization-3.1" et "https://huggingface.co/pyannote/segmentation-3.0"
+    et accepter leurs conditions.
+  HuggingFace Token: Token HuggingFace
+  Diarization: Diarisation
+  GENERATE SUBTITLE FILE: GÉNÉRER UN FICHIER DE SOUS-TITRES
+  Output: Sortie
+  Downloadable output file: Fichier de sortie téléchargeable
+  File: Fichier
   Youtube Link: Lien Youtube
   Youtube Thumbnail: Miniature Youtube
   Youtube Title: Titre Youtube
   Youtube Description: Description Youtube
+  Youtube: Youtube
   Record with Mic: Enregistrer avec le microphone
-  Upload Subtitle Files to translate here: Téléverser ici les fichiers de sous-titres à traduire
+  Mic: Microphone
+  Upload Subtitle Files to translate here: Téléverser ici les fichiers de sous-titres
+    à traduire
   Your Auth Key (API KEY): Votre clé d'authentification (API KEY)
   Source Language: Langue source
   Target Language: Langue cible
   Pro User?: Utilisateur Pro ?
   TRANSLATE SUBTITLE FILE: TRADUIRE LE FICHIER DE SOUS-TITRES
-  Upload Audio Files to separate background music: Téléverser les fichiers audio pour séparer la musique de fond
+  DeepL API: DeepL API
+  NLLB: NLLB
+  T2T Translation: Traduction T2T
+  Upload Audio Files to separate background music: Téléverser les fichiers audio pour
+    séparer la musique de fond
+  SEPARATE BACKGROUND MUSIC: SÉPARER LA MUSIQUE DE FOND
   Instrumental: Instrumental
   Vocals: Voix
-  SEPARATE BACKGROUND MUSIC: SÉPARER LA MUSIQUE DE FOND
-
-de: # Deutsch
+  BGM Separation: Séparation de la musique de fond
+de:
   Language: Sprache
-  File: Datei
-  Youtube: Youtube
-  Mic: Mikrofon
-  T2T Translation: Text zu Text Übersetzung
-  BGM Separation: Hintergrundmusik herausfiltern
-  GENERATE SUBTITLE FILE: UNTERTITELDATEI ERSTELLEN
-  Output: Ausgabe
-  Downloadable output file: Herunterladbare Ausgabedatei
   Upload File here: Datei hier hochladen
   Model: Modell
   Automatic Detection: Automatische Erkennung
   File Format: Dateiformat
   Translate to English?: Ins Englische übersetzen?
   Add a timestamp to the end of the filename: Zeitstempel an den Dateinamen anhängen
+  Offload sub model when finished: Submodell entladen wenn nicht mehr benötigt
   Advanced Parameters: Erweiterte Parameter
-  Background Music Remover Filter: Hintergrundmusik-Entfernungsfilter
-  Enabling this will remove background music: Aktivierung entfernt Hintergrundmusik mithilfe des Submodells vor der Transkription
+  Enabling this will remove background music: Aktivierung entfernt Hintergrundmusik
+    mithilfe des Submodells vor der Transkription
   Enable Background Music Remover Filter: Hintergrundmusik-Entfernungsfilter aktivieren
-  Save separated files to output: Getrennte Dateien in der Ausgabe speichern
-  Offload sub model after removing background music: Submodell nach Entfernung der Hintergrundmusik entladen
-  Voice Detection Filter: Sprachfilter
-  Enable this to transcribe only detected voice: Aktivieren, um nur erkannte Sprachsegmente mithilfe des Submodells zu transkribieren.
-  Enable Silero VAD Filter: Silero VAD-Filter aktivieren
-  Diarization: Diarisierung
-  Enable Diarization: Diarisierung aktivieren
-  HuggingFace Token: HuggingFace-Token
-  This is only needed the first time you download the model: Dies ist nur erforderlich, wenn Sie das Modell zum ersten Mal herunterladen. Falls Sie die Modelle bereits besitzen, ist dies nicht nötig. Um das Modell herunterzuladen, müssen Sie manuell die Seiten „https://huggingface.co/pyannote/speaker-diarization-3.1“ und „https://huggingface.co/pyannote/segmentation-3.0“ besuchen und deren Anforderungen zustimmen.
   Device: Gerät
+  Save separated files to output: Getrennte Dateien in der Ausgabe speichern
+  Background Music Remover Filter: Hintergrundmusik-Entfernungsfilter
+  Enable this to transcribe only detected voice: Aktivieren, um nur erkannte Sprachsegmente
+    mithilfe des Submodells zu transkribieren.
+  Enable Silero VAD Filter: Silero VAD-Filter aktivieren
+  Voice Detection Filter: Sprachfilter
+  Enable Diarization: Diarisierung aktivieren
+  This is only needed the first time you download the model: Dies ist nur erforderlich,
+    wenn Sie das Modell zum ersten Mal herunterladen. Falls Sie die Modelle bereits
+    besitzen, ist dies nicht nötig. Um das Modell herunterzuladen, müssen Sie manuell
+    die Seiten „https://huggingface.co/pyannote/speaker-diarization-3.1“ und „https://huggingface.co/pyannote/segmentation-3.0“
+    besuchen und deren Anforderungen zustimmen.
+  HuggingFace Token: HuggingFace-Token
+  Diarization: Diarisierung
+  GENERATE SUBTITLE FILE: UNTERTITELDATEI ERSTELLEN
+  Output: Ausgabe
+  Downloadable output file: Herunterladbare Ausgabedatei
+  File: Datei
   Youtube Link: Youtube-Link
   Youtube Thumbnail: Youtube-Thumbnail
   Youtube Title: Youtube-Titel
   Youtube Description: Youtube-Beschreibung
+  Youtube: Youtube
   Record with Mic: Mit Mikrofon aufnehmen
-  Upload Subtitle Files to translate here: Untertiteldateien zur Übersetzung hier hochladen
+  Mic: Mikrofon
+  Upload Subtitle Files to translate here: Untertiteldateien zur Übersetzung hier
+    hochladen
   Your Auth Key (API KEY): Ihr Authentifizierungsschlüssel (API-Schlüssel)
   Source Language: Ausgangssprache
   Target Language: Zielsprache
   Pro User?: Pro-Benutzer?
   TRANSLATE SUBTITLE FILE: UNTERTITELDATEI ÜBERSETZEN
-  Upload Audio Files to separate background music: Audiodateien hochladen, um Hintergrundmusik zu trennen
+  DeepL API: DeepL API
+  NLLB: NLLB
+  T2T Translation: Text zu Text Übersetzung
+  Upload Audio Files to separate background music: Audiodateien hochladen, um Hintergrundmusik
+    zu trennen
+  SEPARATE BACKGROUND MUSIC: HINTERGRUNDMUSIK TRENNEN
   Instrumental: Instrumental
   Vocals: Gesang
-  SEPARATE BACKGROUND MUSIC: HINTERGRUNDMUSIK TRENNEN
-
-
-zh: # Chinese
-  Language: 语言
-  File: 文件
+  BGM Separation: Hintergrundmusik herausfiltern
+nl:
+  Language: Taal
+  Upload File here: Upload Bestand Hier
+  Model: Model
+  Automatic Detection: Automatische Detectie
+  File Format: Bestandstype
+  Translate to English?: Naar Engels vertalen? (Whispers End-To-End Speech-To-Text
+    vertaalfunctie)
+  Add a timestamp to the end of the filename: Tijdstempel aan het einde van de bestandsnaam toevoegen
+  Offload sub model when finished: Offload model na voltooiing
+  Advanced Parameters: Geavanceerde Parameters
+  Enabling this will remove background music: Hiermee wordt achtergrondmuziek door het submodel verwijderd, voorafgaand aan de transcriptie
+  Enable Background Music Remover Filter: Achtergrondmuziek-verwijderingsfilter inschakelen
+  Device: Apparaat
+  Save separated files to output: Resultaat als aparte bestanden opslaan
+  Background Music Remover Filter: Achtergrondmuziek-verwijderingsfilter
+  Enable this to transcribe only detected voice: Hiermee worden alleen de door het submodel gedetecteerde stemsegmenten getranscribeerd
+  Enable Silero VAD Filter: Silero VAD-filter inschakelen
+  Voice Detection Filter: Stemdetectie-filter
+  Enable Diarization: Diarisatie inschakelen
+  This is only needed the first time you download the model: Dit is alleen nodig de eerste keer dat
+    je het model downloadt. Als je al modellen hebt, is dit niet nodig. Om het model te downloaden
+    kun je naar "https://huggingface.co/pyannote/speaker-diarization-3.1" en "https://huggingface.co/pyannote/segmentation-3.0" 
+    gaan en daar de voorwaarden accepteren.
+  HuggingFace Token: HuggingFace-token
+  Diarization: Diarisatie
+  GENERATE SUBTITLE FILE: ONDERTITELINGSBESTAND GENEREREN
+  Output: Resultaat
+  Downloadable output file: Downloadbaar resultaat
+  File: Bestand
+  Youtube Link: Youtube-link
+  Youtube Thumbnail: Youtube-thumbnail
+  Youtube Title: Youtube-titel
+  Youtube Description: Youtube-beschrijving
   Youtube: Youtube
-  Mic: 麦克风
-  T2T Translation: 文字翻译
-  BGM Separation: 背景音乐分离
-  GENERATE SUBTITLE FILE: 生成字幕文件
-  Output: 输出
-  Downloadable output file: 生成的字幕文件
+  Record with Mic: Met microfoon opnemen
+  Mic: Microfoon
+  Upload Subtitle Files to translate here: Upload hier te vertalen ondertitelingsbestanden
+  Your Auth Key (API KEY): Jouw autorisatiesleutel (API KEY)
+  Source Language: Brontaal
+  Target Language: Doeltaal
+  Pro User?: Pro gebruiker?
+  TRANSLATE SUBTITLE FILE: ONDERTITELINGSBESTAND VERTALEN
+  DeepL API: DeepL API
+  NLLB: NLLB
+  T2T Translation: T2T Vertaling
+  Upload Audio Files to separate background music: Audiobestanden uploaden, om achtergrondmuziek te scheiden
+  SEPARATE BACKGROUND MUSIC: ACHTERGRONDMUZIEK SCHEIDEN
+  Instrumental: Instrumenteel
+  Vocals: Stemmen
+  BGM Separation: BGM Separatie
+zh:
+  Language: 语言
   Upload File here: 上传文件
   Model: 模型选择
   Automatic Detection: 自动检测语言
   File Format: 字幕文件格式
   Translate to English?: 将字幕翻译成英语
   Add a timestamp to the end of the filename: 在文件名末尾加入时间戳
+  Offload sub model when finished: 完成后卸载子模型
   Advanced Parameters: 高级参数
-  Background Music Remover Filter: 背景音乐消除设置
   Enabling this will remove background music: 启用此功能将会在进行转录前去除背景音乐
   Enable Background Music Remover Filter: 去除背景音乐
-  Save separated files to output: 导出分离出的音频文件
-  Offload sub model after removing background music: 移除背景音乐后卸载子模型
-  Voice Detection Filter: 话音检测设置
-  Enable this to transcribe only detected voice: 启用此功能将仅转录检测到的语音部分
-  Enable Silero VAD Filter: 启用 Silero 语音活动检测 (VAD) 
-  Diarization: 说话人分离设置
-  Enable Diarization: 进行说话人分离处理
-  HuggingFace Token: HuggingFace令牌
-  This is only needed the first time you download the model: 当且仅当您首次下载模型时才需要在此输入令牌，如果您已有模型则无需输入。 要下载模型，您必须先在"https://huggingface.co/pyannote/speaker-diarization-3.1" 与 "https://huggingface.co/pyannote/segmentation-3.0" 上同意他们的使用条款。
   Device: 设备
+  Save separated files to output: 导出分离出的音频文件
+  Background Music Remover Filter: 背景音乐消除设置
+  Enable this to transcribe only detected voice: 启用此功能将仅转录检测到的语音部分
+  Enable Silero VAD Filter: 启用 Silero 语音活动检测 (VAD)
+  Voice Detection Filter: 话音检测设置
+  Enable Diarization: 进行说话人分离处理
+  This is only needed the first time you download the model: 当且仅当您首次下载模型时才需要在此输入令牌，如果您已有模型则无需输入。
+    要下载模型，您必须先在"https://huggingface.co/pyannote/speaker-diarization-3.1" 与 "https://huggingface.co/pyannote/segmentation-3.0"
+    上同意他们的使用条款。
+  HuggingFace Token: HuggingFace令牌
+  Diarization: 说话人分离设置
+  GENERATE SUBTITLE FILE: 生成字幕文件
+  Output: 输出
+  Downloadable output file: 生成的字幕文件
+  File: 文件
   Youtube Link: Youtube视频链接
   Youtube Thumbnail: Youtube视频封面
   Youtube Title: Youtube视频标题
   Youtube Description: Youtube视频简介
+  Youtube: Youtube
   Record with Mic: 通过麦克风录制
+  Mic: 麦克风
   Upload Subtitle Files to translate here: 上传待翻译的字幕文件
   Your Auth Key (API KEY): 填写您的认证令牌(API KEY)
   Source Language: 原语言
   Target Language: 目标语言
   Pro User?: 您是否为专业版用户？
   TRANSLATE SUBTITLE FILE: 翻译字幕文件
+  DeepL API: DeepL API
+  NLLB: NLLB
+  T2T Translation: 文字翻译
   Upload Audio Files to separate background music: 上传待分离背景音乐的音频文件
+  SEPARATE BACKGROUND MUSIC: 分离背景音乐与人声
   Instrumental: 器乐声
   Vocals: 人声
-  SEPARATE BACKGROUND MUSIC: 分离背景音乐与人声
-
-uk: # Ukrainian
+  BGM Separation: 背景音乐分离
+uk:
   Language: Мова
-  File: Файл
-  Youtube: Youtube
-  Mic: Мікрофон
-  T2T Translation: T2T Переклад
-  BGM Separation: Розділення фонової музики
-  GENERATE SUBTITLE FILE: СТВОРИТИ ФАЙЛ СУБТИТРІВ
-  Output: Результат
-  Downloadable output file: Завантажуваний файл результату
   Upload File here: Завантажте файл тут
   Model: Модель
   Automatic Detection: Автоматичне визначення
   File Format: Формат файлу
   Translate to English?: Перекласти на англійську?
   Add a timestamp to the end of the filename: Додати мітку часу до кінця імені файлу
+  Offload sub model when finished: Після завершення вивантажте підмодель
   Advanced Parameters: Розширені параметри
-  Background Music Remover Filter: Фільтр видалення фонової музики
-  Enabling this will remove background music: Увімкнення цього видалить фонову музику за допомогою підмоделі перед транскрипцією
+  Enabling this will remove background music: Увімкнення цього видалить фонову музику
+    за допомогою підмоделі перед транскрипцією
   Enable Background Music Remover Filter: Увімкнути фільтр видалення фонової музики
-  Save separated files to output: Зберегти розділені файли до вихідної папки
-  Offload sub model after removing background music: Вивантажити підмодель після видалення фонової музики
-  Voice Detection Filter: Фільтр розпізнавання голосу
-  Enable this to transcribe only detected voice: Увімкніть це, щоб транскрибувати лише розпізнані голосові частини за допомогою підмоделі
-  Enable Silero VAD Filter: Увімкнути фільтр Silero VAD
-  Diarization: Діаризація
-  Enable Diarization: Увімкнути діаризацію
-  HuggingFace Token: Токен HuggingFace
-  This is only needed the first time you download the model: Це потрібно лише при першому завантаженні моделі. Якщо у вас вже є моделі, вводити не потрібно. Щоб завантажити модель, потрібно вручну перейти на "https://huggingface.co/pyannote/speaker-diarization-3.1" та "https://huggingface.co/pyannote/segmentation-3.0" і погодитися з їхніми вимогами.
   Device: Пристрій
+  Save separated files to output: Зберегти розділені файли до вихідної папки
+  Background Music Remover Filter: Фільтр видалення фонової музики
+  Enable this to transcribe only detected voice: Увімкніть це, щоб транскрибувати
+    лише розпізнані голосові частини за допомогою підмоделі
+  Enable Silero VAD Filter: Увімкнути фільтр Silero VAD
+  Voice Detection Filter: Фільтр розпізнавання голосу
+  Enable Diarization: Увімкнути діаризацію
+  This is only needed the first time you download the model: Це потрібно лише при
+    першому завантаженні моделі. Якщо у вас вже є моделі, вводити не потрібно. Щоб
+    завантажити модель, потрібно вручну перейти на "https://huggingface.co/pyannote/speaker-diarization-3.1"
+    та "https://huggingface.co/pyannote/segmentation-3.0" і погодитися з їхніми вимогами.
+  HuggingFace Token: Токен HuggingFace
+  Diarization: Діаризація
+  GENERATE SUBTITLE FILE: СТВОРИТИ ФАЙЛ СУБТИТРІВ
+  Output: Результат
+  Downloadable output file: Завантажуваний файл результату
+  File: Файл
   Youtube Link: Посилання на Youtube
   Youtube Thumbnail: Ескіз Youtube
   Youtube Title: Назва Youtube
   Youtube Description: Опис Youtube
+  Youtube: Youtube
   Record with Mic: Записати з мікрофона
-  Upload Subtitle Files to translate here: Завантажте файли субтитрів для перекладу тут
+  Mic: Мікрофон
+  Upload Subtitle Files to translate here: Завантажте файли субтитрів для перекладу
+    тут
   Your Auth Key (API KEY): Ваш ключ авторизації (API KEY)
   Source Language: Мова джерела
   Target Language: Мова перекладу
   Pro User?: Професійний користувач?
   TRANSLATE SUBTITLE FILE: ПЕРЕКЛАСТИ ФАЙЛ СУБТИТРІВ
-  Upload Audio Files to separate background music: Завантажте аудіофайли для розділення фонової музики
+  DeepL API: DeepL API
+  NLLB: NLLB
+  T2T Translation: T2T Переклад
+  Upload Audio Files to separate background music: Завантажте аудіофайли для розділення
+    фонової музики
+  SEPARATE BACKGROUND MUSIC: РОЗДІЛИТИ ФОНОВУ МУЗИКУ
   Instrumental: Інструментал
   Vocals: Вокал
-  SEPARATE BACKGROUND MUSIC: РОЗДІЛИТИ ФОНОВУ МУЗИКУ
-
-ru: # Russian
+  BGM Separation: Розділення фонової музики
+ru:
   Language: Язык
-  File: Файл
-  Youtube: Youtube
-  Mic: Микрофон
-  T2T Translation: Перевод T2T
-  BGM Separation: Разделение фоновой музыки
-  GENERATE SUBTITLE FILE: СГЕНЕРИРОВАТЬ ФАЙЛ СУБТИТРОВ
-  Output: Результат
-  Downloadable output file: Загружаемый файл результата
   Upload File here: Загрузите файл здесь
   Model: Модель
   Automatic Detection: Автоматическое определение
   File Format: Формат файла
   Translate to English?: Перевести на английский?
-  Add a timestamp to the end of the filename: Добавить метку времени в конец имени файла
+  Add a timestamp to the end of the filename: Добавить метку времени в конец имени
+    файла
+  Offload sub model when finished: Выгрузить подмодель после завершения
   Advanced Parameters: Расширенные параметры
-  Background Music Remover Filter: Фильтр удаления фоновой музыки
-  Enabling this will remove background music: Включение этого удалит фоновую музыку с помощью подмодели перед транскрипцией
+  Enabling this will remove background music: Включение этого удалит фоновую музыку
+    с помощью подмодели перед транскрипцией
   Enable Background Music Remover Filter: Включить фильтр удаления фоновой музыки
-  Save separated files to output: Сохранить разделенные файлы в выходную папку
-  Offload sub model after removing background music: Выгрузить подмодель после удаления фоновой музыки
-  Voice Detection Filter: Фильтр обнаружения голоса
-  Enable this to transcribe only detected voice: Включите это, чтобы транскрибировать только обнаруженные голосовые части с помощью подмодели
-  Enable Silero VAD Filter: Включить фильтр Silero VAD
-  Diarization: Диаризация
-  Enable Diarization: Включить диаризацию
-  HuggingFace Token: Токен HuggingFace
-  This is only needed the first time you download the model: Это нужно только при первом скачивании модели. Если у вас уже есть модели, вводить не нужно. Чтобы скачать модель, нужно вручную перейти на "https://huggingface.co/pyannote/speaker-diarization-3.1" и "https://huggingface.co/pyannote/segmentation-3.0" и согласиться с их требованиями.
   Device: Устройство
+  Save separated files to output: Сохранить разделенные файлы в выходную папку
+  Background Music Remover Filter: Фильтр удаления фоновой музыки
+  Enable this to transcribe only detected voice: Включите это, чтобы транскрибировать
+    только обнаруженные голосовые части с помощью подмодели
+  Enable Silero VAD Filter: Включить фильтр Silero VAD
+  Voice Detection Filter: Фильтр обнаружения голоса
+  Enable Diarization: Включить диаризацию
+  This is only needed the first time you download the model: Это нужно только при
+    первом скачивании модели. Если у вас уже есть модели, вводить не нужно. Чтобы
+    скачать модель, нужно вручную перейти на "https://huggingface.co/pyannote/speaker-diarization-3.1"
+    и "https://huggingface.co/pyannote/segmentation-3.0" и согласиться с их требованиями.
+  HuggingFace Token: Токен HuggingFace
+  Diarization: Диаризация
+  GENERATE SUBTITLE FILE: СГЕНЕРИРОВАТЬ ФАЙЛ СУБТИТРОВ
+  Output: Результат
+  Downloadable output file: Загружаемый файл результата
+  File: Файл
   Youtube Link: Ссылка на Youtube
   Youtube Thumbnail: Миниатюра Youtube
   Youtube Title: Название Youtube
   Youtube Description: Описание Youtube
+  Youtube: Youtube
   Record with Mic: Записать с микрофона
-  Upload Subtitle Files to translate here: Загрузите файлы субтитров для перевода здесь
+  Mic: Микрофон
+  Upload Subtitle Files to translate here: Загрузите файлы субтитров для перевода
+    здесь
   Your Auth Key (API KEY): Ваш Auth Key (API KEY)
   Source Language: Исходный язык
   Target Language: Целевой язык
   Pro User?: Профессиональный пользователь?
   TRANSLATE SUBTITLE FILE: ПЕРЕВЕСТИ ФАЙЛ СУБТИТРОВ
-  Upload Audio Files to separate background music: Загрузите аудиофайлы для разделения фоновой музыки
+  DeepL API: DeepL API
+  NLLB: NLLB
+  T2T Translation: Перевод T2T
+  Upload Audio Files to separate background music: Загрузите аудиофайлы для разделения
+    фоновой музыки
+  SEPARATE BACKGROUND MUSIC: РАЗДЕЛИТЬ ФОНОВУЮ МУЗЫКУ
   Instrumental: Инструментал
   Vocals: Вокал
-  SEPARATE BACKGROUND MUSIC: РАЗДЕЛИТЬ ФОНОВУЮ МУЗЫКУ
-
-tr: # Turkish
+  BGM Separation: Разделение фоновой музыки
+tr:
   Language: Dil
-  File: Dosya
-  Youtube: Youtube
-  Mic: Mikrofon
-  T2T Translation: T2T Çeviri
-  BGM Separation: Arka Plan Müziği Ayırma
-  GENERATE SUBTITLE FILE: ALTYAZI DOSYASI OLUŞTUR
-  Output: Çıktı
-  Downloadable output file: İndirilebilir çıktı dosyası
   Upload File here: Dosya Yükle
   Model: Model
   Automatic Detection: Otomatik Algılama
   File Format: Dosya Formatı
   Translate to English?: İngilizceye Çevir?
   Add a timestamp to the end of the filename: Dosya adının sonuna zaman damgası ekle
+  Offload sub model when finished: Alt modeli bitirdiğinizde boşaltın
   Advanced Parameters: Gelişmiş Parametreler
-  Background Music Remover Filter: Arka Plan Müziği Kaldırma Filtresi
-  Enabling this will remove background music: Bunu etkinleştirmek, arka plan müziğini alt model tarafından transkripsiyondan önce kaldıracaktır
+  Enabling this will remove background music: Bunu etkinleştirmek, arka plan müziğini
+    alt model tarafından transkripsiyondan önce kaldıracaktır
   Enable Background Music Remover Filter: Arka Plan Müziği Kaldırma Filtresini Etkinleştir
-  Save separated files to output: Ayrılmış dosyaları çıktıya kaydet
-  Offload sub model after removing background music: Arka plan müziği kaldırıldıktan sonra alt modeli devre dışı bırak
-  Voice Detection Filter: Ses Algılama Filtresi
-  Enable this to transcribe only detected voice: Bunu etkinleştirerek yalnızca alt model tarafından algılanan ses kısımlarını transkribe et
-  Enable Silero VAD Filter: Silero VAD Filtresini Etkinleştir
-  Diarization: Konuşmacı Ayrımı
-  Enable Diarization: Konuşmacı Ayrımını Etkinleştir
-  HuggingFace Token: HuggingFace Anahtarı
-  This is only needed the first time you download the model: Bu, modeli ilk kez indirirken gereklidir. Zaten modelleriniz varsa girmenize gerek yok. Modeli indirmek için "https://huggingface.co/pyannote/speaker-diarization-3.1" ve "https://huggingface.co/pyannote/segmentation-3.0" adreslerine gidip gereksinimlerini kabul etmeniz gerekiyor
   Device: Cihaz
+  Save separated files to output: Ayrılmış dosyaları çıktıya kaydet
+  Background Music Remover Filter: Arka Plan Müziği Kaldırma Filtresi
+  Enable this to transcribe only detected voice: Bunu etkinleştirerek yalnızca alt
+    model tarafından algılanan ses kısımlarını transkribe et
+  Enable Silero VAD Filter: Silero VAD Filtresini Etkinleştir
+  Voice Detection Filter: Ses Algılama Filtresi
+  Enable Diarization: Konuşmacı Ayrımını Etkinleştir
+  This is only needed the first time you download the model: Bu, modeli ilk kez indirirken
+    gereklidir. Zaten modelleriniz varsa girmenize gerek yok. Modeli indirmek için
+    "https://huggingface.co/pyannote/speaker-diarization-3.1" ve "https://huggingface.co/pyannote/segmentation-3.0"
+    adreslerine gidip gereksinimlerini kabul etmeniz gerekiyor
+  HuggingFace Token: HuggingFace Anahtarı
+  Diarization: Konuşmacı Ayrımı
+  GENERATE SUBTITLE FILE: ALTYAZI DOSYASI OLUŞTUR
+  Output: Çıktı
+  Downloadable output file: İndirilebilir çıktı dosyası
+  File: Dosya
   Youtube Link: Youtube Bağlantısı
   Youtube Thumbnail: Youtube Küçük Resmi
   Youtube Title: Youtube Başlığı
   Youtube Description: Youtube Açıklaması
+  Youtube: Youtube
   Record with Mic: Mikrofonla Kaydet
-  Upload Subtitle Files to translate here: Çeviri için altyazı dosyalarını buraya yükle
+  Mic: Mikrofon
+  Upload Subtitle Files to translate here: Çeviri için altyazı dosyalarını buraya
+    yükle
   Your Auth Key (API KEY): Yetki Anahtarınız (API ANAHTARI)
   Source Language: Kaynak Dil
   Target Language: Hedef Dil
   Pro User?: Pro Kullanıcı?
   TRANSLATE SUBTITLE FILE: ALTYAZI DOSYASINI ÇEVİR
-  Upload Audio Files to separate background music: Arka plan müziğini ayırmak için ses dosyalarını yükle
+  DeepL API: DeepL API
+  NLLB: NLLB
+  T2T Translation: T2T Çeviri
+  Upload Audio Files to separate background music: Arka plan müziğini ayırmak için
+    ses dosyalarını yükle
+  SEPARATE BACKGROUND MUSIC: ARKA PLAN MÜZİĞİNİ AYIR
   Instrumental: Enstrümantal
   Vocals: Vokal
-  SEPARATE BACKGROUND MUSIC: ARKA PLAN MÜZİĞİNİ AYIR
-
-eu: # Basque
+  BGM Separation: Arka Plan Müziği Ayırma
+eu:
   Language: Hizkuntza
-  File: Fitxategia
-  Youtube: Youtube
-  Mic: Mik
-  T2T Translation: T2T Itzulketak
-  BGM Separation: BGM Bereizpena
-  GENERATE SUBTITLE FILE: SORTU AZPITITULU-FITXATEGIA
-  Output: Irteera
-  Downloadable output file: Irteera fitxategia deskargagarria
   Upload File here: Igo fitxategia hemen
   Model: Eredua
   Automatic Detection: Detekzio Automatikoa
   File Format: Fitxategi Formatua
   Translate to English?: Itzuli ingelesera?
   Add a timestamp to the end of the filename: Gehitu denbora marka fitxategi amaieran
+  Offload sub model when finished: Deskargatu azpieredua amaitutakoan
   Advanced Parameters: Aukera Aurreratuak
-  Background Music Remover Filter: Atzeko Musika Ezabatzeko Filtroa
-  Enabling this will remove background music: Hau aktibatuz, transkribatu aurretik atzeko musika ezabatuko zaio azpieredu baten bidez
+  Enabling this will remove background music: Hau aktibatuz, transkribatu aurretik
+    atzeko musika ezabatuko zaio azpieredu baten bidez
   Enable Background Music Remover Filter: Aktibatu Atzeko Musika Ezabatzeko Filtroa
-  Save separated files to output: Gorde fitxategi bereiziak irteeran
-  Offload sub model after removing background music: Atzeko musika kendu ondoren azpieredua memoriatik kendu
-  Voice Detection Filter: Ahots Detekzio Filtroa
-  Enable this to transcribe only detected voice: Aktibatu hau azpieredu batekin soilik detektatutako ahots zatiak transkribatzeko.
-  Enable Silero VAD Filter: Aktibatu Silero VAD Filtroa
-  Diarization: Diarizazioa
-  Enable Diarization: Aktibatu Diarizazioa
-  HuggingFace Token: HuggingFace Tokena
-  This is only needed the first time you download the model: Soilik beharrezkoa eredua deskargatzen den lehen aldian. Jadanik eredu hauek deskargatuta, ez duzu berriz ere sartu behar. Eredua deskargatzeko, joan hurrengo esteketara "https://huggingface.co/pyannote/speaker-diarization-3.1" eta "https://huggingface.co/pyannote/segmentation-3.0" eta onartu haien erabilpen-baldintzak.
   Device: Gailua
+  Save separated files to output: Gorde fitxategi bereiziak irteeran
+  Background Music Remover Filter: Atzeko Musika Ezabatzeko Filtroa
+  Enable this to transcribe only detected voice: Aktibatu hau azpieredu batekin soilik
+    detektatutako ahots zatiak transkribatzeko.
+  Enable Silero VAD Filter: Aktibatu Silero VAD Filtroa
+  Voice Detection Filter: Ahots Detekzio Filtroa
+  Enable Diarization: Aktibatu Diarizazioa
+  This is only needed the first time you download the model: Soilik beharrezkoa eredua
+    deskargatzen den lehen aldian. Jadanik eredu hauek deskargatuta, ez duzu berriz
+    ere sartu behar. Eredua deskargatzeko, joan hurrengo esteketara "https://huggingface.co/pyannote/speaker-diarization-3.1"
+    eta "https://huggingface.co/pyannote/segmentation-3.0" eta onartu haien erabilpen-baldintzak.
+  HuggingFace Token: HuggingFace Tokena
+  Diarization: Diarizazioa
+  GENERATE SUBTITLE FILE: SORTU AZPITITULU-FITXATEGIA
+  Output: Irteera
+  Downloadable output file: Irteera fitxategia deskargagarria
+  File: Fitxategia
   Youtube Link: Youtube Esteka
   Youtube Thumbnail: Youtube Irudia
   Youtube Title: Youtube Izenburua
   Youtube Description: Youtube Deskribapena
+  Youtube: Youtube
   Record with Mic: Mik. bidez grabatu
+  Mic: Mik
   Upload Subtitle Files to translate here: Igo hemen azpititulu fitxategia itzulketarako
   Your Auth Key (API KEY): Zure Auth Giltza (API KEY)
   Source Language: Jatorrizko Hizkuntza
   Target Language: Helburuko Hizkuntza
   Pro User?: Pro Erabiltzailea?
   TRANSLATE SUBTITLE FILE: ITZULI AZPITITULU FITXATEGIA
-  Upload Audio Files to separate background music: Igo Audio Fitxategiak atzeko musika bereizteko
+  DeepL API: DeepL API
+  NLLB: NLLB
+  T2T Translation: T2T Itzulketak
+  Upload Audio Files to separate background music: Igo Audio Fitxategiak atzeko musika
+    bereizteko
+  SEPARATE BACKGROUND MUSIC: BEREIZI ATZEKO MUSIKA
   Instrumental: Instrumentala
   Vocals: Ahotsak
-  SEPARATE BACKGROUND MUSIC: BEREIZI ATZEKO MUSIKA
+  BGM Separation: BGM Bereizpena
+he: # Hebrew
+  Language: שפה
+  File: קובץ
+  Youtube: יוטיוב
+  Mic: מיקרופון
+  T2T Translation: תרגום T2T
+  BGM Separation: הפרדת מוזיקת רקע
+  GENERATE SUBTITLE FILE: צור קובץ כתוביות
+  Output: פלט
+  Downloadable output file: קובץ פלט להורדה
+  Upload File here: העלה קובץ כאן
+  Model: מודל
+  Automatic Detection: זיהוי אוטומטי
+  File Format: פורמט קובץ
+  Translate to English?: לתרגם לאנגלית?
+  Add a timestamp to the end of the filename: הוסף חותמת זמן לסוף שם הקובץ
+  Advanced Parameters: פרמטרים מתקדמים
+  Background Music Remover Filter: מסנן הסרת מוזיקת רקע
+  Enabling this will remove background music: הפעלה תסיר מוזיקת רקע באמצעות מודל משנה לפני תמלול
+  Enable Background Music Remover Filter: אפשר מסנן הסרת מוזיקת רקע
+  Save separated files to output: שמור קבצים מופרדים לפלט
+  Offload sub model when finished: נתק מודל משנה לאחר סיום
+  Voice Detection Filter: מסנן זיהוי קול
+  Enable this to transcribe only detected voice: אפשר זאת כדי לתמלל רק קטעי קול שזוהו על ידי מודל המשנה
+  Enable Silero VAD Filter: אפשר מסנן Silero VAD
+  Diarization: דיאריזציה (זיהוי דוברים)
+  Enable Diarization: אפשר דיאריזציה
+  HuggingFace Token: אסימון HuggingFace
+  This is only needed the first time you download the model: זה נדרש רק בפעם הראשונה שאתה מוריד את המודל. אם כבר יש לך את המודלים, אין צורך להזין זאת
+  Device: התקן
+  Youtube Link: קישור יוטיוב
+  Youtube Thumbnail: תמונת תצוגה מקדימה של יוטיוב
+  Youtube Title: כותרת יוטיוב
+  Youtube Description: תיאור יוטיוב
+  Record with Mic: הקלט עם מיקרופון
+  Upload Subtitle Files to translate here: העלה כאן קבצי כתוביות לתרגום
+  Your Auth Key (API KEY): מפתח אימות שלך (API KEY)
+  Source Language: שפת מקור
+  Target Language: שפת יעד
+  Pro User?: משתמש פרו?
+  TRANSLATE SUBTITLE FILE: תרגם קובץ כתוביות
+  Upload Audio Files to separate background music: העלה קבצי שמע להפרדת מוזיקת רקע
+  Instrumental: אינסטרומנטלי
+  Vocals: שירה
+  SEPARATE BACKGROUND MUSIC: הפרד מוזיקת רקע
+zh-TW:
+  Language: 語言
+  Upload File here: 在此處上傳檔案
+  Model: 模型
+  Automatic Detection: 自動偵測
+  File Format: 檔案格式
+  Translate to English? (Whisper's End-To-End Speech-To-Text translation feature): 翻譯成英文？(Whisper 的端到端語音轉文字翻譯功能)
+  Add a timestamp to the end of the filename: 在檔名結尾加入時間戳記
+  Offload sub model when finished: 完成後卸載模型
+  Advanced Parameters: 進階參數
+  Enabling this will remove background music: 啟用此功能將在轉錄前，透過子模型移除背景音樂
+  Enable Background Music Remover Filter: 啟用背景音樂移除濾波器
+  Device: 裝置
+  Save separated files to output: 將分離的檔案儲存至輸出資料夾
+  Background Music Remover Filter: 背景音樂移除濾波器
+  Enable this to transcribe only detected voice: 啟用此功能，只轉錄子模型偵測到的語音部分
+  Enable Silero VAD Filter: 啟用 Silero VAD 濾波器
+  Voice Detection Filter: 語音偵測濾波器
+  Enable Diarization: 啟用語者分離（Diarization）
+  This is only needed the first time you download the model: 只有第一次下載模型時才需要此步驟。
+     如果您已經有模型，則無需輸入。若要下載模型，您必須手動前往 "https://huggingface.co/pyannote/speaker-diarization-3.1" 和 "https://huggingface.co/pyannote/segmentation-3.0" 並同意其要求
+  HuggingFace Token: HuggingFace 權杖（Token）
+  Diarization: 語者分離
+  GENERATE SUBTITLE FILE: 產生字幕檔案
+  Output: 輸出
+  Downloadable output file: 可下載的輸出檔案
+  File: 檔案
+  Youtube Link: YouTube 連結
+  Youtube Thumbnail: YouTube 縮圖
+  Youtube Title: YouTube 標題
+  Youtube Description: YouTube 說明
+  Youtube: YouTube
+  Record with Mic: 使用麥克風錄音
+  Mic: 麥克風
+  Upload Subtitle Files to translate here: 在此處上傳要翻譯的字幕檔案
+  Your Auth Key (API KEY): 您的驗證金鑰 (API KEY)
+  Source Language: 來源語言
+  Target Language: 目標語言
+  Pro User?: 專業使用者？
+  TRANSLATE SUBTITLE FILE: 翻譯字幕檔案
+  DeepL API: DeepL API
+  NLLB: NLLB
+  T2T Translation: T2T 翻譯
+  Upload Audio Files to separate background music: 在此處上傳要分離背景音樂的音訊檔案
+  SEPARATE BACKGROUND MUSIC: 分離背景音樂
+  Instrumental: 樂器
+  Vocals: 人聲
+  BGM Separation: 背景音樂分離

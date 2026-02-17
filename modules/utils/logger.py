@@ -1,15 +1,10 @@
 import logging
+from typing import Optional
 
 
-def get_gradio_logger():
-    return get_logger("Whisper-WebUI")
-
-
-def get_backend_logger():
-    return get_logger("Whisper-WebUI-Backend")
-
-
-def get_logger(name: str):
+def get_logger(name: Optional[str] = None):
+    if name is None:
+        name = "Whisper-WebUI"
     logger = logging.getLogger(name)
 
     if not logger.handlers:
@@ -20,7 +15,7 @@ def get_logger(name: str):
         )
 
         handler = logging.StreamHandler()
-        handler.setFormatter(formatter)
+        # handler.setFormatter(formatter)
 
         logger.addHandler(handler)
 

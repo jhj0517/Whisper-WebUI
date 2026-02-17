@@ -127,7 +127,18 @@ class TranslationBase(ABC):
             print(f"Error translating file: {e}")
             raise
         finally:
-            self.release_cuda_memory()
+            self.offload()
+
+    @staticmethod
+    def get_device():
+        if torch.cuda.is_available():
+            return "cuda"
+        if torch.xpu.is_available():
+            return "xpu"
+        elif torch.backends.mps.is_available():
+            return "mps"
+        else:
+            return "cpu"
 
     def offload(self):
         """Offload the model and free up the memory"""
@@ -135,23 +146,13 @@ class TranslationBase(ABC):
             del self.model
             self.model = None
         if self.device == "cuda":
-            self.release_cuda_memory()
-        gc.collect()
-
-    @staticmethod
-    def get_device():
-        if torch.cuda.is_available():
-            return "cuda"
-        elif torch.backends.mps.is_available():
-            return "mps"
-        else:
-            return "cpu"
-
-    @staticmethod
-    def release_cuda_memory():
-        if torch.cuda.is_available():
             torch.cuda.empty_cache()
             torch.cuda.reset_max_memory_allocated()
+        if self.device == "xpu":
+            torch.xpu.empty_cache()
+            torch.xpu.reset_accumulated_memory_stats()
+            torch.xpu.reset_peak_memory_stats()
+        gc.collect()
 
     @staticmethod
     def remove_input_files(file_paths: List[str]):

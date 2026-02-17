@@ -7,11 +7,22 @@ import torch
 import gc
 import gradio as gr
 from datetime import datetime
+import traceback
 
-from uvr.models import MDX, Demucs, VrNetwork, MDXC
 from modules.utils.paths import DEFAULT_PARAMETERS_CONFIG_PATH, UVR_MODELS_DIR, UVR_OUTPUT_DIR
 from modules.utils.files_manager import load_yaml, save_yaml, is_video
 from modules.diarize.audio_loader import load_audio
+from modules.utils.logger import get_logger
+logger = get_logger()
+
+try:
+    from uvr.models import MDX, Demucs, VrNetwork, MDXC
+except Exception as e:
+    logger.warning(
+        "Failed to import uvr. BGM separation feature will not work. "
+        "Please open an issue on GitHub if you encounter this error. "
+        f"Error: {type(e).__name__}: {traceback.format_exc()}"
+    )
 
 
 class MusicSeparator:
@@ -20,7 +31,7 @@ class MusicSeparator:
                  output_dir: Optional[str] = UVR_OUTPUT_DIR):
         self.model = None
         self.device = self.get_device()
-        self.available_devices = ["cpu", "cuda"]
+        self.available_devices = ["cpu", "cuda", "xpu", "mps"]
         self.model_dir = model_dir
         self.output_dir = output_dir
         instrumental_output_dir = os.path.join(self.output_dir, "instrumental")
@@ -158,8 +169,14 @@ class MusicSeparator:
 
     @staticmethod
     def get_device():
-        """Get device for the model"""
-        return "cuda" if torch.cuda.is_available() else "cpu"
+        if torch.cuda.is_available():
+            return "cuda"
+        if torch.xpu.is_available():
+            return "xpu"
+        elif torch.backends.mps.is_available():
+            return "mps"
+        else:
+            return "cpu"
 
     def offload(self):
         """Offload the model and free up the memory"""
@@ -168,6 +185,11 @@ class MusicSeparator:
             self.model = None
         if self.device == "cuda":
             torch.cuda.empty_cache()
+            torch.cuda.reset_max_memory_allocated()
+        if self.device == "xpu":
+            torch.xpu.empty_cache()
+            torch.xpu.reset_accumulated_memory_stats()
+            torch.xpu.reset_peak_memory_stats()
         gc.collect()
         self.audio_info = None
 

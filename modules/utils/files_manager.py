@@ -5,13 +5,45 @@ from gradio.utils import NamedString
 
 from modules.utils.paths import DEFAULT_PARAMETERS_CONFIG_PATH
 
+AUDIO_EXTENSION = ['.mp3', '.wav', '.wma', '.aac', '.flac', '.ogg', '.m4a', '.aiff', '.alac', '.opus', '.webm', '.ac3',
+                   '.amr', '.au', '.mid', '.midi', '.mka']
 
-def load_yaml(path: str = DEFAULT_PARAMETERS_CONFIG_PATH):
+VIDEO_EXTENSION = ['.mp4', '.mkv', '.flv', '.avi', '.mov', '.wmv', '.webm', '.m4v', '.mpeg', '.mpg', '.3gp',
+                   '.f4v', '.ogv', '.vob', '.mts', '.m2ts', '.divx', '.mxf', '.rm', '.rmvb', '.ts']
+
+MEDIA_EXTENSION = VIDEO_EXTENSION + AUDIO_EXTENSION
+FALLBACK_ENCODINGS = ['cp949', 'euc-kr']
+
+
+def load_yaml(path: str = DEFAULT_PARAMETERS_CONFIG_PATH, use_fallback: bool = True):
     yaml = YAML(typ="safe")
     yaml.preserve_quotes = True
-    with open(path, 'r', encoding='utf-8') as file:
-        config = yaml.load(file)
-    return config
+    try:
+        with open(path, 'r', encoding='utf-8') as file:
+            return yaml.load(file)
+    except UnicodeDecodeError:
+        if not use_fallback:
+            raise
+
+        print(f"UTF-8 decoding failed for {path}. Trying fallback encodings...")
+
+        try:
+            with open(path, 'rb') as file:
+                raw_bytes = file.read()
+        except IOError as e:
+            raise RuntimeError(f"Failed to read file {path} as binary.") from e
+
+        for encoding in FALLBACK_ENCODINGS:
+            try:
+                content = raw_bytes.decode(encoding)
+                config = yaml.load(content)
+                print(f"Successfully loaded {path} with '{encoding}'. Consider converting the file to UTF-8.")
+                return config
+            except Exception as inner_e:  # Catches both UnicodeDecodeError and YAMLError
+                print(f"   -> Loading with '{encoding}' failed: {inner_e}")
+                continue
+
+        raise RuntimeError(f"All attempted encodings ({['utf-8'] + FALLBACK_ENCODINGS}) failed to load {path}.")
 
 
 def save_yaml(data: dict, path: str = DEFAULT_PARAMETERS_CONFIG_PATH):
@@ -29,10 +61,7 @@ def save_yaml(data: dict, path: str = DEFAULT_PARAMETERS_CONFIG_PATH):
 
 
 def get_media_files(folder_path, include_sub_directory=False):
-    video_extensions = ['*.mp4', '*.mkv', '*.flv', '*.avi', '*.mov', '*.wmv', '*.webm', '*.m4v', '*.mpeg', '*.mpg',
-                        '*.3gp', '*.f4v', '*.ogv', '*.vob', '*.mts', '*.m2ts', '*.divx', '*.mxf', '*.rm', '*.rmvb']
-    audio_extensions = ['*.mp3', '*.wav', '*.aac', '*.flac', '*.ogg', '*.m4a']
-    media_extensions = video_extensions + audio_extensions
+    media_extensions = ['*' + extension for extension in MEDIA_EXTENSION]
 
     media_files = []
 
@@ -64,9 +93,8 @@ def format_gradio_files(files: list):
 
 
 def is_video(file_path):
-    video_extensions = ['.mp4', '.mkv', '.avi', '.mov', '.flv', '.wmv', '.webm', '.m4v', '.mpeg', '.mpg', '.3gp']
     extension = os.path.splitext(file_path)[1].lower()
-    return extension in video_extensions
+    return extension in VIDEO_EXTENSION
 
 
 def read_file(file_path):
