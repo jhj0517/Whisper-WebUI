@@ -4,6 +4,7 @@ on:
   # Triggers minor version ( vX.Y.Z-ShortHash )
   push:
     branches:
+      - main
       - master
   # Triggers major version ( vX.Y.Z )
   release:

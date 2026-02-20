@@ -1,0 +1,136 @@
+name: Agent Task Queue
+
+on:
+  issues:
+    types: [opened, labeled]
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  queue:
+    if: >-
+      ${{ github.event.issue.pull_request == null && ((github.event.action == 'labeled' && github.event.label.name == 'agent:ready') || (github.event.action == 'opened' && contains(github.event.issue.labels.*.name, 'agent:ready'))) }}
+    runs-on: ubuntu-latest
+    env:
+      VERIFY_COMMAND: bash scripts/verify
+    steps:
+      - name: Build agent task packet and notify Copilot
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issue = context.payload.issue;
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+            const issue_number = issue.number;
+
+            const currentLabels = (issue.labels || []).map(l => typeof l === "string" ? l : l.name);
+            const hadReady = currentLabels.includes("agent:ready");
+            const hadInProgress = currentLabels.includes("agent:in-progress");
+
+            if (!hadReady && context.payload.action === "opened") {
+              core.info("Issue opened without agent:ready; skipping queue.");
+              return;
+            }
+
+            const comments = await github.paginate(github.rest.issues.listComments, {
+              owner,
+              repo,
+              issue_number,
+              per_page: 100,
+            });
+
+            const existingContract = comments.find(c =>
+              c.body?.includes("### Execution Contract") &&
+              c.body?.includes(`- #${issue_number}:`)
+            );
+
+            let addedInProgress = false;
+            let removedReady = false;
+
+            try {
+              if (!hadInProgress) {
+                await github.rest.issues.addLabels({
+                  owner,
+                  repo,
+                  issue_number,
+                  labels: ["agent:in-progress"],
+                });
+                addedInProgress = true;
+              }
+
+              if (hadReady) {
+                try {
+                  await github.rest.issues.removeLabel({
+                    owner,
+                    repo,
+                    issue_number,
+                    name: "agent:ready",
+                  });
+                  removedReady = true;
+                } catch (error) {
+                  if (error.status === 404) {
+                    core.info("agent:ready was already removed.");
+                  } else {
+                    throw error;
+                  }
+                }
+              }
+
+              if (existingContract) {
+                core.info("Execution contract already exists; transition applied without duplicate enqueue.");
+                return;
+              }
+
+              const lines = [
+                "@copilot Please implement this task using repository guardrails.",
+                "",
+                "### Execution Contract",
+                "1. Keep the change minimal and in scope.",
+                "2. Run deterministic verification before requesting review.",
+                `3. Required verification command: \`${process.env.VERIFY_COMMAND}\`.`,
+                "4. Include PR sections: Summary, Risk, Evidence, Rollback, Scope Guard.",
+                "5. Do not merge; maintainers perform final human review.",
+                "",
+                "### Source Issue",
+                `- #${issue_number}: ${issue.title}`,
+              ];
+
+              await github.rest.issues.createComment({
+                owner,
+                repo,
+                issue_number,
+                body: lines.join("\n"),
+              });
+            } catch (error) {
+              core.warning(`Queue transition failed: ${error.message}`);
+
+              if (addedInProgress && !hadInProgress) {
+                try {
+                  await github.rest.issues.removeLabel({
+                    owner,
+                    repo,
+                    issue_number,
+                    name: "agent:in-progress",
+                  });
+                } catch (rollbackError) {
+                  core.warning(`Rollback remove agent:in-progress failed: ${rollbackError.message}`);
+                }
+              }
+
+              if (removedReady && hadReady) {
+                try {
+                  await github.rest.issues.addLabels({
+                    owner,
+                    repo,
+                    issue_number,
+                    labels: ["agent:ready"],
+                  });
+                } catch (rollbackError) {
+                  core.warning(`Rollback add agent:ready failed: ${rollbackError.message}`);
+                }
+              }
+
+              throw error;
+            }

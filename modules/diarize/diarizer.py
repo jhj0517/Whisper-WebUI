@@ -7,9 +7,16 @@ import logging
 import gc
 
 from modules.utils.paths import DIARIZATION_MODELS_DIR
-from modules.diarize.diarize_pipeline import DiarizationPipeline, assign_word_speakers
 from modules.diarize.audio_loader import load_audio
 from modules.whisper.data_classes import *
+
+try:
+    from modules.diarize.diarize_pipeline import DiarizationPipeline, assign_word_speakers
+    _DIARIZATION_IMPORT_ERROR = None
+except Exception as exc:  # pragma: no cover - fallback for constrained CI audio backends
+    DiarizationPipeline = None  # type: ignore[assignment]
+    assign_word_speakers = None  # type: ignore[assignment]
+    _DIARIZATION_IMPORT_ERROR = exc
 
 
 class Diarizer:
@@ -52,6 +59,9 @@ class Diarizer:
             elapsed time for running
         """
         start_time = time.time()
+
+        if DiarizationPipeline is None or assign_word_speakers is None:
+            raise RuntimeError("Diarization dependencies are unavailable in this environment.") from _DIARIZATION_IMPORT_ERROR
 
         if device is None:
             device = self.device
@@ -117,6 +127,8 @@ class Diarizer:
         logger = logging.getLogger("speechbrain.utils.train_logger")
         # Disable redundant torchvision warning message
         logger.disabled = True
+        if DiarizationPipeline is None:
+            raise RuntimeError("Diarization pipeline could not be imported.") from _DIARIZATION_IMPORT_ERROR
         self.pipe = DiarizationPipeline(
             use_auth_token=use_auth_token,
             device=device,

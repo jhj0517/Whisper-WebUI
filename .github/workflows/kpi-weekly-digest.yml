@@ -1,0 +1,113 @@
+name: KPI Weekly Digest
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '15 6 * * 1'
+
+permissions:
+  contents: read
+  issues: write
+  pull-requests: read
+
+jobs:
+  digest:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Publish weekly KPI digest issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const owner = context.repo.owner;
+            const repo = context.repo.repo;
+
+            const now = new Date();
+            const since = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+            const sinceIso = since.toISOString();
+
+            const requiredLabels = [
+              { name: "area:infra", color: "0366D6", description: "Infrastructure/CI/tooling related work." },
+              { name: "risk:low", color: "0E8A16", description: "Low-risk change with small regression surface." },
+              { name: "kpi-digest", color: "D4C5F9", description: "Weekly KPI digest issue for tracking team metrics." },
+            ];
+
+            for (const label of requiredLabels) {
+              try {
+                await github.rest.issues.updateLabel({
+                  owner,
+                  repo,
+                  name: label.name,
+                  new_name: label.name,
+                  color: label.color,
+                  description: label.description,
+                });
+              } catch (error) {
+                if (error.status === 404) {
+                  await github.rest.issues.createLabel({
+                    owner,
+                    repo,
+                    name: label.name,
+                    color: label.color,
+                    description: label.description,
+                  });
+                } else {
+                  throw error;
+                }
+              }
+            }
+
+            const pulls = await github.paginate(github.rest.pulls.list, {
+              owner,
+              repo,
+              state: "all",
+              sort: "updated",
+              direction: "desc",
+              per_page: 100,
+            });
+
+            const mergedLast7d = pulls.filter(pr => pr.merged_at && new Date(pr.merged_at) >= since).length;
+            const openedLast7d = pulls.filter(pr => new Date(pr.created_at) >= since).length;
+
+            const openIssues = await github.paginate(github.rest.issues.listForRepo, {
+              owner,
+              repo,
+              state: "open",
+              per_page: 100,
+            });
+
+            const openAgentIssues = openIssues.filter(
+              i =>
+                !i.pull_request &&
+                (i.labels || []).some(l => ["agent:ready", "agent:in-progress", "agent:blocked"].includes(l.name))
+            ).length;
+
+            const title = `Weekly KPI Digest - ${now.toISOString().slice(0, 10)}`;
+            const body = [
+              "## Summary",
+              `- Window start: ${sinceIso}`,
+              `- Window end: ${now.toISOString()}`,
+              "",
+              "## Automated Snapshot",
+              `- PRs opened (7d): ${openedLast7d}`,
+              `- PRs merged (7d): ${mergedLast7d}`,
+              `- Open agent-tracked issues: ${openAgentIssues}`,
+              "",
+              "## KPI Fields (fill/verify)",
+              "- Intake-to-PR lead time:",
+              "- PR cycle time:",
+              "- Queue failure rate:",
+              "- Agent rework rate:",
+              "- Evidence completeness rate:",
+              "- Regression incident count:",
+              "",
+              "## Notes",
+              "- Add blockers, regressions, and remediation actions.",
+            ].join("\n");
+
+            await github.rest.issues.create({
+              owner,
+              repo,
+              title,
+              body,
+              labels: ["area:infra", "risk:low", "kpi-digest"],
+            });

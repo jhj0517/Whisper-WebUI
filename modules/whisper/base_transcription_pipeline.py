@@ -221,9 +221,9 @@ class BaseTranscriptionPipeline(ABC):
                         file_format: str = "SRT",
                         add_timestamp: bool = True,
                         progress=gr.Progress(),
+                        *pipeline_params,
                         max_line_width: Optional[int] = None,  # ← new
                         max_line_count: Optional[int] = None,  # ← new
-                        *pipeline_params,
                         ) -> Tuple[str, List]:
         """
         Write subtitle file from Files
@@ -326,9 +326,9 @@ class BaseTranscriptionPipeline(ABC):
                        file_format: str = "SRT",
                        add_timestamp: bool = True,
                        progress=gr.Progress(),
+                       *pipeline_params,
                        max_line_width: Optional[int] = None,  # ← new
                        max_line_count: Optional[int] = None,  # ← new
-                       *pipeline_params,
                        ) -> Tuple[str, str]:
         """
         Write subtitle file from microphone

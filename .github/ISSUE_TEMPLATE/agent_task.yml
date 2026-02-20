@@ -1,0 +1,80 @@
+name: Agent Task
+description: Structured task packet for @copilot/Codex implementation.
+title: "[Agent Task] "
+labels:
+  - agent:ready
+body:
+  - type: textarea
+    id: problem_statement
+    attributes:
+      label: Problem statement
+      description: What problem are we solving and why now?
+    validations:
+      required: true
+
+  - type: textarea
+    id: current_behavior
+    attributes:
+      label: Current behavior
+      description: Describe the current observable behavior.
+    validations:
+      required: true
+
+  - type: textarea
+    id: target_behavior
+    attributes:
+      label: Target behavior
+      description: Describe the expected result after implementation.
+    validations:
+      required: true
+
+  - type: textarea
+    id: non_goals
+    attributes:
+      label: Non-goals
+      description: Explicitly list what is out of scope.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: risk
+    attributes:
+      label: Risk level
+      options:
+        - risk:low
+        - risk:medium
+        - risk:high
+    validations:
+      required: true
+
+  - type: dropdown
+    id: primary_area
+    attributes:
+      label: Primary area
+      options:
+        - area:frontend
+        - area:backend
+        - area:infra
+        - area:docs
+        - area:security
+        - area:release
+    validations:
+      required: true
+
+  - type: textarea
+    id: acceptance_criteria
+    attributes:
+      label: Acceptance criteria
+      description: Measurable criteria that define done.
+    validations:
+      required: true
+
+  - type: textarea
+    id: evidence_commands
+    attributes:
+      label: Evidence command list
+      description: List exact commands to verify the change.
+      value: |
+        bash scripts/verify
+    validations:
+      required: true

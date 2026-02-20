@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+python -m compileall -q app.py backend modules
+if [[ -d backend ]]; then
+  python -m compileall -q backend
+fi
+if [[ -d tests ]]; then
+  python -m compileall -q tests
+fi
+
+if [[ -x ./start-webui.sh ]]; then
+  set +e
+  timeout 60s ./start-webui.sh > /tmp/verify-webui.log 2>&1
+  smoke_status=$?
+  set -e
+
+  if [[ "$smoke_status" -ne 0 && "$smoke_status" -ne 124 ]]; then
+    cat /tmp/verify-webui.log || true
+    echo "Web UI smoke launch failed with status $smoke_status" >&2
+    exit "$smoke_status"
+  fi
+fi

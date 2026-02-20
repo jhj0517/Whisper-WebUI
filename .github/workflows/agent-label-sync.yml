@@ -1,0 +1,61 @@
+name: Agent Label Sync
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/agent-label-sync.yml'
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create or update agent labels
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const labels = [
+              { name: "agent:ready", color: "0E8A16", description: "Task is ready to be picked up by an agent." },
+              { name: "agent:in-progress", color: "1D76DB", description: "Agent is actively implementing this task." },
+              { name: "agent:blocked", color: "B60205", description: "Agent cannot proceed without human decision/input." },
+              { name: "risk:low", color: "0E8A16", description: "Low-risk change with small regression surface." },
+              { name: "risk:medium", color: "FBCA04", description: "Medium-risk change requiring careful review." },
+              { name: "risk:high", color: "D93F0B", description: "High-risk change; strict human gate required." },
+              { name: "area:frontend", color: "5319E7", description: "Frontend/UI related work." },
+              { name: "area:backend", color: "0052CC", description: "Backend/runtime logic related work." },
+              { name: "area:infra", color: "0366D6", description: "Infrastructure/CI/tooling related work." },
+              { name: "area:docs", color: "0075CA", description: "Documentation/process related work." },
+              { name: "area:security", color: "B60205", description: "Security hardening or vulnerability-related work." },
+              { name: "area:release", color: "C2E0C6", description: "Release/build/distribution related work." },
+              { name: "kpi-digest", color: "D4C5F9", description: "Weekly KPI digest issue for tracking team metrics." },
+              { name: "escaped-regression", color: "E99695", description: "Bug that escaped to production/main post-merge." }
+            ];
+
+            for (const label of labels) {
+              try {
+                await github.rest.issues.updateLabel({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  name: label.name,
+                  new_name: label.name,
+                  color: label.color,
+                  description: label.description
+                });
+              } catch (error) {
+                if (error.status === 404) {
+                  await github.rest.issues.createLabel({
+                    owner: context.repo.owner,
+                    repo: context.repo.repo,
+                    name: label.name,
+                    color: label.color,
+                    description: label.description
+                  });
+                } else {
+                  throw error;
+                }
+              }
+            }

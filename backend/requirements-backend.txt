@@ -11,3 +11,5 @@ pydantic
 # Test dependencies
 # pytest
 # pytest-asyncio
+setuptools==68.2.2
+wheel
