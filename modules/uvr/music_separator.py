@@ -8,6 +8,7 @@ import gc
 import gradio as gr
 from datetime import datetime
 import traceback
+import subprocess
 
 from modules.utils.paths import DEFAULT_PARAMETERS_CONFIG_PATH, UVR_MODELS_DIR, UVR_OUTPUT_DIR
 from modules.utils.files_manager import load_yaml, save_yaml, is_video
@@ -97,20 +98,17 @@ class MusicSeparator:
             np.ndarray: Vocals numpy arrays.
             file_paths: List of file paths where the separated audio is saved. Return empty when save_file is False.
         """
+
+        sample_rate = 16000
+
         if isinstance(audio, str):
             output_filename, ext = os.path.basename(audio), ".wav"
             output_filename, orig_ext = os.path.splitext(output_filename)
-
-            if is_video(audio):
-                audio = load_audio(audio)
-                sample_rate = 16000
-            else:
-                self.audio_info = torchaudio.info(audio)
-                sample_rate = self.audio_info.sample_rate
         else:
             timestamp = datetime.now().strftime("%m%d%H%M%S")
             output_filename, ext = f"UVR-{timestamp}", ".wav"
-            sample_rate = 16000
+
+        audio = load_audio(audio)
 
         model_config = {
             "segment": segment_size,

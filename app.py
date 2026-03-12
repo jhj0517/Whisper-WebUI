@@ -25,7 +25,8 @@ class App:
     def __init__(self, args):
         self.args = args
         # Check every 1 hour (3600) for cached files and delete them if older than 1 day (86400)
-        self.app = gr.Blocks(css=CSS, theme=self.args.theme, delete_cache=(3600, 86400))
+        self.default_params = load_yaml(DEFAULT_PARAMETERS_CONFIG_PATH)
+        self.app = gr.Blocks(css=CSS, theme=self.args.theme, delete_cache=(3600, 86400), title=self.default_params["whisper"]["title"])
         self.whisper_inf = WhisperFactory.create_whisper_inference(
             whisper_type=self.args.whisper_type,
             whisper_model_dir=self.args.whisper_model_dir,
@@ -42,7 +43,6 @@ class App:
             output_dir=os.path.join(self.args.output_dir, "translations")
         )
         self.i18n = load_yaml(I18N_YAML_PATH)
-        self.default_params = load_yaml(DEFAULT_PARAMETERS_CONFIG_PATH)
         logger.info(f"Use \"{self.args.whisper_type}\" implementation\n"
                     f"Device \"{self.whisper_inf.device}\" is detected")
 
@@ -58,7 +58,7 @@ class App:
             dd_lang = gr.Dropdown(choices=self.whisper_inf.available_langs + [AUTOMATIC_DETECTION],
                                   value=AUTOMATIC_DETECTION if whisper_params["lang"] == AUTOMATIC_DETECTION.unwrap()
                                   else whisper_params["lang"], label=_("Language"))
-            dd_file_format = gr.Dropdown(choices=["SRT", "WebVTT", "txt", "LRC"], value=whisper_params["file_format"], label=_("File Format"))
+            dd_file_format = gr.Dropdown(choices=["SRT", "WebVTT", "txt", "LRC", "json"], value=whisper_params["file_format"], label=_("File Format"))
         with gr.Row():
             cb_translate = gr.Checkbox(value=whisper_params["is_translate"], label=_("Translate to English?"),
                                        interactive=True)
@@ -108,8 +108,24 @@ class App:
                             )
             with Translate(self.i18n):  # Add `lang = lang` here to test dynamic change of the languages.
                 with gr.Row():
-                    with gr.Column():
-                        gr.Markdown(MARKDOWN, elem_id="md_project")
+                    with gr.Column(scale=10):
+                        gr.HTML("<h1><a href="+self.default_params["whisper"]["gh_url"]+" style='text-decoration: none; color: inherit;'>"+self.default_params["whisper"]["title"]+"</a></h1>")
+                        # gr.Markdown(MARKDOWN, elem_id="md_project")
+                    with gr.Column(scale=1, min_width=100):
+                        # Define a function that returns the JavaScript code for dark mode
+                        def dark_mode():
+                            return """
+                                () => {
+                                    document.body.classList.toggle('dark');
+                                }
+                            """
+
+                        btn = gr.Button("Dark Mode")
+
+                        # Attach the JavaScript code to the button click event
+                        js_code = dark_mode()
+                        btn.click(None, [], [], js=js_code)
+
                 with gr.Tabs():
                     with gr.TabItem(_("File")):  # tab1
                         with gr.Column():
@@ -198,42 +214,7 @@ class App:
                         with gr.Row():
                             file_subs = gr.Files(type="filepath", label=_("Upload Subtitle Files to translate here"))
 
-                        with gr.TabItem(_("DeepL API")):  # sub tab1
-                            with gr.Row():
-                                tb_api_key = gr.Textbox(label=_("Your Auth Key (API KEY)"),
-                                                        value=deepl_params["api_key"])
-                            with gr.Row():
-                                dd_source_lang = gr.Dropdown(label=_("Source Language"),
-                                                             value=AUTOMATIC_DETECTION if deepl_params["source_lang"] == AUTOMATIC_DETECTION.unwrap()
-                                                             else deepl_params["source_lang"],
-                                                             choices=list(self.deepl_api.available_source_langs.keys()))
-                                dd_target_lang = gr.Dropdown(label=_("Target Language"),
-                                                             value=deepl_params["target_lang"],
-                                                             choices=list(self.deepl_api.available_target_langs.keys()))
-                            with gr.Row():
-                                cb_is_pro = gr.Checkbox(label=_("Pro User?"), value=deepl_params["is_pro"])
-                            with gr.Row():
-                                cb_timestamp = gr.Checkbox(value=translation_params["add_timestamp"],
-                                                           label=_("Add a timestamp to the end of the filename"),
-                                                           interactive=True)
-                            with gr.Row():
-                                btn_run = gr.Button(_("TRANSLATE SUBTITLE FILE"), variant="primary")
-                            with gr.Row():
-                                tb_indicator = gr.Textbox(label=_("Output"), scale=5)
-                                files_subtitles = gr.Files(label=_("Downloadable output file"), scale=3)
-                                btn_openfolder = gr.Button('📂', scale=1)
-
-                        btn_run.click(fn=self.deepl_api.translate_deepl,
-                                      inputs=[tb_api_key, file_subs, dd_source_lang, dd_target_lang,
-                                              cb_is_pro, cb_timestamp],
-                                      outputs=[tb_indicator, files_subtitles])
-
-                        btn_openfolder.click(
-                            fn=lambda: self.open_folder(os.path.join(self.args.output_dir, "translations")),
-                            inputs=None,
-                            outputs=None)
-
-                        with gr.TabItem(_("NLLB")):  # sub tab2
+                        with gr.TabItem(_("NLLB")):  # sub tab1
                             with gr.Row():
                                 dd_model_size = gr.Dropdown(label=_("Model"), value=nllb_params["model_size"],
                                                             choices=self.nllb_inf.available_models)
@@ -262,6 +243,41 @@ class App:
                         btn_run.click(fn=self.nllb_inf.translate_file,
                                       inputs=[file_subs, dd_model_size, dd_source_lang, dd_target_lang,
                                               nb_max_length, cb_timestamp],
+                                      outputs=[tb_indicator, files_subtitles])
+
+                        btn_openfolder.click(
+                            fn=lambda: self.open_folder(os.path.join(self.args.output_dir, "translations")),
+                            inputs=None,
+                            outputs=None)
+
+                        with gr.TabItem(_("DeepL API")):  # sub tab2
+                            with gr.Row():
+                                tb_api_key = gr.Textbox(label=_("Your Auth Key (API KEY)"),
+                                                        value=deepl_params["api_key"])
+                            with gr.Row():
+                                dd_source_lang = gr.Dropdown(label=_("Source Language"),
+                                                             value=AUTOMATIC_DETECTION if deepl_params["source_lang"] == AUTOMATIC_DETECTION.unwrap()
+                                                             else deepl_params["source_lang"],
+                                                             choices=list(self.deepl_api.available_source_langs.keys()))
+                                dd_target_lang = gr.Dropdown(label=_("Target Language"),
+                                                             value=deepl_params["target_lang"],
+                                                             choices=list(self.deepl_api.available_target_langs.keys()))
+                            with gr.Row():
+                                cb_is_pro = gr.Checkbox(label=_("Pro User?"), value=deepl_params["is_pro"])
+                            with gr.Row():
+                                cb_timestamp = gr.Checkbox(value=translation_params["add_timestamp"],
+                                                           label=_("Add a timestamp to the end of the filename"),
+                                                           interactive=True)
+                            with gr.Row():
+                                btn_run = gr.Button(_("TRANSLATE SUBTITLE FILE"), variant="primary")
+                            with gr.Row():
+                                tb_indicator = gr.Textbox(label=_("Output"), scale=5)
+                                files_subtitles = gr.Files(label=_("Downloadable output file"), scale=3)
+                                btn_openfolder = gr.Button('📂', scale=1)
+
+                        btn_run.click(fn=self.deepl_api.translate_deepl,
+                                      inputs=[tb_api_key, file_subs, dd_source_lang, dd_target_lang,
+                                              cb_is_pro, cb_timestamp],
                                       outputs=[tb_indicator, files_subtitles])
 
                         btn_openfolder.click(

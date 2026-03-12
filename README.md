@@ -21,6 +21,7 @@ If you wish to try this on Colab, you can do it in [here](https://colab.research
   - SRT
   - WebVTT
   - txt ( only text file without timeline )
+  - json
 - Speech to Text Translation 
   - From other languages to English. ( This is Whisper's end-to-end speech-to-text translation feature )
 - Text to Text Translation

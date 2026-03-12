@@ -587,6 +587,8 @@ class BaseTranscriptionPipeline(ABC):
         param_to_cache = params.to_dict()
 
         cached_yaml = {**cached_params, **param_to_cache}
+        cached_yaml["whisper"]["gh_url"] = cached_params["whisper"]["gh_url"]
+        cached_yaml["whisper"]["title"] = cached_params["whisper"]["title"]
         cached_yaml["whisper"]["add_timestamp"] = add_timestamp
         cached_yaml["whisper"]["file_format"] = file_format
 
