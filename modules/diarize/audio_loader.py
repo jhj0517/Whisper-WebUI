@@ -81,7 +81,8 @@ def load_audio(file: Union[str, np.ndarray], sr: int = SAMPLE_RATE) -> np.ndarra
         if isinstance(file, np.ndarray):
             os.remove(temp_file_path)
 
-    return np.frombuffer(out, np.int16).flatten().astype(np.float32) / 32768.0
+    audio = np.frombuffer(out, np.int16).flatten().astype(np.float32) / 32768.0
+    return audio.astype(np.float32)
 
 
 
