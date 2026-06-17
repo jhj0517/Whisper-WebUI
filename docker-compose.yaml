@@ -12,6 +12,9 @@ services:
       - ./outputs:/Whisper-WebUI/outputs
       - ./configs:/Whisper-WebUI/configs
 
+    environment:
+      - GRADIO_ROOT_PATH=/whisper
+
     ports:
       - "7860:7860"
 
