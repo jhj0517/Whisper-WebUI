@@ -1,5 +1,4 @@
 import os
-import fnmatch
 from ruamel.yaml import YAML
 from gradio.utils import NamedString
 
@@ -12,6 +11,7 @@ VIDEO_EXTENSION = ['.mp4', '.mkv', '.flv', '.avi', '.mov', '.wmv', '.webm', '.m4
                    '.f4v', '.ogv', '.vob', '.mts', '.m2ts', '.divx', '.mxf', '.rm', '.rmvb', '.ts']
 
 MEDIA_EXTENSION = VIDEO_EXTENSION + AUDIO_EXTENSION
+MEDIA_EXTENSION_GRADIO = MEDIA_EXTENSION + [ext.upper() for ext in MEDIA_EXTENSION]
 FALLBACK_ENCODINGS = ['cp949', 'euc-kr']
 
 
@@ -61,23 +61,24 @@ def save_yaml(data: dict, path: str = DEFAULT_PARAMETERS_CONFIG_PATH):
 
 
 def get_media_files(folder_path, include_sub_directory=False):
-    media_extensions = ['*' + extension for extension in MEDIA_EXTENSION]
+    media_extensions = {ext.lower() for ext in MEDIA_EXTENSION}
+
+    def _is_media(filename):
+        return os.path.splitext(filename)[1].lower() in media_extensions
 
     media_files = []
 
     if include_sub_directory:
         for root, _, files in os.walk(folder_path):
-            for extension in media_extensions:
-                media_files.extend(
-                    os.path.join(root, file) for file in fnmatch.filter(files, extension)
-                    if os.path.exists(os.path.join(root, file))
-                )
-    else:
-        for extension in media_extensions:
             media_files.extend(
-                os.path.join(folder_path, file) for file in fnmatch.filter(os.listdir(folder_path), extension)
-                if os.path.isfile(os.path.join(folder_path, file)) and os.path.exists(os.path.join(folder_path, file))
+                os.path.join(root, file) for file in files
+                if _is_media(file) and os.path.exists(os.path.join(root, file))
             )
+    else:
+        media_files.extend(
+            os.path.join(folder_path, file) for file in os.listdir(folder_path)
+            if _is_media(file) and os.path.isfile(os.path.join(folder_path, file))
+        )
 
     return media_files
 
