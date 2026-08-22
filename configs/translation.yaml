@@ -728,3 +728,51 @@ zh-TW:
   Instrumental: 樂器
   Vocals: 人聲
   BGM Separation: 背景音樂分離
+pt:
+  Language: Idioma
+  Upload File here: Envie o arquivo aqui
+  Model: Modelo
+  Automatic Detection: Detecção Automática
+  File Format: Formato do Arquivo
+  Translate to English?: Traduzir para o inglês? (Recurso de tradução de fala para texto do Whisper)
+  Add a timestamp to the end of the filename: Adicionar data/hora ao final do nome do arquivo
+  Offload sub model when finished: Descarregar submodelo ao finalizar
+  Advanced Parameters: Parâmetros Avançados
+  Enabling this will remove background music: Ao ativar, a música de fundo será removida pelo submodelo antes da transcrição
+  Enable Background Music Remover Filter: Ativar Filtro de Remoção de Música de Fundo
+  Device: Dispositivo
+  Save separated files to output: Salvar arquivos separados na pasta de saída
+  Background Music Remover Filter: Filtro de Remoção de Música de Fundo
+  Enable this to transcribe only detected voice: Ative para transcrever apenas trechos com voz detectada pelo submodelo
+  Enable Silero VAD Filter: Ativar Filtro Silero VAD
+  Voice Detection Filter: Filtro de Detecção de Voz
+  Enable Diarization: Ativar Diarização (Identificação de Locutores)
+  This is only needed the first time you download the model: Necessário apenas na primeira vez que o modelo for baixado. Se já possuir os modelos, deixe em branco. Para baixar, acesse "https://huggingface.co/pyannote/speaker-diarization-3.1" e "https://huggingface.co/pyannote/segmentation-3.0" e aceite os termos.
+  HuggingFace Token: Token do Hugging Face
+  Diarization: Diarização
+  GENERATE SUBTITLE FILE: GERAR ARQUIVO DE LEGENDA
+  Output: Saída
+  Downloadable output file: Arquivo de saída para download
+  File: Arquivo
+  Youtube Link: Link do YouTube
+  Youtube Thumbnail: Miniatura do YouTube
+  Youtube Title: Título do YouTube
+  Youtube Description: Descrição do YouTube
+  Youtube: YouTube
+  Record with Mic: Gravar com Microfone
+  Mic: Microfone
+  Upload Subtitle Files to translate here: Envie os arquivos de legenda para traduzir aqui
+  Your Auth Key (API KEY): Sua Chave de Autenticação (API KEY)
+  Source Language: Idioma de Origem
+  Target Language: Idioma de Destino
+  Pro User?: Usuário Pro?
+  TRANSLATE SUBTITLE FILE: TRADUZIR ARQUIVO DE LEGENDA
+  DeepL API: API do DeepL
+  NLLB: NLLB
+  T2T Translation: Tradução Texto-para-Texto (T2T)
+  Upload Audio Files to separate background music: Envie arquivos de áudio para separar a música de fundo
+  SEPARATE BACKGROUND MUSIC: SEPARAR MÚSICA DE FUNDO
+  Instrumental: Instrumental
+  Vocals: Vozes
+  BGM Separation: Separação de Música de Fundo (BGM)
+
