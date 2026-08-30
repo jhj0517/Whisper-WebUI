@@ -8,6 +8,9 @@ from modules.utils.paths import (FASTER_WHISPER_MODELS_DIR, DIARIZATION_MODELS_D
                                  INSANELY_FAST_WHISPER_MODELS_DIR, NLLB_MODELS_DIR, DEFAULT_PARAMETERS_CONFIG_PATH,
                                  UVR_MODELS_DIR, I18N_YAML_PATH)
 from modules.utils.files_manager import load_yaml, MEDIA_EXTENSION
+from modules.utils.preset_manager import (list_presets, load_preset, save_preset, delete_preset,
+                                          sanitize_preset_name, pipeline_values_to_preset,
+                                          preset_to_pipeline_values, keep_available_choices)
 from modules.whisper.whisper_factory import WhisperFactory
 from modules.translation.nllb_inference import NLLBInference
 from modules.ui.htmls import *
@@ -41,6 +44,8 @@ class App:
         self.deepl_api = DeepLAPI(
             output_dir=os.path.join(self.args.output_dir, "translations")
         )
+        self.preset_dropdowns = []
+        self.preset_events = []
         self.i18n = load_yaml(I18N_YAML_PATH)
         self.default_params = load_yaml(DEFAULT_PARAMETERS_CONFIG_PATH)
         logger.info(f"Use \"{self.args.whisper_type}\" implementation\n"
@@ -51,6 +56,15 @@ class App:
         vad_params = self.default_params["vad"]
         diarization_params = self.default_params["diarization"]
         uvr_params = self.default_params["bgm_separation"]
+
+        with gr.Row(equal_height=True):
+            dd_preset = gr.Dropdown(choices=list_presets(), value=None, label=_("Preset"),
+                                    info=_("Save the settings below as a preset, or load a saved one"),
+                                    allow_custom_value=True, scale=4)
+            self.preset_dropdowns.append(dd_preset)
+            btn_preset_load = gr.Button(_("LOAD"), scale=1)
+            btn_preset_save = gr.Button(_("SAVE"), scale=1)
+            btn_preset_delete = gr.Button(_("DELETE"), scale=1)
 
         with gr.Row():
             dd_model = gr.Dropdown(choices=self.whisper_inf.available_models, value=whisper_params["model_size"],
@@ -89,11 +103,72 @@ class App:
 
         pipeline_inputs = [dd_model, dd_lang, cb_translate] + whisper_inputs + vad_inputs + diarization_inputs + uvr_inputs
 
+        # The preset holds whatever is in the UI right now, so every handler takes the pipeline
+        # inputs and gives them back. Each tab builds its own widgets, hence its own wiring.
+        preset_params = [dd_file_format, cb_timestamp] + pipeline_inputs
+
+        def on_preset_load(preset_name, file_format, add_timestamp, *pipeline_values):
+            try:
+                preset = load_preset(preset_name)
+            except (ValueError, FileNotFoundError, OSError) as e:
+                raise gr.Error(str(e))
+
+            whisper_preset = preset.get("whisper") or {}
+            current_values = [file_format, add_timestamp] + list(pipeline_values)
+            values = [whisper_preset.get("file_format", file_format),
+                      whisper_preset.get("add_timestamp", add_timestamp)] + \
+                preset_to_pipeline_values(preset, list(pipeline_values))
+
+            gr.Info(_("Loaded preset") + f" : {sanitize_preset_name(preset_name)}")
+            return keep_available_choices(preset_params, values, current_values)
+
+        btn_preset_load.click(fn=on_preset_load, inputs=[dd_preset] + preset_params,
+                              outputs=preset_params)
+        # Saving and deleting change the list every tab shows, so they are wired in `launch()`
+        # once the other tabs exist. Loading only touches this tab, so it is wired here.
+        self.preset_events.append((dd_preset, btn_preset_save, btn_preset_delete, preset_params))
+
         return (
             pipeline_inputs,
             dd_file_format,
             cb_timestamp
         )
+
+    def preset_choices(self, selected: str = None, selected_index: int = None):
+        """
+        Update every tab's preset dropdown. Only the tab that was used gets its selection changed;
+        the others just get the new list, so they keep whatever they had selected.
+        """
+        presets = list_presets()
+        return [gr.Dropdown(choices=presets, value=selected) if index == selected_index
+                else gr.Dropdown(choices=presets)
+                for index in range(len(self.preset_dropdowns))]
+
+    def preset_saver(self, index: int):
+        """Build the SAVE handler for one tab. `index` is the dropdown that keeps the selection."""
+        def on_preset_save(preset_name, file_format, add_timestamp, *pipeline_values):
+            try:
+                preset_name = sanitize_preset_name(preset_name)
+                save_preset(preset_name, pipeline_values_to_preset(list(pipeline_values),
+                                                                   file_format, add_timestamp))
+            except (ValueError, OSError) as e:
+                raise gr.Error(str(e))
+
+            gr.Info(_("Saved preset") + f" : {preset_name}")
+            return self.preset_choices(selected=preset_name, selected_index=index)
+        return on_preset_save
+
+    def preset_deleter(self, index: int):
+        """Build the DELETE handler for one tab."""
+        def on_preset_delete(preset_name):
+            try:
+                delete_preset(preset_name)
+            except (ValueError, FileNotFoundError, OSError) as e:
+                raise gr.Error(str(e))
+
+            gr.Info(_("Deleted preset") + f" : {sanitize_preset_name(preset_name)}")
+            return self.preset_choices(selected=None, selected_index=index)
+        return on_preset_delete
 
     def launch(self):
         translation_params = self.default_params["translation"]
@@ -302,6 +377,21 @@ class App:
                                                      fn=lambda: self.open_folder(os.path.join(
                                                          self.args.output_dir, "UVR", "vocals"
                                                      )))
+
+            # Every tab builds its own dropdown, so saving or deleting has to write to all of
+            # them, which is only possible now that they all exist.
+            for index, (dd_preset, btn_save, btn_delete, preset_params) in enumerate(self.preset_events):
+                btn_save.click(fn=self.preset_saver(index), inputs=[dd_preset] + preset_params,
+                               outputs=self.preset_dropdowns)
+                btn_delete.click(fn=self.preset_deleter(index), inputs=dd_preset,
+                                 outputs=self.preset_dropdowns)
+
+            # Presets can also appear or disappear on disk while the app runs, and the choices are
+            # baked in when the UI is built, so refresh them whenever a page loads. Don't do this
+            # on the dropdown's own focus event: a `choices` update re-filters the list against the
+            # text in the box, which would hide every preset but the selected one.
+            self.app.load(fn=lambda: self.preset_choices(), inputs=None,
+                          outputs=self.preset_dropdowns)
 
         # Launch the app with optional gradio settings
         args = self.args
