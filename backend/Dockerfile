@@ -8,11 +8,11 @@ RUN apt-get update && \
 WORKDIR /Whisper-WebUI
 
 COPY backend/ backend/
-COPY requirements.txt requirements.txt
+COPY requirements.txt constraints.txt ./
 
 RUN python3 -m venv venv && \
     . venv/bin/activate && \
-    pip install -U -r backend/requirements-backend.txt
+    PIP_CONSTRAINT=constraints.txt PIP_BUILD_CONSTRAINT=constraints.txt pip install -U -r backend/requirements-backend.txt
 
 
 FROM debian:bookworm-slim AS runtime

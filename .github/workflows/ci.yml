@@ -36,6 +36,9 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y git ffmpeg
 
       - name: Install dependencies
+        env:
+          PIP_CONSTRAINT: constraints.txt
+          PIP_BUILD_CONSTRAINT: constraints.txt
         run: pip install -r requirements.txt pytest jiwer
 
       - name: Run test
@@ -65,6 +68,9 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y git ffmpeg
 
       - name: Install dependencies
+        env:
+          PIP_CONSTRAINT: constraints.txt
+          PIP_BUILD_CONSTRAINT: constraints.txt
         run: pip install -r backend/requirements-backend.txt pytest pytest-asyncio jiwer
 
       - name: Run test

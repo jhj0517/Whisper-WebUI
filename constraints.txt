@@ -1,0 +1,8 @@
+# jhj0517-whisper's setup.py imports pkg_resources, which setuptools no longer ships. pip builds
+# that dependency in an isolated environment which always picks the newest setuptools, so pinning
+# it in the target environment has no effect -- it has to be applied as a constraint.
+#
+# Point both PIP_CONSTRAINT and PIP_BUILD_CONSTRAINT at this file wherever the requirements are
+# installed. pip >= 26 deliberately ignores PIP_CONSTRAINT inside an isolated build and honours
+# only PIP_BUILD_CONSTRAINT; older pip has no PIP_BUILD_CONSTRAINT and honours PIP_CONSTRAINT.
+setuptools<81

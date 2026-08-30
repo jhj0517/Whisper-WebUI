@@ -9,6 +9,8 @@ echo checked the venv folder. now installing requirements..
 call "%~dp0\venv\scripts\activate"
 
 python -m pip install -U pip
+set PIP_CONSTRAINT=constraints.txt
+set PIP_BUILD_CONSTRAINT=constraints.txt
 pip install -r requirements.txt
 
 if errorlevel 1 (
